@@ -1,10 +1,11 @@
-import { beforeAll, afterEach, afterAll } from "vitest";
-import { server } from "./src/mocks/server";
+import { server } from './src/mocks/server'
 
-if (process.env.NODE_ENV === "test") {
+import { afterAll, afterEach, beforeAll } from 'vitest'
+
+if (process.env.NODE_ENV === 'test') {
   beforeAll(() => {
-    server.listen({ onUnhandledRequest: "error" });
-  });
-  afterEach(() => server.resetHandlers());
-  afterAll(() => server.close());
+    server.listen({ onUnhandledRequest: 'error' })
+  })
+  afterEach(() => server.resetHandlers())
+  afterAll(() => server.close())
 }
