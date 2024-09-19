@@ -1,10 +1,10 @@
-import { http, HttpResponse } from "msw";
+import { HttpResponse, http } from 'msw'
 
 export const handlers = [
-  http.get("/posts", () => {
-    console.log('Captured a "GET /posts" request');
+  http.get('/posts', () => {
+    console.log('Captured a "GET /posts" request')
     return HttpResponse.json({
-      message: "posts mocking success",
-    });
+      message: 'posts mocking success',
+    })
   }),
-];
+]
