@@ -29,10 +29,16 @@ const RightHeader: React.FC = () => {
   )
 }
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  isTabOpen: boolean
+}
+
+const Header = ({ isTabOpen }: HeaderProps) => {
   return (
-    <header className="dark:bg-darkblack inset-0 flex h-auto w-full items-center justify-between bg-white px-8 py-4">
-      <LeftHeader />
+    <header
+      className={`dark:bg-darkblack ${isTabOpen ? 'justify-end' : 'justify-between'} inset-0 flex h-auto w-full items-center bg-white px-8 py-4`}
+    >
+      {!isTabOpen && <LeftHeader />}
       <RightHeader />
     </header>
   )
