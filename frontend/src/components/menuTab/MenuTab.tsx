@@ -27,12 +27,10 @@ const MenuTab: React.FC<MenuTabProps> = ({ style, isTabOpen, onToggle }) => {
           {isTabOpen ? <ChevronRight size={24} /> : <ChevronLeft size={24} />}
         </button>
       </div>
-      <div className="flex-grow overflow-y-auto">
+      <div className="flex-grow overflow-x-hidden">
         <MenuTabList />
       </div>
-      <div className="p-4">
-        <DarkModeToggle />
-      </div>
+      <div className="p-4">{isTabOpen && <DarkModeToggle />}</div>
     </nav>
   )
 }
