@@ -1,9 +1,7 @@
 import React from 'react'
 
-import { useCustomReactFlow } from '../../hooks/useCustomReactFlow'
-
+import { useCustomReactFlow } from '@/hooks/useCustomReactFlow'
 import AddButton from '@/pages/CharacterRelationshipPage/AddButton'
-import Node from '@/pages/CharacterRelationshipPage/Node'
 import { FlowEdge } from '@/types/node'
 import ReactFlow, {
   Background,
@@ -13,10 +11,6 @@ import ReactFlow, {
   ReactFlowProvider,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
-
-const nodeTypes = {
-  custom: Node,
-}
 
 const FlowDiagramContent: React.FC = () => {
   const {
@@ -43,7 +37,7 @@ const FlowDiagramContent: React.FC = () => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        nodeTypes={nodeTypes}
+        fitView
       >
         <Background />
         <Controls />
