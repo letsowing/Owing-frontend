@@ -20,8 +20,8 @@ const Modal = ({
       isOpen={isOpen}
       ariaHideApp={false}
       onRequestClose={() => setIsOpen(false)}
-      className="mx-auto mt-[5%] flex h-4/5 w-[85%] flex-col rounded-3xl bg-white drop-shadow-lg"
-      overlayClassName="fixed inset-0 bg-gray bg-opacity-75 flex"
+      className="mx-auto mt-[5%] flex h-4/5 w-[85%] flex-col rounded-3xl bg-white drop-shadow-lg dark:bg-darkblack"
+      overlayClassName="fixed inset-0 bg-gray bg-opacity-90 flex"
     >
       <div>{children}</div>
       {/* <button className="onClick={onRequestClose}>exit</button> */}
