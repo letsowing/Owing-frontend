@@ -1,77 +1,46 @@
-import {
-  Connection,
-  Edge,
-  EdgeChange,
-  Node,
-  NodeChange,
-  OnConnect,
-  OnEdgesChange,
-  OnNodesChange,
-  addEdge,
-  applyEdgeChanges,
-  applyNodeChanges,
-} from 'reactflow'
-import { create } from 'zustand'
+import { FlowEdge, FlowNode } from '@/types/node'
+import create from 'zustand'
+import { persist } from 'zustand/middleware'
 
-type CharacterState = {
-  nodes: Node[]
-  edges: Edge[]
-  onNodesChange: OnNodesChange
-  onEdgesChange: OnEdgesChange
-  onConnect: OnConnect
+interface StoreState {
+  nodes: FlowNode[]
+  edges: FlowEdge[]
+  addNode: (node: FlowNode) => void
+  removeNode: (nodeId: string) => void
+  updateNode: (nodeId: string, updates: Partial<FlowNode>) => void
+  addEdge: (edge: FlowEdge) => void
+  updateEdge: (edgeId: string, updates: Partial<FlowEdge>) => void
 }
 
-export const useCharacterStore = create<CharacterState>((set, get) => ({
-  nodes: [
+export const useCharacterStore = create<StoreState>()(
+  persist(
+    (set) => ({
+      nodes: [],
+      edges: [],
+      addNode: (node) => set((state) => ({ nodes: [...state.nodes, node] })),
+      removeNode: (nodeId) =>
+        set((state) => ({
+          nodes: state.nodes.filter((node) => node.id !== nodeId),
+          edges: state.edges.filter(
+            (edge) => edge.source !== nodeId && edge.target !== nodeId,
+          ),
+        })),
+      updateNode: (nodeId, updates) =>
+        set((state) => ({
+          nodes: state.nodes.map((node) =>
+            node.id === nodeId ? { ...node, ...updates } : node,
+          ),
+        })),
+      addEdge: (edge) => set((state) => ({ edges: [...state.edges, edge] })),
+      updateEdge: (edgeId, updates) =>
+        set((state) => ({
+          edges: state.edges.map((edge) =>
+            edge.id === edgeId ? { ...edge, ...updates } : edge,
+          ),
+        })),
+    }),
     {
-      id: '1',
-      type: 'custom',
-      position: { x: 0, y: 0 },
-      data: { label: '이름 작성', image: '/path/to/image1.jpg' },
+      name: 'character-flow',
     },
-    {
-      id: '2',
-      type: 'custom',
-      position: { x: 250, y: 0 },
-      data: { label: '이름 작성', image: '/path/to/image2.jpg' },
-    },
-    {
-      id: '3',
-      type: 'custom',
-      position: { x: 500, y: 0 },
-      data: { label: '이름 작성', image: '/path/to/image3.jpg' },
-    },
-    {
-      id: '4',
-      type: 'custom',
-      position: { x: 250, y: 200 },
-      data: { label: '이름 작성', image: '/path/to/image4.jpg' },
-    },
-  ],
-  edges: [
-    { id: 'e1-2', source: '1', target: '2', label: '조직적', animated: true },
-    { id: 'e2-3', source: '2', target: '3', label: '남매', animated: true },
-    {
-      id: 'e1-4',
-      source: '1',
-      target: '4',
-      label: '대립관계',
-      animated: true,
-    },
-  ],
-  onNodesChange: (changes: NodeChange[]) => {
-    set({
-      nodes: applyNodeChanges(changes, get().nodes),
-    })
-  },
-  onEdgesChange: (changes: EdgeChange[]) => {
-    set({
-      edges: applyEdgeChanges(changes, get().edges),
-    })
-  },
-  onConnect: (connection: Connection) => {
-    set({
-      edges: addEdge(connection, get().edges),
-    })
-  },
-}))
+  ),
+)

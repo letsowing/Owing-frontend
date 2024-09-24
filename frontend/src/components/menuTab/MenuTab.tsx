@@ -14,16 +14,19 @@ interface MenuTabProps {
 const MenuTab: React.FC<MenuTabProps> = ({ style, isTabOpen, onToggle }) => {
   return (
     <nav
-      className="flex h-full flex-col bg-white transition-all duration-300 ease-in-out"
+      className="dark:bg-darkblack flex h-full flex-col bg-white transition-all duration-300 ease-in-out"
       style={style}
     >
       <div className="flex items-center justify-between p-3">
         {isTabOpen && (
-          <div className="from-redorange to-orange dark:from-blue dark:to-skyblue bg-gradient-to-b bg-clip-text text-2xl font-bold text-transparent">
+          <div className="bg-gradient-to-b from-redorange to-orange bg-clip-text text-2xl font-bold text-transparent dark:from-blue dark:to-skyblue">
             Owing
           </div>
         )}
-        <button onClick={onToggle} className="text-gray ml-auto">
+        <button
+          onClick={onToggle}
+          className="ml-auto text-gray dark:text-coldbeige"
+        >
           {isTabOpen ? <ChevronRight size={24} /> : <ChevronLeft size={24} />}
         </button>
       </div>

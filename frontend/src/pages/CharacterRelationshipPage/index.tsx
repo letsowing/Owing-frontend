@@ -1,35 +1,68 @@
 import React from 'react'
 
-import CustomNode from './CustomNode'
+import { useCustomReactFlow } from '../../hooks/useCustomReactFlow'
 
-import { useCharacterStore } from '@/stores/characterStore'
-import ReactFlow, { Background, Controls } from 'reactflow'
+import AddButton from '@/pages/CharacterRelationshipPage/AddButton'
+import Node from '@/pages/CharacterRelationshipPage/Node'
+import { FlowEdge } from '@/types/node'
+import ReactFlow, {
+  Background,
+  Controls,
+  Edge,
+  MarkerType,
+  ReactFlowProvider,
+} from 'reactflow'
 import 'reactflow/dist/style.css'
 
 const nodeTypes = {
-  custom: CustomNode,
+  custom: Node,
 }
 
-const CharacterRelationship: React.FC = () => {
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } =
-    useCharacterStore()
+const FlowDiagramContent: React.FC = () => {
+  const {
+    nodes,
+    edges,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    handleAddNode,
+  } = useCustomReactFlow()
+
+  const edgeWithRelationship = (edge: FlowEdge): Edge => ({
+    ...edge,
+    label: edge.data?.relationship,
+    labelStyle: { fill: '#000', fontWeight: 700 },
+    markerEnd: { type: MarkerType.ArrowClosed, color: '#000' },
+  })
 
   return (
-    <div className="h-screen w-full">
+    <div className="relative h-full w-full">
       <ReactFlow
         nodes={nodes}
-        edges={edges}
+        edges={edges.map(edgeWithRelationship)}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
-        fitView
       >
         <Background />
         <Controls />
       </ReactFlow>
+      <div className="absolute right-4 top-4 z-10">
+        <AddButton onClick={handleAddNode} />
+      </div>
     </div>
   )
 }
 
-export default CharacterRelationship
+const FlowDiagram: React.FC = () => {
+  return (
+    <ReactFlowProvider>
+      <div className="h-full w-full">
+        <FlowDiagramContent />
+      </div>
+    </ReactFlowProvider>
+  )
+}
+
+export default FlowDiagram

@@ -19,7 +19,7 @@ const MenuTabItem: React.FC<MenuTabItemProps> = ({
       className={`flex cursor-pointer items-center justify-between p-3 ${
         isActive
           ? 'bg-beige text-redorange dark:bg-coldbeige dark:text-blue'
-          : 'hover:bg-beige dark:hover:bg-coldbeige text-gray'
+          : 'text-gray hover:bg-beige dark:text-coldbeige dark:hover:bg-coldbeige dark:hover:text-gray'
       }`}
       onClick={() => {
         onClick()
