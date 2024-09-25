@@ -5,10 +5,11 @@ import MenuTab from '@/components/menuTab/MenuTab'
 import { Outlet, useLocation } from 'react-router-dom'
 
 const HeaderTabLayout: React.FC = () => {
-  const [isTabOpen, setIsTabOpen] = useState(true)
+  const [isTabOpen, setIsTabOpen] = useState(false)
   const [tabWidth, setTabWidth] = useState(256) // 기본 탭 너비
   const location = useLocation()
-  const isMainPage = location.pathname === '/'
+  const isNotTabPage =
+    location.pathname === '/' || location.pathname === '/main'
 
   useEffect(() => {
     setTabWidth(isTabOpen ? 256 : 41)
@@ -20,7 +21,7 @@ const HeaderTabLayout: React.FC = () => {
 
   return (
     <div className="flex h-screen">
-      {!isMainPage && (
+      {!isNotTabPage && (
         <MenuTab
           style={{ width: `${tabWidth}px` }}
           isTabOpen={isTabOpen}
@@ -29,10 +30,12 @@ const HeaderTabLayout: React.FC = () => {
       )}
       <div
         className="flex flex-1 flex-col"
-        style={{ width: `calc(100% - ${isMainPage ? 0 : tabWidth}px)` }}
+        style={{ width: `calc(100% - ${isNotTabPage ? 0 : tabWidth}px)` }}
       >
         <Header isTabOpen={isTabOpen} />
-        <main className={`flex-1 overflow-auto ${isMainPage ? 'p-0' : 'p-6'}`}>
+        <main
+          className={`flex-1 overflow-auto ${isNotTabPage ? 'p-0' : 'p-6'}`}
+        >
           <Outlet />
         </main>
       </div>
