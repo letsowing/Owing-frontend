@@ -11,9 +11,9 @@ export const useFlow = () => {
     (data: CustomNodeData, position: { x: number; y: number }) => {
       const newNode: CustomNode = {
         id: `node_${Date.now()}`,
-        type: 'customNode',
-        position,
         data,
+        position,
+        type: 'customNode',
       }
       addNode(newNode)
     },

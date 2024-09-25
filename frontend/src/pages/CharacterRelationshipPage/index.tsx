@@ -1,18 +1,25 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 
+import CustomEdge from './CustomEdge'
 import CustomNode from './CustomNode'
 
 import { useFlow } from '@/hooks/useFlow'
-import { Background, Controls, MiniMap, ReactFlow } from '@xyflow/react'
+import useThemeStore from '@/stores/themeStore'
+import {
+  Background,
+  Controls,
+  MiniMap,
+  ReactFlow,
+  ReactFlowProvider,
+} from '@xyflow/react'
 import '@xyflow/react/dist/style.css'
 
-const nodeTypes = {
-  customNode: CustomNode,
-}
-
-const CharacterRelationship: React.FC = () => {
+const FlowWithProvider: React.FC = () => {
   const { nodes, edges, onNodesChange, onEdgesChange, onConnect, createNode } =
     useFlow()
+  const nodeTypes = useMemo(() => ({ customNode: CustomNode }), [])
+  const edgeTypes = useMemo(() => ({ customEdge: CustomEdge }), [])
+  const { isDarkMode } = useThemeStore()
 
   return (
     <div className="relative h-full w-full">
@@ -23,7 +30,9 @@ const CharacterRelationship: React.FC = () => {
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         nodeTypes={nodeTypes}
+        edgeTypes={edgeTypes}
         fitView
+        colorMode={isDarkMode ? 'dark' : 'light'}
       >
         <Background />
         <Controls />
@@ -47,5 +56,13 @@ const CharacterRelationship: React.FC = () => {
     </div>
   )
 }
+
+const CharacterRelationship: React.FC = () => (
+  <div className="relative h-full w-full">
+    <ReactFlowProvider>
+      <FlowWithProvider />
+    </ReactFlowProvider>
+  </div>
+)
 
 export default CharacterRelationship
