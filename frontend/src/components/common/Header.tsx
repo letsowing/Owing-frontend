@@ -30,7 +30,7 @@ const RightHeader: React.FC = () => {
       >
         Login
       </Link>
-      <button className="rounded-full bg-gradient-to-r from-redorange to-orange px-6 py-2 font-bold text-darkblack dark:from-blue dark:to-skyblue">
+      <button className="rounded-full bg-gradient-to-r from-redorange to-orange px-6 py-2 font-bold text-white dark:from-blue dark:to-skyblue dark:text-darkblack">
         Contact us
       </button>
     </nav>
