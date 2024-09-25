@@ -1,10 +1,10 @@
 import App from '@/App'
 import HeaderTabLayout from '@/layouts/HeaderTabLayout'
 import CharacterRelationshipPage from '@/pages/CharacterRelationshipPage'
+import Landing from '@/pages/LandingPage'
 import Login from '@/pages/LoginPage'
 import Main from '@/pages/MainPage'
 import Register from '@/pages/RegisterPage'
-import Rending from '@/pages/RendingPage'
 import { createBrowserRouter } from 'react-router-dom'
 
 const router = createBrowserRouter([
@@ -17,7 +17,7 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Main />,
+            element: <Landing />,
           },
           {
             path: 'characterRelationship',
@@ -26,16 +26,16 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: 'main',
+        element: <Main />,
+      },
+      {
         path: 'login',
         element: <Login />,
       },
       {
         path: 'register',
         element: <Register />,
-      },
-      {
-        path: 'rending',
-        element: <Rending />,
       },
     ],
   },
