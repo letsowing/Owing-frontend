@@ -1,31 +1,9 @@
 import Card from '@/components/landing/Card'
 import Ribbon from '@/components/landing/Ribbon'
+import { CARD_LIST } from '@/constants/cardList'
 import { motion } from 'framer-motion'
 
 const Landing = () => {
-  const cards = [
-    {
-      text: '스토리 원고 기능은 시나리오 작성에 필요한 템플릿을 제공하여 효율적인 작업을 지원합니다.',
-      name: 'Name 1',
-    },
-    {
-      text: '스토리 원고 기능은 시나리오 작성에 필요한 템플릿을 제공하여 효율적인 작업을 지원합니다.',
-      name: 'Name 2',
-    },
-    {
-      text: '스토리 원고 기능은 시나리오 작성에 필요한 템플릿을 제공하여 효율적인 작업을 지원합니다.',
-      name: 'Name 3',
-    },
-    {
-      text: '스토리 원고 기능은 시나리오 작성에 필요한 템플릿을 제공하여 효율적인 작업을 지원합니다.',
-      name: 'Name 4',
-    },
-    {
-      text: '스토리 원고 기능은 시나리오 작성에 필요한 템플릿을 제공하여 효율적인 작업을 지원합니다.',
-      name: 'Name 5',
-    },
-  ]
-
   return (
     <div className="w-full" style={{ minHeight: '1080px' }}>
       <div className="mx-auto px-4 py-8">
@@ -57,7 +35,7 @@ const Landing = () => {
 
             <div className="container relative z-20 mx-auto px-4 pt-72">
               <div className="flex flex-wrap justify-center gap-2">
-                {cards.map((card, index) => (
+                {CARD_LIST.map((card, index) => (
                   <div key={index} className="p-2">
                     <Card text={card.text} name={card.name} />
                   </div>
