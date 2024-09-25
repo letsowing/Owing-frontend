@@ -1,17 +1,13 @@
-import { Edge, Node } from '@xyflow/react'
+// types/node.ts
+import { Node } from '@xyflow/react'
 
-// Node 데이터 인터페이스 정의
-export interface NodeData extends Record<string, unknown> {
-  id: string
+// 노드 데이터 타입
+export interface CustomNodeData {
   name: string
   role: string
   image: string
+  [key: string]: unknown // 인덱스 시그니처 추가
 }
 
-export type FlowNode = Node<NodeData>
-
-export interface EdgeData extends Record<string, unknown> {
-  relationship: string
-}
-
-export type FlowEdge = Edge<EdgeData>
+// 전체 노드 타입
+export type CustomNode = Node<CustomNodeData>

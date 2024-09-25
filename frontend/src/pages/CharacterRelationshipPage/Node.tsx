@@ -1,25 +1,23 @@
-import { memo } from 'react'
+import React, { memo } from 'react'
 
-import { Handle, Position } from 'reactflow'
+import { CustomNodeData } from '@/types/node'
+import { Handle, NodeProps, Position } from '@xyflow/react'
 
-const Node = memo(
-  ({ data }: { data: { name: string; role: string; image: string } }) => {
-    return (
-      <>
-        <Handle type="target" position={Position.Top} />
-        <div className="w-48 rounded-lg bg-white p-4 shadow-md">
-          <img
-            src={data.image}
-            alt={data.name}
-            className="mx-auto mb-2 h-16 w-16 rounded-full"
-          />
-          <h3 className="text-center text-lg font-semibold">{data.name}</h3>
-          <p className="text-gray-600 text-center text-sm">{data.role}</p>
-        </div>
-        <Handle type="source" position={Position.Bottom} />
-      </>
-    )
-  },
-)
+const CustomNode: React.FC<NodeProps> = ({ data }) => {
+  const nodeData = data as CustomNodeData
+  return (
+    <div className="custom-node">
+      <Handle type="target" position={Position.Top} />
+      <img
+        src={nodeData.image}
+        alt={nodeData.name}
+        style={{ width: 50, height: 50, borderRadius: '50%' }}
+      />
+      <div>{nodeData.name}</div>
+      <div>{nodeData.role}</div>
+      <Handle type="source" position={Position.Bottom} />
+    </div>
+  )
+}
 
-export default Node
+export default memo(CustomNode)

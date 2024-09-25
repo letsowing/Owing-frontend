@@ -2,20 +2,20 @@ import React from 'react'
 
 import CustomNode from './CustomNode'
 
-import { useCharacterStore } from '@/stores/characterStore'
-import ReactFlow, { Background, Controls } from 'reactflow'
-import 'reactflow/dist/style.css'
+import { useFlow } from '@/hooks/useFlow'
+import { Background, Controls, MiniMap, ReactFlow } from '@xyflow/react'
+import '@xyflow/react/dist/style.css'
 
 const nodeTypes = {
-  custom: CustomNode,
+  customNode: CustomNode,
 }
 
 const CharacterRelationship: React.FC = () => {
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect } =
-    useCharacterStore()
+  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, createNode } =
+    useFlow()
 
   return (
-    <div className="h-screen w-full">
+    <div className="relative h-full w-full">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -27,7 +27,23 @@ const CharacterRelationship: React.FC = () => {
       >
         <Background />
         <Controls />
+        <MiniMap />
       </ReactFlow>
+      <button
+        className="absolute left-4 top-4 z-10 rounded bg-blue px-4 py-2 text-white"
+        onClick={() =>
+          createNode(
+            {
+              name: 'New Character',
+              role: 'Unknown',
+              image: 'placeholder.jpg',
+            },
+            { x: 100, y: 100 },
+          )
+        }
+      >
+        Add Character
+      </button>
     </div>
   )
 }
