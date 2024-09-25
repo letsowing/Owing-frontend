@@ -45,7 +45,7 @@ const Landing = () => {
           </div>
         </div>
 
-        <h2 className="mb-32 mt-32 text-center text-2xl font-bold text-darkgray">
+        <h2 className="my-32 text-center text-2xl font-bold text-darkgray">
           이야기의 아이디어부터 완성까지 한 곳에서,
           <br />
           복잡한 설정을 걱정하지 않고 창작에만 집중할 수 있는 새로운 경험.
