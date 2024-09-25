@@ -32,15 +32,6 @@ const Ribbon: React.FC = () => {
               fontFamily="Arial, sans-serif"
               dominantBaseline="middle"
             >
-              {/* <tspan
-              style={{
-                fontSize: 'calc(0.2vw + 0.2vh)',
-                fontWeight: 'bold',
-                fontFamily: 'Arial, sans-serif',
-              }}
-              dominantBaseline="middle"
-              vectorEffect="non-scaling-size"
-            > */}
               Strategy aligned with business needs and robust data analysis are
               Strategy aligned with business needs and robust data analysis are
             </tspan>
