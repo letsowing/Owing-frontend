@@ -9,7 +9,6 @@ import {
   Background,
   ConnectionMode,
   Controls,
-  MarkerType,
   MiniMap,
   ReactFlow,
   ReactFlowProvider,
@@ -36,7 +35,6 @@ const FlowWithProvider: React.FC = () => {
         fitView
         defaultEdgeOptions={{
           type: 'customEdge',
-          markerEnd: { type: MarkerType.ArrowClosed },
         }}
         connectionMode={ConnectionMode.Loose}
         colorMode={isDarkMode ? 'dark' : 'light'}

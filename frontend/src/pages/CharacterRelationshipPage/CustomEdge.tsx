@@ -1,5 +1,7 @@
+import React from 'react'
+
+import useThemeStore from '@/stores/themeStore'
 import {
-  BaseEdge,
   EdgeProps,
   ReactFlowState,
   getBezierPath,
@@ -26,6 +28,7 @@ export const getSpecialPath = (
 }
 
 export default function CustomEdge({
+  id,
   source,
   target,
   sourceX,
@@ -34,16 +37,17 @@ export default function CustomEdge({
   targetY,
   sourcePosition,
   targetPosition,
-  markerEnd,
+  style = {},
 }: EdgeProps) {
+  const { isDarkMode } = useThemeStore()
+  const edgeColor = isDarkMode ? '#fff' : '#000'
+
   const isBiDirectionEdge = useStore((s: ReactFlowState) => {
-    const edgeExists = s.edges.some(
+    return s.edges.some(
       (e) =>
         (e.source === target && e.target === source) ||
         (e.target === source && e.source === target),
     )
-
-    return edgeExists
   })
 
   const edgePathParams = {
@@ -55,13 +59,31 @@ export default function CustomEdge({
     targetPosition,
   }
 
-  let path = ''
+  let path = isBiDirectionEdge
+    ? getSpecialPath(edgePathParams, sourceX < targetX ? 50 : -50)
+    : getBezierPath(edgePathParams)[0]
 
-  if (isBiDirectionEdge) {
-    path = getSpecialPath(edgePathParams, sourceX < targetX ? 50 : -50)
-  } else {
-    ;[path] = getBezierPath(edgePathParams)
-  }
-
-  return <BaseEdge path={path} markerEnd={markerEnd} />
+  return (
+    <>
+      <path
+        id={id}
+        style={{ ...style, stroke: edgeColor }}
+        className="react-flow__edge-path"
+        d={path}
+        markerEnd={`url(#${id}-marker)`}
+      />
+      <marker
+        id={`${id}-marker`}
+        viewBox="0 0 10 10"
+        refX="5"
+        refY="5"
+        markerUnits="strokeWidth"
+        markerWidth="10"
+        markerHeight="10"
+        orient="auto"
+      >
+        <path d="M 0 0 L 10 5 L 0 10 z" fill={edgeColor} />
+      </marker>
+    </>
+  )
 }
