@@ -33,9 +33,7 @@ const HeaderTabLayout: React.FC = () => {
         style={{ width: `calc(100% - ${isNotTabPage ? 0 : tabWidth}px)` }}
       >
         <Header isTabOpen={isTabOpen} />
-        <main
-          className={`flex-1 overflow-auto ${isNotTabPage ? 'p-0' : 'p-6'}`}
-        >
+        <main className="flex-1 overflow-auto">
           <Outlet />
         </main>
       </div>
