@@ -59,7 +59,7 @@ export default function CustomEdge({
     targetPosition,
   }
 
-  let path = isBiDirectionEdge
+  const path = isBiDirectionEdge
     ? getSpecialPath(edgePathParams, sourceX < targetX ? 50 : -50)
     : getBezierPath(edgePathParams)[0]
 

@@ -48,8 +48,8 @@ const FlowWithProvider: React.FC = () => {
         onClick={() =>
           createNode(
             {
-              name: 'New Character',
-              role: 'Unknown',
+              name: '김보미',
+              role: '여주인공',
               image: 'placeholder.jpg',
             },
             { x: 100, y: 100 },
