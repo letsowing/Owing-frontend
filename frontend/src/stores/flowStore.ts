@@ -23,6 +23,8 @@ interface FlowState {
   addNode: (node: CustomNode) => void
   removeNode: (nodeId: string) => void
   removeEdge: (edgeId: string) => void
+  onNodeClick: (nodeId: string) => void
+  reconnect: (oldEdge: Edge, newConnection: Connection) => void
 }
 
 const getInitialState = (): Pick<FlowState, 'nodes' | 'edges'> => {
@@ -30,7 +32,7 @@ const getInitialState = (): Pick<FlowState, 'nodes' | 'edges'> => {
   if (storedState) {
     return JSON.parse(storedState)
   }
-  return { nodes: [], edges: [] } // 기본 초기값
+  return { nodes: [], edges: [] }
 }
 
 export const useFlowStore = create<FlowState>()(
@@ -68,6 +70,16 @@ export const useFlowStore = create<FlowState>()(
       removeEdge: (edgeId: string) => {
         set({
           edges: get().edges.filter((edge) => edge.id !== edgeId),
+        })
+      },
+      onNodeClick: (nodeId: string) => {
+        get().removeNode(nodeId)
+      },
+      reconnect: (oldEdge: Edge, newConnection: Connection) => {
+        set({
+          edges: get().edges.map((edge) =>
+            edge.id === oldEdge.id ? { ...edge, ...newConnection } : edge,
+          ),
         })
       },
     }),

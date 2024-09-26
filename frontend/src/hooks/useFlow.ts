@@ -1,13 +1,47 @@
-import { useCallback } from 'react'
+// useFlow.ts
+import { useCallback, useRef } from 'react'
 
 import { useFlowStore } from '@/stores/flowStore'
 import { CustomNode, CustomNodeData } from '@/types/node'
+import { Connection, Edge } from '@xyflow/react'
 
 export const useFlow = () => {
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, addNode } =
-    useFlowStore()
+  const {
+    nodes,
+    edges,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    addNode,
+    removeNode,
+    removeEdge,
+    onNodeClick,
+    reconnect,
+  } = useFlowStore()
 
-  const createNode = useCallback(
+  const edgeReconnectSuccessful = useRef(true)
+
+  const onReconnectStart = useCallback(() => {
+    edgeReconnectSuccessful.current = false
+  }, [])
+
+  const onReconnect = useCallback(
+    (oldEdge: Edge, newConnection: Connection) => {
+      edgeReconnectSuccessful.current = true
+      reconnect(oldEdge, newConnection)
+    },
+    [reconnect],
+  )
+
+  const onReconnectEnd = useCallback(
+    (_Event: MouseEvent | TouchEvent, edge: Edge) => {
+      if (!edgeReconnectSuccessful.current) {
+        removeEdge(edge.id)
+      }
+    },
+    [removeEdge],
+  )
+  const onNodeAdd = useCallback(
     (data: CustomNodeData, position: { x: number; y: number }) => {
       const newNode: CustomNode = {
         id: `node_${Date.now()}`,
@@ -20,12 +54,32 @@ export const useFlow = () => {
     [addNode],
   )
 
+  const onNodeRemove = useCallback(
+    (nodeId: string) => {
+      removeNode(nodeId)
+    },
+    [removeNode],
+  )
+
+  const onEdgeRemove = useCallback(
+    (edgeId: string) => {
+      removeEdge(edgeId)
+    },
+    [removeEdge],
+  )
+
   return {
     nodes,
     edges,
     onNodesChange,
     onEdgesChange,
     onConnect,
-    createNode,
+    onReconnectStart,
+    onReconnect,
+    onReconnectEnd,
+    onNodeAdd,
+    onNodeRemove,
+    onEdgeRemove,
+    onNodeClick,
   }
 }
