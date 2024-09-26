@@ -1,6 +1,7 @@
-import { Edge, Node } from 'reactflow'
+import { Edge, Node } from '@xyflow/react'
 
-export interface NodeData {
+// Node 데이터 인터페이스 정의
+export interface NodeData extends Record<string, unknown> {
   id: string
   name: string
   role: string
@@ -9,7 +10,7 @@ export interface NodeData {
 
 export type FlowNode = Node<NodeData>
 
-export interface EdgeData {
+export interface EdgeData extends Record<string, unknown> {
   relationship: string
 }
 

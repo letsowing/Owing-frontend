@@ -10,7 +10,7 @@ const AddButton: React.FC<AddButtonProps> = ({ onClick }) => {
       onClick={onClick}
       className="rounded bg-blue px-4 py-2 font-bold text-white hover:bg-skyblue"
     >
-      노드 추가
+      캐릭터 생성
     </button>
   )
 }
