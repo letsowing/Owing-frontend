@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 
-import characterImage from '@/assets/character/Character.png'
+import characterImage from '@/assets/character/character.png'
 import { CustomNodeData } from '@/types/node'
 import { Handle, Position } from '@xyflow/react'
 
