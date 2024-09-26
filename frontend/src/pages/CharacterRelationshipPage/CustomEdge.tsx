@@ -6,14 +6,13 @@ import {
   useStore,
 } from '@xyflow/react'
 
-// 엣지의 시작점과 끝점의 좌표 정의
 export type GetSpecialPathParams = {
   sourceX: number
   sourceY: number
   targetX: number
   targetY: number
 }
-// 양방향 엣지를 그릴 때 사용되는 곡선 경로 생성
+
 export const getSpecialPath = (
   { sourceX, sourceY, targetX, targetY }: GetSpecialPathParams,
   offset: number,
@@ -59,7 +58,7 @@ export default function CustomEdge({
   let path = ''
 
   if (isBiDirectionEdge) {
-    path = getSpecialPath(edgePathParams, sourceX < targetX ? 25 : -25)
+    path = getSpecialPath(edgePathParams, sourceX < targetX ? 50 : -50)
   } else {
     ;[path] = getBezierPath(edgePathParams)
   }

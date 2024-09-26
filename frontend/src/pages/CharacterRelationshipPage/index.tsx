@@ -7,7 +7,9 @@ import { useFlow } from '@/hooks/useFlow'
 import useThemeStore from '@/stores/themeStore'
 import {
   Background,
+  ConnectionMode,
   Controls,
+  MarkerType,
   MiniMap,
   ReactFlow,
   ReactFlowProvider,
@@ -32,6 +34,11 @@ const FlowWithProvider: React.FC = () => {
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
         fitView
+        defaultEdgeOptions={{
+          type: 'customEdge',
+          markerEnd: { type: MarkerType.ArrowClosed },
+        }}
+        connectionMode={ConnectionMode.Loose}
         colorMode={isDarkMode ? 'dark' : 'light'}
       >
         <Background />

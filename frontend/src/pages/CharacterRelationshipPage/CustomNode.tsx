@@ -23,7 +23,7 @@ const CustomNode: React.FC<CustomNodeProps> = ({ data }) => {
       />
       <div className="text-center font-semibold">{data.name}</div>
       <Handle
-        type="target"
+        type="source"
         position={Position.Right}
         id="right"
         className="h-3 w-3"
