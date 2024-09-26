@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
+import AddButton from './AddButton'
 import CustomEdge from './CustomEdge'
 import CustomNode from './CustomNode'
 
@@ -16,11 +17,32 @@ import {
 import '@xyflow/react/dist/style.css'
 
 const FlowWithProvider: React.FC = () => {
-  const { nodes, edges, onNodesChange, onEdgesChange, onConnect, createNode } =
-    useFlow()
+  const {
+    nodes,
+    edges,
+    onNodesChange,
+    onEdgesChange,
+    onConnect,
+    onReconnectStart,
+    onReconnect,
+    onReconnectEnd,
+    onNodeAdd,
+  } = useFlow()
+
   const nodeTypes = useMemo(() => ({ customNode: CustomNode }), [])
   const edgeTypes = useMemo(() => ({ customEdge: CustomEdge }), [])
   const { isDarkMode } = useThemeStore()
+
+  const handleAddCharacter = useCallback(() => {
+    onNodeAdd(
+      {
+        name: '김보미',
+        role: '여주인공',
+        image: 'placeholder.jpg',
+      },
+      { x: 100, y: 100 },
+    )
+  }, [onNodeAdd])
 
   return (
     <div className="relative h-full w-full">
@@ -30,8 +52,12 @@ const FlowWithProvider: React.FC = () => {
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onReconnectStart={onReconnectStart}
+        onReconnect={onReconnect}
+        onReconnectEnd={onReconnectEnd}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
+        // onNodeClick={(_, node) => onNodeClick(node.id)}
         fitView
         defaultEdgeOptions={{
           type: 'customEdge',
@@ -43,21 +69,9 @@ const FlowWithProvider: React.FC = () => {
         <Controls />
         <MiniMap />
       </ReactFlow>
-      <button
-        className="absolute left-4 top-4 z-10 rounded bg-blue px-4 py-2 text-white"
-        onClick={() =>
-          createNode(
-            {
-              name: '김보미',
-              role: '여주인공',
-              image: 'placeholder.jpg',
-            },
-            { x: 100, y: 100 },
-          )
-        }
-      >
-        Add Character
-      </button>
+      <div className="absolute left-4 top-4 z-10">
+        <AddButton onClick={handleAddCharacter} />
+      </div>
     </div>
   )
 }
