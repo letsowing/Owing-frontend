@@ -1,8 +1,8 @@
-// useFlow.ts
 import { useCallback, useRef } from 'react'
 
-import { useFlowStore } from '@/stores/flowStore'
-import { CustomNode, CustomNodeData } from '@/types/node'
+import { useFlowStore } from '@stores/flowStore'
+
+import { CustomNode, CustomNodeData } from '@types'
 import { Connection, Edge } from '@xyflow/react'
 
 export const useFlow = () => {

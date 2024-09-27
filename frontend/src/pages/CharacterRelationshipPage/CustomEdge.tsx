@@ -1,6 +1,7 @@
+import useThemeStore from '@stores/themeStore'
+
 import { getSpecialPath } from './getSpecialPath'
 
-import useThemeStore from '@/stores/themeStore'
 import {
   EdgeProps,
   ReactFlowState,

@@ -1,4 +1,4 @@
-import { MenuPath } from '@/constants/menu'
+import { MenuPath } from '@constants/menu'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
 
