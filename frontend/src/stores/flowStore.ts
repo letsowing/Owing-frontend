@@ -1,4 +1,4 @@
-import { CustomNode } from '@/types/node'
+import { CustomNode } from '@types'
 import {
   Connection,
   Edge,

@@ -1,7 +1,8 @@
+import useMenuStore from '@stores/menuStore'
+
 import MenuTabItem from './MenuTabItem'
 
-import { MENU_LIST } from '@/constants/menu'
-import useMenuStore from '@/stores/menuStore'
+import { MENU_LIST } from '@constants/menu'
 
 const MenuTabList: React.FC = () => {
   const { activePath, setActivePath } = useMenuStore()

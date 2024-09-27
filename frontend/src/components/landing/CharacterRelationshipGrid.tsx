@@ -2,7 +2,7 @@ import React from 'react'
 
 import CharacterRelationshipInfo from './CharacterRelationshipInfo'
 
-import { InfoItem } from '@/constants/characterRelationshipInfoList'
+import { InfoItem } from '@constants/characterRelationshipInfoList'
 
 interface GridProps {
   infoList: InfoItem[]

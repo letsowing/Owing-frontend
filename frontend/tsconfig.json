@@ -8,21 +8,19 @@
     "baseUrl": "src",
     "paths": {
       "@/*": ["*"],
-      "@apis/*": ["apis/*"],
       "@assets/*": ["assets/*"],
       "@components/*": ["components/*"],
-      "@constants": ["constants/index.ts"],
       "@constants/*": ["constants/*"],
       "@hooks/*": ["hooks/*"],
       "@layouts/*": ["layouts/*"],
       "@mocks/*": ["mocks/*"],
       "@pages/*": ["pages/*"],
       "@routes/*": ["routes/*"],
+      "@services/*": ["services/*"],
       "@stores/*": ["stores/*"],
       "@types/*": ["types/*"],
       "@types": ["types/index.d.ts"],
-      "@utils/*": ["utils/*"],
-      "@style/*": ["style/*"]
+      "@utils/*": ["utils/*"]
     },
     "typeRoots": ["./node_modules/@types"]
   }

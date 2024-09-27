@@ -1,8 +1,9 @@
 import React from 'react'
 
+import DarkModeToggle from '@components/common/DarkModeToggle'
+
 import MenuTabList from './MenuTabList'
 
-import DarkModeToggle from '@/components/common/DarkModeToggle'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface MenuTabProps {
@@ -14,7 +15,7 @@ interface MenuTabProps {
 const MenuTab: React.FC<MenuTabProps> = ({ style, isTabOpen, onToggle }) => {
   return (
     <nav
-      className="dark:bg-darkblack flex h-full flex-col bg-white transition-all duration-300 ease-in-out"
+      className="flex h-full flex-col bg-white transition-all duration-300 ease-in-out dark:bg-darkblack"
       style={style}
     >
       <div className="flex items-center justify-between p-3">
