@@ -1,5 +1,7 @@
 import React from 'react'
 
+import ProfileImageIcon from '@/assets/landing/profileImage.png'
+
 interface CardProps {
   text: string
   name: string
@@ -15,9 +17,9 @@ const Card: React.FC<CardProps> = ({ text, name, bgColor = '#f4f4f4' }) => {
       <p className="mt-5 text-[18px] text-darkgray">{text}</p>
       <div className="flex items-center">
         <img
-          src="src/assets/react.svg"
+          src={ProfileImageIcon}
           alt="Card"
-          className="mr-3 h-10 w-10 rounded-full"
+          className="mr-3 h-20 w-20 rounded-full"
         />
         <span className="text-darkgrey text-[18px] font-semibold">{name}</span>
       </div>
