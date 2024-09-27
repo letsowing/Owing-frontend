@@ -1,3 +1,11 @@
+import AiHelperIcon from '@/assets/landing/aiHelper.png'
+import DashboardIcon from '@/assets/landing/dashboard.png'
+import GetStartedIcon from '@/assets/landing/getStarted.png'
+import KanbanIcon from '@/assets/landing/kanban.png'
+import LogoIcon from '@/assets/landing/logo.png'
+import MemoIcon from '@/assets/landing/memo.png'
+import TemplateIcon from '@/assets/landing/template.png'
+import UniverseIcon from '@/assets/landing/universe.png'
 import Card from '@/components/landing/Card'
 import CharacterRelationshipGrid from '@/components/landing/CharacterRelationshipGrid'
 import Footer from '@/components/landing/Footer'
@@ -12,13 +20,13 @@ const Landing = () => {
     <div className="w-full" style={{ minHeight: '1080px' }}>
       <div className="mx-auto mt-48 px-4 py-8">
         <img
-          src="src/assets/landing/logo.png"
+          src={LogoIcon}
           alt="OwingLogo"
           className="mx-auto mb-12 mt-4 h-auto w-96"
         />
 
         <img
-          src="src/assets/landing/getStarted.png"
+          src={GetStartedIcon}
           alt="getStarted"
           className="mx-auto mb-40 mt-48 h-auto w-96"
         />
@@ -104,7 +112,7 @@ const Landing = () => {
             </div>
             <div className="mr-40 flex-1">
               <img
-                src="src/assets/landing/aiHelper.png"
+                src={AiHelperIcon}
                 alt="aiHelper"
                 className="mx-auto mb-12 mt-4 h-auto w-96"
               />
@@ -120,8 +128,8 @@ const Landing = () => {
           >
             <div className="ml-48 flex-1">
               <img
-                src="src/assets/landing/template.png"
-                alt="kanban"
+                src={TemplateIcon}
+                alt="template"
                 className="mx-auto mb-12 mt-4 h-auto w-96"
               />
             </div>
@@ -162,7 +170,7 @@ const Landing = () => {
             </div>
             <div className="mr-40 flex-1">
               <img
-                src="src/assets/landing/kanban.png"
+                src={KanbanIcon}
                 alt="kanban"
                 className="mx-auto mb-12 mt-4 h-auto w-96"
               />
@@ -178,8 +186,8 @@ const Landing = () => {
           >
             <div className="ml-48 flex-1">
               <img
-                src="src/assets/landing/memo.png"
-                alt="kanban"
+                src={MemoIcon}
+                alt="memo"
                 className="mx-auto mb-12 mt-4 h-auto w-96"
               />
             </div>
@@ -231,7 +239,7 @@ const Landing = () => {
             className="mx-80"
           >
             <img
-              src="src/assets/landing/universe.png"
+              src={UniverseIcon}
               alt="Universe"
               className="shadow-gray-300/50 mx-auto mb-12 mt-4 rounded-[25px] shadow-lg"
             />
@@ -261,7 +269,7 @@ const Landing = () => {
                 그래프로 간편하게 확인할 수 있어요
               </p>
               <img
-                src="src/assets/landing/dashboard.png"
+                src={DashboardIcon}
                 alt="Dashboard"
                 className="mx-auto mb-12 mt-4 h-auto w-96 rounded-[25px]"
               />
