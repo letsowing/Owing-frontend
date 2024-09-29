@@ -19,7 +19,7 @@ const ProjectModal = ({ isOpen, setIsOpen, isEditable }: ProjectModalProps) => {
   return (
     <div>
       <Modal isOpen={isOpen} onRequestClose={() => null} setIsOpen={setIsOpen}>
-        <div className="mx-20 mt-20 flex flex-col gap-5">
+        <div className="mx-20 mt-8 flex flex-col gap-5">
           <InputField
             type={'text'}
             labelValue={'작품명'}
@@ -39,7 +39,7 @@ const ProjectModal = ({ isOpen, setIsOpen, isEditable }: ProjectModalProps) => {
             initialValue=""
             isEditable={isEditable}
           />
-          <div className="my-20 flex justify-end gap-3">
+          <div className="mt-8 flex justify-end gap-3">
             <div className="w-1/5">
               <SubButton value={'Back'} />
             </div>
