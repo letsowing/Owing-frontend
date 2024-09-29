@@ -47,7 +47,7 @@ const InputField = ({
         onChange={onChangeInput}
         maxLength={maxLength}
         readOnly={!isEditable}
-        className="mt-1 w-full rounded-lg border border-lightgray px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-redorange"
+        className="mt-1 h-[60px] w-full rounded-lg border border-lightgray px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-redorange"
       />
     </div>
   )
