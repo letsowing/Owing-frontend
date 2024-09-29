@@ -8,7 +8,7 @@ const ImageForm = () => {
         <label>이미지</label>
         <BsPlusCircle className="mt-1 text-redorange" />
       </div>
-      <div className="my-3 flex h-[300px] w-[100%] justify-center border border-lightgray">
+      <div className="my-3 flex h-[300px] w-[100%] justify-center rounded-xl border border-lightgray">
         <img src="" className=""></img>
       </div>
       <div
