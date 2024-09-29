@@ -12,7 +12,7 @@ const TagField = ({ labelValue, tagList }: TagFieldProps) => {
         {labelValue}
         <span className="ml-1 text-redorange">*</span>
       </label>
-      <div className="mt-2 flex gap-3">
+      <div className="mt-2 flex flex-wrap gap-3">
         {tagList.map((tag) => (
           <Tag value={tag.value} />
         ))}
