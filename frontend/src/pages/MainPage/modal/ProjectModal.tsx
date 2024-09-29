@@ -8,18 +8,14 @@ import Modal from '@/components/common/Modal'
 import SubButton from '@/components/common/SubButton'
 import TextAreaField from '@/components/common/TextAreaField'
 
-interface CreateProjectModalProps {
+interface ProjectModalProps {
   isOpen: boolean
   onRequestClose: () => void
   setIsOpen: (state: boolean) => void
   isEditable: boolean
 }
 
-const CreateProjectModal = ({
-  isOpen,
-  setIsOpen,
-  isEditable,
-}: CreateProjectModalProps) => {
+const ProjectModal = ({ isOpen, setIsOpen, isEditable }: ProjectModalProps) => {
   return (
     <div>
       <Modal isOpen={isOpen} onRequestClose={() => null} setIsOpen={setIsOpen}>
@@ -57,4 +53,4 @@ const CreateProjectModal = ({
   )
 }
 
-export default CreateProjectModal
+export default ProjectModal
