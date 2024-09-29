@@ -1,6 +1,6 @@
+import TagField from '../../../components/common/TagField'
 import { CATEGORY_LIST } from '../../../constants/categoryList'
 import { GENRE_LIST } from '../../../constants/genreList'
-import TagField from './TagField'
 
 import InputField from '@/components/common/InputField'
 import MainButton from '@/components/common/MainButton'
