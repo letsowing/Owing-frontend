@@ -11,6 +11,8 @@ export default {
         orange: '#EF931A',
         redorange: '#FB5D2B',
         lightredorange: '#FF9060',
+
+        verylightgray: '#F8F8F8',
         lightgray: '#CFCDCD',
         gray: '#676767',
         darkgray: '#333333',
