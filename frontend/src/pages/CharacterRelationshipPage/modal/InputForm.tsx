@@ -1,5 +1,5 @@
-import InputField from '../../../components/common/InputField'
-import TextAreaField from '../../../components/common/TextAreaField'
+import InputField from '@components/common/InputField'
+import TextAreaField from '@components/common/TextAreaField'
 
 interface InputFormProps {
   isEditable: boolean
