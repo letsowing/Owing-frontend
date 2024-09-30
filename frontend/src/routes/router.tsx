@@ -5,6 +5,7 @@ import Landing from '@pages/LandingPage'
 import Login from '@pages/LoginPage'
 import Main from '@pages/MainPage'
 import Register from '@pages/RegisterPage'
+import ScenarioManagementPage from '@pages/ScenarioManagementPage'
 
 import App from '@/App'
 import { createBrowserRouter } from 'react-router-dom'
@@ -24,6 +25,10 @@ const router = createBrowserRouter([
           {
             path: 'characterRelationship',
             element: <CharacterRelationshipPage />,
+          },
+          {
+            path: 'scenarioManagement',
+            element: <ScenarioManagementPage />,
           },
         ],
       },
