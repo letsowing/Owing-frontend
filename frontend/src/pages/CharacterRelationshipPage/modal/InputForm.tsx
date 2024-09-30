@@ -7,7 +7,7 @@ interface InputFormProps {
 
 const InputForm = ({ isEditable }: InputFormProps) => {
   return (
-    <div className="flex flex-col space-y-9">
+    <div className="flex flex-col space-y-9 pe-1">
       <InputField
         type={'text'}
         labelValue={'이름'}
