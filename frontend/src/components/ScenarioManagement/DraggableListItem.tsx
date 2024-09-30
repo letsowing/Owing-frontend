@@ -8,14 +8,16 @@ interface DraggableListItemProps {
   id: string
   index: number
   name: string
+  folderId: number
 }
 
 export default function DraggableListItem({
   id,
   index,
   name,
+  folderId
 }: DraggableListItemProps) {
-  const { moveItem } = useDndStore()
+  const { moveFileItem } = useDndStore()
   const ref = useRef<HTMLLIElement>(null)
 
   const [, drop] = useDrop({
@@ -28,7 +30,7 @@ export default function DraggableListItem({
 
       if (dragIndex === hoverIndex) return
 
-      moveItem(dragIndex, hoverIndex)
+      moveFileItem(folderId, dragIndex, hoverIndex)
       item.index = hoverIndex
     },
   })
