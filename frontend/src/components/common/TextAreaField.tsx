@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import React from 'react'
 
 interface TextAreaFieldProps {
@@ -17,10 +17,16 @@ const TextAreaField = ({
   isEditable = true,
 }: TextAreaFieldProps) => {
   const [inputValue, setInputValue] = useState(initialValue)
+  const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   const onChangeInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (isEditable && e.target.value.length <= maxLength) {
       setInputValue(e.target.value)
+      if (textAreaRef.current) {
+        textAreaRef.current.style.height = 'auto'
+        textAreaRef.current.style.height =
+          textAreaRef.current.scrollHeight + 'px'
+      }
     }
   }
 
@@ -42,11 +48,12 @@ const TextAreaField = ({
         </span>
       </div>
       <textarea
+        ref={textAreaRef}
         value={inputValue}
         onChange={onChangeInput}
         maxLength={maxLength}
         readOnly={!isEditable}
-        className="dark:focus-blue dark:bg-verydarkblack dark:border-lightdarkgray mt-1 h-[150px] w-full rounded-lg border border-lightgray px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-redorange dark:text-white dark:ring-blue"
+        className="dark:focus-blue dark:bg-verydarkblack dark:border-lightdarkgray mt-1 h-auto min-h-[150px] w-full rounded-lg border border-lightgray px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-redorange dark:text-coldbeige dark:ring-blue"
       />
     </div>
   )
