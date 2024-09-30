@@ -21,7 +21,7 @@ export default function DnDWrapper({ selectedFolderId }: DnDWrapperProps) {
             <img
               src={AlertOwing}
               alt="AlertOwing"
-              className="mx-auto mb-4 h-auto w-20"
+              className="mx-auto mb-4 h-auto w-24"
             />
             <div className="text-redorange">파일을 생성해 주세요!</div>
           </div>
@@ -46,7 +46,7 @@ export default function DnDWrapper({ selectedFolderId }: DnDWrapperProps) {
           <img
             src={AlertOwing}
             alt="AlertOwing"
-            className="mx-auto mb-4 h-auto w-20"
+            className="mx-auto mb-4 h-auto w-24"
           />
           <div className="text-redorange">폴더를 생성해 주세요!</div>
         </div>
