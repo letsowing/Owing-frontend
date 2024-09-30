@@ -21,7 +21,9 @@ export default {
         coldbeige: '#F5F7FF',
         skyblue: '#C3DCFE',
         blue: '#3082F6',
+        lightdarkgray: '#464646',
         darkblack: '#262627',
+        verydarkblack: '#161616',
       },
       textShadow: {
         sm: '0 1px 2px var(--tw-shadow-color)',
