@@ -7,7 +7,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 
 const ScenarioManagement = () => {
-  const [selectedFolderId, setSelectedFolderId] = useState<number | null>(null) // 선택된 폴더 ID 상태 관리
+  const [selectedFolderId, setSelectedFolderId] = useState<number | null>(0) // 선택된 폴더 ID 상태 관리
 
   return (
     <DndProvider backend={HTML5Backend}>
