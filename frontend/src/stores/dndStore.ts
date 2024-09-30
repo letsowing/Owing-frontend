@@ -1,61 +1,60 @@
-// persist를 이용해 로컬 스토리지에 저장되고, 페이지 새로고침 시에도 유지
 import { SCENARIO_LIST } from '@constants/scenarioList'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-// items 하나의 타입 정의
-interface DndItem {
-  id: string
+// 파일 하나의 타입 정의
+interface FileItem {
+  fileId: number
   name: string
   description: string
 }
-// interface DndItem {
-//   id?: string;
-//   name?: string;
-//   description?: string;
-//   folderId?: number;
-// }
+
+// 폴더 하나의 타입 정의 (하위 폴더와 파일을 가질 수 있음)
+interface FolderItem {
+  folderId: number
+  name: string
+  files: FileItem[]
+  subfolders?: FolderItem[] // 폴더 안에 폴더가 있을 수 있으므로 optional 설정
+}
 
 // zustand store의 타입 정의
 interface DndState {
-  items: DndItem[]
-  moveItem: (dragIndex: number, hoverIndex: number) => void
+  items: FolderItem[]
+  moveFileItem: (
+    folderId: number,
+    dragIndex: number,
+    hoverIndex: number,
+  ) => void // 파일 이동
 }
 
 // store 생성 (create 함수 사용)
 export const useDndStore = create(
-  // persist는 로컬스토리지에 저장하기 위해 사용
+  // persist는 로컬 스토리지에 저장하기 위해 사용
   persist<DndState>(
     (set) => ({
-      // items는 초기값 설정
-
-      // 파일리스트 예시
+      // 폴더리스트 예시
       items: SCENARIO_LIST.map((item) => ({
-        id: item.id,
-        name: item.name,
-        description: item.description,
+        ...item, // item 자체는 수정 가능해야 하므로 복사
+        files: item.files.map((file) => ({ ...file })), // 각 파일도 복사
       })),
 
-      // 폴더리스트 예시
-      // items: [
-      //   {
-      //     folderId: 0,
-      //     name: '폴더명1',
-      //     files: [
-      //       { fileId: 0, fileName: '파일명1', fileDescription: 'aaa' },
-      //       { fileId: 1, fileName: '파일명2', fileDescription: 'aaa' },
-      //     ],
-      //   },
-      //   { folderId: 1, name: '폴더명2', files: [] },
-      // ],
-
-      // moveItem 드래그앤드롭시 발동되는 함수
-      moveItem: (dragIndex: number, hoverIndex: number) =>
+      // 파일을 폴더 내에서 드래그하여 이동시키는 함수
+      moveFileItem: (folderId: number, dragIndex: number, hoverIndex: number) =>
         set((state) => {
-          const updateItems = [...state.items]
-          const [draggedItem] = updateItems.splice(dragIndex, 1) // 드래그한 아이템 제거
-          updateItems.splice(hoverIndex, 0, draggedItem) // 드래그한 위치로 이동
-          return { items: updateItems }
+          // 해당 폴더를 찾기
+          const folder = state.items.find((f) => f.folderId === folderId)
+          if (!folder) return state
+
+          const updatedFiles = [...folder.files]
+          const [draggedFile] = updatedFiles.splice(dragIndex, 1) // 드래그한 파일 제거
+          updatedFiles.splice(hoverIndex, 0, draggedFile) // 드래그한 위치로 파일 이동
+
+          // 해당 폴더의 파일들을 업데이트
+          const updatedItems = state.items.map((f) =>
+            f.folderId === folderId ? { ...f, files: updatedFiles } : f,
+          )
+
+          return { items: updatedItems }
         }),
     }),
     {

@@ -5,10 +5,11 @@ import { useDndStore } from '../../stores/dndStore'
 import { useDrag, useDrop } from 'react-dnd'
 
 interface DraggableBoxProps {
-  id: string
+  id: number
   index: number
   name: string
   description: string
+  folderId: number
 }
 
 export default function DraggableBox({
@@ -16,8 +17,9 @@ export default function DraggableBox({
   index,
   name,
   description,
+  folderId
 }: DraggableBoxProps) {
-  const { moveItem } = useDndStore()
+  const { moveFileItem } = useDndStore()
   const ref = useRef<HTMLDivElement>(null)
 
   const [, drop] = useDrop({
@@ -30,7 +32,7 @@ export default function DraggableBox({
 
       if (dragIndex === hoverIndex) return
 
-      moveItem(dragIndex, hoverIndex)
+      moveFileItem(folderId, dragIndex, hoverIndex)
       item.index = hoverIndex
     },
   })
