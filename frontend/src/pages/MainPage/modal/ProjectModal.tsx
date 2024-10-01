@@ -28,9 +28,17 @@ const ProjectModal = ({ isOpen, setIsOpen, isEditable }: ProjectModalProps) => {
             initialValue=""
             isEditable={isEditable}
           />
-          <TagField labelValue={'분류'} tagList={CATEGORY_LIST} />
+          <TagField
+            labelValue={'분류'}
+            tagList={CATEGORY_LIST}
+            isEditable={isEditable}
+          />
           <div className="w-3/4">
-            <TagField labelValue={'장르'} tagList={GENRE_LIST} />
+            <TagField
+              labelValue={'장르'}
+              tagList={GENRE_LIST}
+              isEditable={isEditable}
+            />
           </div>
           <TextAreaField
             labelValue="작품 설명"
