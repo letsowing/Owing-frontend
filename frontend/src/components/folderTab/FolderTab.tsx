@@ -25,8 +25,8 @@ const FolderTab: React.FC<FolderTabProps> = ({
 
   return (
     <div
-      className={`bg-lightgray transition-all duration-300 ease-in-out dark:bg-darkblack ${
-        isOpen ? 'w-64' : 'w-0'
+      className={`bg-beige transition-all duration-300 ease-in-out ${
+        isOpen ? 'w-72' : 'w-0'
       } overflow-hidden`}
       style={{ height: '100%' }}
     >

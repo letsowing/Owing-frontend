@@ -5,7 +5,7 @@ import MenuTabItem from './MenuTabItem'
 import { MENU_LIST } from '@constants/menu'
 
 interface MenuTabListProps {
-  onItemClick: () => void // 항목 클릭 시 호출할 함수
+  onItemClick?: () => void // 항목 클릭 시 호출할 함수
 }
 
 const MenuTabList: React.FC<MenuTabListProps> = ({ onItemClick }) => {
@@ -20,7 +20,9 @@ const MenuTabList: React.FC<MenuTabListProps> = ({ onItemClick }) => {
           isActive={activePath === item.path}
           onClick={() => {
             setActivePath(item.path)
-            onItemClick() // FolderTab 열기
+            if (onItemClick) {
+              onItemClick() // FolderTab 열기
+            }
           }}
         />
       ))}

@@ -49,19 +49,15 @@ const HeaderFolderTabLayout: React.FC = () => {
 
       <DndProvider backend={HTML5Backend}>
         <div className="flex h-full w-full flex-row">
-          <div className="flex-grow">
-            <FolderTab
-              isOpen={isFolderTabOpen} // FolderTab 열림 상태
-              onClose={handleCloseFolderTab} // FolderTab 닫기 핸들러
-              setSelectedFolderId={setSelectedFolderId} // FolderTab에서 선택된 폴더 ID 설정
-            />
-          </div>
-          <div>
-            <main className="flex-1">
-              <Header isTabOpen={isTabOpen} />
-              <Outlet />
-            </main>
-          </div>
+          <FolderTab
+            isOpen={isFolderTabOpen} // FolderTab 열림 상태
+            onClose={handleCloseFolderTab} // FolderTab 닫기 핸들러
+            setSelectedFolderId={setSelectedFolderId} // FolderTab에서 선택된 폴더 ID 설정
+          />
+          <main className="h-full w-full">
+            <Header isTabOpen={isTabOpen} />
+            <Outlet />
+          </main>
         </div>
       </DndProvider>
     </div>
