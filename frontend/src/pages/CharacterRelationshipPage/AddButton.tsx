@@ -1,5 +1,7 @@
 import React from 'react'
 
+import { MdOutlinePersonAddAlt1 } from 'react-icons/md'
+
 interface AddButtonProps {
   onClick: () => void
 }
@@ -8,9 +10,9 @@ const AddButton: React.FC<AddButtonProps> = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="rounded bg-blue px-4 py-2 font-bold text-white hover:bg-skyblue"
+      className="rounded bg-beige px-3 py-1 text-gray hover:bg-lightredorange hover:font-semibold hover:text-white dark:bg-coldbeige hover:dark:bg-skyblue hover:dark:text-darkgray"
     >
-      캐릭터 생성
+      <MdOutlinePersonAddAlt1 />
     </button>
   )
 }

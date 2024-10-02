@@ -5,13 +5,17 @@ import useThemeStore from '@stores/themeStore'
 import { useFlow } from '@hooks/useFlow'
 
 import AddButton from './AddButton'
-import CustomEdge from './CustomEdge'
+import BidirectionalEdge from './BidirectionalEdge'
 import CustomNode from './CustomNode'
+import SelectEdgeButton from './SelectEdgeButton'
+import UnidirectionalEdge from './UnidirectionalEdge'
 
+import { CustomNodeProps, EdgeTypes, NodeTypes } from '@/types'
 import {
   Background,
   ConnectionMode,
   Controls,
+  EdgeProps,
   MiniMap,
   ReactFlow,
   ReactFlowProvider,
@@ -29,10 +33,56 @@ const FlowWithProvider: React.FC = () => {
     onReconnect,
     onReconnectEnd,
     onNodeAdd,
+    onNodeRemove,
+    isBidirectionalEdge,
+    setIsBidirectionalEdge,
+    onEdgeLabelChange,
   } = useFlow()
 
-  const nodeTypes = useMemo(() => ({ customNode: CustomNode }), [])
-  const edgeTypes = useMemo(() => ({ customEdge: CustomEdge }), [])
+  const isValidConnection = () => {
+    return true // 모든 연결 허용
+  }
+
+  const handleEdgeLabelChange = useCallback(
+    (edgeId: string, newLabel: string) => {
+      onEdgeLabelChange(edgeId, newLabel)
+    },
+    [onEdgeLabelChange],
+  )
+
+  const nodeTypes = useMemo<NodeTypes>(
+    () => ({
+      customNode: (props: CustomNodeProps) => (
+        <CustomNode {...props} onNodeRemove={onNodeRemove} />
+      ),
+    }),
+    [onNodeRemove],
+  )
+  const edgeTypes = useMemo<EdgeTypes>(
+    () => ({
+      unidirectionalEdge: (props: EdgeProps) => (
+        <UnidirectionalEdge
+          {...props}
+          onLabelChange={handleEdgeLabelChange}
+          type="unidirectionalEdge"
+        />
+      ),
+      bidirectionalEdge: (props: EdgeProps) => (
+        <BidirectionalEdge
+          {...props}
+          onLabelChange={handleEdgeLabelChange}
+          type="bidirectionalEdge"
+        />
+      ),
+    }),
+    [handleEdgeLabelChange],
+  )
+  const defaultEdgeOptions = useMemo(
+    () => ({
+      type: isBidirectionalEdge ? 'bidirectionalEdge' : 'unidirectionalEdge',
+    }),
+    [isBidirectionalEdge],
+  )
   const { isDarkMode } = useThemeStore()
 
   const handleAddCharacter = useCallback(() => {
@@ -59,11 +109,9 @@ const FlowWithProvider: React.FC = () => {
         onReconnectEnd={onReconnectEnd}
         nodeTypes={nodeTypes}
         edgeTypes={edgeTypes}
-        // onNodeClick={(_, node) => onNodeClick(node.id)}
+        defaultEdgeOptions={defaultEdgeOptions}
         fitView
-        defaultEdgeOptions={{
-          type: 'customEdge',
-        }}
+        isValidConnection={isValidConnection}
         connectionMode={ConnectionMode.Loose}
         colorMode={isDarkMode ? 'dark' : 'light'}
       >
@@ -71,8 +119,14 @@ const FlowWithProvider: React.FC = () => {
         <Controls />
         <MiniMap />
       </ReactFlow>
-      <div className="absolute left-4 top-4 z-10">
-        <AddButton onClick={handleAddCharacter} />
+      <div className="absolute left-0 right-9 top-2 z-10 flex justify-center">
+        <div className="inline-flex space-x-2 rounded-lg bg-beige p-2 dark:bg-coldbeige">
+          <AddButton onClick={handleAddCharacter} />
+          <SelectEdgeButton
+            isBidirectional={isBidirectionalEdge}
+            onChange={setIsBidirectionalEdge}
+          />
+        </div>
       </div>
     </div>
   )
