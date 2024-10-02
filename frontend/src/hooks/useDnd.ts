@@ -1,4 +1,4 @@
-import { useDndStore } from '../stores/dndStore'
+import { useDndStore } from '@stores/dndStore'
 
 export const useDnd = () => {
   const items = useDndStore((state) => state.items)

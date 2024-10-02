@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
-import DnDWrapper from '../../components/dnd/DnDWrapper'
-import Tab from '../../components/dnd/Tab'
+import DnDWrapper from '@components/dnd/DnDWrapper'
+import Tab from '@components/dnd/Tab'
 
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
