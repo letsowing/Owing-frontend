@@ -10,9 +10,15 @@ interface MenuTabProps {
   style?: React.CSSProperties
   isTabOpen: boolean
   onToggle: () => void
+  onItemClick?: () => void // 항목 클릭 시 호출할 함수 추가
 }
 
-const MenuTab: React.FC<MenuTabProps> = ({ style, isTabOpen, onToggle }) => {
+const MenuTab: React.FC<MenuTabProps> = ({
+  style,
+  isTabOpen,
+  onToggle,
+  onItemClick,
+}) => {
   return (
     <nav
       className="flex h-full flex-col bg-white transition-all duration-300 ease-in-out dark:bg-darkblack"
@@ -32,7 +38,7 @@ const MenuTab: React.FC<MenuTabProps> = ({ style, isTabOpen, onToggle }) => {
         </button>
       </div>
       <div className="flex-grow overflow-x-hidden">
-        <MenuTabList />
+        <MenuTabList onItemClick={onItemClick} />
       </div>
       <div className="p-4">{isTabOpen && <DarkModeToggle />}</div>
     </nav>

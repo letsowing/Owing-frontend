@@ -1,12 +1,21 @@
+// FolderTab.tsx
+import React from 'react'
+
 import { useDnd } from '@hooks/useDnd'
 
 import FolderList from './FolderList'
 
-interface TabProps {
+interface FolderTabProps {
   setSelectedFolderId: (folderId: number) => void // 상위 컴포넌트에서 전달받는 함수
+  isOpen: boolean // FolderTab이 열렸는지 여부
+  onClose: () => void // FolderTab을 닫는 함수
 }
 
-export default function Tab({ setSelectedFolderId }: TabProps) {
+const FolderTab: React.FC<FolderTabProps> = ({
+  setSelectedFolderId,
+  isOpen,
+  onClose,
+}) => {
   const { items } = useDnd() // items는 폴더 목록을 의미
 
   // 선택된 폴더가 변경될 때 호출
@@ -16,21 +25,17 @@ export default function Tab({ setSelectedFolderId }: TabProps) {
 
   return (
     <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '120px',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '10px',
-        backgroundColor: '#fff',
-        color: '#000',
-      }}
+      className={`bg-lightgray transition-all duration-300 ease-in-out dark:bg-darkblack ${
+        isOpen ? 'w-64' : 'w-0'
+      } overflow-hidden`}
+      style={{ height: '100%' }}
     >
-      <h2>Folder View</h2>
+      <div className="flex justify-between p-4">
+        <h2>Folder View</h2>
+        <button onClick={onClose} className="text-gray dark:text-white">
+          닫기
+        </button>
+      </div>
       <ul style={{ padding: 0, margin: 0 }}>
         {items.map((folder: any) => (
           <FolderList
@@ -43,3 +48,5 @@ export default function Tab({ setSelectedFolderId }: TabProps) {
     </div>
   )
 }
+
+export default FolderTab

@@ -1,3 +1,4 @@
+import HeaderFolderTabLayout from '@layouts/HeaderFolderTabLayout'
 import HeaderTabLayout from '@layouts/HeaderTabLayout'
 
 import CharacterRelationshipPage from '@pages/CharacterRelationshipPage'
@@ -26,6 +27,11 @@ const router = createBrowserRouter([
             path: 'characterRelationship',
             element: <CharacterRelationshipPage />,
           },
+        ],
+      },
+      {
+        element: <HeaderFolderTabLayout />, // 2차탭(폴더탭) 존재
+        children: [
           {
             path: 'scenarioManagement',
             element: <ScenarioManagementPage />,
