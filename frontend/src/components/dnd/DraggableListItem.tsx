@@ -1,6 +1,6 @@
 import { useRef } from 'react'
 
-import { useDndStore } from '../../stores/dndStore'
+import { useDnd } from '@hooks/useDnd'
 
 import { useDrag, useDrop } from 'react-dnd'
 
@@ -15,9 +15,9 @@ export default function DraggableListItem({
   id,
   index,
   name,
-  folderId
+  folderId,
 }: DraggableListItemProps) {
-  const { moveFileItem } = useDndStore()
+  const { moveFileItem } = useDnd()
   const ref = useRef<HTMLLIElement>(null)
 
   const [, drop] = useDrop({
@@ -48,17 +48,11 @@ export default function DraggableListItem({
   return (
     <li
       ref={ref}
-      style={{
-        margin: '30px 0',
-        cursor: 'pointer',
-        opacity: isDragging ? 0.5 : 1,
-        listStyle: 'none',
-        padding: '5px 10px',
-        backgroundColor: isDragging ? '#e0e0e0' : '#f5f5f5',
-        borderRadius: '4px',
-      }}
+      className={`my-4 cursor-pointer list-none rounded-md p-2.5 ${
+        isDragging ? 'bg-[#e0e0e0] opacity-50' : 'bg-[#f5f5f5]'
+      }`}
     >
-      <p style={{ margin: 0 }}>{name}</p>
+      <p className="m-0">{name}</p>
     </li>
   )
 }

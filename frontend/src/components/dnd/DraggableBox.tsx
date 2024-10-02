@@ -1,25 +1,18 @@
 import { useRef } from 'react'
 
-import { useDndStore } from '../../stores/dndStore'
+import { useDnd } from '@hooks/useDnd'
 
+import { DraggableBoxProps } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
-
-interface DraggableBoxProps {
-  id: number
-  index: number
-  name: string
-  description: string
-  folderId: number
-}
 
 export default function DraggableBox({
   id,
   index,
   name,
   description,
-  folderId
+  folderId,
 }: DraggableBoxProps) {
-  const { moveFileItem } = useDndStore()
+  const { moveFileItem } = useDnd()
   const ref = useRef<HTMLDivElement>(null)
 
   const [, drop] = useDrop({
