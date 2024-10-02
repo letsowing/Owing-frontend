@@ -1,5 +1,5 @@
-import InputField from '../../../components/common/InputField'
-import TextAreaField from '../../../components/common/TextAreaField'
+import InputField from '@components/common/InputField'
+import TextAreaField from '@components/common/TextAreaField'
 
 interface InputFormProps {
   isEditable: boolean
@@ -7,7 +7,7 @@ interface InputFormProps {
 
 const InputForm = ({ isEditable }: InputFormProps) => {
   return (
-    <div className="flex flex-col space-y-9">
+    <div className="flex flex-col space-y-9 pe-1">
       <InputField
         type={'text'}
         labelValue={'이름'}

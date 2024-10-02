@@ -1,9 +1,11 @@
+import MainButton from '@components/common/MainButton'
+import Modal from '@components/common/Modal'
+import SubButton from '@components/common/SubButton'
+
 import ImageForm from './ImageForm'
 import InputForm from './InputForm'
 
-import MainButton from '@/components/common/MainButton'
-import Modal from '@/components/common/Modal'
-import SubButton from '@/components/common/SubButton'
+import TagField from '@/components/common/TagField'
 
 interface CharacterRelationshipModalProps {
   isOpen: boolean
@@ -17,16 +19,28 @@ const CharacterRelationshipModal = ({
   setIsOpen,
   isEditable,
 }: CharacterRelationshipModalProps) => {
+  const mockData = [
+    {
+      value: '1화',
+    },
+    {
+      value: '2화',
+    },
+    {
+      value: '3화',
+    },
+  ]
+
   return (
-    <div>
-      <Modal isOpen={isOpen} onRequestClose={() => null} setIsOpen={setIsOpen}>
-        <div className="mx-20 my-20 flex justify-between space-x-10">
-          <div className="mt-100 w-1/3">
-            <ImageForm />
-          </div>
-          <div className="flex w-2/3 flex-col justify-between">
-            <InputForm isEditable={isEditable} />
-            <div className="my-20 flex justify-end gap-2">
+    <Modal isOpen={isOpen} onRequestClose={() => null} setIsOpen={setIsOpen}>
+      <div className="mx-20 my-10 flex justify-between">
+        <div className="w-1/3">
+          <ImageForm isEditable={isEditable} />
+        </div>
+        <div className="flex w-2/3 flex-col justify-between">
+          <InputForm isEditable={isEditable} />
+          {isEditable ? (
+            <div className="mt-44 flex justify-end gap-2">
               <div className="w-1/3">
                 <SubButton value={'Cancel'} />
               </div>
@@ -34,10 +48,28 @@ const CharacterRelationshipModal = ({
                 <MainButton value={'Save'} />
               </div>
             </div>
-          </div>
+          ) : (
+            <>
+              <div className="mt-8">
+                <TagField
+                  labelValue={'등장원고'}
+                  tagList={mockData}
+                  isEditable={isEditable}
+                />
+              </div>
+              <div className="mt-20 flex justify-end gap-2">
+                <div className="w-1/3">
+                  <SubButton value={'Back'} />
+                </div>
+                <div className="w-1/3">
+                  <MainButton value={'Edit'} />
+                </div>
+              </div>
+            </>
+          )}
         </div>
-      </Modal>
-    </div>
+      </div>
+    </Modal>
   )
 }
 
