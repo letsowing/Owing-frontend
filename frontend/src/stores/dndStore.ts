@@ -1,6 +1,6 @@
-import { SCENARIO_LIST } from '@constants/scenarioList'
+import { SCENARIO_LIST } from '@datas/scenarioList'
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 // 파일 하나의 타입 정의
 interface FileItem {
@@ -59,6 +59,7 @@ export const useDndStore = create(
     }),
     {
       name: 'dnd-items', // 로컬 스토리지에 저장할 키
+      storage: createJSONStorage(() => localStorage),
     },
   ),
 )

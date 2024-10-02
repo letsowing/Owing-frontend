@@ -1,4 +1,5 @@
-import { useDndStore } from '../../stores/dndStore'
+import { useDnd } from '@hooks/useDnd'
+
 import DraggableBox from './DraggableBox'
 
 import AlertOwing from '@assets/common/AlertOwing.png'
@@ -8,7 +9,7 @@ interface DnDWrapperProps {
 }
 
 export default function DnDWrapper({ selectedFolderId }: DnDWrapperProps) {
-  const { items } = useDndStore()
+  const { items } = useDnd()
   const selectedFolder = items.find(
     (folder) => folder.folderId === selectedFolderId,
   )

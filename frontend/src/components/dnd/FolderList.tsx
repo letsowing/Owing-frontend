@@ -1,15 +1,10 @@
 import { useState } from 'react'
 
-import { useDndStore } from '../../stores/dndStore'
 import DraggableListItem from './DraggableListItem'
 
 interface FolderItemProps {
   folder: any // 폴더의 타입을 정의할 수 있습니다
   onSelectFolder: (folder: any) => void // 폴더가 선택될 때 호출할 함수
-}
-
-interface TabProps {
-  setSelectedFolderId: (folderId: number) => void // 상위 컴포넌트에서 전달받는 함수
 }
 
 // 폴더와 파일을 렌더링하는 컴포넌트
@@ -52,40 +47,4 @@ const FolderList = ({ folder, onSelectFolder }: FolderItemProps) => {
   )
 }
 
-export default function Tab({ setSelectedFolderId }: TabProps) {
-  const { items } = useDndStore() // items는 폴더 목록을 의미
-
-  // 선택된 폴더가 변경될 때 호출
-  const handleSelectFolder = (folder: any) => {
-    setSelectedFolderId(folder.folderId) // 상위 컴포넌트로 선택된 폴더 ID 전달
-  }
-
-  return (
-    <div
-      style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        width: '120px',
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: '10px',
-        backgroundColor: '#fff',
-        color: '#000',
-      }}
-    >
-      <h2>Folder View</h2>
-      <ul style={{ padding: 0, margin: 0 }}>
-        {items.map((folder: any) => (
-          <FolderList
-            key={folder.folderId}
-            folder={folder}
-            onSelectFolder={handleSelectFolder}
-          />
-        ))}
-      </ul>
-    </div>
-  )
-}
+export default FolderList
