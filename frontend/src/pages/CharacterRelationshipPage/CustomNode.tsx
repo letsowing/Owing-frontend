@@ -1,29 +1,36 @@
 import React, { memo } from 'react'
 
 import characterImage from '@assets/character/character.png'
-import { CustomNodeData } from '@types'
+import { CustomNodeRemoveProps } from '@types'
 import { Handle, Position } from '@xyflow/react'
+import { MdDelete } from 'react-icons/md'
 
-interface CustomNodeProps {
-  data: CustomNodeData
-}
+const CustomNode: React.FC<CustomNodeRemoveProps> = ({
+  id,
+  data,
+  onNodeRemove,
+}) => {
+  const handleDelete = () => {
+    onNodeRemove(id)
+  }
 
-const CustomNode: React.FC<CustomNodeProps> = ({ data }) => {
   return (
     <div className="w-32 overflow-hidden rounded-lg bg-white shadow-md dark:shadow-gray">
-      <Handle
-        type="source"
-        position={Position.Left}
-        id="left"
-        className="h-3 w-3"
-      />
-      <div className="border-b border-lightgray px-2 py-2">
-        <div className="truncate text-xs font-semibold text-gray">
-          {data.name}
+      <div className="flex justify-between border-b border-lightgray px-2 py-2">
+        <div>
+          <div className="truncate text-xs font-semibold text-gray">
+            {data.name}
+          </div>
+          <div className="truncate text-xs font-semibold text-gray">
+            {data.role}
+          </div>
         </div>
-        <div className="truncate text-xs font-semibold text-gray">
-          {data.role}
-        </div>
+        <button
+          onClick={handleDelete}
+          className="text-gray hover:text-redorange"
+        >
+          <MdDelete />
+        </button>
       </div>
       <div className="p-2">
         <img
@@ -32,12 +39,10 @@ const CustomNode: React.FC<CustomNodeProps> = ({ data }) => {
           className="m-auto w-20 object-cover"
         />
       </div>
-      <Handle
-        type="source"
-        position={Position.Right}
-        id="right"
-        className="h-3 w-3"
-      />
+      <Handle type="source" position={Position.Top} id="top" />
+      <Handle type="source" position={Position.Right} id="right" />
+      <Handle type="source" position={Position.Bottom} id="bottom" />
+      <Handle type="source" position={Position.Left} id="left" />
     </div>
   )
 }

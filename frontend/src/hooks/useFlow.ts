@@ -2,21 +2,23 @@ import { useCallback, useRef } from 'react'
 
 import { useFlowStore } from '@stores/flowStore'
 
-import { CustomNode, CustomNodeData } from '@types'
-import { Connection, Edge } from '@xyflow/react'
+import { CustomNodeData } from '@types'
+import { Connection, Edge, Node } from '@xyflow/react'
 
 export const useFlow = () => {
   const {
     nodes,
     edges,
+    isBidirectionalEdge,
     onNodesChange,
     onEdgesChange,
     onConnect,
     addNode,
     removeNode,
     removeEdge,
-    onNodeClick,
     reconnect,
+    setIsBidirectionalEdge,
+    updateEdgeLabel,
   } = useFlowStore()
 
   const edgeReconnectSuccessful = useRef(true)
@@ -41,9 +43,10 @@ export const useFlow = () => {
     },
     [removeEdge],
   )
+
   const onNodeAdd = useCallback(
     (data: CustomNodeData, position: { x: number; y: number }) => {
-      const newNode: CustomNode = {
+      const newNode: Node<CustomNodeData> = {
         id: `node_${Date.now()}`,
         data,
         position,
@@ -68,9 +71,17 @@ export const useFlow = () => {
     [removeEdge],
   )
 
+  const onEdgeLabelChange = useCallback(
+    (edgeId: string, newLabel: string) => {
+      updateEdgeLabel(edgeId, newLabel)
+    },
+    [updateEdgeLabel],
+  )
+
   return {
-    nodes,
+    nodes: nodes as Node<CustomNodeData>[],
     edges,
+    isBidirectionalEdge,
     onNodesChange,
     onEdgesChange,
     onConnect,
@@ -80,6 +91,7 @@ export const useFlow = () => {
     onNodeAdd,
     onNodeRemove,
     onEdgeRemove,
-    onNodeClick,
+    setIsBidirectionalEdge,
+    onEdgeLabelChange,
   }
 }

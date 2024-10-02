@@ -16,6 +16,8 @@ export default {
         lightgray: '#CFCDCD',
         gray: '#676767',
         darkgray: '#333333',
+        olive: '#AEE156',
+        violet: '#A49AFF',
 
         // dark mode
         coldbeige: '#F5F7FF',
