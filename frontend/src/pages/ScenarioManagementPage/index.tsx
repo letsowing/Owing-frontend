@@ -1,7 +1,7 @@
 import { useState } from 'react'
 
 import DnDWrapper from '@components/dnd/DnDWrapper'
-import FolderTab from '@components/dnd/FolderTab'
+import FolderTab from '@components/folderTab/FolderTab'
 
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'

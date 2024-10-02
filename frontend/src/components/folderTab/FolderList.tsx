@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import DraggableListItem from './DraggableListItem'
+import DraggableListItem from '../dnd/DraggableListItem'
 
 interface FolderItemProps {
   folder: any // 폴더의 타입을 정의할 수 있습니다
