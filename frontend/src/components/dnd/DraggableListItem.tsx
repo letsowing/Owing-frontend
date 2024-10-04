@@ -37,7 +37,7 @@ export default function DraggableListItem({
     },
   })
 
-  const [{ isDragging }, drag] = useDrag({
+  const [, drag] = useDrag({
     type: 'TAB_ITEM',
     item: { id, index },
     collect: (monitor) => ({
