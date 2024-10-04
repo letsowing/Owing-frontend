@@ -29,24 +29,24 @@ const FolderTab: React.FC<FolderTabProps> = ({
 
   return (
     <div
-      className={`bg-beige transition-all duration-300 ease-in-out ${
+      className={`bg-beige transition-all duration-300 ease-in-out dark:bg-coldbeige ${
         isOpen ? 'w-72' : 'w-0'
       } overflow-hidden`}
       style={{ height: '100%' }}
     >
       <div className="flex justify-between p-4">
         <p className="font-bold">억만장자</p>
-        <button onClick={onClose} className="text-gray dark:text-white">
+        <button onClick={onClose} className="text-darkgray">
           닫기
         </button>
       </div>
 
       <button
-        className="mx-4 mb-4 flex h-10 w-52 items-center justify-center rounded-md border border-solid bg-white text-sm"
+        className="mx-4 mb-4 flex h-10 w-52 items-center justify-center rounded-md border border-solid bg-white text-sm dark:bg-darkgray"
         style={{ borderColor: '#e8e8e8' }}
       >
-        <FaPlus size={12} />
-        <p className="px-1">Create Folder</p>
+        <FaPlus className="dark:text-white" size={12} />
+        <p className="px-1 dark:text-white">Create Folder</p>
       </button>
 
       <ul className="m-0 p-0">

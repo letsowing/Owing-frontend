@@ -54,15 +54,15 @@ export default function DraggableListItem({
     >
       <div className="flex items-center">
         <div
-          className="h-1 w-1 rounded-full"
-          style={{ backgroundColor: 'orange' }}
+          className="h-1 w-1 rounded-full bg-redorange dark:bg-blue"
+          // style={{ backgroundColor: 'orange' }}
         ></div>
-        <p className="mx-4">{name}</p>
+        <p className="mx-4 text-darkgray">{name}</p>
       </div>
 
       <div className="flex w-10 items-center justify-between">
-        <GoPencil />
-        <PiTrashSimpleLight />
+        <GoPencil className="text-darkgray" />
+        <PiTrashSimpleLight className="text-darkgray" />
       </div>
     </li>
   )

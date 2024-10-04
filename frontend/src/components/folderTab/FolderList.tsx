@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import DraggableListItem from '../dnd/DraggableListItem'
+import DraggableListItem from '@components/dnd/DraggableListItem'
 
 import { CiFolderOn } from 'react-icons/ci'
 import { GoPencil } from 'react-icons/go'
@@ -29,10 +29,12 @@ const FolderList = ({ folder, onSelectFolder, isActive }: FolderItemProps) => {
         onClick={toggleFolder}
       >
         <div className="flex items-center">
-          <CiFolderOn color={isActive ? '#fb5d2b' : '#999999'} />
+          <CiFolderOn
+            className={`${isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'}`}
+          />
           <p
             className={`px-2 text-base ${
-              isActive ? 'text-redorange' : 'text-[#999999]'
+              isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'
             }`}
           >
             {folder.name}
@@ -40,13 +42,13 @@ const FolderList = ({ folder, onSelectFolder, isActive }: FolderItemProps) => {
         </div>
         <div className="flex w-16 items-center justify-between">
           <PiFilePlusLight
-            className={`${isActive ? 'text-redorange' : 'text-[#999999]'}`}
+            className={`${isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'}`}
           />
           <GoPencil
-            className={`${isActive ? 'text-redorange' : 'text-[#999999]'}`}
+            className={`${isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'}`}
           />
           <PiTrashSimpleLight
-            className={`${isActive ? 'text-redorange' : 'text-[#999999]'}`}
+            className={`${isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'}`}
           />
         </div>
       </div>
