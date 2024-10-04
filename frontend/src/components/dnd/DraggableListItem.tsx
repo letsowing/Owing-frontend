@@ -50,7 +50,7 @@ export default function DraggableListItem({
   return (
     <li
       ref={ref}
-      className="${ isDragging? 'bg-[#e0e0e0] opacity-50' : 'bg-[#f5f5f5]' } my-4 flex h-8 w-full items-center justify-between"
+      className="${ isDragging? 'bg-[#e0e0e0] opacity-50' : 'bg-[#f5f5f5]' } my-2 flex h-10 w-full items-center justify-between"
     >
       <div className="flex items-center">
         <div
@@ -65,13 +65,5 @@ export default function DraggableListItem({
         <PiTrashSimpleLight />
       </div>
     </li>
-    // <li
-    //   ref={ref}
-    //   className={`my-4 cursor-pointer list-none rounded-md p-2.5 ${
-    //     isDragging ? 'bg-[#e0e0e0] opacity-50' : 'bg-[#f5f5f5]'
-    //   }`}
-    // >
-    //   <p className="m-0">{name}</p>
-    // </li>
   )
 }
