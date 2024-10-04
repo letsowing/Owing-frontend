@@ -3,6 +3,8 @@ import { useRef } from 'react'
 import { useDnd } from '@hooks/useDnd'
 
 import { useDrag, useDrop } from 'react-dnd'
+import { GoPencil } from 'react-icons/go'
+import { PiTrashSimpleLight } from 'react-icons/pi'
 
 interface DraggableListItemProps {
   id: string
@@ -48,11 +50,20 @@ export default function DraggableListItem({
   return (
     <li
       ref={ref}
-      className={`my-4 cursor-pointer list-none rounded-md p-2.5 ${
-        isDragging ? 'bg-[#e0e0e0] opacity-50' : 'bg-[#f5f5f5]'
-      }`}
+      className="${ isDragging? 'bg-[#e0e0e0] opacity-50' : 'bg-[#f5f5f5]' } my-2 flex h-10 w-full items-center justify-between"
     >
-      <p className="m-0">{name}</p>
+      <div className="flex items-center">
+        <div
+          className="h-1 w-1 rounded-full bg-redorange dark:bg-blue"
+          // style={{ backgroundColor: 'orange' }}
+        ></div>
+        <p className="mx-4 text-darkgray">{name}</p>
+      </div>
+
+      <div className="flex w-10 items-center justify-between">
+        <GoPencil className="text-darkgray" />
+        <PiTrashSimpleLight className="text-darkgray" />
+      </div>
     </li>
   )
 }

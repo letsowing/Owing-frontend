@@ -15,7 +15,7 @@ export default function DnDWrapper({ selectedFolderId }: DnDWrapperProps) {
   )
 
   return (
-    <div className="ml-20 p-5">
+    <div className="p-5">
       {selectedFolder ? (
         selectedFolder.files.length === 0 ? ( // 폴더는 있지만 파일이 없는 경우
           <div className="mt-[200px] text-center">
