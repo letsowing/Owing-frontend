@@ -38,7 +38,7 @@ export default function WorldViewWrapper({
               </p>
             </div>
 
-            <div className="flex w-full flex-wrap bg-[#FCFBFA] py-2">
+            <div className="flex max-h-[80vh] w-full flex-wrap overflow-y-auto bg-[#FCFBFA] py-2">
               {selectedFolder &&
                 selectedFolder.files.map((file, index) => (
                   <WorldViewDraggableBox
