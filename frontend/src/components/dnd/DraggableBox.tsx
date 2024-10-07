@@ -43,7 +43,7 @@ export default function DraggableBox({
   return (
     <div
       ref={ref}
-      className={`shadow-gray-300/50 m-2 h-[250px] w-[360px] rounded-[10px] bg-white p-2 shadow-lg dark:bg-verydarkblack dark:text-white ${
+      className={`shadow-gray-300/50 m-2 h-56 rounded-[10px] bg-white p-2 shadow-lg dark:bg-verydarkblack dark:text-white ${
         isDragging ? 'opacity-20' : ''
       }`}
     >

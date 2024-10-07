@@ -54,7 +54,7 @@ const HeaderFolderTabLayout: React.FC = () => {
             onClose={handleCloseFolderTab} // FolderTab 닫기 핸들러
             setSelectedFolderId={setSelectedFolderId} // FolderTab에서 선택된 폴더 ID 설정
           />
-          <main className="h-full w-full dark:bg-darkblack">
+          <main className="h-full w-full overflow-y-auto dark:bg-darkblack">
             <Header isTabOpen={isTabOpen} />
             <Outlet />
           </main>

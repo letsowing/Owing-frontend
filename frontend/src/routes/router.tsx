@@ -1,16 +1,17 @@
 import HeaderFolderTabLayout from '@layouts/HeaderFolderTabLayout'
 import HeaderTabLayout from '@layouts/HeaderTabLayout'
+import WorldViewTabLayout from '@layouts/WorldViewTabLayout'
 
+import CharacterPage from '@pages/CharacterPage'
 import CharacterRelationshipPage from '@pages/CharacterRelationshipPage'
 import Landing from '@pages/LandingPage'
 import Login from '@pages/LoginPage'
 import Main from '@pages/MainPage'
 import Register from '@pages/RegisterPage'
 import ScenarioManagementPage from '@pages/ScenarioManagementPage'
+import WorldView from '@pages/WorldViewPage'
 
 import App from '@/App'
-import WorldViewTabLayout from '@/layouts/WorldViewTabLayout'
-import WorldView from '@/pages/WorldViewPage'
 import { createBrowserRouter } from 'react-router-dom'
 
 const router = createBrowserRouter([
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
           {
             path: 'scenarioManagement',
             element: <ScenarioManagementPage />,
+          },
+          {
+            path: 'character',
+            element: <CharacterPage />,
           },
         ],
       },

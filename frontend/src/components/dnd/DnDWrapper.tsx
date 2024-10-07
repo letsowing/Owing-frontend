@@ -27,7 +27,7 @@ export default function DnDWrapper({ selectedFolderId }: DnDWrapperProps) {
             <div className="text-redorange">파일을 생성해 주세요!</div>
           </div>
         ) : (
-          <div className="grid grid-cols-4 gap-4">
+          <div className="xs:grid-cols-3 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {selectedFolder &&
               selectedFolder.files.map((file, index) => (
                 <DraggableBox
