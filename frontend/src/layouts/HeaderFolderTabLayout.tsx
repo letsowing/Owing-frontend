@@ -37,17 +37,17 @@ const HeaderFolderTabLayout: React.FC = () => {
   }
 
   return (
-    <div className="flex h-screen">
-      {!isNotTabPage && (
-        <MenuTab
-          style={{ width: `${tabWidth}px` }}
-          isTabOpen={isTabOpen}
-          onToggle={toggleTab}
-          onItemClick={handleMenuItemClick}
-        />
-      )}
+    <DndProvider backend={HTML5Backend}>
+      <div className="flex h-screen">
+        {!isNotTabPage && (
+          <MenuTab
+            style={{ width: `${tabWidth}px` }}
+            isTabOpen={isTabOpen}
+            onToggle={toggleTab}
+            onItemClick={handleMenuItemClick}
+          />
+        )}
 
-      <DndProvider backend={HTML5Backend}>
         <div className="flex h-full w-full flex-row">
           <FolderTab
             isOpen={isFolderTabOpen} // FolderTab 열림 상태
@@ -59,8 +59,8 @@ const HeaderFolderTabLayout: React.FC = () => {
             <Outlet />
           </main>
         </div>
-      </DndProvider>
-    </div>
+      </div>
+    </DndProvider>
   )
 }
 
