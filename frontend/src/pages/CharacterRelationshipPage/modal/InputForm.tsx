@@ -22,7 +22,7 @@ const InputForm: React.FC<InputFormProps> = ({
         type="text"
         labelValue="이름"
         value={character.name}
-        isRequired={isEditable}
+        isRequired={true}
         maxLength={50}
         isEditable={isEditable}
         onChange={(value) => onInputChange('name', value)}
@@ -33,7 +33,7 @@ const InputForm: React.FC<InputFormProps> = ({
             type="number"
             labelValue="나이"
             value={character.age.toString()}
-            isRequired={isEditable}
+            isRequired={false}
             maxLength={50}
             isEditable={isEditable}
             onChange={(value) => onInputChange('age', parseInt(value, 10) || 0)}
@@ -44,7 +44,7 @@ const InputForm: React.FC<InputFormProps> = ({
             type="text"
             labelValue="성별"
             value={character.gender}
-            isRequired={isEditable}
+            isRequired={false}
             maxLength={50}
             isEditable={isEditable}
             onChange={(value) => onInputChange('gender', value)}
@@ -55,7 +55,7 @@ const InputForm: React.FC<InputFormProps> = ({
         type="text"
         labelValue="역할/직업"
         value={character.role}
-        isRequired={false}
+        isRequired={true}
         maxLength={200}
         isEditable={isEditable}
         onChange={(value) => onInputChange('role', value)}
@@ -63,7 +63,7 @@ const InputForm: React.FC<InputFormProps> = ({
       <TextAreaField
         labelValue="세부사항"
         value={character.details}
-        isRequired={isEditable}
+        isRequired={false}
         maxLength={1000}
         isEditable={isEditable}
         onChange={(value) => onInputChange('details', value)}
