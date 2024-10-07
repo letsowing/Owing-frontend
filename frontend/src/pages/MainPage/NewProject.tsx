@@ -1,13 +1,6 @@
-interface NewProjectProps {
-  onClickNewProject: React.MouseEventHandler<HTMLDivElement>
-}
-
-const NewProject = ({ onClickNewProject }: NewProjectProps) => {
+const NewProject = () => {
   return (
-    <div
-      className="flex h-[200px] w-[150px] items-center justify-center rounded-3xl border border-dashed"
-      onClick={onClickNewProject}
-    >
+    <div className="my-1 flex h-[200px] w-[150px] items-center justify-center rounded-3xl border border-dashed">
       <label className="text-sm font-semibold">새 작품 생성</label>
     </div>
   )
