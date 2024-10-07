@@ -28,14 +28,9 @@ const HeaderTabLayout: React.FC = () => {
           onToggle={toggleTab}
         />
       )}
-      <div
-        className="flex flex-1 flex-col"
-        style={{ width: `calc(100% - ${isNotTabPage ? 0 : tabWidth}px)` }}
-      >
+      <div className="flex flex-1 flex-col">
         <Header isTabOpen={isTabOpen} />
-        <main className="flex-1 overflow-auto">
-          <Outlet />
-        </main>
+        <Outlet />
       </div>
     </div>
   )

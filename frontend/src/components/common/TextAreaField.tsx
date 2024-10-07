@@ -1,38 +1,35 @@
-import { useEffect, useRef, useState } from 'react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface TextAreaFieldProps {
+  value: string
   labelValue: string
   isRequired?: boolean
   maxLength?: number
-  initialValue?: string
   isEditable?: boolean
+  onChange: (value: string) => void
 }
 
-const TextAreaField = ({
+const TextAreaField: React.FC<TextAreaFieldProps> = ({
+  value,
   labelValue,
   isRequired = false,
-  maxLength = 50,
-  initialValue = '',
+  maxLength = 1000,
   isEditable = true,
-}: TextAreaFieldProps) => {
-  const [inputValue, setInputValue] = useState(initialValue)
-  const textAreaRef = useRef<HTMLTextAreaElement>(null)
-
-  const onChangeInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (isEditable && e.target.value.length <= maxLength) {
-      setInputValue(e.target.value)
-      if (textAreaRef.current) {
-        textAreaRef.current.style.height = 'auto'
-        textAreaRef.current.style.height =
-          textAreaRef.current.scrollHeight + 'px'
-      }
-    }
-  }
+  onChange,
+}) => {
+  const [textValue, setTextValue] = useState(value)
 
   useEffect(() => {
-    setInputValue(initialValue)
-  }, [initialValue])
+    setTextValue(value)
+  }, [value])
+
+  const onChangeTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newValue = e.target.value
+    if (isEditable && newValue.length <= maxLength) {
+      setTextValue(newValue)
+      onChange(newValue)
+    }
+  }
 
   return (
     <div className="flex flex-col">
@@ -44,18 +41,18 @@ const TextAreaField = ({
           )}
         </label>
         <span className="text-sm font-medium text-redorange dark:text-blue">
-          {isEditable ? inputValue.length + '/' + maxLength : ''}
+          {isEditable ? textValue.length + '/' + maxLength : ''}
         </span>
       </div>
       <textarea
-        ref={textAreaRef}
-        value={inputValue}
-        onChange={onChangeInput}
+        value={textValue}
+        onChange={onChangeTextArea}
         maxLength={maxLength}
         readOnly={!isEditable}
-        className="dark:focus-blue dark:bg-verydarkblack dark:border-lightdarkgray mt-1 h-auto min-h-[150px] w-full rounded-lg border border-lightgray px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-redorange dark:text-coldbeige dark:ring-blue"
+        className="mt-1 h-36 w-full rounded-lg border border-lightgray px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-redorange dark:border-lightdarkgray dark:bg-verydarkblack dark:text-coldbeige dark:ring-blue"
       />
     </div>
   )
 }
+
 export default TextAreaField

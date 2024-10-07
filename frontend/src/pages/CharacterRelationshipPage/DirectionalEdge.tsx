@@ -5,7 +5,7 @@ import { getSpecialPath } from './getSpecialPath'
 import { CommonEdgeProps, useCommonEdge } from '@/hooks/useCommonEdge'
 import { EdgeLabelRenderer } from '@xyflow/react'
 
-export default function UnidirectionalEdge({
+export default function DirectionalEdge({
   id,
   sourceX,
   sourceY,
@@ -48,13 +48,10 @@ export default function UnidirectionalEdge({
       />
       <EdgeLabelRenderer>
         <div
+          className="nodrag nopan pointer-events-auto absolute z-20 -translate-x-1/2 -translate-y-1/2 transform text-xs"
           style={{
-            position: 'absolute',
             transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-            fontSize: 12,
-            pointerEvents: 'all',
           }}
-          className="nodrag nopan"
         >
           {isEditing ? (
             <input

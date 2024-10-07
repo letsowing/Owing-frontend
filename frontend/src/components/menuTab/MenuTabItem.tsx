@@ -6,13 +6,13 @@ import { LiaFeatherAltSolid } from 'react-icons/lia'
 interface MenuTabItemProps {
   text: string
   isActive: boolean
-  onClick: () => void
+  onClickMenu: () => void
 }
 
 const MenuTabItem: React.FC<MenuTabItemProps> = ({
   text,
   isActive,
-  onClick,
+  onClickMenu,
 }) => {
   return (
     <div
@@ -22,7 +22,7 @@ const MenuTabItem: React.FC<MenuTabItemProps> = ({
           : 'text-gray hover:bg-beige dark:text-coldbeige dark:hover:bg-coldbeige dark:hover:text-gray'
       }`}
       onClick={() => {
-        onClick()
+        onClickMenu()
       }}
     >
       <div className="flex items-center">

@@ -1,11 +1,11 @@
 export const MENU_LIST = [
   {
     text: '스토리 원고',
-    path: 'story',
+    path: 'scenarioManagement',
   },
   {
     text: '인물관계도',
-    path: 'relation',
+    path: 'characterRelationship',
   },
   {
     text: '캐릭터',

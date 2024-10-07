@@ -28,6 +28,7 @@
     "react-router-dom": "^6.26.2",
     "reactflow": "^11.11.4",
     "sort-by": "^1.2.0",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "uuid": "^10.0.0",
     "zustand": "^4.5.5"
   },

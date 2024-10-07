@@ -15,6 +15,7 @@ export const useFlow = () => {
     onConnect,
     addNode,
     removeNode,
+    updateNode,
     removeEdge,
     reconnect,
     setIsBidirectionalEdge,
@@ -45,9 +46,9 @@ export const useFlow = () => {
   )
 
   const onNodeAdd = useCallback(
-    (data: CustomNodeData, position: { x: number; y: number }) => {
+    (id: string, data: CustomNodeData, position: { x: number; y: number }) => {
       const newNode: Node<CustomNodeData> = {
-        id: `node_${Date.now()}`,
+        id,
         data,
         position,
         type: 'customNode',
@@ -62,6 +63,13 @@ export const useFlow = () => {
       removeNode(nodeId)
     },
     [removeNode],
+  )
+
+  const onNodeUpdate = useCallback(
+    (nodeId: string, data: Partial<CustomNodeData>) => {
+      updateNode(nodeId, data)
+    },
+    [updateNode],
   )
 
   const onEdgeRemove = useCallback(
@@ -90,6 +98,7 @@ export const useFlow = () => {
     onReconnectEnd,
     onNodeAdd,
     onNodeRemove,
+    onNodeUpdate,
     onEdgeRemove,
     setIsBidirectionalEdge,
     onEdgeLabelChange,

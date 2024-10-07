@@ -1,0 +1,47 @@
+import useMenuStore from '@stores/menuStore'
+
+import { MenuPath } from '@constants/menu'
+import { useNavigate } from 'react-router-dom'
+
+const useNavigation = () => {
+  const navigate = useNavigate()
+  const { activePath, setActivePath } = useMenuStore()
+
+  const goTo = (path: MenuPath) => {
+    setActivePath(path)
+    navigate(path)
+  }
+
+  const goToMain = () => {
+    navigate('/main')
+  }
+
+  const goToLogin = () => {
+    navigate('/login')
+  }
+
+  const goToRegister = () => {
+    navigate('/register')
+  }
+
+  const goToCharacterRelationship = () => {
+    navigate('/characterRelationship')
+  }
+
+  const goToScenarioManagement = () => {
+    navigate('/scenarioManagement')
+  }
+
+  return {
+    goTo,
+    goToMain,
+    goToLogin,
+    goToRegister,
+    goToCharacterRelationship,
+    goToScenarioManagement,
+    activePath,
+    setActivePath,
+  }
+}
+
+export default useNavigation
