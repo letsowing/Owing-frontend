@@ -1,16 +1,25 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 
 import useThemeStore from '@stores/themeStore'
 
-import { useFlow } from '@hooks/useFlow'
+import { useCharFlow } from '@hooks/useCharFlow'
+import { useModalManagement } from '@hooks/useModal'
 
 import AddButton from './AddButton'
 import BidirectionalEdge from './BidirectionalEdge'
 import CustomNode from './CustomNode'
+import DirectionalEdge from './DirectionalEdge'
 import SelectEdgeButton from './SelectEdgeButton'
-import UnidirectionalEdge from './UnidirectionalEdge'
+import CharacterRelationshipModal from './modal/CharacterRelationshipModal'
 
-import { CustomNodeProps, EdgeTypes, NodeTypes } from '@/types'
+import {
+  Character,
+  CustomNodeProps,
+  CustomNode as CustomNodeType,
+  EdgeTypes,
+  ModalType,
+  NodeTypes,
+} from '@types'
 import {
   Background,
   ConnectionMode,
@@ -32,16 +41,27 @@ const FlowWithProvider: React.FC = () => {
     onReconnectStart,
     onReconnect,
     onReconnectEnd,
-    onNodeAdd,
-    onNodeRemove,
+    addCharacter,
+    updateCharacter,
+    deleteCharacter,
+    getCharacterById,
     isBidirectionalEdge,
     setIsBidirectionalEdge,
     onEdgeLabelChange,
-  } = useFlow()
+  } = useCharFlow()
+
+  const { isDarkMode } = useThemeStore()
+  const { modals, openModal, closeModal } = useModalManagement()
+
+  const [isEditable, setIsEditable] = useState(false)
 
   const isValidConnection = () => {
     return true // 모든 연결 허용
   }
+
+  const toggleEditMode = useCallback(() => {
+    setIsEditable((prev) => !prev)
+  }, [])
 
   const handleEdgeLabelChange = useCallback(
     (edgeId: string, newLabel: string) => {
@@ -50,54 +70,109 @@ const FlowWithProvider: React.FC = () => {
     [onEdgeLabelChange],
   )
 
+  const handleCharacterAction = useCallback(
+    (character: Character) => {
+      if (character.id) {
+        updateCharacter(character)
+      } else {
+        addCharacter(character)
+      }
+      closeModal()
+      setIsEditable(false)
+    },
+    [updateCharacter, addCharacter, closeModal],
+  )
+
+  const handleCloseModal = useCallback(() => {
+    closeModal()
+    setIsEditable(false)
+  }, [closeModal])
+
+  const handleNodeClick = useCallback(
+    (_event: React.MouseEvent, node: CustomNodeType) => {
+      const character = getCharacterById(node.id)
+      if (character) {
+        openModal({
+          type: ModalType.CHARACTER_RELATIONSHIP,
+          character,
+          isEditable: false,
+          onSave: handleCharacterAction,
+          onEdit: toggleEditMode,
+          onClose: handleCloseModal,
+        })
+        setIsEditable(false)
+      }
+    },
+    [
+      getCharacterById,
+      handleCharacterAction,
+      handleCloseModal,
+      openModal,
+      toggleEditMode,
+    ],
+  )
+
+  const handleAddCharacter = useCallback(() => {
+    openModal({
+      type: ModalType.CHARACTER_RELATIONSHIP,
+      character: null,
+      isEditable: true,
+      onSave: handleCharacterAction,
+      onEdit: toggleEditMode,
+      onClose: handleCloseModal,
+    })
+    setIsEditable(true)
+  }, [handleCloseModal, handleCharacterAction, openModal, toggleEditMode])
+
+  const handleNodeRemove = useCallback(
+    (nodeId: string) => {
+      deleteCharacter(nodeId)
+    },
+    [deleteCharacter],
+  )
+
   const nodeTypes = useMemo<NodeTypes>(
     () => ({
       customNode: (props: CustomNodeProps) => (
-        <CustomNode {...props} onNodeRemove={onNodeRemove} />
-      ),
-    }),
-    [onNodeRemove],
-  )
-  const edgeTypes = useMemo<EdgeTypes>(
-    () => ({
-      unidirectionalEdge: (props: EdgeProps) => (
-        <UnidirectionalEdge
+        <CustomNode
           {...props}
-          onLabelChange={handleEdgeLabelChange}
-          type="unidirectionalEdge"
+          onNodeRemove={handleNodeRemove}
+          onNodeClick={handleNodeClick}
         />
       ),
-      bidirectionalEdge: (props: EdgeProps) => (
+    }),
+    [handleNodeRemove, handleNodeClick],
+  )
+
+  const edgeTypes = useMemo<EdgeTypes>(
+    () => ({
+      Directional: (props: EdgeProps) => (
+        <DirectionalEdge
+          {...props}
+          onLabelChange={handleEdgeLabelChange}
+          type="Directional"
+        />
+      ),
+      Bidirectional: (props: EdgeProps) => (
         <BidirectionalEdge
           {...props}
           onLabelChange={handleEdgeLabelChange}
-          type="bidirectionalEdge"
+          type="Bidirectional"
         />
       ),
     }),
     [handleEdgeLabelChange],
   )
+
   const defaultEdgeOptions = useMemo(
     () => ({
-      type: isBidirectionalEdge ? 'bidirectionalEdge' : 'unidirectionalEdge',
+      type: isBidirectionalEdge ? 'Bidirectional' : 'Directional',
     }),
     [isBidirectionalEdge],
   )
-  const { isDarkMode } = useThemeStore()
-
-  const handleAddCharacter = useCallback(() => {
-    onNodeAdd(
-      {
-        name: '김보미',
-        role: '여주인공',
-        image: 'placeholder.jpg',
-      },
-      { x: 100, y: 100 },
-    )
-  }, [onNodeAdd])
 
   return (
-    <div className="relative h-full w-full">
+    <>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -128,7 +203,23 @@ const FlowWithProvider: React.FC = () => {
           />
         </div>
       </div>
-    </div>
+      {modals.map((modal, index) => {
+        if (modal.type === 'CHARACTER_RELATIONSHIP') {
+          return (
+            <CharacterRelationshipModal
+              key={index}
+              isEditable={isEditable}
+              onEdit={() => setIsEditable(true)}
+              onSave={handleCharacterAction}
+              onClose={handleCloseModal}
+              type={ModalType.CHARACTER_RELATIONSHIP}
+              character={modal.character}
+            />
+          )
+        }
+        return null
+      })}
+    </>
   )
 }
 

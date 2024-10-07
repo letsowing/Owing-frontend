@@ -10,7 +10,7 @@ interface MenuTabProps {
   style?: React.CSSProperties
   isTabOpen: boolean
   onToggle: () => void
-  onItemClick?: () => void // 항목 클릭 시 호출할 함수 추가
+  onItemClick?: () => void
 }
 
 const MenuTab: React.FC<MenuTabProps> = ({
@@ -21,7 +21,7 @@ const MenuTab: React.FC<MenuTabProps> = ({
 }) => {
   return (
     <nav
-      className="flex h-full flex-col bg-white transition-all duration-300 ease-in-out dark:bg-darkblack"
+      className="flex h-full flex-col bg-white dark:bg-darkblack"
       style={style}
     >
       <div className="flex items-center justify-between p-3">

@@ -1,34 +1,37 @@
-import { useEffect, useState } from 'react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 interface InputFieldProps {
-  type: string
+  type: 'text' | 'number'
+  value: string
   labelValue: string
   isRequired?: boolean
   maxLength?: number
-  initialValue?: string
   isEditable?: boolean
+  onChange: (value: string) => void
 }
 
-const InputField = ({
+const InputField: React.FC<InputFieldProps> = ({
   type,
+  value,
   labelValue,
   isRequired = false,
   maxLength = 50,
-  initialValue = '',
   isEditable = true,
-}: InputFieldProps) => {
-  const [inputValue, setInputValue] = useState(initialValue)
-
-  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isEditable && e.target.value.length <= maxLength) {
-      setInputValue(e.target.value)
-    }
-  }
+  onChange,
+}) => {
+  const [inputValue, setInputValue] = useState(value)
 
   useEffect(() => {
-    setInputValue(initialValue)
-  }, [initialValue])
+    setInputValue(value)
+  }, [value])
+
+  const onChangeInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value
+    if (isEditable && newValue.length <= maxLength) {
+      setInputValue(newValue)
+      onChange(newValue)
+    }
+  }
 
   return (
     <div className="flex flex-col">
@@ -54,4 +57,5 @@ const InputField = ({
     </div>
   )
 }
+
 export default InputField

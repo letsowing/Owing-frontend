@@ -1,26 +1,67 @@
+import React from 'react'
+
 import { BsPlusCircle } from 'react-icons/bs'
 import { MdLightbulbOutline } from 'react-icons/md'
 
 interface ImageFormProps {
   isEditable: boolean
+  image: string
+  onImageChange: (image: string) => void
+  onAIGenerateClick: () => void
 }
 
-const ImageForm = ({ isEditable }: ImageFormProps) => {
+const ImageForm: React.FC<ImageFormProps> = ({
+  isEditable,
+  image,
+  onImageChange,
+  onAIGenerateClick,
+}) => {
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        onImageChange(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
   return (
     <div className="flex flex-col ps-1">
       <div className="flex w-[300px] justify-between">
         <label className="font-semibold dark:text-coldbeige">이미지</label>
         {isEditable && (
-          <BsPlusCircle className="mt-1 text-redorange dark:text-blue" />
+          <label htmlFor="imageUpload" className="cursor-pointer">
+            <BsPlusCircle className="mt-1 text-redorange dark:text-blue" />
+          </label>
         )}
+        <input
+          id="imageUpload"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleImageUpload}
+          disabled={!isEditable}
+        />
       </div>
-      <div className="dark:bg-verydarkblack dark:border-lightdarkgray my-1 flex h-[300px] w-[300px] justify-center rounded-xl border border-lightgray">
-        <img src="" className=""></img>
+      <div className="my-1 flex h-80 w-80 justify-center rounded-xl border border-lightgray dark:border-lightdarkgray dark:bg-verydarkblack">
+        {image ? (
+          <img
+            src={image}
+            alt="Character"
+            className="w-full rounded-xl object-cover"
+          />
+        ) : (
+          <div className="flex items-center justify-center text-gray">
+            No image uploaded
+          </div>
+        )}
       </div>
       {isEditable && (
         <div
-          // onClick={onClick}
-          className="dark:border-lightdarkgray my-3 flex w-[300px] cursor-pointer items-center justify-between rounded-full border border-lightgray p-3 px-4"
+          onClick={onAIGenerateClick}
+          className="my-3 flex w-80 cursor-pointer items-center justify-between rounded-full border border-lightgray p-3 px-4 dark:border-lightdarkgray"
         >
           <div className="flex items-center space-x-2">
             <div className="text-xl font-medium text-redorange dark:text-blue">

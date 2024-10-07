@@ -1,4 +1,6 @@
-import { CustomNode } from '@types'
+import { generateUUID } from '@utils/uuid'
+
+import { CustomNode, CustomNodeData } from '@types'
 import {
   Connection,
   Edge,
@@ -25,6 +27,7 @@ interface FlowActions {
   onConnect: OnConnect
   addNode: (node: CustomNode) => void
   removeNode: (nodeId: string) => void
+  updateNode: (nodeId: string, data: Partial<CustomNodeData>) => void
   removeEdge: (edgeId: string) => void
   updateEdgeLabel: (edgeId: string, label: string) => void
   reconnect: (oldEdge: Edge, newConnection: Connection) => void
@@ -62,11 +65,9 @@ export const useFlowStore = create<FlowStore>()(
         set((state) => {
           const { edges, isBidirectionalEdge } = state
 
-          const edgeType = isBidirectionalEdge
-            ? 'bidirectionalEdge'
-            : 'unidirectionalEdge'
+          const edgeType = isBidirectionalEdge ? 'Bidirectional' : 'Directional'
 
-          const newEdgeId = `${edgeType}-${connection.source}-${connection.target}`
+          const newEdgeId = generateUUID()
 
           let updatedEdges = [...edges]
 
@@ -88,7 +89,7 @@ export const useFlowStore = create<FlowStore>()(
             updatedEdges = updatedEdges.filter(
               (edge) =>
                 !(
-                  edge.type === 'bidirectionalEdge' &&
+                  edge.type === 'Bidirectional' &&
                   ((edge.source === connection.source &&
                     edge.target === connection.target) ||
                     (edge.source === connection.target &&
@@ -120,6 +121,16 @@ export const useFlowStore = create<FlowStore>()(
           nodes: state.nodes.filter((node) => node.id !== nodeId),
           edges: state.edges.filter(
             (edge) => edge.source !== nodeId && edge.target !== nodeId,
+          ),
+        }))
+      },
+
+      updateNode: (nodeId: string, data: Partial<CustomNodeData>) => {
+        set((state) => ({
+          nodes: state.nodes.map((node) =>
+            node.id === nodeId
+              ? { ...node, data: { ...node.data, ...data } }
+              : node,
           ),
         }))
       },

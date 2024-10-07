@@ -16,8 +16,8 @@ const TagField = ({ labelValue, tagList, isEditable }: TagFieldProps) => {
         )}
       </label>
       <div className="mt-2 flex flex-wrap gap-3">
-        {tagList.map((tag) => (
-          <Tag value={tag.value} />
+        {tagList.map((tag, index) => (
+          <Tag value={tag.value} key={index} />
           // <Tag value={tag.value} isActive={tag.isActive} />
         ))}
       </div>

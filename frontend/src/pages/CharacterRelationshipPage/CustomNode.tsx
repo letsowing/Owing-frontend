@@ -1,21 +1,41 @@
-import React, { memo } from 'react'
+import React, { memo, useCallback } from 'react'
 
 import characterImage from '@assets/character/character.png'
-import { CustomNodeRemoveProps } from '@types'
+import { CustomNodeProps, CustomNode as CustomNodeType } from '@types'
 import { Handle, Position } from '@xyflow/react'
 import { MdDelete } from 'react-icons/md'
+
+export interface CustomNodeRemoveProps extends CustomNodeProps {
+  onNodeRemove: (nodeId: string) => void
+  onNodeClick: (event: React.MouseEvent, node: CustomNodeType) => void
+}
 
 const CustomNode: React.FC<CustomNodeRemoveProps> = ({
   id,
   data,
   onNodeRemove,
+  onNodeClick,
 }) => {
-  const handleDelete = () => {
-    onNodeRemove(id)
-  }
+  const handleDelete = useCallback(
+    (event: React.MouseEvent) => {
+      event.stopPropagation()
+      onNodeRemove(id)
+    },
+    [id, onNodeRemove],
+  )
+
+  const handleClick = useCallback(
+    (event: React.MouseEvent) => {
+      onNodeClick(event, { id, data } as CustomNodeType)
+    },
+    [id, data, onNodeClick],
+  )
 
   return (
-    <div className="w-32 overflow-hidden rounded-lg bg-white shadow-md dark:shadow-gray">
+    <div
+      className="z-10 w-32 cursor-pointer overflow-hidden rounded-lg bg-white shadow-md dark:shadow-gray"
+      onClick={handleClick}
+    >
       <div className="flex justify-between border-b border-lightgray px-2 py-2">
         <div>
           <div className="truncate text-xs font-semibold text-gray">
@@ -34,9 +54,9 @@ const CustomNode: React.FC<CustomNodeRemoveProps> = ({
       </div>
       <div className="p-2">
         <img
-          src={characterImage}
+          src={data.image || characterImage}
           alt={data.name}
-          className="m-auto w-20 object-cover"
+          className="m-auto h-20 w-20 object-cover"
         />
       </div>
       <Handle type="source" position={Position.Top} id="top" />

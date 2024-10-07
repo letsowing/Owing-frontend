@@ -13,7 +13,7 @@ const useMenuStore = create<MenuState>()(
       const storedMenu = localStorage.getItem('menu')
       const initialActivePath: MenuPath = storedMenu
         ? JSON.parse(storedMenu).state.activePath
-        : 'story'
+        : 'ScenarioManagementPage'
 
       return {
         activePath: initialActivePath,

@@ -6,7 +6,7 @@ import { EdgeProps } from '@xyflow/react'
 
 export interface CommonEdgeProps extends EdgeProps {
   onLabelChange: (edgeId: string, newLabel: string) => void
-  type: 'unidirectionalEdge' | 'bidirectionalEdge' // 이 줄을 추가합니다
+  type: 'Directional' | 'Bidirectional'
 }
 
 export const useCommonEdge = (
@@ -18,11 +18,7 @@ export const useCommonEdge = (
   const { isDarkMode } = useThemeStore()
 
   const edgeColor =
-    type === 'bidirectionalEdge'
-      ? '#AEE156'
-      : isDarkMode
-        ? '#A49AFF'
-        : '#FB5D2B'
+    type === 'Bidirectional' ? '#AEE156' : isDarkMode ? '#A49AFF' : '#FB5D2B'
 
   const [isEditing, setIsEditing] = useState(false)
   const [labelText, setLabelText] = useState(
