@@ -18,7 +18,7 @@ const AllScenario = ({ projects }: AllScenarioProps) => {
         </label>
         {/* <select className="text-redorange"></select> */}
       </div>
-      <div>
+      <div className="mt-1">
         <ProjectList projects={projects} />
       </div>
     </div>
