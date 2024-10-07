@@ -1,45 +1,52 @@
 import { useRef } from 'react'
 
-import { useDnd } from '@hooks/useDnd'
+import { useWorldViewStore } from '@stores/worldViewStore'
 
 import { useDrag, useDrop } from 'react-dnd'
 import { GoPencil } from 'react-icons/go'
 import { PiTrashSimpleLight } from 'react-icons/pi'
 
-interface DraggableListItemProps {
-  id: string
+interface WorldViewFolderItemProps {
+  id: number
+  folder: any
   index: number
   name: string
   folderId: number
 }
 
-export default function DraggableListItem({
-  id,
+export default function WorldViewFolderItem({
+  // id,
+  // folder,
   index,
   name,
   folderId,
-}: DraggableListItemProps) {
-  const { moveFileItem } = useDnd()
+}: WorldViewFolderItemProps) {
+  const { moveFile } = useWorldViewStore()
   const ref = useRef<HTMLLIElement>(null)
 
+  // useDrop 설정
   const [, drop] = useDrop({
-    accept: 'TAB_ITEM',
-    hover(item: { id: string; index: number }) {
+    accept: 'FILE',
+    hover(item: { index: number }) {
       if (!ref.current) return
-
       const dragIndex = item.index
       const hoverIndex = index
 
+      // 드래그 인덱스와 호버 인덱스가 같으면 리턴
       if (dragIndex === hoverIndex) return
 
-      moveFileItem(folderId, dragIndex, hoverIndex)
+      // moveFile 함수 호출
+      moveFile(folderId, dragIndex, hoverIndex)
+
+      // 드래그 중인 아이템의 인덱스를 업데이트
       item.index = hoverIndex
     },
   })
 
+  // useDrag 설정
   const [, drag] = useDrag({
-    type: 'TAB_ITEM',
-    item: { id, index },
+    type: 'FILE',
+    item: { index }, // 드래그할 때 index 전달
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -54,7 +61,7 @@ export default function DraggableListItem({
     >
       <div className="flex items-center">
         <div className="h-1 w-1 rounded-full bg-redorange dark:bg-blue"></div>
-        <p className="mx-4 text-[15px] text-darkgray">{name}</p>
+        <p className="mx-4 text-darkgray text-[15px]">{name}</p>
       </div>
 
       <div className="flex w-10 items-center justify-between">

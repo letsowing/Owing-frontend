@@ -9,6 +9,8 @@ import Register from '@pages/RegisterPage'
 import ScenarioManagementPage from '@pages/ScenarioManagementPage'
 
 import App from '@/App'
+import WorldViewTabLayout from '@/layouts/WorldViewTabLayout'
+import WorldView from '@/pages/WorldViewPage'
 import { createBrowserRouter } from 'react-router-dom'
 
 const router = createBrowserRouter([
@@ -35,6 +37,15 @@ const router = createBrowserRouter([
           {
             path: 'scenarioManagement',
             element: <ScenarioManagementPage />,
+          },
+        ],
+      },
+      {
+        element: <WorldViewTabLayout />,
+        children: [
+          {
+            path: 'worldView',
+            element: <WorldView />,
           },
         ],
       },
