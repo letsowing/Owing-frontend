@@ -14,7 +14,7 @@ const Chart = ({ wordCountStats }: ChartProps) => {
       options={{
         chart: {
           height: 300,
-          width: 300,
+          width: 500,
           toolbar: { show: false },
           background: 'white',
         },

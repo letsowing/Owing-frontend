@@ -14,7 +14,7 @@ const Dashboard = ({
   wordCountStats,
 }: DashboardProps) => {
   return (
-    <div className="flex h-[430px] w-[320px] flex-col gap-3 rounded-3xl bg-beige">
+    <div className="flex h-[400px] w-[320px] flex-col gap-2 rounded-3xl bg-beige">
       <label className="mx-5 mb-3 mt-5 text-2xl font-semibold">Dashboard</label>
       <div className="mx-5 flex justify-between">
         <label className="text-gray">오늘의 활동 글자수</label>
