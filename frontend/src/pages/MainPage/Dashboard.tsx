@@ -4,14 +4,17 @@ interface DashboardProps {
   todayWordCount: number
   monthTotalWordCount: number
   monthAvgWordCount: number
-  wordCountStats: { day: Date; wordCount: number }[]
+  dailyStats: {
+    day: Date
+    wordCount: number
+  }[]
 }
 
 const Dashboard = ({
   todayWordCount,
   monthTotalWordCount,
   monthAvgWordCount,
-  wordCountStats,
+  dailyStats,
 }: DashboardProps) => {
   return (
     <div className="flex h-[400px] w-[320px] flex-col gap-2 rounded-3xl bg-beige">
@@ -35,7 +38,7 @@ const Dashboard = ({
         </label>
       </div>
       <div className="mx-3 mt-5">
-        <Chart wordCountStats={wordCountStats} />
+        <Chart dailyStats={dailyStats} />
       </div>
     </div>
   )

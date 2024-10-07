@@ -7,7 +7,7 @@ import 'slick-carousel/slick/slick.css'
 
 interface ProjectCarouselProps {
   projects: {
-    id: number
+    id: string
     name: string
     createdAt: Date
     image: string
@@ -23,8 +23,6 @@ const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
     slidesToShow: totalSlides < 5 ? totalSlides : 5,
     slidesToScroll: 1,
     arrows: false,
-    // nextArrow: <NextArrow />,
-    // prevArrow: <PrevArrow />,
   }
 
   return (
@@ -35,6 +33,7 @@ const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
           {projects.map((project) => (
             <Project
               key={project.id}
+              id={project.id}
               name={project.name}
               createdAt={project.createdAt}
               image={project.image}

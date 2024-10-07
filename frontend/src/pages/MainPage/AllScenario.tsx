@@ -2,10 +2,10 @@ import ProjectList from './ProjectList'
 
 interface AllScenarioProps {
   projects: {
+    id: string
     name: string
     updatedAt: Date
     createdAt: Date
-    onClick: () => null
   }[]
 }
 

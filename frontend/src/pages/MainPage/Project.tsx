@@ -1,5 +1,5 @@
 interface ProjectProps {
-  key: number
+  id: string
   name: string
   createdAt: Date
   image: string

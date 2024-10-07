@@ -2,7 +2,7 @@ import ProjectCarousel from './ProjectCarousel'
 
 interface QuickAccessProps {
   projects: {
-    id: number
+    id: string
     name: string
     createdAt: Date
     image: string

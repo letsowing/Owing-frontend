@@ -1,15 +1,18 @@
 import ApexCharts from 'react-apexcharts'
 
 interface ChartProps {
-  wordCountStats: { day: Date; wordCount: number }[]
+  dailyStats: {
+    day: Date
+    wordCount: number
+  }[]
 }
 
-const Chart = ({ wordCountStats }: ChartProps) => {
+const Chart = ({ dailyStats }: ChartProps) => {
   return (
     <ApexCharts
       type="line"
       series={[
-        { name: '글자수', data: wordCountStats.map((stat) => stat.wordCount) },
+        { name: '글자수', data: dailyStats.map((stat) => stat.wordCount) },
       ]}
       options={{
         chart: {
@@ -28,7 +31,7 @@ const Chart = ({ wordCountStats }: ChartProps) => {
           labels: { show: true },
           axisTicks: { show: false },
           axisBorder: { show: true },
-          categories: wordCountStats.map((stat) => stat.day.getTime()),
+          categories: dailyStats.map((stat) => stat.day.getTime()),
           type: 'datetime',
         },
         title: {
