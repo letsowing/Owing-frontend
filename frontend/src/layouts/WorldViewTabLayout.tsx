@@ -22,7 +22,7 @@ export default function WorldViewTabLayout() {
     location.pathname === '/' || location.pathname === '/main'
 
   useEffect(() => {
-    if (activePath === 'worldview' && isTabOpen) {
+    if (activePath === 'worldView' && isTabOpen) {
       setIsFolderTabOpen(true)
     } else {
       setIsFolderTabOpen(false)
@@ -44,32 +44,34 @@ export default function WorldViewTabLayout() {
   }
 
   return (
-    <div className="flex h-screen">
-      {!isNotTabPage && (
-        <MenuTab
-          style={{ width: `${tabWidth}px` }}
-          isTabOpen={isTabOpen}
-          onToggle={toggleTab}
-          onItemClick={handleMenuItemClick}
-        />
-      )}
+    <DndProvider backend={HTML5Backend}>
+      <div className="flex h-screen">
+        {!isNotTabPage && (
+          <MenuTab
+            style={{ width: `${tabWidth}px` }}
+            isTabOpen={isTabOpen}
+            onToggle={toggleTab}
+            onItemClick={handleMenuItemClick}
+          />
+        )}
 
-      {/* '/worldView' 페이지에서만 나올 수 있도록... */}
-      {location.pathname === '/worldView' && (
-        <div className="flex h-full w-full flex-row">
-          <DndProvider backend={HTML5Backend}>
+        {/* '/worldView' 페이지에서만 나올 수 있도록... */}
+        {location.pathname === '/worldView' && (
+          <div className="flex h-full w-full flex-row">
+            {/* <DndProvider backend={HTML5Backend}> */}
             <WorldViewTab
               isTabOpen={isFolderTabOpen}
               tabHandler={handleCloseFolderTab}
               setSelectedFolderId={setSelectedFolderId}
             />
-          </DndProvider>
-          <main className="h-full w-full dark:bg-darkblack">
-            <Header isTabOpen={isTabOpen} />
-            <Outlet />
-          </main>
-        </div>
-      )}
-    </div>
+            {/* </DndProvider> */}
+            <main className="h-full w-full dark:bg-darkblack">
+              <Header isTabOpen={isTabOpen} />
+              <Outlet />
+            </main>
+          </div>
+        )}
+      </div>
+    </DndProvider>
   )
 }

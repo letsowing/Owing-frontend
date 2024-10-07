@@ -13,7 +13,7 @@ export const MENU_LIST = [
   },
   {
     text: '세계관',
-    path: 'worldview',
+    path: 'worldView',
   },
   {
     text: '휴지통',
