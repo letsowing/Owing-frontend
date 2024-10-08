@@ -30,6 +30,10 @@ const router = createBrowserRouter([
             path: 'characterRelationship',
             element: <CharacterRelationshipPage />,
           },
+          {
+            path: 'main',
+            element: <Main />,
+          },
         ],
       },
       {
@@ -54,10 +58,7 @@ const router = createBrowserRouter([
           },
         ],
       },
-      {
-        path: 'main',
-        element: <Main />,
-      },
+
       {
         path: 'login',
         element: <Login />,
