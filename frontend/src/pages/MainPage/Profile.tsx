@@ -7,11 +7,13 @@ interface ProfileProps {
 
 const Profile = ({ member }: ProfileProps) => {
   return (
-    <div className="flex h-[320px] w-[320px] flex-col items-center justify-center rounded-3xl bg-beige">
-      <div className="h-[130px] w-[130px] overflow-hidden rounded-xl bg-gray">
+    <div className="flex h-[14rem] flex-col items-center rounded-3xl bg-beige dark:bg-coldbeige xl:w-[15rem] 2xl:w-[20rem]">
+      <div className="m-auto h-[8rem] w-[8rem] overflow-hidden rounded-xl bg-gray">
         <img src={member.image} />
       </div>
-      <label className="mt-8 text-xl font-semibold">{member.name}</label>
+      <label className="mb-5 text-2xl font-semibold dark:text-darkblack">
+        {member.name}
+      </label>
     </div>
   )
 }

@@ -9,10 +9,10 @@ import { WORD_COUNT_STATS } from '@datas/wordCountStats'
 
 const Main = () => {
   return (
-    <div className="flex max-w-7xl justify-between gap-10">
-      <div className="ms-16 mt-5 flex flex-col gap-2">
+    <div className="mx-[5%] flex w-[90%]">
+      <div className="mt-5 flex-col xl:w-[20%] 2xl:w-[25%]">
         <Profile member={MEMBER} />
-        <div className="my-10">
+        <div className="my-9">
           <Dashboard
             todayWordCount={WORD_COUNT_STATS.todayWordCount}
             monthTotalWordCount={WORD_COUNT_STATS.monthTotalWordCount}
@@ -21,9 +21,9 @@ const Main = () => {
           />
         </div>
       </div>
-      <div className="me-16 mt-5 w-5/6 flex-col">
+      <div className="mt-6 flex-col xl:w-[80%] 2xl:w-[75%]">
         <QuickAccess projects={PROJECT_LIST} />
-        <div className="mt-16">
+        <div className="mb-20 mt-16 w-full dark:bg-darkblack">
           <AllScenario projects={PROJECT_LIST} />
         </div>
       </div>

@@ -17,8 +17,8 @@ const Dashboard = ({
   dailyStats,
 }: DashboardProps) => {
   return (
-    <div className="flex h-[390px] w-[320px] flex-col gap-2 rounded-3xl bg-beige dark:bg-coldbeige">
-      <label className="mx-5 mb-3 mt-5 text-2xl font-semibold">Dashboard</label>
+    <div className="flex h-auto w-[20rem] flex-col gap-2 rounded-3xl bg-beige px-2 py-10 dark:bg-coldbeige dark:text-darkblack">
+      <label className="mx-5 mb-3 text-2xl font-semibold">Dashboard</label>
       <div className="mx-5 flex justify-between">
         <label className="text-sm text-gray">오늘의 활동 글자수</label>
         <label className="text-sm font-semibold text-redorange dark:text-blue">
