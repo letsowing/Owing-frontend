@@ -36,8 +36,8 @@ const ProjectList = ({ projects }: ProjectListProps) => {
           </tr>
         </thead>
         <tbody className="w-full divide-y divide-lightgray bg-white dark:bg-darkblack">
-          {projects.map((project, index) => (
-            <ProjectItem key={index} {...project} />
+          {projects.map((project) => (
+            <ProjectItem key={project.id} {...project} />
           ))}
         </tbody>
       </table>
