@@ -7,7 +7,7 @@ interface ProjectProps {
 
 const Project = ({ name, createdAt, image }: ProjectProps) => {
   return (
-    <div className="my-1 flex h-[15rem] w-[12rem] flex-col justify-between overflow-hidden rounded-3xl bg-white shadow-lg">
+    <div className="my-1 flex h-[15rem] w-[12rem] flex-col justify-between overflow-hidden rounded-3xl bg-white shadow-lg dark:bg-coldbeige">
       <div className="flex flex-1 bg-gray">
         <img className="h-full w-full object-cover" src={image} />
       </div>
