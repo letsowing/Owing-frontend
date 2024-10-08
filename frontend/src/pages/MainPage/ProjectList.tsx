@@ -11,7 +11,7 @@ interface ProjectListProps {
 
 const ProjectList = ({ projects }: ProjectListProps) => {
   return (
-    <div className="overflow-x-auto">
+    <div className="max-h-[25rem] overflow-x-auto overflow-y-auto">
       <table className="divide-y-lightgray min-w-full">
         <thead>
           <tr>
