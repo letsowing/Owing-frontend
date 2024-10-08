@@ -1,13 +1,20 @@
+import useNavigation from '@hooks/useNavigation'
+
 interface ProjectItemProps {
-  key: number
+  id: string
   name: string
   updatedAt: Date
   createdAt: Date
 }
 
-const ProjectItem = ({ name, updatedAt, createdAt }: ProjectItemProps) => {
+const ProjectItem = ({ id, name, updatedAt, createdAt }: ProjectItemProps) => {
+  const { goToProject } = useNavigation()
+
   return (
-    <tr className="cursor-pointer border-t border-lightgray hover:bg-beige dark:hover:bg-coldbeige">
+    <tr
+      className="cursor-pointer border-t border-lightgray hover:bg-beige dark:hover:bg-coldbeige"
+      onClick={() => goToProject({ id })}
+    >
       <td className="text-normal py-4 pl-4 pr-3 font-medium text-gray dark:hover:text-darkgray">
         {name}
       </td>
