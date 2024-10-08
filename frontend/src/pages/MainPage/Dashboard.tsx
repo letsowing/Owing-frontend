@@ -17,27 +17,27 @@ const Dashboard = ({
   dailyStats,
 }: DashboardProps) => {
   return (
-    <div className="flex h-[400px] w-[320px] flex-col gap-2 rounded-3xl bg-beige">
+    <div className="flex h-[390px] w-[320px] flex-col gap-2 rounded-3xl bg-beige dark:bg-coldbeige">
       <label className="mx-5 mb-3 mt-5 text-2xl font-semibold">Dashboard</label>
       <div className="mx-5 flex justify-between">
-        <label className="text-gray">오늘의 활동 글자수</label>
-        <label className="font-semibold text-redorange">
+        <label className="text-sm text-gray">오늘의 활동 글자수</label>
+        <label className="text-sm font-semibold text-redorange dark:text-blue">
           {todayWordCount}자
         </label>
       </div>
-      <div className="mx-5 flex justify-between">
-        <label className="text-gray">이번 달 총 글 자수</label>
-        <label className="font-semibold text-redorange">
+      <div className="mx-5 flex justify-between text-sm">
+        <label className="text-sm text-gray">이번 달 총 글 자수</label>
+        <label className="font-semibold text-redorange dark:text-blue">
           {monthTotalWordCount}자
         </label>
       </div>
-      <div className="mx-5 flex justify-between">
+      <div className="mx-5 flex justify-between text-sm">
         <label className="text-gray">이번 달 하루 평균 글자수</label>
-        <label className="font-semibold text-redorange">
+        <label className="text-sm font-semibold text-redorange dark:text-blue">
           {monthAvgWordCount}자
         </label>
       </div>
-      <div className="mx-3 mt-5">
+      <div className="dark:coldbeige mx-3 mt-5 h-[190px] bg-white">
         <Chart dailyStats={dailyStats} />
       </div>
     </div>

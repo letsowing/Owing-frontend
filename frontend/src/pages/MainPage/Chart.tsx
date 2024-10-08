@@ -19,7 +19,7 @@ const Chart = ({ dailyStats }: ChartProps) => {
           height: 300,
           width: 500,
           toolbar: { show: false },
-          background: 'white',
+          background: 'transparent',
         },
         stroke: {
           curve: 'smooth',
