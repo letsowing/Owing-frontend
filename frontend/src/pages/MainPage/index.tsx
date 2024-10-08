@@ -1,3 +1,5 @@
+import ThemeToggleSwitch from '@components/common/DarkModeToggle'
+
 import AllScenario from './AllScenario'
 import Dashboard from './Dashboard'
 import Profile from './Profile'
@@ -19,6 +21,9 @@ const Main = () => {
             monthAvgWordCount={WORD_COUNT_STATS.monthAvgWordCount}
             dailyStats={WORD_COUNT_STATS.dailyStats}
           />
+        </div>
+        <div className="flex w-[85%] justify-center">
+          <ThemeToggleSwitch />
         </div>
       </div>
       <div className="mt-6 flex-col xl:w-[80%] 2xl:w-[75%]">
