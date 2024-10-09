@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 
+import ImageForm from '@components/common/ImageForm'
 import InputField from '@components/common/InputField'
 import Modal from '@components/common/Modal'
 import TagField from '@components/common/TagField'
@@ -13,7 +14,7 @@ const initialWork: Work = {
   id: 0,
   title: '',
   genre: '',
-  category: '',
+  category: [''],
   description: '',
   imageUrl: '',
 }
@@ -38,6 +39,10 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
     onClose()
   }
 
+  const onImageChange = (image: string) => {}
+
+  const onAIGenerateClick = () => {}
+
   return (
     <Modal
       modalType={ModalType.WORK}
@@ -47,6 +52,15 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
       onSecondaryAction={onClose}
     >
       <div className="mx-20 mt-8 flex flex-col gap-5">
+        <div className="flex justify-center">
+          <ImageForm
+            isEditable={isEditable}
+            image={currentWork.imageUrl}
+            onImageChange={onImageChange}
+            onAIGenerateClick={onAIGenerateClick}
+          />
+        </div>
+
         <InputField
           type="text"
           labelValue="작품명"
