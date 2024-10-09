@@ -50,26 +50,36 @@ const CharacterPage: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="mb-4 text-2xl font-bold">
-        캐릭터 {isEditing ? '수정' : '생성'}
-      </h1>
-      <div className="flex flex-col gap-4 md:flex-row">
-        <CharacterImage imageUrl={characterData.imageUrl} />
-        <div className="flex-1">
+    <div className="mx-[3%] flex w-[94%] flex-col items-center justify-center gap-2 p-4">
+      <div className="flex-start w-full">
+        <h1 className="mb-4 text-2xl font-bold dark:text-coldbeige">
+          캐릭터 {isEditing ? '수정' : '생성'}
+        </h1>
+      </div>
+      <div className="flex w-full flex-col gap-4">
+        <div className="flex-center align-center flex h-[15rem] w-[15rem] rounded-xl bg-coldbeige">
+          <CharacterImage imageUrl={characterData.imageUrl} />
+        </div>
+        <div className="w-full flex-1">
           <CharacterInputForm
             characterData={characterData}
             onInputChange={handleInputChange}
             isEditable={isEditing}
           />
-          <div className="mt-4 flex gap-2">
+          <div className="mt-4 flex justify-end gap-2">
             {isEditing ? (
               <>
-                <SubButton value="취소" onClick={handleCancel} />
-                <MainButton value="저장" onClick={handleSave} />
+                <div className="w-[12rem]">
+                  <SubButton value="취소" onClick={handleCancel} />
+                </div>
+                <div className="w-[12rem]">
+                  <MainButton value="저장" onClick={handleSave} />
+                </div>
               </>
             ) : (
-              <MainButton value="수정" onClick={handleEdit} />
+              <div className="w-[12rem]">
+                <MainButton value="수정" onClick={handleEdit} />
+              </div>
             )}
           </div>
         </div>
