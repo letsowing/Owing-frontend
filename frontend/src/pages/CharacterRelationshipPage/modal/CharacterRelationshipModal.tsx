@@ -41,15 +41,6 @@ const CharacterRelationshipModal = ({
     }
   }, [modals])
 
-  useEffect(() => {
-    if (modals.length > 0) {
-      const currentModal = modals[modals.length - 1]
-      if (currentModal.type === ModalType.CHARACTER_RELATIONSHIP) {
-        setEditableCharacter(currentModal.character || initialCharacter)
-      }
-    }
-  }, [modals])
-
   const handleInputChange = (
     field: keyof Character,
     value: string | number,
