@@ -32,7 +32,7 @@ const useNavigation = () => {
     navigate('/scenarioManagement')
   }
 
-  const goToProject = ({ id }: { id: string }) => {
+  const goToProject = (id: string) => {
     navigate(`/scenarioManagement?id=${id}`)
   }
 

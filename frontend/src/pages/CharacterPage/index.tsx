@@ -9,6 +9,8 @@ import CharacterImage from './CharacterImage'
 import CharacterInputForm from './CharacterInputForm'
 
 import { Character } from '@types'
+import { BsPlusCircle } from 'react-icons/bs'
+import { MdLightbulbOutline } from 'react-icons/md'
 
 const CharacterPage: React.FC = () => {
   const { addCharacter, updateCharacter } = useCharFlow()
@@ -56,10 +58,42 @@ const CharacterPage: React.FC = () => {
           캐릭터 {isEditing ? '수정' : '생성'}
         </h1>
       </div>
-      <div className="flex w-full flex-col gap-4">
-        <div className="flex-center align-center flex h-[15rem] w-[15rem] rounded-xl bg-coldbeige">
-          <CharacterImage imageUrl={characterData.imageUrl} />
+      <div className="flex w-full flex-col">
+        <div className="flex justify-center">
+          <div className="flex-col">
+            {isEditing && (
+              <label
+                htmlFor="imageUpload"
+                className="mb-1 flex w-80 cursor-pointer justify-end"
+                // onClick={ }
+              >
+                <BsPlusCircle className="mt-1 text-redorange dark:text-blue" />
+              </label>
+            )}
+            <div className="flex-center align-center flex h-80 w-80 rounded-xl bg-coldbeige">
+              <CharacterImage imageUrl={characterData.imageUrl} />
+            </div>
+            {isEditing && (
+              <div
+                // onClick={onAIGenerateClick}
+                className="my-3 flex w-80 cursor-pointer items-center justify-between rounded-full border border-lightgray p-3 px-4 dark:border-lightdarkgray"
+              >
+                <div className="flex items-center space-x-2">
+                  <div className="text-xl font-medium text-redorange dark:text-blue">
+                    <MdLightbulbOutline />
+                  </div>
+                  <span className="text-[10px] text-darkgray dark:text-coldbeige">
+                    AI를 활용하여 이미지를 생성할 수 있어요!
+                  </span>
+                </div>
+                <span className="mx-2 rounded-full bg-orange bg-opacity-20 px-2 text-sm text-redorange dark:bg-coldbeige dark:text-blue">
+                  Click
+                </span>
+              </div>
+            )}
+          </div>
         </div>
+
         <div className="w-full flex-1">
           <CharacterInputForm
             characterData={characterData}

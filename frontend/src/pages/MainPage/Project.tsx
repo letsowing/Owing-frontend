@@ -13,7 +13,7 @@ const Project = ({ id, name, createdAt, image }: ProjectProps) => {
   return (
     <div
       className="my-1 flex h-[15rem] w-[12rem] cursor-pointer flex-col justify-between overflow-hidden rounded-3xl bg-white shadow-lg dark:bg-coldbeige"
-      onClick={() => goToProject({ id })}
+      onClick={() => goToProject(id)}
     >
       <div className="flex flex-1 bg-gray">
         <img className="h-full w-full object-cover" src={image} />
