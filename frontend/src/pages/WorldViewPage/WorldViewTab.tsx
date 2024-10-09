@@ -1,31 +1,35 @@
-// FolderTab.tsx
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
-import { useDnd } from '@hooks/useDnd'
+import { useWorldViewStore } from '@stores/worldViewStore'
 
-import FolderList from './FolderList'
+import WorldViewFolderList from './WorldViewFolderList'
 
 import { CiFolderOn } from 'react-icons/ci'
 import { FaPlus } from 'react-icons/fa6'
 
-interface FolderTabProps {
-  setSelectedFolderId: (folderId: string) => void // 상위 컴포넌트에서 전달받는 함수
-  isOpen: boolean // FolderTab이 열렸는지 여부
-  onClose: () => void // FolderTab을 닫는 함수
+interface WorldViewTabProps {
+  setSelectedFolderId: (folderId: string) => void
+  isTabOpen: boolean
+  tabHandler: () => void
 }
 
-const FolderTab: React.FC<FolderTabProps> = ({
+export default function WorldViewTab({
   setSelectedFolderId,
-  isOpen,
-  onClose,
-}) => {
-  const { items, addFolder } = useDnd() // items는 폴더 목록을 의미
-  const [activeFolderId, setActiveFolderId] = useState<number | null>(null) // activeFolderId 상태 추가
+  isTabOpen,
+  tabHandler,
+}: WorldViewTabProps) {
+  const { items, addFolder } = useWorldViewStore()
+  const [activeFolderId, setActiveFolderId] = useState<number | null>(null)
 
   const [isEditing, setIsEditing] = useState(false)
   const [newFolderName, setNewFolderName] = useState('')
 
   const editableRef = useRef<HTMLDivElement>(null) // 포커스 설정용 ref
+
+  const handleSelectFolder = (folder: any) => {
+    setSelectedFolderId(folder.folderId)
+    setActiveFolderId(folder.folderId)
+  }
 
   const handleCreateFolder = () => {
     setIsEditing(true)
@@ -58,29 +62,22 @@ const FolderTab: React.FC<FolderTabProps> = ({
     }
   }, [isEditing])
 
-  // 선택된 폴더가 변경될 때 호출
-  const handleSelectFolder = (folder: any) => {
-    setSelectedFolderId(folder.folderId) // 새로운 폴더를 활성화 또는 비활성화
-    setActiveFolderId(folder.folderId) // 상위 컴포넌트로 선택된 폴더 ID 전달
-  }
-
   return (
     <div
       className={`h-full bg-beige transition-all duration-300 ease-in-out dark:bg-coldbeige ${
-        isOpen ? 'w-72' : 'w-0'
+        isTabOpen ? 'w-72' : 'w-0'
       } overflow-hidden`}
     >
       <div className="flex justify-between p-4">
         <p className="font-bold">억만장자</p>
-        <button onClick={onClose} className="text-darkgray">
+        <button onClick={tabHandler} className="text-darkgray">
           닫기
         </button>
       </div>
 
       <button
         onClick={handleCreateFolder}
-        className="mx-4 mb-4 flex h-10 w-52 items-center justify-center rounded-md border border-solid bg-white text-sm dark:bg-darkgray"
-        style={{ borderColor: '#e8e8e8' }}
+        className="mx-4 mb-4 flex h-10 w-52 items-center justify-center rounded-md border border-solid border-[#e8e8e8] bg-white text-sm dark:bg-darkgray"
       >
         <FaPlus className="dark:text-white" size={12} />
         <p className="px-1 dark:text-white">Create Folder</p>
@@ -91,12 +88,12 @@ const FolderTab: React.FC<FolderTabProps> = ({
         style={{ maxHeight: '780px', overflow: 'overlay' }}
       >
         {items.map((folder: any, index: number) => (
-          <FolderList
+          <WorldViewFolderList
             key={folder.folderId}
             folder={folder}
             index={index}
             onSelectFolder={handleSelectFolder}
-            isActive={activeFolderId === folder.folderId} // 활성화 상태 전달
+            isActive={activeFolderId === folder.folderId}
           />
         ))}
         {isEditing && (
@@ -121,5 +118,3 @@ const FolderTab: React.FC<FolderTabProps> = ({
     </div>
   )
 }
-
-export default FolderTab

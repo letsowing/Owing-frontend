@@ -6,11 +6,11 @@ import AlertOwing from '@assets/common/AlertOwing.png'
 import { useDrag, useDrop } from 'react-dnd'
 
 interface WorldViewDraggableBoxProps {
-  id: number
+  id: string
   index: number
   name: string
   description: string
-  folderId: number
+  folderId: string
   imageUrl: string
 }
 
@@ -63,9 +63,7 @@ export default function WorldViewDraggableBox({
           }}
         ></div>
       ) : (
-        <div
-          className="flex h-[240px] w-[240px] min-w-[240px] flex-col items-center justify-center rounded-[6px] border border-[#CFCDCD]"
-        >
+        <div className="flex h-[240px] w-[240px] min-w-[240px] flex-col items-center justify-center rounded-[6px] border border-[#CFCDCD]">
           <img
             src={AlertOwing}
             alt="AlertOwing"

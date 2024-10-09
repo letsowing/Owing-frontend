@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 
-import { useDnd } from '@hooks/useDnd'
+import { useWorldViewStore } from '@stores/worldViewStore'
 
 import { useDrag, useDrop } from 'react-dnd'
 import { GoPencil } from 'react-icons/go'
 import { PiTrashSimpleLight } from 'react-icons/pi'
 
-interface DraggableListItemProps {
+interface WorldViewFolderItemProps {
   id: string
   file: any
   index: number
@@ -14,14 +14,14 @@ interface DraggableListItemProps {
   folderId: string
 }
 
-export default function DraggableListItem({
-  id,
+export default function WorldViewFolderItem({
+  id, // fileId
   file,
   index,
   name,
   folderId,
-}: DraggableListItemProps) {
-  const { moveFileItem, updateFileName, deleteFile } = useDnd()
+}: WorldViewFolderItemProps) {
+  const { moveFile, updateFileName, deleteFile } = useWorldViewStore()
   const ref = useRef<HTMLLIElement>(null)
 
   const [isFileEditing, setIsFileEditing] = useState(false) // 파일 이름 입력 상태
@@ -59,24 +59,29 @@ export default function DraggableListItem({
     if (e.key === 'Enter') handleSaveFileName()
   }
 
+  // useDrop 설정
   const [, drop] = useDrop({
-    accept: 'TAB_ITEM',
-    hover(item: { id: string; index: number }) {
+    accept: 'FILE',
+    hover(item: { index: number }) {
       if (!ref.current) return
-
       const dragIndex = item.index
       const hoverIndex = index
 
+      // 드래그 인덱스와 호버 인덱스가 같으면 리턴
       if (dragIndex === hoverIndex) return
 
-      moveFileItem(folderId, dragIndex, hoverIndex)
+      // moveFile 함수 호출
+      moveFile(folderId, dragIndex, hoverIndex)
+
+      // 드래그 중인 아이템의 인덱스를 업데이트
       item.index = hoverIndex
     },
   })
 
+  // useDrag 설정
   const [, drag] = useDrag({
-    type: 'TAB_ITEM',
-    item: { id, index },
+    type: 'FILE',
+    item: { index }, // 드래그할 때 index 전달
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),

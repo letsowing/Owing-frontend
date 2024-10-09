@@ -1,6 +1,4 @@
-import HeaderFolderTabLayout from '@layouts/HeaderFolderTabLayout'
 import HeaderTabLayout from '@layouts/HeaderTabLayout'
-import WorldViewTabLayout from '@layouts/WorldViewTabLayout'
 
 import CharacterPage from '@pages/CharacterPage'
 import CharacterRelationshipPage from '@pages/CharacterRelationshipPage'
@@ -9,9 +7,10 @@ import Login from '@pages/LoginPage'
 import Main from '@pages/MainPage'
 import Register from '@pages/RegisterPage'
 import ScenarioManagementPage from '@pages/ScenarioManagementPage'
-import WorldView from '@pages/WorldViewPage'
 
 import App from '@/App'
+import FolderTabLayout from '@/layouts/FolderTabLayout'
+import WorldView from '@/pages/WorldViewPage'
 import { createBrowserRouter } from 'react-router-dom'
 
 const router = createBrowserRouter([
@@ -37,7 +36,7 @@ const router = createBrowserRouter([
         ],
       },
       {
-        element: <HeaderFolderTabLayout />, // 2차탭(폴더탭) 존재
+        element: <FolderTabLayout />,
         children: [
           {
             path: 'scenarioManagement',
@@ -47,17 +46,21 @@ const router = createBrowserRouter([
             path: 'character',
             element: <CharacterPage />,
           },
-        ],
-      },
-      {
-        element: <WorldViewTabLayout />,
-        children: [
           {
             path: 'worldView',
             element: <WorldView />,
           },
         ],
       },
+      // {
+      //   element: <FolderTabLayout />,
+      //   children: [
+      //     {
+      //       path: 'worldView',
+      //       element: <WorldView />,
+      //     },
+      //   ],
+      // },
 
       {
         path: 'login',
