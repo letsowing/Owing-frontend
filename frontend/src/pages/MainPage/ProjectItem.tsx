@@ -13,7 +13,7 @@ const ProjectItem = ({ id, name, updatedAt, createdAt }: ProjectItemProps) => {
   return (
     <tr
       className="cursor-pointer border-t border-lightgray hover:bg-beige dark:hover:bg-coldbeige"
-      onClick={() => goToProject({ id })}
+      onClick={() => goToProject(id)}
     >
       <td className="text-normal py-4 pl-4 pr-3 font-medium text-gray dark:hover:text-darkgray">
         {name}
