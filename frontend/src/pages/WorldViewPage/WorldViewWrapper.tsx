@@ -5,7 +5,7 @@ import WorldViewDraggableBox from './WorldViewDraggableBox'
 import AlertOwing from '@assets/common/AlertOwing.png'
 
 interface WorldViewWrapperProps {
-  selectedFolderId: number | null
+  selectedFolderId: string | null
 }
 
 export default function WorldViewWrapper({
@@ -15,6 +15,7 @@ export default function WorldViewWrapper({
   const selectedFolder = items.find(
     (folder) => folder.folderId === selectedFolderId,
   )
+
   return (
     <div>
       {selectedFolder ? (

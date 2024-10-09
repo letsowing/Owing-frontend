@@ -5,7 +5,7 @@ import DraggableBox from './DraggableBox'
 import AlertOwing from '@assets/common/AlertOwing.png'
 
 interface DnDWrapperProps {
-  selectedFolderId: number | null // 상위 컴포넌트에서 전달받는 선택된 폴더 ID
+  selectedFolderId: string | null // 상위 컴포넌트에서 전달받는 선택된 폴더 ID
 }
 
 export default function DnDWrapper({ selectedFolderId }: DnDWrapperProps) {

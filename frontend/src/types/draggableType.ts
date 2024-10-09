@@ -1,7 +1,7 @@
 export interface DraggableBoxProps {
-  id: number
+  id: string
   index: number
   name: string
   description: string
-  folderId: number
+  folderId: string
 }

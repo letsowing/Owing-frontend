@@ -1,4 +1,5 @@
-import WorldViewWrapper from '@/components/worldView/WorldViewWrapper'
+import WorldViewWrapper from './WorldViewWrapper'
+
 import useFolderStore from '@/stores/folderStore'
 
 export default function WorldView() {

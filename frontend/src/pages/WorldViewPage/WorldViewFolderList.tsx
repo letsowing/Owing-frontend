@@ -1,30 +1,28 @@
 import { useEffect, useRef, useState } from 'react'
 
-import DraggableListItem from '@components/dnd/DraggableListItem'
+import { useWorldViewStore } from '@stores/worldViewStore'
 
-import { useDnd } from '@/hooks/useDnd'
+import WorldViewListItem from './WorldViewListItem'
+
 import { useDrag, useDrop } from 'react-dnd'
 import { CiFolderOn } from 'react-icons/ci'
 import { GoPencil } from 'react-icons/go'
-import { PiFilePlusLight } from 'react-icons/pi'
-import { PiTrashSimpleLight } from 'react-icons/pi'
+import { PiFilePlusLight, PiTrashSimpleLight } from 'react-icons/pi'
 
-interface FolderItemProps {
-  folder: any // 폴더의 타입 정의
+interface WorldViewFolderListProps {
+  folder: any
   index: number
-  onSelectFolder: (folder: any) => void // 폴더가 선택될 때 호출할 함수
-  isActive: boolean // 폴더가 활성화 상태인지 확인하는 prop
+  onSelectFolder: (folder: any) => void
+  isActive: boolean
 }
 
-// 폴더와 파일을 렌더링하는 컴포넌트
-const FolderList = ({
+export default function WorldViewFolderList({
   folder,
   index,
   onSelectFolder,
   isActive,
-}: FolderItemProps) => {
-  const { moveFolder, addFile, updateFolderName, deleteFolder } = useDnd()
-  const [isOpen, setIsOpen] = useState(false) // 폴더 열고 닫기 상태
+}: WorldViewFolderListProps) {
+  const [isOpen, setIsOpen] = useState(false)
 
   const [isFolderEditing, setIsEditingFolder] = useState(false) // 폴더 이름 편집 상태
   const [newFolderName, setNewFolderName] = useState(folder.name) // 새 폴더 이름 상태
@@ -35,6 +33,37 @@ const FolderList = ({
   const ref = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLDivElement>(null) // 파일 이름 입력을 위한 ref
   const folderNameRef = useRef<HTMLInputElement>(null) // 폴더 이름 입력을 위한 ref
+
+  const { moveFolder, addFile, updateFolderName, deleteFolder } =
+    useWorldViewStore()
+
+  const toggleFolder = () => {
+    if (!isFolderEditing) {
+      setIsOpen(!isOpen)
+      onSelectFolder(folder)
+    }
+  }
+
+  // 폴더 간 드래그 앤 드롭 설정
+  const [, drop] = useDrop({
+    accept: 'FOLDER',
+    hover(item: { index: number }) {
+      if (item.index !== index) {
+        moveFolder(item.index, index) // 폴더 이동
+        item.index = index // 드래그 중인 아이템의 인덱스를 업데이트
+      }
+    },
+  })
+
+  const [, drag] = useDrag({
+    type: 'FOLDER',
+    item: { index },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  })
+
+  drag(drop(ref))
 
   // 폴더 이름 편집 시작
   const handleEditFolderClick = (e: React.MouseEvent) => {
@@ -63,6 +92,11 @@ const FolderList = ({
     }
     setIsEditingFolder(false)
   }
+
+  // const handleCancelFolderEdit = () => {
+  //   setNewFolderName(folder.name) // 기존 이름으로 되돌림
+  //   setIsEditingFolder(false)
+  // }
 
   const handleFolderNameKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleSaveFolderName()
@@ -95,43 +129,19 @@ const FolderList = ({
     if (e.key === 'Enter') handleSaveFile()
   }
 
-  const toggleFolder = () => {
-    if (!isFolderEditing) {
-      setIsOpen(!isOpen) // 폴더 클릭 시 열고 닫기 토글
-      onSelectFolder(folder) // 폴더 선택 시 상위 컴포넌트에 알림
-    }
-  }
-
+  // 폴더 이름 수정 모드가 활성화될 때 이전 이름을 설정
   useEffect(() => {
     if (folderNameRef.current) {
+      // 기존 폴더 이름을 보여주기 위해 contentEditable div에 초기 텍스트 설정
       folderNameRef.current.textContent = newFolderName
     }
+  }, [isFolderEditing]) // 편집 상태가 변경될 때마다 실행
 
+  useEffect(() => {
     if (isFileEditing) {
       inputRef.current?.focus()
     }
-  }, [isFolderEditing, isFileEditing])
-
-  // 폴더 간 드래그 앤 드롭 설정
-  const [, drop] = useDrop({
-    accept: 'FOLDER',
-    hover(item: { index: number }) {
-      if (item.index !== index) {
-        moveFolder(item.index, index) // 폴더 이동
-        item.index = index // 드래그 중인 아이템의 인덱스를 업데이트
-      }
-    },
-  })
-
-  const [, drag] = useDrag({
-    type: 'FOLDER',
-    item: { index },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  })
-
-  drag(drop(ref))
+  }, [isFileEditing])
 
   return (
     <li className="mx-2 mb-4 list-none">
@@ -140,11 +150,10 @@ const FolderList = ({
         className="group flex w-full cursor-pointer items-center justify-between rounded-[7px] px-2 py-2 hover:bg-white"
         onClick={toggleFolder}
       >
-        <div className="flex items-center">
+        <div className="flex items-start">
           <CiFolderOn
-            className={`${isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'}`}
+            className={`mt-1 ${isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'}`}
           />
-
           {isFolderEditing ? (
             <div
               ref={folderNameRef}
@@ -166,7 +175,7 @@ const FolderList = ({
             <p
               className={`px-2 text-base ${
                 isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'
-              }`}
+              } max-w-[130px] overflow-hidden text-ellipsis whitespace-nowrap border-gray bg-transparent px-2 text-base outline-none`}
             >
               {newFolderName}
             </p>
@@ -191,11 +200,11 @@ const FolderList = ({
 
       {isOpen && (
         <ul style={{ paddingLeft: '20px', paddingRight: '20px' }}>
-          {folder.files?.map((file: any, index: number) => (
-            <DraggableListItem
+          {folder.files?.map((file: any, fileIndex: number) => (
+            <WorldViewListItem
               key={file.fileId}
               id={file.fileId}
-              index={index}
+              index={fileIndex}
               name={file.name}
               folderId={folder.folderId}
               file={file}
@@ -223,5 +232,3 @@ const FolderList = ({
     </li>
   )
 }
-
-export default FolderList
