@@ -141,13 +141,13 @@ export default function WorldViewDraggableBox({
             <>
               <button
                 onClick={handleCancel}
-                className="h-12 px-4 text-lg text-redorange hover:rounded-[10px] hover:bg-redorange hover:text-white"
+                className="h-12 from-redorange to-orange px-4 text-lg text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="h-12 px-4 text-lg text-redorange hover:rounded-[10px] hover:bg-redorange hover:text-white"
+                className="h-12 from-redorange to-orange px-4 text-lg text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white"
               >
                 Save
               </button>
