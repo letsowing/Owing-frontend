@@ -2,7 +2,7 @@ import ProjectList from './ProjectList'
 
 interface AllScenarioProps {
   projects: {
-    id: string
+    id: number
     name: string
     updatedAt: Date
     createdAt: Date

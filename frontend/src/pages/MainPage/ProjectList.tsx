@@ -2,7 +2,7 @@ import ProjectItem from './ProjectItem'
 
 interface ProjectListProps {
   projects: {
-    id: string
+    id: number
     name: string
     updatedAt: Date
     createdAt: Date
