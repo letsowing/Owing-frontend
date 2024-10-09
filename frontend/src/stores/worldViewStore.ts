@@ -36,6 +36,7 @@ interface DndState {
   ) => void // 파일 이름 변경
   deleteFolder: (folderId: string) => void
   deleteFile: (folderId: string, fileId: string) => void
+  updateFileDescription: (folderId: string, fileId: string, newDescription: string) => void // 세계관 내용 수정
 }
 
 export const useWorldViewStore = create(
@@ -128,6 +129,19 @@ export const useWorldViewStore = create(
 
           return { items: updatedItems }
         }),
+        // 세계관 내용 수정
+        updateFileDescription: (folderId: string, fileId: string, newDescription: string) =>
+          set((state) => {
+            const updatedItems = [...state.items]
+            const folder = updatedItems.find((f) => f.folderId === folderId)
+            if (folder) {
+              const file = folder.files.find((f) => f.fileId === fileId)
+              if (file) {
+                file.description = newDescription
+              }
+            }
+            return { items: updatedItems }
+          }),
     }),
     {
       name: 'Worldview-items',
