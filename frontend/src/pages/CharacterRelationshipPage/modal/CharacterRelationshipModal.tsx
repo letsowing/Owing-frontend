@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react'
 
+import ImageForm from '@components/common/ImageForm'
 import Modal from '@components/common/Modal'
 import TagField from '@components/common/TagField'
 
 import { useModalManagement } from '@hooks/useModal'
 
-import ImageForm from './ImageForm'
 import InputForm from './InputForm'
 
 import { Character, CharacterRelationshipModalProps, ModalType } from '@types'
