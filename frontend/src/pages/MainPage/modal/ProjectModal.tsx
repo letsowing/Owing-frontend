@@ -1,13 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import InputField from '@components/common/InputField'
-import MainButton from '@components/common/MainButton'
 import Modal from '@components/common/Modal'
-import SubButton from '@components/common/SubButton'
 import TagField from '@components/common/TagField'
 import TextAreaField from '@components/common/TextAreaField'
-
-import { useModalManagement } from '@hooks/useModal'
 
 import { CATEGORY_LIST } from '@constants/categoryList'
 import { GENRE_LIST } from '@constants/genreList'
@@ -22,12 +18,8 @@ const initialWork: Work = {
   imageUrl: '',
 }
 
-const WorkModal: React.FC = () => {
-  const { modals, closeModal } = useModalManagement()
-  const currentModal = modals[modals.length - 1] as WorkModalProps
-  const { isEditable, onAction, work = null } = currentModal || {}
-
-  const [currentWork, setCurrentWork] = useState<Work>(work || initialWork)
+const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
+  const [currentWork, setCurrentWork] = useState<Work>(initialWork)
 
   useEffect(() => {
     if (work) {
@@ -42,12 +34,18 @@ const WorkModal: React.FC = () => {
   }
 
   const handleSave = () => {
-    onAction(currentWork)
-    closeModal()
+    onSave(currentWork)
+    onClose()
   }
 
   return (
-    <Modal modalType={ModalType.WORK}>
+    <Modal
+      modalType={ModalType.WORK}
+      primaryButtonText="Save"
+      secondaryButtonText="Cancel"
+      onPrimaryAction={handleSave}
+      onSecondaryAction={onClose}
+    >
       <div className="mx-20 mt-8 flex flex-col gap-5">
         <InputField
           type="text"
@@ -79,17 +77,6 @@ const WorkModal: React.FC = () => {
           onChange={(value) => handleInputChange('description', value)}
         />
         {/* imageUrl은 별도의 이미지 업로드 컴포넌트가 필요할 수 있습니다 */}
-        <div className="mt-8 flex justify-end gap-3">
-          <div className="w-1/5">
-            <SubButton value="뒤로" onClick={closeModal} />
-          </div>
-          <div className="w-1/5">
-            <MainButton
-              value={isEditable ? '저장' : '확인'}
-              onClick={isEditable ? handleSave : closeModal}
-            />
-          </div>
-        </div>
       </div>
     </Modal>
   )

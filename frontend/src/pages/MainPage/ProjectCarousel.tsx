@@ -6,15 +6,16 @@ import 'slick-carousel/slick/slick-theme.css'
 import 'slick-carousel/slick/slick.css'
 
 interface ProjectCarouselProps {
+  handleAddWork: () => void
   projects: {
-    id: string
+    id: number
     name: string
     createdAt: Date
     image: string
   }[]
 }
 
-const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
+const ProjectCarousel = ({ handleAddWork, projects }: ProjectCarouselProps) => {
   const totalSlides = projects.length + 1
   const settings = {
     dots: true,
@@ -29,7 +30,7 @@ const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
     <div className="slider-container">
       {totalSlides > 1 ? (
         <Slider {...settings}>
-          <NewProject />
+          <NewProject handleAddWork={handleAddWork} />
           {projects.map((project) => (
             <Project
               key={project.id}
@@ -41,7 +42,7 @@ const ProjectCarousel = ({ projects }: ProjectCarouselProps) => {
           ))}
         </Slider>
       ) : (
-        <NewProject />
+        <NewProject handleAddWork={handleAddWork} />
       )}
     </div>
   )

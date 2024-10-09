@@ -4,5 +4,5 @@ export interface Work {
   genre: string
   category: string
   description: string
-  imageUrl: string
+  imageUrl?: string
 }
