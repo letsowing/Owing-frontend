@@ -74,20 +74,18 @@ export default function FolderTabLayout() {
           </div>
         ) : (
           // 사이드 탭메뉴 컴포넌트를 공통으로 사용하기 위해 추가
-          location.pathname === '/scenarioManagement' && (
-            <div className="flex h-full w-full flex-row">
-              {/* FolderTab 컴포넌트에 props로 넘기는 이름은 그대로 유지하기 위해 기존대로 작성함(넘기는 값, 함수 이름은 다르나 역할은 동일함) */}
-              <FolderTab
-                isOpen={isFolderTabOpen}
-                onClose={handleCloseFolderTab}
-                setSelectedFolderId={setSelectedFolderId}
-              />
-              <main className="h-full w-full dark:bg-darkblack">
-                <Header isTabOpen={isTabOpen} />
-                <Outlet />
-              </main>
-            </div>
-          )
+          <div className="flex h-full w-full flex-row">
+            {/* FolderTab 컴포넌트에 props로 넘기는 이름은 그대로 유지하기 위해 기존대로 작성함(넘기는 값, 함수 이름은 다르나 역할은 동일함) */}
+            <FolderTab
+              isOpen={isFolderTabOpen}
+              onClose={handleCloseFolderTab}
+              setSelectedFolderId={setSelectedFolderId}
+            />
+            <main className="h-full w-full dark:bg-darkblack">
+              <Header isTabOpen={isTabOpen} />
+              <Outlet />
+            </main>
+          </div>
         )}
       </div>
     </DndProvider>
