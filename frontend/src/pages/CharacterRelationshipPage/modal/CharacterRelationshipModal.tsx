@@ -10,7 +10,11 @@ import InputForm from './InputForm'
 
 import { Character, CharacterRelationshipModalProps, ModalType } from '@types'
 
-const mockData = [{ value: '1화' }, { value: '2화' }, { value: '3화' }]
+const mockData = [
+  { name: '1화', value: '1' },
+  { name: '2화', value: '2' },
+  { name: '3화', value: '3' },
+]
 
 const initialCharacter: Character = {
   id: '',

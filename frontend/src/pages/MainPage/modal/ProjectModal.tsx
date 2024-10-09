@@ -60,7 +60,6 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
             onAIGenerateClick={onAIGenerateClick}
           />
         </div>
-
         <InputField
           type="text"
           labelValue="작품명"
@@ -90,7 +89,6 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
           value={currentWork.description}
           onChange={(value) => handleInputChange('description', value)}
         />
-        {/* imageUrl은 별도의 이미지 업로드 컴포넌트가 필요할 수 있습니다 */}
       </div>
     </Modal>
   )
