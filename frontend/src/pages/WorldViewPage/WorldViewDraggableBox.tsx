@@ -99,7 +99,7 @@ export default function WorldViewDraggableBox({
             <div className="m-2 text-redorange">이미지를 추가해 주세요!</div>
           </div>
         )}
-        <div className="m-8 mb-auto flex w-[50rem] flex-grow flex-col">
+        <div className="m-8 mb-auto flex w-[48rem] flex-grow flex-col">
           {isEditing ? (
             <div
               onFocus={() => setIsDraggingEnabled(false)} // 포커스 시 드래그 비활성화
@@ -126,41 +126,43 @@ export default function WorldViewDraggableBox({
         </div>
       </div>
 
-      {/* 오른쪽 버튼 그룹 */}
       <div className="ml-auto flex h-full w-1/4 flex-col items-end justify-between font-semibold">
-        <div className="mt-4 flex flex-col items-end">
-          <button className="h-10 px-4 text-sm text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white">
-            + Create Image with AI
-          </button>
-          <button className="h-10 px-4 text-sm text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white">
-            + Upload Image locally
-          </button>
-        </div>
-        <div className="mt-auto">
-          {isEditing ? (
-            <>
+        {isEditing ? (
+          <>
+            {/* 위쪽 버튼 그룹 */}
+            <div className="mb-auto flex flex-col items-end">
+              <button className="h-10 px-4 text-sm text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white">
+                + Create Image with AI
+              </button>
+              <button className="mt-2 h-10 px-4 text-sm text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white">
+                + Upload Image locally
+              </button>
+            </div>
+
+            {/* 아래쪽 버튼 그룹 */}
+            <div className="mt-auto flex flex-row items-center space-x-2">
               <button
                 onClick={handleCancel}
-                className="h-12 from-redorange to-orange px-4 text-lg text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white"
+                className="h-12 px-4 text-lg text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
               >
                 Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="h-12 from-redorange to-orange px-4 text-lg text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white"
+                className="h-12 px-4 text-lg text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
               >
                 Save
               </button>
-            </>
-          ) : (
-            <button
-              onClick={handleEdit}
-              className="h-12 px-4 text-lg text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
-            >
-              Edit
-            </button>
-          )}
-        </div>
+            </div>
+          </>
+        ) : (
+          <button
+            onClick={handleEdit}
+            className="mt-auto h-12 from-redorange to-orange px-4 text-lg text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white"
+          >
+            Edit
+          </button>
+        )}
       </div>
     </div>
   )
