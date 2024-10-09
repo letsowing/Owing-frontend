@@ -96,10 +96,10 @@ export default function WorldViewDraggableBox({
               alt="AlertOwing"
               className="mx-auto h-auto w-12"
             />
-            <div className="m-2 text-redorange">이미지를 추가해 주세요!</div>
+            <div className="mt-4 text-redorange">이미지를 추가해 주세요!</div>
           </div>
         )}
-        <div className="m-8 mb-auto flex w-[48rem] flex-grow flex-col">
+        <div className="mx-8 my-4 mb-auto flex w-[48rem] flex-grow flex-col">
           {isEditing ? (
             <div
               onFocus={() => setIsDraggingEnabled(false)} // 포커스 시 드래그 비활성화
@@ -111,7 +111,7 @@ export default function WorldViewDraggableBox({
                 onChange={(e) => setEditedName(e.target.value)}
               />
               <textarea
-                className="mt-2 w-full min-w-full rounded border border-lightgray p-2 text-darkgray"
+                className="mt-1 h-[11rem] w-full min-w-full overflow-y-auto rounded border border-lightgray p-2 text-darkgray"
                 rows={5}
                 value={editedDescription}
                 onChange={(e) => setEditedDescription(e.target.value)}
@@ -120,7 +120,9 @@ export default function WorldViewDraggableBox({
           ) : (
             <>
               <strong className="text-2xl font-semibold">{name}</strong>
-              <p className="mt-4 text-darkgray">{description}</p>
+              <p className="mt-4 h-[11rem] overflow-y-auto text-darkgray">
+                {description}
+              </p>
             </>
           )}
         </div>
@@ -131,7 +133,7 @@ export default function WorldViewDraggableBox({
           <>
             {/* 위쪽 버튼 그룹 */}
             <div className="mb-auto flex flex-col items-end">
-              <button className="h-10 px-4 text-sm text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white">
+              <button className="h-10 from-redorange to-orange px-4 text-sm text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white">
                 + Create Image with AI
               </button>
               <button className="mt-2 h-10 px-4 text-sm text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white">
@@ -158,7 +160,7 @@ export default function WorldViewDraggableBox({
         ) : (
           <button
             onClick={handleEdit}
-            className="mt-auto h-12 from-redorange to-orange px-4 text-lg text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white"
+            className="mt-auto h-12 px-4 text-lg text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
           >
             Edit
           </button>
