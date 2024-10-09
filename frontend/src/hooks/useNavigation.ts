@@ -33,7 +33,7 @@ const useNavigation = () => {
   }
 
   const goToProject = ({ id }: { id: string }) => {
-    navigate(`/characterRelationship?id=${id}`)
+    navigate(`/scenarioManagement?id=${id}`)
   }
 
   return {
