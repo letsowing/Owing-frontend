@@ -272,7 +272,7 @@ const Landing = () => {
             transition={{ ease: 'easeInOut', duration: 0.6 }}
             className="mx-80"
           >
-            <div className="mb-20 flex flex-col items-center justify-between md:flex-row">
+            <div className="flex flex-col items-center justify-between md:flex-row">
               <p className="mt-32 text-right text-[25px] font-semibold text-darkgray">
                 작업량이 기록되어
                 <br />

@@ -20,8 +20,8 @@ const Footer = () => {
           ></path>
         </svg>
         <div className="absolute bottom-0 left-0 right-0 p-4 text-center">
-          <div className="text-gray-600 text-sm font-semibold">
-            © 2077 Untitled UI. All rights reserved.
+          <div className="mb-2 text-sm font-bold text-darkgray">
+            © 2024. (주)_상류사회 Co, Ltd. All rights reserved.
           </div>
         </div>
       </div>

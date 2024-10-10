@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: 'Noto Sans CJK KR';
+  font-style: normal;
+  font-weight: 100;
+  unicode-range: 'U+AC00-U+D7A3';
+  src:
+    url('styles/fonts/NotoSansKR-Light.woff2') format('woff2'),
+    url('styles/fonts/NotoSansKR-Light.woff') format('woff'),
+    url('styles/fonts/NotoSansKR-Light.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Noto Sans CJK KR';
+  font-style: normal;
+  font-weight: normal;
+  unicode-range: 'U+AC00-U+D7A3';
+  src:
+    url('styles/fonts/NotoSansKR-Regular.woff2') format('woff2'),
+    url('styles/fonts/NotoSansKR-Regular.woff') format('woff'),
+    url('styles/fonts/NotoSansKR-Regular.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Noto Sans CJK KR';
+  font-style: normal;
+  font-weight: 500;
+  unicode-range: 'U+AC00-U+D7A3';
+  src:
+    url('styles/fonts/NotoSansKR-Medium.woff2') format('woff2'),
+    url('styles/fonts/NotoSansKR-Medium.woff') format('woff'),
+    url('styles/fonts/NotoSansKR-Medium.otf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Noto Sans CJK KR';
+  font-style: normal;
+  font-weight: bold;
+  unicode-range: 'U+AC00-U+D7A3';
+  src:
+    url('styles/fonts/NotoSansKR-Bold.woff2') format('woff2'),
+    url('styles/fonts/NotoSansKR-Bold.woff') format('woff'),
+    url('styles/fonts/NotoSansKR-Bold.otf') format('truetype');
+}
