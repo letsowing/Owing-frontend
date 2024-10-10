@@ -3,7 +3,8 @@ import React, { useRef, useState } from 'react'
 
 import DraggableListItem from '@components/dnd/DraggableListItem'
 
-import { useDnd } from '@/hooks/useDnd'
+import { useDnd } from '@hooks/useDnd'
+
 import { FileItem, FolderItem } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 import { CiFolderOn } from 'react-icons/ci'
