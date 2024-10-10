@@ -37,7 +37,7 @@ export const postGenerateAiImage = async (
   description: string,
   category: string,
   genres: string[],
-): Promise<{ imageUrl: string }> => {
+): Promise<string> => {
   try {
     const payload = {
       title,

@@ -57,7 +57,7 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
           currentWork.category || '',
           currentWork.genres || [],
         )
-        onImageChange(data.imageUrl)
+        onImageChange(data)
       } catch (error) {
         console.error('AI 이미지 생성 실패', error)
       }
