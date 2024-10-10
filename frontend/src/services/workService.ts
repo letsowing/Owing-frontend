@@ -45,7 +45,8 @@ export const postGenerateAiImage = async (
       category,
       genres,
     }
-    const response = await axiosInstance.post('/project/generate', payload)
+    const response = await axiosInstance.post('/project/image', payload)
+    console.log(response.data)
     return response.data
   } catch (error) {
     console.error('프로젝트 AI 표지 생성 실패:', error)
@@ -55,7 +56,7 @@ export const postGenerateAiImage = async (
 
 export const getAllWork = async (): Promise<Work[]> => {
   try {
-    const response = await axiosInstance.get('/project/load')
+    const response = await axiosInstance.get('/project')
     return response.data
   } catch (error) {
     console.error('프로젝트 리스트 조회 실패:', error)
