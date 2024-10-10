@@ -98,7 +98,20 @@ const Main = () => {
     })
   }, [handleCloseModal, handleSaveWork, openModal])
 
-  const convertWorkToProject = (works: Work[]) => {
+  // const convertWorkToProject = (works: Work[]) => {
+  //   return works.map((work) => ({
+  //     id: work.id,
+  //     name: work.title,
+  //     imageUrl: work.imageUrl,
+  //     updatedAt: work.updatedAt || new Date(),
+  //     createdAt: work.createdAt || new Date(),
+  //   }))
+  // }
+
+  const convertWorkToProject = (works: Work[] = []) => {
+    if (!Array.isArray(works)) {
+      return []
+    }
     return works.map((work) => ({
       id: work.id,
       name: work.title,
