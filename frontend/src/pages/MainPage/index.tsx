@@ -2,6 +2,8 @@ import { useCallback } from 'react'
 
 import ThemeToggleSwitch from '@components/common/DarkModeToggle'
 
+import { useWorkStore } from '@stores/workStore'
+
 import { useModalManagement } from '@hooks/useModal'
 import useNavigation from '@hooks/useNavigation'
 
@@ -11,7 +13,6 @@ import Profile from './Profile'
 import QuickAccess from './QuickAccess'
 import WorkModal from './modal/ProjectModal'
 
-import { useWorkStore } from '@/stores/workStore'
 import { MEMBER } from '@datas/member'
 import { PROJECT_LIST } from '@datas/projectList'
 import { WORD_COUNT_STATS } from '@datas/wordCountStats'

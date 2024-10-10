@@ -52,7 +52,6 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
       ...prevWork,
       category: prevWork.category === value ? '' : value,
     }))
-    console.log(currentWork.category)
   }
 
   const onGenreTagClick = (value: string) => {
@@ -70,7 +69,6 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
         genre: updatedGenre,
       }
     })
-    console.log(currentWork.genre)
   }
 
   return (
