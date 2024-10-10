@@ -2,12 +2,13 @@ import useNavigation from '@hooks/useNavigation'
 
 interface ProjectItemProps {
   id: number
-  name: string
+  title: string
   updatedAt: Date
   createdAt: Date
+  imageUrl: string
 }
 
-const ProjectItem = ({ id, name, updatedAt, createdAt }: ProjectItemProps) => {
+const ProjectItem = ({ id, title, updatedAt, createdAt }: ProjectItemProps) => {
   const { goToProject } = useNavigation()
 
   return (
@@ -16,7 +17,7 @@ const ProjectItem = ({ id, name, updatedAt, createdAt }: ProjectItemProps) => {
       onClick={() => goToProject(id)}
     >
       <td className="text-normal py-4 pl-4 pr-3 font-medium text-gray dark:hover:text-darkgray">
-        {name}
+        {title}
       </td>
       <td className="px-3 py-4 text-center text-sm text-gray dark:hover:text-darkgray">
         {updatedAt.toLocaleString()}

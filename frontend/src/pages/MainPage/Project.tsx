@@ -2,12 +2,12 @@ import useNavigation from '@hooks/useNavigation'
 
 interface ProjectProps {
   id: number
-  name: string
+  title: string
   createdAt: Date
-  image: string
+  imageUrl: string
 }
 
-const Project = ({ id, name, createdAt, image }: ProjectProps) => {
+const Project = ({ id, title, createdAt, imageUrl }: ProjectProps) => {
   const { goToProject } = useNavigation()
 
   return (
@@ -16,11 +16,11 @@ const Project = ({ id, name, createdAt, image }: ProjectProps) => {
       onClick={() => goToProject(id)}
     >
       <div className="flex flex-1 bg-gray">
-        <img className="h-full w-full object-cover" src={image} />
+        <img className="h-full w-full object-cover" src={imageUrl} />
       </div>
       <div className="flex flex-col items-center">
         <label className="w-36 cursor-pointer truncate px-2 text-sm font-medium dark:text-gray">
-          {name}
+          {title}
         </label>
         <label className="mb-2 cursor-pointer text-[11px] font-normal dark:text-gray">
           {createdAt.toLocaleString()}

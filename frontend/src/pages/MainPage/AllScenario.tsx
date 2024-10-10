@@ -3,9 +3,10 @@ import ProjectList from './ProjectList'
 interface AllScenarioProps {
   projects: {
     id: number
-    name: string
+    title: string
     updatedAt: Date
     createdAt: Date
+    imageUrl: string
   }[]
 }
 

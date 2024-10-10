@@ -1,6 +1,6 @@
 import Tag from '@components/common/Tag'
 
-import { Work } from '@/types'
+import { Work } from '@types'
 
 interface ProjectTagFieldProps {
   labelValue: string
@@ -11,6 +11,7 @@ interface ProjectTagFieldProps {
   isEditable: boolean
   work: Work
   onTagClick?: (value: string) => void
+  type: 'category' | 'genres'
 }
 
 const ProjectTagField = ({
@@ -19,7 +20,15 @@ const ProjectTagField = ({
   isEditable,
   work,
   onTagClick,
+  type,
 }: ProjectTagFieldProps) => {
+  const isTagSelected = (tagValue: string) => {
+    if (type === 'category') {
+      return work.category === tagValue
+    }
+    return work.genres.includes(tagValue)
+  }
+
   return (
     <div className="flex flex-col">
       <label className="font-semibold text-darkgray dark:text-coldbeige">
@@ -35,9 +44,7 @@ const ProjectTagField = ({
             value={tag.value}
             key={tag.name}
             onClick={onTagClick}
-            isSelected={
-              work.category === tag.value || work.genre.includes(tag.value)
-            }
+            isSelected={isTagSelected(tag.value)}
           />
         ))}
       </div>

@@ -9,13 +9,16 @@ interface ProjectCarouselProps {
   handleAddWork: () => void
   projects: {
     id: number
-    name: string
+    title: string
     createdAt: Date
-    image: string
+    imageUrl: string
   }[]
 }
 
-const ProjectCarousel = ({ handleAddWork, projects }: ProjectCarouselProps) => {
+const ProjectCarousel = ({
+  handleAddWork,
+  projects = [],
+}: ProjectCarouselProps) => {
   const totalSlides = projects.length + 1
   const settings = {
     dots: true,
@@ -35,9 +38,9 @@ const ProjectCarousel = ({ handleAddWork, projects }: ProjectCarouselProps) => {
             <Project
               key={project.id}
               id={project.id}
-              name={project.name}
+              title={project.title}
               createdAt={project.createdAt}
-              image={project.image}
+              imageUrl={project.imageUrl}
             />
           ))}
         </Slider>

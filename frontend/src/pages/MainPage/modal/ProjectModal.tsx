@@ -9,12 +9,13 @@ import ProjectTagField from './ProjectTagField'
 
 import { CATEGORY_LIST } from '@constants/categoryList'
 import { GENRE_LIST } from '@constants/genreList'
+import { postGenerateAiImage } from '@services/workService'
 import { ModalType, Work, WorkModalProps } from '@types'
 
 const initialWork: Work = {
   id: 0,
   title: '',
-  genre: [],
+  genres: [],
   category: '',
   description: '',
   imageUrl: '',
@@ -40,37 +41,53 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
     onClose()
   }
 
-  const onImageChange = (image: string) => {
-    // axios 후 이미지 변경된 거를 넣어준다.
-    console.log(image)
+  const onImageChange = (imageUrl: string) => {
+    setCurrentWork((prev) => ({
+      ...prev,
+      imageUrl: imageUrl,
+    }))
   }
 
-  const onAIGenerateClick = () => {}
+  const onAiGenerateClick = () => {
+    const generateAiImage = async () => {
+      try {
+        const data = await postGenerateAiImage(
+          currentWork.title,
+          currentWork.description || '',
+          currentWork.category || '',
+          currentWork.genres || [],
+        )
+        onImageChange(data)
+      } catch (error) {
+        console.error('AI 이미지 생성 실패', error)
+      }
+    }
+    generateAiImage()
+  }
 
   const onCategoryTagClick = (value: string) => {
     setCurrentWork((prevWork) => ({
       ...prevWork,
       category: prevWork.category === value ? '' : value,
     }))
-    console.log(currentWork.category)
   }
 
   const onGenreTagClick = (value: string) => {
     setCurrentWork((prevWork) => {
-      const isTagSelected = prevWork.genre.includes(value)
+      const isTagSelected = prevWork.genres.includes(value)
 
-      const updatedGenre = isTagSelected
-        ? prevWork.genre.filter((genre) => genre !== value)
-        : prevWork.genre.length < 5
-          ? [...prevWork.genre, value]
-          : prevWork.genre
+      const updatedGenres = isTagSelected
+        ? prevWork.genres.filter((genre) => genre !== value)
+        : prevWork.genres.length < 5
+          ? [...prevWork.genres, value]
+          : prevWork.genres
 
       return {
         ...prevWork,
-        genre: updatedGenre,
+        genres: updatedGenres,
       }
     })
-    console.log(currentWork.genre)
+    console.log(currentWork.genres)
   }
 
   return (
@@ -87,7 +104,7 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
             isEditable={isEditable}
             image={currentWork.imageUrl}
             onImageChange={onImageChange}
-            onAIGenerateClick={onAIGenerateClick}
+            onAIGenerateClick={onAiGenerateClick}
           />
         </div>
         <InputField
@@ -105,6 +122,7 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
           isEditable={isEditable}
           work={currentWork}
           onTagClick={onCategoryTagClick}
+          type="category"
         />
         <div className="w-3/4">
           <ProjectTagField
@@ -113,6 +131,7 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
             isEditable={isEditable}
             work={currentWork}
             onTagClick={onGenreTagClick}
+            type="genres"
           />
         </div>
         <TextAreaField
@@ -120,7 +139,7 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
           isRequired={isEditable}
           maxLength={1000}
           isEditable={isEditable}
-          value={currentWork.description}
+          value={currentWork.description || ''}
           onChange={(value) => handleInputChange('description', value)}
         />
       </div>
