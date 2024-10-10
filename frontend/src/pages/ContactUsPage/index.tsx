@@ -25,8 +25,7 @@ export default function ContactUs() {
           Didn’t find an answer?
         </div>
         <div className="mb-20 flex justify-center text-[20px] text-gray">
-          ~팀 이메일로 문의해주시면 도와드릴게용ㅇㅇ 서비스 피드백도 좋아요
-          느낌~
+          팀 이메일로 문의해주시면 도와드릴게요. 서비스 피드백도 좋아요 👍
         </div>
         <div className="flex flex-row justify-center">
           {MEMBER_INFO_LIST.map((info, index) => (
