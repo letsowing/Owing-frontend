@@ -1,5 +1,7 @@
 import axiosInstance from '@utils/httpCommons'
 
+import { putUploadImageToS3 } from './s3Service'
+
 import { Work } from '@types'
 
 export const postCreateWork = async (
@@ -22,6 +24,7 @@ export const postCreateWork = async (
       imageUrl,
     }
     const response = await axiosInstance.post('/project', payload)
+    await putUploadImageToS3(response.data.presignedUrl, imageUrl)
     return response.data
   } catch (error) {
     console.error('프로젝트 생성 실패:', error)
