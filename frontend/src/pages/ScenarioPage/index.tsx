@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
+import { AiHelper } from './AiHelper'
 import { BlueButton } from './BlueButton'
 import { customDarkTheme, customLightTheme } from './ScenarioTheme'
 
@@ -89,6 +90,7 @@ const ScenarioPage: React.FC = () => {
 
   return (
     <>
+      <AiHelper />
       <BlockNoteView
         editor={editor}
         formattingToolbar={false}
