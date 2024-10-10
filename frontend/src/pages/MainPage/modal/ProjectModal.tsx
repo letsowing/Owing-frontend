@@ -7,9 +7,9 @@ import TextAreaField from '@components/common/TextAreaField'
 
 import ProjectTagField from './ProjectTagField'
 
-import { postGenerateAiImage } from '@/services/workService'
 import { CATEGORY_LIST } from '@constants/categoryList'
 import { GENRE_LIST } from '@constants/genreList'
+import { postGenerateAiImage } from '@services/workService'
 import { ModalType, Work, WorkModalProps } from '@types'
 
 const initialWork: Work = {
