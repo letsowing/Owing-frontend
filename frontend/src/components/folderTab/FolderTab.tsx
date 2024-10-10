@@ -1,41 +1,64 @@
-// FolderTab.tsx
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from 'react'
 
 import { useDnd } from '@hooks/useDnd'
 
 import FolderList from './FolderList'
 
+import { FolderItem } from '@types'
 import { CiFolderOn } from 'react-icons/ci'
 import { FaPlus } from 'react-icons/fa6'
+import { useParams } from 'react-router-dom'
 
 interface FolderTabProps {
-  setSelectedFolderId: (folderId: string) => void // 상위 컴포넌트에서 전달받는 함수
-  isOpen: boolean // FolderTab이 열렸는지 여부
-  onClose: () => void // FolderTab을 닫는 함수
+  isOpen: boolean
+  onClose: () => void
+  setSelectedFolderId: (folderId: number) => void
+  currentService: any
 }
 
 const FolderTab: React.FC<FolderTabProps> = ({
   setSelectedFolderId,
   isOpen,
   onClose,
+  currentService,
 }) => {
-  const { items, addFolder } = useDnd() // items는 폴더 목록을 의미
-  const [activeFolderId, setActiveFolderId] = useState<number | null>(null) // activeFolderId 상태 추가
-
+  const { items, setItems } = useDnd()
+  const [activeFolderId, setActiveFolderId] = useState<number | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [newFolderName, setNewFolderName] = useState('')
+  const { projectId } = useParams()
 
-  const editableRef = useRef<HTMLDivElement>(null) // 포커스 설정용 ref
+  const editableRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const fetchFolders = async () => {
+      try {
+        const folders = await currentService.getFolders(projectId)
+        setItems(folders)
+      } catch (err) {
+        console.error('폴더 목록 조회 실패:', err)
+      }
+    }
+
+    fetchFolders()
+  }, [setItems, currentService, projectId])
 
   const handleCreateFolder = () => {
     setIsEditing(true)
   }
 
-  const handleSaveFolder = () => {
-    if (newFolderName.trim()) {
-      addFolder(newFolderName)
-    } else {
-      handleCancelFolder()
+  const handleSaveFolder = async () => {
+    try {
+      const folderData = {
+        projectId,
+        name: newFolderName,
+        description: 'This is a test folder',
+      }
+      const newFolder = await currentService.postFolder(folderData)
+      setItems([...items, newFolder])
+    } catch (error) {
+      console.error('새 폴더 생성 실패:', error)
     }
     setNewFolderName('')
     setIsEditing(false)
@@ -43,25 +66,19 @@ const FolderTab: React.FC<FolderTabProps> = ({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      handleSaveFolder() // Enter 키로 폴더 저장
+      handleSaveFolder()
     }
-  }
-
-  const handleCancelFolder = () => {
-    setNewFolderName('')
-    setIsEditing(false)
   }
 
   useEffect(() => {
     if (isEditing && editableRef.current) {
-      editableRef.current.focus() // 커서 깜빡이게 포커스 설정
+      editableRef.current.focus()
     }
   }, [isEditing])
 
-  // 선택된 폴더가 변경될 때 호출
-  const handleSelectFolder = (folder: any) => {
-    setSelectedFolderId(folder.folderId) // 새로운 폴더를 활성화 또는 비활성화
-    setActiveFolderId(folder.folderId) // 상위 컴포넌트로 선택된 폴더 ID 전달
+  const handleSelectFolder = (folder: FolderItem) => {
+    setSelectedFolderId(folder.id)
+    setActiveFolderId(folder.id)
   }
 
   return (
@@ -90,13 +107,14 @@ const FolderTab: React.FC<FolderTabProps> = ({
         className="m-0 p-0"
         style={{ maxHeight: '780px', overflow: 'overlay' }}
       >
-        {items.map((folder: any, index: number) => (
+        {items.map((folder: FolderItem, index: number) => (
           <FolderList
-            key={folder.folderId}
+            key={folder.id}
             folder={folder}
             index={index}
             onSelectFolder={handleSelectFolder}
-            isActive={activeFolderId === folder.folderId} // 활성화 상태 전달
+            isActive={activeFolderId === folder.id}
+            currentService={currentService}
           />
         ))}
         {isEditing && (
@@ -109,7 +127,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
               onInput={(e) =>
                 setNewFolderName((e.target as HTMLDivElement).textContent || '')
               }
-              onBlur={handleSaveFolder} // 포커스가 벗어날 때 저장
+              onBlur={handleSaveFolder}
               onKeyDown={handleKeyDown}
               className="flex-1"
             >

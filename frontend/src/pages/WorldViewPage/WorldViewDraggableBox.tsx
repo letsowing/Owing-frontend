@@ -1,18 +1,12 @@
 import { useRef, useState } from 'react'
 
-import { useWorldViewStore } from '@stores/worldViewStore'
+import { useDnd } from '@hooks/useDnd'
+import useNavigation from '@hooks/useNavigation'
 
 import AlertOwing from '@assets/common/AlertOwing.png'
+import { scenarioDirectoryService } from '@services/directoryService'
+import { DraggableBoxProps } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
-
-interface WorldViewDraggableBoxProps {
-  id: string
-  index: number
-  name: string
-  description: string
-  folderId: string
-  imageUrl: string
-}
 
 export default function WorldViewDraggableBox({
   id,
@@ -21,65 +15,83 @@ export default function WorldViewDraggableBox({
   description,
   folderId,
   imageUrl,
-}: WorldViewDraggableBoxProps) {
-  const { moveFile, updateFileName, updateFileDescription } =
-    useWorldViewStore()
+}: DraggableBoxProps) {
+  const { moveFileItem, updateFile } = useDnd()
   const ref = useRef<HTMLDivElement>(null)
-
+  const { goToScenario } = useNavigation()
   const [isEditing, setIsEditing] = useState(false)
-  const [isDraggingEnabled, setIsDraggingEnabled] = useState(true) // 드래그 활성화 상태 관리
-
   const [editedName, setEditedName] = useState(name)
   const [editedDescription, setEditedDescription] = useState(description)
 
   const [, drop] = useDrop({
-    accept: 'FILE_ITEM',
-    hover(item: { id: string; index: number }) {
-      if (!ref.current || !isDraggingEnabled) return
+    accept: 'GRID_ITEM',
+    hover(item: { id: number; index: number }) {
+      if (!ref.current) return
 
       const dragIndex = item.index
       const hoverIndex = index
 
       if (dragIndex === hoverIndex) return
 
-      moveFile(folderId, dragIndex, hoverIndex)
+      moveFileItem(folderId, dragIndex, hoverIndex)
       item.index = hoverIndex
+    },
+    drop(item: { id: number; index: number }) {
+      scenarioDirectoryService
+        .moveFile(item.id, index, folderId)
+        .catch((error: unknown) => {
+          console.error('파일 이동 실패:', error)
+        })
     },
   })
 
   const [{ isDragging }, drag] = useDrag({
-    type: 'FILE_ITEM',
+    type: 'GRID_ITEM',
     item: { id, index },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
-    canDrag: isDraggingEnabled, // 드래그 가능 여부를 상태에 따라 제어
   })
 
   drag(drop(ref))
 
-  // 저장 핸들러
-  const handleSave = () => {
-    updateFileName(folderId, id, editedName)
-    updateFileDescription(folderId, id, editedDescription)
-    setIsEditing(false)
-  }
-
-  // 취소 핸들러
-  const handleCancel = () => {
-    setEditedName(name) // 원래 이름으로 되돌림
-    setEditedDescription(description) // 원래 설명으로 되돌림
-    setIsEditing(false)
-  }
-
-  const handleEdit = () => {
+  const handleEdit = (e: React.MouseEvent) => {
+    e.stopPropagation()
     setIsEditing(true)
+  }
+
+  const handleSave = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    try {
+      await scenarioDirectoryService.putFile(id, {
+        name: editedName,
+        description: editedDescription,
+      })
+
+      updateFile(folderId, id, {
+        name: editedName,
+        description: editedDescription,
+      })
+      setIsEditing(false)
+    } catch (error) {
+      console.error('파일 업데이트 실패:', error)
+    }
+  }
+
+  const handleCancel = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    setEditedName(name)
+    setEditedDescription(description)
+    setIsEditing(false)
   }
 
   return (
     <div
       ref={ref}
-      className={`shadow-gray-300/50 m-4 flex w-full items-center rounded-[6px] bg-white p-6 shadow-lg ${isDragging ? 'opacity-20' : ''}`}
+      className={`shadow-gray-300/50 m-4 flex w-full items-center rounded-[6px] bg-white p-6 shadow-lg ${
+        isDragging ? 'opacity-20' : ''
+      }`}
+      onClick={() => !isEditing && goToScenario(id)}
     >
       <div className="flex items-center">
         {imageUrl ? (
@@ -101,10 +113,7 @@ export default function WorldViewDraggableBox({
         )}
         <div className="mx-8 my-4 mb-auto flex w-[48rem] flex-grow flex-col">
           {isEditing ? (
-            <div
-              onFocus={() => setIsDraggingEnabled(false)} // 포커스 시 드래그 비활성화
-              onBlur={() => setIsDraggingEnabled(true)} // 포커스 해제 시 드래그 활성화
-            >
+            <>
               <input
                 className="mb-2 w-full border-b border-lightgray text-2xl font-semibold"
                 value={editedName}
@@ -116,7 +125,7 @@ export default function WorldViewDraggableBox({
                 value={editedDescription}
                 onChange={(e) => setEditedDescription(e.target.value)}
               />
-            </div>
+            </>
           ) : (
             <>
               <strong className="text-2xl font-semibold">{name}</strong>
@@ -131,7 +140,6 @@ export default function WorldViewDraggableBox({
       <div className="ml-auto flex h-full w-1/4 flex-col items-end justify-between font-semibold">
         {isEditing ? (
           <>
-            {/* 위쪽 버튼 그룹 */}
             <div className="mb-auto flex flex-col items-end">
               <button className="h-10 from-redorange to-orange px-4 text-sm text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white">
                 + Create Image with AI
@@ -140,8 +148,6 @@ export default function WorldViewDraggableBox({
                 + Upload Image locally
               </button>
             </div>
-
-            {/* 아래쪽 버튼 그룹 */}
             <div className="mt-auto flex flex-row items-center space-x-2">
               <button
                 onClick={handleCancel}

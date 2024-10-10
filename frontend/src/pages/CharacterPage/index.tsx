@@ -8,6 +8,7 @@ import { useCharFlow } from '@hooks/useCharFlow'
 import CharacterImage from './CharacterImage'
 import CharacterInputForm from './CharacterInputForm'
 
+// import { characterDirectoryService } from '@services/directoryService'
 import { Character } from '@types'
 import { BsPlusCircle } from 'react-icons/bs'
 import { MdLightbulbOutline } from 'react-icons/md'

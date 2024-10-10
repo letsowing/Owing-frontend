@@ -9,6 +9,7 @@ import Login from '@pages/LoginPage'
 import Main from '@pages/MainPage'
 import Register from '@pages/RegisterPage'
 import ScenarioManagementPage from '@pages/ScenarioManagementPage'
+import ScenarioPage from '@pages/ScenarioPage'
 import WorldViewPage from '@pages/WorldViewPage'
 
 import App from '@/App'
@@ -45,12 +46,16 @@ const router = createBrowserRouter([
         element: <FolderTabLayout />,
         children: [
           {
-            path: 'scenarioManagement',
+            path: 'scenarioManagement/:projectId',
             element: <ScenarioManagementPage />,
           },
           {
             path: 'character',
             element: <CharacterPage />,
+          },
+          {
+            path: 'scenario/:id',
+            element: <ScenarioPage />,
           },
           {
             path: 'worldView',

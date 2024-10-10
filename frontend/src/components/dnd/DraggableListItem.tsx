@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react'
 
 import { useDnd } from '@hooks/useDnd'
@@ -7,11 +8,12 @@ import { GoPencil } from 'react-icons/go'
 import { PiTrashSimpleLight } from 'react-icons/pi'
 
 interface DraggableListItemProps {
-  id: string
+  id: number
   file: any
   index: number
   name: string
-  folderId: string
+  folderId: number
+  currentService: any
 }
 
 export default function DraggableListItem({
@@ -20,14 +22,15 @@ export default function DraggableListItem({
   index,
   name,
   folderId,
+  currentService,
 }: DraggableListItemProps) {
   const { moveFileItem, updateFileName, deleteFile } = useDnd()
   const ref = useRef<HTMLLIElement>(null)
 
-  const [isFileEditing, setIsFileEditing] = useState(false) // 파일 이름 입력 상태
+  const [isFileEditing, setIsFileEditing] = useState(false)
   const [newFileName, setNewFileName] = useState(file.name)
 
-  const fileNameRef = useRef<HTMLDivElement>(null) // 파일 이름 입력을 위한 ref
+  const fileNameRef = useRef<HTMLDivElement>(null)
 
   const moveCursorToEnd = () => {
     if (fileNameRef.current) {
@@ -46,9 +49,15 @@ export default function DraggableListItem({
     setTimeout(() => moveCursorToEnd(), 0)
   }
 
-  const handleSaveFileName = () => {
-    if (newFileName.trim()) {
-      updateFileName(folderId, id, newFileName)
+  const handleSaveFileName = async () => {
+    if (newFileName.trim() && newFileName !== file.name) {
+      try {
+        await currentService.putFile(id, { name: newFileName })
+        updateFileName(folderId, id, newFileName)
+      } catch (error) {
+        console.error('파일 이름 업데이트 실패:', error)
+        setNewFileName(file.name)
+      }
     } else {
       setNewFileName(file.name)
     }
@@ -59,9 +68,26 @@ export default function DraggableListItem({
     if (e.key === 'Enter') handleSaveFileName()
   }
 
+  const handleDeleteFile = async () => {
+    try {
+      await currentService.deleteFile(id)
+      deleteFile(folderId, id)
+    } catch (error) {
+      console.error('파일 삭제 실패:', error)
+    }
+  }
+
+  const [{ isDragging }, drag] = useDrag({
+    type: 'TAB_ITEM',
+    item: { id, index },
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
+  })
+
   const [, drop] = useDrop({
     accept: 'TAB_ITEM',
-    hover(item: { id: string; index: number }) {
+    hover(item: { id: number; index: number }) {
       if (!ref.current) return
 
       const dragIndex = item.index
@@ -72,14 +98,11 @@ export default function DraggableListItem({
       moveFileItem(folderId, dragIndex, hoverIndex)
       item.index = hoverIndex
     },
-  })
-
-  const [, drag] = useDrag({
-    type: 'TAB_ITEM',
-    item: { id, index },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
+    drop(item: { id: number; index: number }) {
+      currentService.moveFile(item.id, index, folderId).catch((error: any) => {
+        console.error('파일 이동 실패:', error)
+      })
+    },
   })
 
   drag(drop(ref))
@@ -97,7 +120,9 @@ export default function DraggableListItem({
   return (
     <li
       ref={ref}
-      className="${ isDragging? 'bg-[#e0e0e0] opacity-50' : 'bg-[#f5f5f5]' } group my-2 flex h-10 w-full items-center justify-between rounded-[7px] hover:bg-white"
+      className={`${
+        isDragging ? 'bg-[#e0e0e0] opacity-50' : 'bg-[#f5f5f5]'
+      } group my-2 flex h-10 w-full items-center justify-between rounded-[7px] hover:bg-white`}
     >
       <div className="flex items-center">
         <div className="h-1 w-1 rounded-full bg-redorange dark:bg-blue"></div>
@@ -124,11 +149,13 @@ export default function DraggableListItem({
 
       <div className="flex hidden w-10 items-center justify-between group-hover:flex">
         <GoPencil
-          className={`${isFileEditing ? 'text-redorange dark:text-blue' : 'text-darkgray'} cursor-pointer`}
+          className={`${
+            isFileEditing ? 'text-redorange dark:text-blue' : 'text-darkgray'
+          } cursor-pointer`}
           onClick={handleEditFileClick}
         />
         <PiTrashSimpleLight
-          onClick={() => deleteFile(folderId, id)}
+          onClick={handleDeleteFile}
           className="cursor-pointer text-darkgray"
         />
       </div>

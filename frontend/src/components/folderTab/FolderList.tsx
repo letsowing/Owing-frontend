@@ -1,65 +1,72 @@
-import { useEffect, useRef, useState } from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import React, { useRef, useState } from 'react'
 
 import DraggableListItem from '@components/dnd/DraggableListItem'
 
 import { useDnd } from '@/hooks/useDnd'
+import { FileItem, FolderItem } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 import { CiFolderOn } from 'react-icons/ci'
 import { GoPencil } from 'react-icons/go'
-import { PiFilePlusLight } from 'react-icons/pi'
-import { PiTrashSimpleLight } from 'react-icons/pi'
+import { PiFilePlusLight, PiTrashSimpleLight } from 'react-icons/pi'
 
-interface FolderItemProps {
-  folder: any // 폴더의 타입 정의
+interface FolderListProps {
+  folder: FolderItem
   index: number
-  onSelectFolder: (folder: any) => void // 폴더가 선택될 때 호출할 함수
-  isActive: boolean // 폴더가 활성화 상태인지 확인하는 prop
+  onSelectFolder: (folder: FolderItem) => void
+  isActive: boolean
+  currentService: any
 }
 
-// 폴더와 파일을 렌더링하는 컴포넌트
-const FolderList = ({
+const FolderList: React.FC<FolderListProps> = ({
   folder,
   index,
   onSelectFolder,
   isActive,
-}: FolderItemProps) => {
+  currentService,
+}) => {
   const { moveFolder, addFile, updateFolderName, deleteFolder } = useDnd()
-  const [isOpen, setIsOpen] = useState(false) // 폴더 열고 닫기 상태
-
-  const [isFolderEditing, setIsEditingFolder] = useState(false) // 폴더 이름 편집 상태
-  const [newFolderName, setNewFolderName] = useState(folder.name) // 새 폴더 이름 상태
-
-  const [isFileEditing, setIsFileEditing] = useState(false) // 파일 이름 입력 상태
-  const [newFileName, setNewFileName] = useState('') // 새 파일 이름 상태
+  const [isOpen, setIsOpen] = useState(false)
+  const [isFolderEditing, setIsEditingFolder] = useState(false)
+  const [newFolderName, setNewFolderName] = useState(folder.name)
+  const [isFileEditing, setIsFileEditing] = useState(false)
+  const [newFileName, setNewFileName] = useState('')
 
   const ref = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLDivElement>(null) // 파일 이름 입력을 위한 ref
-  const folderNameRef = useRef<HTMLInputElement>(null) // 폴더 이름 입력을 위한 ref
+  const inputRef = useRef<HTMLDivElement>(null)
+  const folderNameRef = useRef<HTMLInputElement>(null)
 
-  // 폴더 이름 편집 시작
   const handleEditFolderClick = (e: React.MouseEvent) => {
-    e.stopPropagation() // 폴더 선택 이벤트 방지
+    e.stopPropagation()
     setIsEditingFolder(true)
     setTimeout(() => moveCursorToEnd(), 0)
   }
-
   const moveCursorToEnd = () => {
     if (folderNameRef.current) {
       const range = document.createRange()
       const selection = window.getSelection()
       range.selectNodeContents(folderNameRef.current)
-      range.collapse(false) // false: 끝으로 이동
+      range.collapse(false)
       selection?.removeAllRanges()
       selection?.addRange(range)
     }
   }
 
-  // 폴더 이름 저장
-  const handleSaveFolderName = () => {
-    if (newFolderName.trim()) {
-      updateFolderName(folder.folderId, newFolderName) // 폴더 이름 업데이트
+  const handleSaveFolderName = async () => {
+    if (newFolderName.trim() && newFolderName !== folder.name) {
+      try {
+        const data = {
+          name: newFolderName,
+          description: folder.description,
+        }
+        await currentService.putFolder(folder.id, data)
+        updateFolderName(folder.id, newFolderName)
+      } catch (error) {
+        console.error('폴더 이름 업데이트 실패:', error)
+        setNewFolderName(folder.name)
+      }
     } else {
-      setNewFolderName(folder.name) // 이름이 비어 있으면 기존 이름으로 되돌림
+      setNewFolderName(folder.name)
     }
     setIsEditingFolder(false)
   }
@@ -68,18 +75,21 @@ const FolderList = ({
     if (e.key === 'Enter') handleSaveFolderName()
   }
 
-  // 파일 추가 버튼 클릭 이벤트
   const handleAddFileClick = (e: React.MouseEvent) => {
-    e.stopPropagation() // 폴더 선택 이벤트 방지
-    setIsOpen(true) // 폴더가 닫혀있을 경우 열기
+    e.stopPropagation()
+    setIsOpen(true)
     setIsFileEditing(true)
-    setTimeout(() => inputRef.current?.focus(), 0) // 파일 이름 입력에 포커스
+    setTimeout(() => inputRef.current?.focus(), 0)
   }
 
-  // 파일 이름 저장 및 추가
-  const handleSaveFile = () => {
+  const handleSaveFile = async () => {
     if (newFileName.trim()) {
-      addFile(folder.folderId, newFileName) // 파일 추가
+      try {
+        const newFile = await currentService.postFile(folder.id)
+        addFile(folder.id, newFile.fileId, newFileName)
+      } catch (error) {
+        console.error('파일 추가 실패:', error)
+      }
     }
     setNewFileName('')
     setIsFileEditing(false)
@@ -90,35 +100,32 @@ const FolderList = ({
     setIsFileEditing(false)
   }
 
-  // Enter 키로 파일 저장
   const handleFileNameKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleSaveFile()
   }
 
   const toggleFolder = () => {
     if (!isFolderEditing) {
-      setIsOpen(!isOpen) // 폴더 클릭 시 열고 닫기 토글
-      onSelectFolder(folder) // 폴더 선택 시 상위 컴포넌트에 알림
+      setIsOpen(!isOpen)
+      onSelectFolder(folder)
     }
   }
 
-  useEffect(() => {
-    if (folderNameRef.current) {
-      folderNameRef.current.textContent = newFolderName
+  const handleDeleteFolder = async () => {
+    try {
+      await currentService.deleteFolder(folder.id)
+      deleteFolder(folder.id)
+    } catch (error) {
+      console.error('폴더 삭제 실패:', error)
     }
+  }
 
-    if (isFileEditing) {
-      inputRef.current?.focus()
-    }
-  }, [isFolderEditing, isFileEditing])
-
-  // 폴더 간 드래그 앤 드롭 설정
   const [, drop] = useDrop({
     accept: 'FOLDER',
     hover(item: { index: number }) {
       if (item.index !== index) {
-        moveFolder(item.index, index) // 폴더 이동
-        item.index = index // 드래그 중인 아이템의 인덱스를 업데이트
+        moveFolder(item.index, index)
+        item.index = index
       }
     },
   })
@@ -148,8 +155,8 @@ const FolderList = ({
           {isFolderEditing ? (
             <div
               ref={folderNameRef}
-              contentEditable={isFolderEditing} // 편집 중일 때만 true로 설정
-              suppressContentEditableWarning={true} // 경고 메시지 방지
+              contentEditable={isFolderEditing}
+              suppressContentEditableWarning={true}
               onInput={(e) =>
                 setNewFolderName(e.currentTarget.textContent || '')
               }
@@ -158,8 +165,8 @@ const FolderList = ({
               className="w-40 resize-none overflow-hidden bg-transparent px-2 text-base outline-none"
               style={{
                 whiteSpace: 'pre-wrap',
-                maxWidth: '130px', // 한 줄 최대 길이 설정
-                height: 'auto', // 높이를 자동으로 설정
+                maxWidth: '130px',
+                height: 'auto',
               }}
             />
           ) : (
@@ -175,15 +182,15 @@ const FolderList = ({
 
         <div className="flex hidden w-16 items-center justify-between group-hover:flex">
           <PiFilePlusLight
-            onClick={handleAddFileClick} // 파일 추가 클릭 이벤트
+            onClick={handleAddFileClick}
             className={`${isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'}`}
           />
           <GoPencil
-            onClick={handleEditFolderClick} // 폴더 이름 편집 시작
+            onClick={handleEditFolderClick}
             className={`${isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'}`}
           />
           <PiTrashSimpleLight
-            onClick={() => deleteFolder(folder.folderId)}
+            onClick={handleDeleteFolder}
             className={`${isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'}`}
           />
         </div>
@@ -191,14 +198,15 @@ const FolderList = ({
 
       {isOpen && (
         <ul style={{ paddingLeft: '20px', paddingRight: '20px' }}>
-          {folder.files?.map((file: any, index: number) => (
+          {folder.files?.map((file: FileItem, fileIndex: number) => (
             <DraggableListItem
-              key={file.fileId}
-              id={file.fileId}
-              index={index}
+              key={file.id}
+              id={file.id}
+              index={fileIndex}
               name={file.name}
-              folderId={folder.folderId}
+              folderId={folder.id}
               file={file}
+              currentService={currentService}
             />
           ))}
 
@@ -212,8 +220,8 @@ const FolderList = ({
                 onInput={(e) =>
                   setNewFileName(e.currentTarget.textContent || '')
                 }
-                onBlur={handleCancelFile} // 포커스가 벗어나면 취소
-                onKeyDown={handleFileNameKeyDown} // Enter로 파일 저장
+                onBlur={handleCancelFile}
+                onKeyDown={handleFileNameKeyDown}
                 className="flex-1 border-gray text-base"
               />
             </li>

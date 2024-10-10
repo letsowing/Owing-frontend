@@ -11,6 +11,9 @@
     "test": "vitest --globals --reporter verbose"
   },
   "dependencies": {
+    "@blocknote/core": "^0.16.0",
+    "@blocknote/mantine": "^0.16.0",
+    "@blocknote/react": "^0.16.0",
     "@tanstack/react-query": "^5.55.4",
     "@types/react-modal": "^3.16.3",
     "@xyflow/react": "^12.3.0",
