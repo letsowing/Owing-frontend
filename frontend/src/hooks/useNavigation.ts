@@ -23,6 +23,9 @@ const useNavigation = () => {
   const goToRegister = () => {
     navigate('/register')
   }
+  const goToContactUs = () => {
+    navigate('/contactUs')
+  }
 
   const goToCharacterRelationship = () => {
     navigate('/characterRelationship')
@@ -41,6 +44,7 @@ const useNavigation = () => {
     goToMain,
     goToLogin,
     goToRegister,
+    goToContactUs,
     goToCharacterRelationship,
     goToScenarioManagement,
     goToProject,

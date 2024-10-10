@@ -1,5 +1,7 @@
 import React from 'react'
 
+import useNavigation from '@hooks/useNavigation'
+
 import { Link } from 'react-router-dom'
 
 const LeftHeader: React.FC = () => {
@@ -16,6 +18,7 @@ const LeftHeader: React.FC = () => {
 }
 
 const RightHeader: React.FC = () => {
+  const { goToContactUs } = useNavigation()
   return (
     <nav className="flex items-center space-x-12">
       <Link
@@ -25,12 +28,15 @@ const RightHeader: React.FC = () => {
         How to use
       </Link>
       <Link
-        to="/"
+        to="/login"
         className="bg-gradient-to-b from-redorange to-orange bg-clip-text font-bold text-transparent dark:from-blue dark:to-skyblue"
       >
         Login
       </Link>
-      <button className="rounded-full bg-gradient-to-r from-redorange to-orange px-6 py-2 font-bold text-white dark:from-blue dark:to-skyblue">
+      <button
+        onClick={goToContactUs}
+        className="rounded-full bg-gradient-to-r from-redorange to-orange px-6 py-2 font-bold text-white dark:from-blue dark:to-skyblue"
+      >
         Contact us
       </button>
     </nav>

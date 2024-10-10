@@ -1,8 +1,8 @@
-import Card from '@components/landing/Card'
-import CharacterRelationshipGrid from '@components/landing/CharacterRelationshipGrid'
-import Footer from '@components/landing/Footer'
-import Ribbon from '@components/landing/Ribbon'
-import Title from '@components/landing/Title'
+import Card from '@pages/LandingPage/Card'
+import CharacterRelationshipGrid from '@pages/LandingPage/CharacterRelationshipGrid'
+import Footer from '@pages/LandingPage/Footer'
+import Ribbon from '@pages/LandingPage/Ribbon'
+import Title from '@pages/LandingPage/Title'
 
 import AiHelperIcon from '@assets/landing/aiHelper.png'
 import DashboardIcon from '@assets/landing/dashboard.png'
@@ -20,7 +20,7 @@ import { SlArrowDown } from 'react-icons/sl'
 const Landing = () => {
   return (
     <div className="w-full" style={{ minHeight: '1080px' }}>
-      <div className="mx-auto mt-40 px-4 py-8">
+      <div className="mx-auto mt-48 py-8">
         <img
           src={LogoIcon}
           alt="OwingLogo"
@@ -39,8 +39,8 @@ const Landing = () => {
           </div>
         </div>
 
-        <div className="bg-gradient-to-b from-white to-[#FDF8F4]">
-          <h1 className="mb-20 text-center text-[50px] font-bold text-darkgray">
+        <div className="h-[65rem] bg-gradient-to-b from-white to-[#FDF8F4]">
+          <h1 className="mb-18 text-center text-[50px] font-bold text-darkgray">
             이야기 관리를 편하게.
             <br />
             창작의 본질에 집중할 수 있는
@@ -53,13 +53,15 @@ const Landing = () => {
               <Ribbon />
             </div>
 
-            <div className="container relative z-20 mx-auto px-4 pt-72">
-              <div className="flex flex-wrap justify-center gap-2">
-                {CARD_LIST.map((card, index) => (
-                  <div key={index} className="p-2">
-                    <Card text={card.text} name={card.name} />
-                  </div>
-                ))}
+            <div className="container relative z-20 mx-auto px-4 pt-60">
+              <div className="animate-slider mb-10 flex flex-row gap-x-[2rem]">
+                {[...CARD_LIST, ...CARD_LIST, ...CARD_LIST].map(
+                  (card, index) => (
+                    <div key={index} className="inline-block p-2">
+                      <Card text={card.text} name={card.name} />
+                    </div>
+                  ),
+                )}
               </div>
             </div>
           </div>

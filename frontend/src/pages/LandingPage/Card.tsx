@@ -11,7 +11,8 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({ text, name, bgColor = '#f4f4f4' }) => {
   return (
     <div
-      className="flex h-80 w-64 flex-col justify-between rounded-3xl p-6 shadow-lg"
+      className="flex h-[23rem] w-[18rem] flex-col justify-between rounded-3xl p-6 shadow-lg"
+      // className="flex h-80 w-64 flex-col justify-between rounded-3xl p-6 shadow-lg"
       style={{ backgroundColor: bgColor }}
     >
       <p className="mt-5 text-[18px] text-darkgray">{text}</p>
