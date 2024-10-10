@@ -63,8 +63,6 @@ export const getAllWork = async (): Promise<{
 }> => {
   try {
     const response = await axiosInstance.get('/project')
-    console.log(response.data)
-    console.log()
     return response.data
   } catch (error) {
     console.error('프로젝트 리스트 조회 실패:', error)

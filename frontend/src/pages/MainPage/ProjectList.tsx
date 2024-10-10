@@ -11,11 +11,6 @@ interface ProjectListProps {
 }
 
 const ProjectList = ({ projects = [] }: ProjectListProps) => {
-  console.log('projects:', projects) // projects의 실제 내용 확인
-  console.log('projects 타입:', typeof projects) // projects의 타입 확인
-  console.log('projects가 배열인가?:', Array.isArray(projects))
-  console.log(projects.length)
-
   return (
     <div className="max-h-[25rem] overflow-x-auto overflow-y-auto">
       <table className="divide-y-lightgray min-w-full">

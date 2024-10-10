@@ -39,8 +39,9 @@ const Main = () => {
   const { modals, openModal, closeModal } = useModalManagement()
   const { goToProject } = useNavigation()
   const { setCurrentWork } = useWorkStore()
-  const [projects, setProjects] = useState<Project[]>([])
   const [member, setMember] = useState<Member>(initialMember)
+  const [projects, setProjects] = useState<Project[]>([])
+  const [sortedProjects, setSortedProjects] = useState<Project[]>([])
 
   useEffect(() => {
     const fetchMember = async () => {
@@ -55,6 +56,11 @@ const Main = () => {
       try {
         const fetchedProjects = await getAllWork()
         setProjects(fetchedProjects.projects)
+        const sortedProjectsList = fetchedProjects.projects.sort(
+          (a: Project, b: Project) =>
+            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        )
+        setSortedProjects(sortedProjectsList)
       } catch (error) {
         console.error('프로젝트 리스트 조회 실패:', error)
       }
@@ -126,7 +132,7 @@ const Main = () => {
         <div className="mt-6 flex-col xl:w-[80%] 2xl:w-[75%]">
           <QuickAccess handleAddWork={handleAddWork} projects={projects} />
           <div className="mb-20 mt-16 w-full dark:bg-darkblack">
-            <AllScenario projects={projects} />
+            <AllScenario projects={sortedProjects} />
           </div>
         </div>
       </div>
