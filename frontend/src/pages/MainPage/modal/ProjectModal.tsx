@@ -14,7 +14,7 @@ import { ModalType, Work, WorkModalProps } from '@types'
 const initialWork: Work = {
   id: 0,
   title: '',
-  genre: [],
+  genres: [],
   category: '',
   description: '',
   imageUrl: '',
@@ -56,13 +56,13 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
 
   const onGenreTagClick = (value: string) => {
     setCurrentWork((prevWork) => {
-      const isTagSelected = prevWork.genre.includes(value)
+      const isTagSelected = prevWork.genres.includes(value)
 
       const updatedGenre = isTagSelected
-        ? prevWork.genre.filter((genre) => genre !== value)
-        : prevWork.genre.length < 5
-          ? [...prevWork.genre, value]
-          : prevWork.genre
+        ? prevWork.genres.filter((genre) => genre !== value)
+        : prevWork.genres.length < 5
+          ? [...prevWork.genres, value]
+          : prevWork.genres
 
       return {
         ...prevWork,
