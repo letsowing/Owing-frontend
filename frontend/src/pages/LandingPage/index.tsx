@@ -1,8 +1,8 @@
-import Card from '@components/landing/Card'
-import CharacterRelationshipGrid from '@components/landing/CharacterRelationshipGrid'
-import Footer from '@components/landing/Footer'
-import Ribbon from '@components/landing/Ribbon'
-import Title from '@components/landing/Title'
+import Card from '@pages/LandingPage/Card'
+import CharacterRelationshipGrid from '@pages/LandingPage/CharacterRelationshipGrid'
+import Footer from '@pages/LandingPage/Footer'
+import Ribbon from '@pages/LandingPage/Ribbon'
+import Title from '@pages/LandingPage/Title'
 
 import AiHelperIcon from '@assets/landing/aiHelper.png'
 import DashboardIcon from '@assets/landing/dashboard.png'
