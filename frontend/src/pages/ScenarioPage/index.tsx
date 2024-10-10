@@ -89,63 +89,76 @@ const ScenarioPage: React.FC = () => {
   }
 
   return (
-    <>
-      <AiHelper />
-      <BlockNoteView
-        editor={editor}
-        formattingToolbar={false}
-        onChange={() => handleContentChange(editor)}
-        theme={isDarkMode ? customDarkTheme : customLightTheme}
-      >
-        <FormattingToolbarController
-          formattingToolbar={() => (
-            <FormattingToolbar>
-              <BlockTypeSelect key={'blockTypeSelect'} />
-              <BlueButton key={'customButton'} />
-              <FileCaptionButton key={'fileCaptionButton'} />
-              <FileReplaceButton key={'replaceFileButton'} />
-              <BasicTextStyleButton
-                basicTextStyle={'bold'}
-                key={'boldStyleButton'}
-              />
-              <BasicTextStyleButton
-                basicTextStyle={'italic'}
-                key={'italicStyleButton'}
-              />
-              <BasicTextStyleButton
-                basicTextStyle={'underline'}
-                key={'underlineStyleButton'}
-              />
-              <BasicTextStyleButton
-                basicTextStyle={'strike'}
-                key={'strikeStyleButton'}
-              />
-              <BasicTextStyleButton
-                basicTextStyle={'code'}
-                key={'codeStyleButton'}
-              />
-              <TextAlignButton
-                textAlignment={'left'}
-                key={'textAlignLeftButton'}
-              />
-              <TextAlignButton
-                textAlignment={'center'}
-                key={'textAlignCenterButton'}
-              />
-              <TextAlignButton
-                textAlignment={'right'}
-                key={'textAlignRightButton'}
-              />
-              <ColorStyleButton key={'colorStyleButton'} />
-              <NestBlockButton key={'nestBlockButton'} />
-              <UnnestBlockButton key={'unnestBlockButton'} />
-              <CreateLinkButton key={'createLinkButton'} />
-            </FormattingToolbar>
-          )}
-        />
-      </BlockNoteView>
-      <button onClick={handleSaveClick}>저장하기</button>
-    </>
+    <div className="mx-auto flex space-x-4 p-4">
+      <div className="w-1/4">
+        <AiHelper />
+      </div>
+
+      <div className="w-full">
+        <BlockNoteView
+          className="mx-10 h-full rounded-[10px] border border-lightgray"
+          editor={editor}
+          formattingToolbar={false}
+          onChange={() => handleContentChange(editor)}
+          theme={isDarkMode ? customDarkTheme : customLightTheme}
+        >
+          <FormattingToolbarController
+            formattingToolbar={() => (
+              <FormattingToolbar>
+                <BlockTypeSelect key={'blockTypeSelect'} />
+                <BlueButton key={'customButton'} />
+                <FileCaptionButton key={'fileCaptionButton'} />
+                <FileReplaceButton key={'replaceFileButton'} />
+                <BasicTextStyleButton
+                  basicTextStyle={'bold'}
+                  key={'boldStyleButton'}
+                />
+                <BasicTextStyleButton
+                  basicTextStyle={'italic'}
+                  key={'italicStyleButton'}
+                />
+                <BasicTextStyleButton
+                  basicTextStyle={'underline'}
+                  key={'underlineStyleButton'}
+                />
+                <BasicTextStyleButton
+                  basicTextStyle={'strike'}
+                  key={'strikeStyleButton'}
+                />
+                <BasicTextStyleButton
+                  basicTextStyle={'code'}
+                  key={'codeStyleButton'}
+                />
+                <TextAlignButton
+                  textAlignment={'left'}
+                  key={'textAlignLeftButton'}
+                />
+                <TextAlignButton
+                  textAlignment={'center'}
+                  key={'textAlignCenterButton'}
+                />
+                <TextAlignButton
+                  textAlignment={'right'}
+                  key={'textAlignRightButton'}
+                />
+                <ColorStyleButton key={'colorStyleButton'} />
+                <NestBlockButton key={'nestBlockButton'} />
+                <UnnestBlockButton key={'unnestBlockButton'} />
+                <CreateLinkButton key={'createLinkButton'} />
+              </FormattingToolbar>
+            )}
+          />
+        </BlockNoteView>
+        <div className="flex justify-end py-1">
+          <button
+            className="mx-10 mt-2 h-10 w-20 text-xl text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
+            onClick={handleSaveClick}
+          >
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
   )
 }
 
