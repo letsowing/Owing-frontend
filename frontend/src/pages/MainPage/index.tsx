@@ -54,7 +54,7 @@ const Main = () => {
     const fetchProjects = async () => {
       try {
         const fetchedProjects = await getAllWork()
-        setProjects(fetchedProjects)
+        setProjects(fetchedProjects.projects)
       } catch (error) {
         console.error('프로젝트 리스트 조회 실패:', error)
       }
