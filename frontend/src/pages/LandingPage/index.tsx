@@ -15,22 +15,29 @@ import UniverseIcon from '@assets/landing/universe.png'
 import { CARD_LIST } from '@constants/cardList'
 import { INFO_LIST } from '@constants/characterRelationshipInfoList'
 import { motion } from 'framer-motion'
+import { SlArrowDown } from 'react-icons/sl'
 
 const Landing = () => {
   return (
     <div className="w-full" style={{ minHeight: '1080px' }}>
-      <div className="mx-auto mt-48 px-4 py-8">
+      <div className="mx-auto mt-40 px-4 py-8">
         <img
           src={LogoIcon}
           alt="OwingLogo"
           className="mx-auto mb-12 mt-4 h-auto w-96"
         />
 
-        <img
-          src={GetStartedIcon}
-          alt="getStarted"
-          className="mx-auto mb-40 mt-48 h-auto w-96"
-        />
+        <div className="flex flex-col items-center justify-center">
+          <img
+            src={GetStartedIcon}
+            alt="getStarted"
+            className="mb-16 mt-52 h-auto w-96"
+          />
+
+          <div className="mb-12 animate-bounce text-4xl text-lightgray">
+            <SlArrowDown />
+          </div>
+        </div>
 
         <div className="bg-gradient-to-b from-white to-[#FDF8F4]">
           <h1 className="mb-20 text-center text-[50px] font-bold text-darkgray">
