@@ -4,12 +4,14 @@ import { ChevronDown, ChevronRight } from 'lucide-react'
 import { LiaFeatherAltSolid } from 'react-icons/lia'
 
 interface MenuTabItemProps {
+  icon: React.ElementType
   text: string
   isActive: boolean
   onClickMenu: () => void
 }
 
 const MenuTabItem: React.FC<MenuTabItemProps> = ({
+  icon: Icon,
   text,
   isActive,
   onClickMenu,
@@ -26,7 +28,7 @@ const MenuTabItem: React.FC<MenuTabItemProps> = ({
       }}
     >
       <div className="flex items-center">
-        <LiaFeatherAltSolid size={20} />
+        <Icon size={22} />
         <span className="ml-2">{text}</span>
       </div>
       {isActive ? <ChevronRight size={20} /> : <ChevronDown size={20} />}
