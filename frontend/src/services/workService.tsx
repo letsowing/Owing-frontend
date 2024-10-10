@@ -29,7 +29,28 @@ export const postCreateWork = async (
   }
 }
 
-export const getAllProject = async (): Promise<Work[]> => {
+export const postGenerateAiImage = async (
+  title: string,
+  description: string,
+  category: string,
+  genres: string[],
+): Promise<{ imageUrl: string }> => {
+  try {
+    const payload = {
+      title,
+      description,
+      category,
+      genres,
+    }
+    const response = await axiosInstance.post('/project/generate', payload)
+    return response.data
+  } catch (error) {
+    console.error('프로젝트 AI 표지 생성 실패:', error)
+    throw error
+  }
+}
+
+export const getAllWork = async (): Promise<Work[]> => {
   try {
     const response = await axiosInstance.get('/project/load')
     return response.data
