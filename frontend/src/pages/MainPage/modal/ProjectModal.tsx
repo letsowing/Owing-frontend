@@ -74,21 +74,20 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
 
   const onGenreTagClick = (value: string) => {
     setCurrentWork((prevWork) => {
-      const genres = prevWork.genres || []
-      const isTagSelected = genres.includes(value)
-      const updatedGenres = isTagSelected
-        ? genres.filter((genre) => genre !== value)
-        : genres.length < 5
-          ? [...genres, value]
-          : genres
+      const isTagSelected = prevWork.genres.includes(value)
 
-      console.log(updatedGenres)
+      const updatedGenres = isTagSelected
+        ? prevWork.genres.filter((genre) => genre !== value)
+        : prevWork.genres.length < 5
+          ? [...prevWork.genres, value]
+          : prevWork.genres
 
       return {
         ...prevWork,
-        genre: updatedGenres,
+        genres: updatedGenres,
       }
     })
+    console.log(currentWork.genres)
   }
 
   return (
@@ -123,6 +122,7 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
           isEditable={isEditable}
           work={currentWork}
           onTagClick={onCategoryTagClick}
+          type="category"
         />
         <div className="w-3/4">
           <ProjectTagField
@@ -131,6 +131,7 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
             isEditable={isEditable}
             work={currentWork}
             onTagClick={onGenreTagClick}
+            type="genres"
           />
         </div>
         <TextAreaField

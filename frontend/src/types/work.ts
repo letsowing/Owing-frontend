@@ -2,7 +2,7 @@ export interface Work {
   id: number
   title: string
   category?: string
-  genres?: string[]
+  genres: string[]
   description?: string
   imageUrl: string
   createdAt?: Date
