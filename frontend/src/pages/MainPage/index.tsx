@@ -27,11 +27,19 @@ const initialMember: Member = {
   imageUrl: '',
 }
 
+interface Project {
+  id: number
+  title: string
+  createdAt: Date
+  updatedAt: Date
+  imageUrl: string
+}
+
 const Main = () => {
   const { modals, openModal, closeModal } = useModalManagement()
   const { goToProject } = useNavigation()
   const { setCurrentWork } = useWorkStore()
-  const [projects, setProjects] = useState<Work[]>([])
+  const [projects, setProjects] = useState<Project[]>([])
   const [member, setMember] = useState<Member>(initialMember)
 
   useEffect(() => {
@@ -98,29 +106,6 @@ const Main = () => {
     })
   }, [handleCloseModal, handleSaveWork, openModal])
 
-  // const convertWorkToProject = (works: Work[]) => {
-  //   return works.map((work) => ({
-  //     id: work.id,
-  //     name: work.title,
-  //     imageUrl: work.imageUrl,
-  //     updatedAt: work.updatedAt || new Date(),
-  //     createdAt: work.createdAt || new Date(),
-  //   }))
-  // }
-
-  const convertWorkToProject = (works: Work[] = []) => {
-    if (!Array.isArray(works)) {
-      return []
-    }
-    return works.map((work) => ({
-      id: work.id,
-      name: work.title,
-      imageUrl: work.imageUrl,
-      updatedAt: work.updatedAt || new Date(),
-      createdAt: work.createdAt || new Date(),
-    }))
-  }
-
   return (
     <>
       <div className="mx-[5%] flex w-[90%]">
@@ -139,12 +124,9 @@ const Main = () => {
           </div>
         </div>
         <div className="mt-6 flex-col xl:w-[80%] 2xl:w-[75%]">
-          <QuickAccess
-            handleAddWork={handleAddWork}
-            projects={convertWorkToProject(projects)}
-          />
+          <QuickAccess handleAddWork={handleAddWork} projects={projects} />
           <div className="mb-20 mt-16 w-full dark:bg-darkblack">
-            <AllScenario projects={convertWorkToProject(projects)} />
+            <AllScenario projects={projects} />
           </div>
         </div>
       </div>

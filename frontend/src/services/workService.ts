@@ -2,8 +2,6 @@ import axiosInstance from '@utils/httpCommons'
 
 import { putUploadImageToS3 } from './s3Service'
 
-import { Work } from '@types'
-
 export const postCreateWork = async (
   title: string,
   description: string,
@@ -54,7 +52,15 @@ export const postGenerateAiImage = async (
   }
 }
 
-export const getAllWork = async (): Promise<Work[]> => {
+export const getAllWork = async (): Promise<
+  {
+    id: number
+    title: string
+    createdAt: Date
+    updatedAt: Date
+    imageUrl: string
+  }[]
+> => {
   try {
     const response = await axiosInstance.get('/project')
     return response.data

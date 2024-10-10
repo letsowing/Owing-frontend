@@ -4,7 +4,7 @@ interface QuickAccessProps {
   handleAddWork: () => void
   projects: {
     id: number
-    name: string
+    title: string
     createdAt: Date
     imageUrl: string
   }[]
@@ -17,7 +17,10 @@ const QuickAccess = ({ handleAddWork, projects }: QuickAccessProps) => {
         Quick Access
       </label>
       <div className="mt-6">
-        <ProjectCarousel handleAddWork={handleAddWork} projects={projects} />
+        <ProjectCarousel
+          handleAddWork={handleAddWork}
+          projects={projects || []}
+        />
       </div>
     </div>
   )

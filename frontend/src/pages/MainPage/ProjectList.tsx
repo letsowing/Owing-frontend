@@ -3,13 +3,19 @@ import ProjectItem from './ProjectItem'
 interface ProjectListProps {
   projects: {
     id: number
-    name: string
+    title: string
     updatedAt: Date
     createdAt: Date
+    imageUrl: string
   }[]
 }
 
-const ProjectList = ({ projects }: ProjectListProps) => {
+const ProjectList = ({ projects = [] }: ProjectListProps) => {
+  console.log('projects:', projects) // projects의 실제 내용 확인
+  console.log('projects 타입:', typeof projects) // projects의 타입 확인
+  console.log('projects가 배열인가?:', Array.isArray(projects))
+  console.log(projects.length)
+
   return (
     <div className="max-h-[25rem] overflow-x-auto overflow-y-auto">
       <table className="divide-y-lightgray min-w-full">
@@ -36,9 +42,10 @@ const ProjectList = ({ projects }: ProjectListProps) => {
           </tr>
         </thead>
         <tbody className="w-full divide-y divide-lightgray bg-white dark:bg-darkblack">
-          {projects.map((project) => (
-            <ProjectItem key={project.id} {...project} />
-          ))}
+          {projects.length > 0 &&
+            projects.map((project) => (
+              <ProjectItem key={project.id} {...project} />
+            ))}
         </tbody>
       </table>
     </div>
