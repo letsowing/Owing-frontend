@@ -44,17 +44,12 @@ export default {
           '0%': { transform: 'translateX(0)' },
           '100%': { transform: 'translateX(-50%)' }, // 왼쪽으로 전체 목록 이동
         },
-        // slider: {
-        //   '0%': {
-        //     transform: 'translateX(0px)',
-        //   },
-        //   '100%': {
-        //     transform: 'translateX(-1400px)',
-        //   },
-        // },
       },
       animation: {
         slider: 'slider 30s linear infinite',
+      },
+      fontFamily: {
+        sans: ['Noto Sans CJK KR', 'Arial', 'sans-serif'], // 기본 폰트 설정
       },
     },
   },
