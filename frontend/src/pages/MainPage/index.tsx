@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import ThemeToggleSwitch from '@components/common/DarkModeToggle'
 
@@ -13,16 +13,47 @@ import Profile from './Profile'
 import QuickAccess from './QuickAccess'
 import WorkModal from './modal/ProjectModal'
 
-import { MEMBER } from '@datas/member'
-import { PROJECT_LIST } from '@datas/projectList'
+import { getMember } from '@/services/memberService'
 import { WORD_COUNT_STATS } from '@datas/wordCountStats'
 import { postCreateWork } from '@services/workService'
-import { ModalType, Work } from '@types'
+import { getAllWork } from '@services/workService'
+import { Member, ModalType, Work } from '@types'
+
+const initialMember: Member = {
+  id: 0,
+  email: '',
+  name: '',
+  nickname: '',
+  imageUrl: '',
+}
 
 const Main = () => {
   const { modals, openModal, closeModal } = useModalManagement()
   const { goToProject } = useNavigation()
   const { setCurrentWork } = useWorkStore()
+  const [projects, setProjects] = useState<Work[]>([])
+  const [member, setMember] = useState<Member>(initialMember)
+
+  useEffect(() => {
+    const fetchMember = async () => {
+      try {
+        const fetchedMember = await getMember(1)
+        setMember(fetchedMember)
+      } catch (error) {
+        console.error('회원 조회 실패', error)
+      }
+    }
+    const fetchProjects = async () => {
+      try {
+        const fetchedProjects = await getAllWork()
+        setProjects(fetchedProjects)
+      } catch (error) {
+        console.error('프로젝트 리스트 조회 실패:', error)
+      }
+    }
+    fetchMember()
+    fetchProjects()
+  }, [])
 
   const handleMoveWork = useCallback(
     (work: Work) => {
@@ -67,11 +98,21 @@ const Main = () => {
     })
   }, [handleCloseModal, handleSaveWork, openModal])
 
+  const convertWorkToProject = (works: Work[]) => {
+    return works.map((work) => ({
+      id: work.id,
+      name: work.title,
+      imageUrl: work.imageUrl,
+      updatedAt: work.updatedAt || new Date(),
+      createdAt: work.createdAt || new Date(),
+    }))
+  }
+
   return (
     <>
       <div className="mx-[5%] flex w-[90%]">
         <div className="mt-5 flex-col xl:w-[20%] 2xl:w-[25%]">
-          <Profile member={MEMBER} />
+          <Profile member={member} />
           <div className="my-9">
             <Dashboard
               todayWordCount={WORD_COUNT_STATS.todayWordCount}
@@ -85,9 +126,12 @@ const Main = () => {
           </div>
         </div>
         <div className="mt-6 flex-col xl:w-[80%] 2xl:w-[75%]">
-          <QuickAccess handleAddWork={handleAddWork} projects={PROJECT_LIST} />
+          <QuickAccess
+            handleAddWork={handleAddWork}
+            projects={convertWorkToProject(projects)}
+          />
           <div className="mb-20 mt-16 w-full dark:bg-darkblack">
-            <AllScenario projects={PROJECT_LIST} />
+            <AllScenario projects={convertWorkToProject(projects)} />
           </div>
         </div>
       </div>

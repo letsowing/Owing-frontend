@@ -11,7 +11,7 @@ interface ProjectCarouselProps {
     id: number
     name: string
     createdAt: Date
-    image: string
+    imageUrl: string
   }[]
 }
 
@@ -37,7 +37,7 @@ const ProjectCarousel = ({ handleAddWork, projects }: ProjectCarouselProps) => {
               id={project.id}
               name={project.name}
               createdAt={project.createdAt}
-              image={project.image}
+              image={project.imageUrl}
             />
           ))}
         </Slider>

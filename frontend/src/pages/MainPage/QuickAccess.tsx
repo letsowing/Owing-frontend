@@ -6,7 +6,7 @@ interface QuickAccessProps {
     id: number
     name: string
     createdAt: Date
-    image: string
+    imageUrl: string
   }[]
 }
 
