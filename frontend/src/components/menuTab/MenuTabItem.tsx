@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { ChevronDown, ChevronRight } from 'lucide-react'
-import { LiaFeatherAltSolid } from 'react-icons/lia'
 
 interface MenuTabItemProps {
   icon: React.ElementType
