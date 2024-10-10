@@ -7,6 +7,7 @@ import TextAreaField from '@components/common/TextAreaField'
 
 import ProjectTagField from './ProjectTagField'
 
+import { postGenerateAiImage } from '@/services/workService'
 import { CATEGORY_LIST } from '@constants/categoryList'
 import { GENRE_LIST } from '@constants/genreList'
 import { ModalType, Work, WorkModalProps } from '@types'
@@ -40,12 +41,29 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
     onClose()
   }
 
-  const onImageChange = (image: string) => {
-    // axios 후 이미지 변경된 거를 넣어준다.
-    console.log(image)
+  const onImageChange = (imageUrl: string) => {
+    setCurrentWork((prev) => ({
+      ...prev,
+      imageUrl: imageUrl,
+    }))
   }
 
-  const onAIGenerateClick = () => {}
+  const onAiGenerateClick = () => {
+    const generateAiImage = async () => {
+      try {
+        const data = await postGenerateAiImage(
+          currentWork.title,
+          currentWork.description || '',
+          currentWork.category || '',
+          currentWork.genres || [],
+        )
+        onImageChange(data.imageUrl)
+      } catch (error) {
+        console.error('AI 이미지 생성 실패', error)
+      }
+    }
+    generateAiImage()
+  }
 
   const onCategoryTagClick = (value: string) => {
     setCurrentWork((prevWork) => ({
@@ -58,15 +76,17 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
     setCurrentWork((prevWork) => {
       const genres = prevWork.genres || []
       const isTagSelected = genres.includes(value)
-      const updatedGenre = isTagSelected
+      const updatedGenres = isTagSelected
         ? genres.filter((genre) => genre !== value)
         : genres.length < 5
           ? [...genres, value]
           : genres
 
+      console.log(updatedGenres)
+
       return {
         ...prevWork,
-        genre: updatedGenre,
+        genre: updatedGenres,
       }
     })
   }
@@ -85,7 +105,7 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
             isEditable={isEditable}
             image={currentWork.imageUrl}
             onImageChange={onImageChange}
-            onAIGenerateClick={onAIGenerateClick}
+            onAIGenerateClick={onAiGenerateClick}
           />
         </div>
         <InputField
