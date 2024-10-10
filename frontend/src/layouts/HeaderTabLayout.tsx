@@ -9,7 +9,9 @@ const HeaderTabLayout: React.FC = () => {
   const [tabWidth, setTabWidth] = useState(256) // 기본 탭 너비
   const location = useLocation()
   const isNotTabPage =
-    location.pathname === '/' || location.pathname === '/main'
+    location.pathname === '/' ||
+    location.pathname === '/main' ||
+    location.pathname === '/contactUs'
 
   useEffect(() => {
     setTabWidth(isTabOpen ? 256 : 41)
