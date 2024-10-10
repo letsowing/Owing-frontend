@@ -20,10 +20,10 @@ const ProjectItem = ({ id, title, updatedAt, createdAt }: ProjectItemProps) => {
         {title}
       </td>
       <td className="px-3 py-4 text-center text-sm text-gray dark:hover:text-darkgray">
-        {updatedAt.toLocaleString()}
+      {new Date(updatedAt).toLocaleDateString()}  {new Date(updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
       </td>
       <td className="px-3 py-4 text-center text-sm text-gray dark:hover:text-darkgray">
-        {createdAt.toLocaleString()}
+      {new Date(createdAt).toLocaleDateString()}  {new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
       </td>
     </tr>
   )
