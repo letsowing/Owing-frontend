@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react'
 import ImageForm from '@components/common/ImageForm'
 import InputField from '@components/common/InputField'
 import Modal from '@components/common/Modal'
-import TagField from '@components/common/TagField'
 import TextAreaField from '@components/common/TextAreaField'
+
+import ProjectTagField from './ProjectTagField'
 
 import { CATEGORY_LIST } from '@constants/categoryList'
 import { GENRE_LIST } from '@constants/genreList'
@@ -13,8 +14,8 @@ import { ModalType, Work, WorkModalProps } from '@types'
 const initialWork: Work = {
   id: 0,
   title: '',
-  genre: '',
-  category: [''],
+  genre: [],
+  category: '',
   description: '',
   imageUrl: '',
 }
@@ -46,9 +47,31 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
 
   const onAIGenerateClick = () => {}
 
-  const onCategoryTagClick = () => {}
+  const onCategoryTagClick = (value: string) => {
+    setCurrentWork((prevWork) => ({
+      ...prevWork,
+      category: prevWork.category === value ? '' : value,
+    }))
+    console.log(currentWork.category)
+  }
 
-  const onGenreTagClick = () => {}
+  const onGenreTagClick = (value: string) => {
+    setCurrentWork((prevWork) => {
+      const isTagSelected = prevWork.genre.includes(value)
+
+      const updatedGenre = isTagSelected
+        ? prevWork.genre.filter((genre) => genre !== value)
+        : prevWork.genre.length < 5
+          ? [...prevWork.genre, value]
+          : prevWork.genre
+
+      return {
+        ...prevWork,
+        genre: updatedGenre,
+      }
+    })
+    console.log(currentWork.genre)
+  }
 
   return (
     <Modal
@@ -76,18 +99,20 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
           value={currentWork.title}
           onChange={(value) => handleInputChange('title', value)}
         />
-        <TagField
+        <ProjectTagField
           labelValue="분류"
           tagList={CATEGORY_LIST}
           isEditable={isEditable}
-          onClick={onCategoryTagClick}
+          work={currentWork}
+          onTagClick={onCategoryTagClick}
         />
         <div className="w-3/4">
-          <TagField
+          <ProjectTagField
             labelValue="장르"
             tagList={GENRE_LIST}
             isEditable={isEditable}
-            onClick={onGenreTagClick}
+            work={currentWork}
+            onTagClick={onGenreTagClick}
           />
         </div>
         <TextAreaField

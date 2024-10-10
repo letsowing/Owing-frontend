@@ -1,8 +1,8 @@
 export interface Work {
   id: number
   title: string
-  genre: string
-  category: string[]
+  category: string
+  genre: string[]
   description: string
   imageUrl: string
 }

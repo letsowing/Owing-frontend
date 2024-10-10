@@ -10,7 +10,7 @@ interface ProjectTagFieldProps {
   }[]
   isEditable: boolean
   work: Work
-  onTagClick?: () => void
+  onTagClick?: (value: string) => void
 }
 
 const ProjectTagField = ({
@@ -36,7 +36,7 @@ const ProjectTagField = ({
             key={tag.name}
             onClick={onTagClick}
             isSelected={
-              work.genre === tag.value || work.category.includes(tag.value)
+              work.category === tag.value || work.genre.includes(tag.value)
             }
           />
         ))}
