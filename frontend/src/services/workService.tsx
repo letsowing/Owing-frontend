@@ -2,13 +2,17 @@ import axiosInstance from '@utils/httpCommons'
 
 import { Work } from '@types'
 
-export const createWork = async (
+export const postCreateWork = async (
   title: string,
   description: string,
   category: string,
   genres: string[],
   imageUrl: string,
-): Promise<{ id: number; name: string }> => {
+): Promise<{
+  id: number
+  name: string
+  presignedUrl: string
+}> => {
   try {
     const payload = {
       title,
