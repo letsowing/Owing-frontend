@@ -16,6 +16,7 @@ import WorkModal from './modal/ProjectModal'
 import { MEMBER } from '@datas/member'
 import { PROJECT_LIST } from '@datas/projectList'
 import { WORD_COUNT_STATS } from '@datas/wordCountStats'
+import { postCreateWork } from '@services/workService'
 import { ModalType, Work } from '@types'
 
 const Main = () => {
@@ -25,9 +26,7 @@ const Main = () => {
 
   const handleMoveWork = useCallback(
     (work: Work) => {
-      // Zustand 저장
       setCurrentWork(work)
-      // MoveNavigation workId 수정
       goToProject(work.id)
     },
     [goToProject, setCurrentWork],
@@ -39,8 +38,22 @@ const Main = () => {
 
   const handleSaveWork = useCallback(
     (work: Work) => {
-      // axios
-      handleMoveWork(work)
+      const saveWork = async () => {
+        try {
+          const savedWork = await postCreateWork(
+            work.title,
+            work.description || '',
+            work.category || '',
+            work.genres || [],
+            work.imageUrl,
+          )
+          work.id = savedWork.id
+          handleMoveWork(work)
+        } catch (error) {
+          console.error('프로젝트 생성 실패:', error)
+        }
+      }
+      saveWork()
     },
     [handleMoveWork],
   )
