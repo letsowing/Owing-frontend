@@ -56,13 +56,13 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
 
   const onGenreTagClick = (value: string) => {
     setCurrentWork((prevWork) => {
-      const isTagSelected = prevWork.genres.includes(value)
-
+      const genres = prevWork.genres || []
+      const isTagSelected = genres.includes(value)
       const updatedGenre = isTagSelected
-        ? prevWork.genres.filter((genre) => genre !== value)
-        : prevWork.genres.length < 5
-          ? [...prevWork.genres, value]
-          : prevWork.genres
+        ? genres.filter((genre) => genre !== value)
+        : genres.length < 5
+          ? [...genres, value]
+          : genres
 
       return {
         ...prevWork,
@@ -118,7 +118,7 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
           isRequired={isEditable}
           maxLength={1000}
           isEditable={isEditable}
-          value={currentWork.description}
+          value={currentWork.description || ''}
           onChange={(value) => handleInputChange('description', value)}
         />
       </div>

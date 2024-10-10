@@ -36,7 +36,8 @@ const ProjectTagField = ({
             key={tag.name}
             onClick={onTagClick}
             isSelected={
-              work.category === tag.value || work.genre.includes(tag.value)
+              work.category === tag.value ||
+              (work.genres || []).includes(tag.value)
             }
           />
         ))}
