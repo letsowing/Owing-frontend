@@ -58,12 +58,12 @@ export default function DirectionalEdge({
               value={labelText}
               onChange={handleLabelChange}
               onBlur={handleLabelBlur}
-              className="rounded border border-2 border-redorange bg-white px-1 py-0.5 text-xs outline-none dark:border-violet"
+              className="rounded border border-2 border-redorange bg-white px-1 py-0.5 text-xs text-darkgray outline-none dark:border-violet"
               autoFocus
             />
           ) : (
             <div
-              className="cursor-pointer rounded border border-2 border-redorange bg-white px-1 py-0.5 text-xs dark:border-violet"
+              className="cursor-pointer rounded border border-2 border-redorange bg-white px-1 py-0.5 text-xs text-darkgray dark:border-violet"
               onClick={handleLabelClick}
             >
               {label}

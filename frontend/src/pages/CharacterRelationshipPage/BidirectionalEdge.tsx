@@ -59,12 +59,12 @@ export default function BidirectionalEdge({
               value={labelText}
               onChange={handleLabelChange}
               onBlur={handleLabelBlur}
-              className="rounded border border-2 border-olive bg-white px-1 py-0.5 text-xs outline-none"
+              className="rounded border border-2 border-olive bg-white px-1 py-0.5 text-xs text-darkgray outline-none"
               autoFocus
             />
           ) : (
             <div
-              className="cursor-pointer rounded border border-2 border-olive bg-white px-1 py-0.5 text-xs"
+              className="cursor-pointer rounded border border-2 border-olive bg-white px-1 py-0.5 text-xs text-darkgray"
               onClick={handleLabelClick}
             >
               {label}

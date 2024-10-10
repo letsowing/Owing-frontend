@@ -35,8 +35,12 @@ const useNavigation = () => {
     navigate('/scenarioManagement')
   }
 
-  const goToProject = (id: number) => {
-    navigate(`/scenarioManagement?id=${id}`)
+  const goToScenario = (id: number) => {
+    navigate(`/scenario/${id}`)
+  }
+
+  const goToProject = (projectId: number) => {
+    navigate(`/scenarioManagement/${projectId}`)
   }
 
   return {
@@ -47,6 +51,7 @@ const useNavigation = () => {
     goToContactUs,
     goToCharacterRelationship,
     goToScenarioManagement,
+    goToScenario,
     goToProject,
     activePath,
     setActivePath,
