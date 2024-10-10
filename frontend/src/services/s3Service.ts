@@ -1,11 +1,20 @@
 import axios from 'axios'
 
 export const putUploadImageToS3 = async (
-  imageUrl: string,
   presignedUrl: string,
+  imageUrl: string,
 ) => {
   try {
-    const response = await axios.put(presignedUrl, imageUrl, {
+    const base64Data = imageUrl.split(',')[1]
+
+    const binaryData = atob(base64Data)
+    const bytes = new Uint8Array(binaryData.length)
+    for (let i = 0; i < binaryData.length; i++) {
+      bytes[i] = binaryData.charCodeAt(i)
+    }
+    const blob = new Blob([bytes], { type: 'image/png' })
+
+    const response = await axios.put(presignedUrl, blob, {
       headers: {
         'Content-Type': 'image/png',
       },
