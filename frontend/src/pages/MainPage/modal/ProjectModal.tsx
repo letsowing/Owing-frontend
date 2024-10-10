@@ -39,9 +39,16 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
     onClose()
   }
 
-  const onImageChange = (image: string) => {}
+  const onImageChange = (image: string) => {
+    // axios 후 이미지 변경된 거를 넣어준다.
+    console.log(image)
+  }
 
   const onAIGenerateClick = () => {}
+
+  const onCategoryTagClick = () => {}
+
+  const onGenreTagClick = () => {}
 
   return (
     <Modal
@@ -73,12 +80,14 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
           labelValue="분류"
           tagList={CATEGORY_LIST}
           isEditable={isEditable}
+          onClick={onCategoryTagClick}
         />
         <div className="w-3/4">
           <TagField
             labelValue="장르"
             tagList={GENRE_LIST}
             isEditable={isEditable}
+            onClick={onGenreTagClick}
           />
         </div>
         <TextAreaField

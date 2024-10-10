@@ -7,9 +7,15 @@ interface TagFieldProps {
     name: string
   }[]
   isEditable: boolean
+  onClick?: () => void
 }
 
-const TagField = ({ labelValue, tagList, isEditable }: TagFieldProps) => {
+const TagField = ({
+  labelValue,
+  tagList,
+  isEditable,
+  onClick,
+}: TagFieldProps) => {
   return (
     <div className="flex flex-col">
       <label className="font-semibold text-darkgray dark:text-coldbeige">
@@ -19,9 +25,13 @@ const TagField = ({ labelValue, tagList, isEditable }: TagFieldProps) => {
         )}
       </label>
       <div className="mt-2 flex flex-wrap gap-3">
-        {tagList.map((tag, index) => (
-          <Tag name={tag.name} value={tag.value} key={index} />
-          // <Tag value={tag.value} isActive={tag.isActive} />
+        {tagList.map((tag) => (
+          <Tag
+            name={tag.name}
+            value={tag.value}
+            key={tag.name}
+            onClick={onClick}
+          />
         ))}
       </div>
     </div>
