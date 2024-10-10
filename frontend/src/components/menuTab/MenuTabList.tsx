@@ -20,6 +20,7 @@ const MenuTabList: React.FC<MenuTabListProps> = ({ onItemClick }) => {
     <div className="w-64">
       {MENU_LIST.map((item) => (
         <MenuTabItem
+          icon={item.icon}
           key={item.path}
           text={item.text}
           isActive={activePath === item.path}
