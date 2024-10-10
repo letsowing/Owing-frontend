@@ -1,9 +1,9 @@
 export interface Work {
-  id?: number
+  id: number
   title: string
-  category: string
-  genres: string[]
-  description: string
+  category?: string
+  genres?: string[]
+  description?: string
   imageUrl: string
   createdAt?: Date
   updatedAt?: Date

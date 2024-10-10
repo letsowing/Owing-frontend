@@ -3,5 +3,5 @@ export interface Member {
   email: string
   name: string
   nickname: string
-  profileImage: string
+  imageUrl: string
 }
