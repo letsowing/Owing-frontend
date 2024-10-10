@@ -1,16 +1,20 @@
 import { useEffect, useState } from 'react'
 
+import ImageForm from '@components/common/ImageForm'
 import Modal from '@components/common/Modal'
 import TagField from '@components/common/TagField'
 
 import { useModalManagement } from '@hooks/useModal'
 
-import ImageForm from './ImageForm'
 import InputForm from './InputForm'
 
 import { Character, CharacterRelationshipModalProps, ModalType } from '@types'
 
-const mockData = [{ value: '1화' }, { value: '2화' }, { value: '3화' }]
+const mockData = [
+  { name: '1화', value: '1' },
+  { name: '2화', value: '2' },
+  { name: '3화', value: '3' },
+]
 
 const initialCharacter: Character = {
   id: '',
@@ -31,15 +35,6 @@ const CharacterRelationshipModal = ({
   const { modals } = useModalManagement()
   const [editableCharacter, setEditableCharacter] =
     useState<Character>(initialCharacter)
-
-  useEffect(() => {
-    if (modals.length > 0) {
-      const currentModal = modals[modals.length - 1]
-      if (currentModal.type === ModalType.CHARACTER_RELATIONSHIP) {
-        setEditableCharacter(currentModal.character || initialCharacter)
-      }
-    }
-  }, [modals])
 
   useEffect(() => {
     if (modals.length > 0) {

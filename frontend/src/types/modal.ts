@@ -26,8 +26,9 @@ export interface CharacterRelationshipModalProps extends ModalProps<Character> {
 export interface WorkModalProps extends ModalProps<Work> {
   type: ModalType.WORK
   isEditable: boolean
-  onAction: (work: Work) => void
   work?: Work | null
+  onSave: ActionFunction<Work>
+  onClose: () => void
 }
 
 export interface WorldSettingModalProps extends ModalProps<Work> {

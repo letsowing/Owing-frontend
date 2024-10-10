@@ -1,7 +1,7 @@
 import useNavigation from '@hooks/useNavigation'
 
 interface ProjectProps {
-  id: string
+  id: number
   name: string
   createdAt: Date
   image: string

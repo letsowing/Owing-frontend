@@ -1,26 +1,34 @@
 export const CATEGORY_LIST = [
   {
-    value: '시나리오/대본',
+    name: '시나리오/대본',
+    value: 'SCENARIO_SCRIPT',
   },
   {
-    value: '웹소설',
+    name: '웹소설',
+    value: 'WEB_NOVEL',
   },
   {
-    value: '웹툰스토리',
+    name: '웹툰스토리',
+    value: 'WEBTOON_STORY',
   },
   {
-    value: '게임스토리',
+    name: '게임스토리',
+    value: 'GAME_STORY',
   },
   {
-    value: '희곡',
+    name: '희곡',
+    value: 'PLAY',
   },
   {
-    value: '에세이',
+    name: '에세이',
+    value: 'ESSAY',
   },
   {
-    value: '순문학',
+    name: '순문학',
+    value: 'LITERATURE',
   },
   {
-    value: '기타',
+    name: '기타',
+    value: 'OTHER',
   },
 ] as const

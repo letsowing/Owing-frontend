@@ -1,21 +1,25 @@
-import Tag from './Tag'
+import Tag from '@components/common/Tag'
 
-interface TagFieldProps {
+import { Work } from '@/types'
+
+interface ProjectTagFieldProps {
   labelValue: string
   tagList: readonly {
     value: string
     name: string
   }[]
   isEditable: boolean
-  onClick?: () => void
+  work: Work
+  onTagClick?: (value: string) => void
 }
 
-const TagField = ({
+const ProjectTagField = ({
   labelValue,
   tagList,
   isEditable,
-  onClick,
-}: TagFieldProps) => {
+  work,
+  onTagClick,
+}: ProjectTagFieldProps) => {
   return (
     <div className="flex flex-col">
       <label className="font-semibold text-darkgray dark:text-coldbeige">
@@ -30,7 +34,10 @@ const TagField = ({
             name={tag.name}
             value={tag.value}
             key={tag.name}
-            onClick={onClick}
+            onClick={onTagClick}
+            isSelected={
+              work.category === tag.value || work.genre.includes(tag.value)
+            }
           />
         ))}
       </div>
@@ -38,4 +45,4 @@ const TagField = ({
   )
 }
 
-export default TagField
+export default ProjectTagField

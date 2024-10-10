@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
+import ImageForm from '@components/common/ImageForm'
 import InputField from '@components/common/InputField'
-import MainButton from '@components/common/MainButton'
 import Modal from '@components/common/Modal'
-import SubButton from '@components/common/SubButton'
-import TagField from '@components/common/TagField'
 import TextAreaField from '@components/common/TextAreaField'
 
-import { useModalManagement } from '@hooks/useModal'
+import ProjectTagField from './ProjectTagField'
 
 import { CATEGORY_LIST } from '@constants/categoryList'
 import { GENRE_LIST } from '@constants/genreList'
@@ -16,18 +14,14 @@ import { ModalType, Work, WorkModalProps } from '@types'
 const initialWork: Work = {
   id: 0,
   title: '',
-  genre: '',
+  genre: [],
   category: '',
   description: '',
   imageUrl: '',
 }
 
-const WorkModal: React.FC = () => {
-  const { modals, closeModal } = useModalManagement()
-  const currentModal = modals[modals.length - 1] as WorkModalProps
-  const { isEditable, onAction, work = null } = currentModal || {}
-
-  const [currentWork, setCurrentWork] = useState<Work>(work || initialWork)
+const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
+  const [currentWork, setCurrentWork] = useState<Work>(initialWork)
 
   useEffect(() => {
     if (work) {
@@ -42,13 +36,60 @@ const WorkModal: React.FC = () => {
   }
 
   const handleSave = () => {
-    onAction(currentWork)
-    closeModal()
+    onSave(currentWork)
+    onClose()
+  }
+
+  const onImageChange = (image: string) => {
+    // axios 후 이미지 변경된 거를 넣어준다.
+    console.log(image)
+  }
+
+  const onAIGenerateClick = () => {}
+
+  const onCategoryTagClick = (value: string) => {
+    setCurrentWork((prevWork) => ({
+      ...prevWork,
+      category: prevWork.category === value ? '' : value,
+    }))
+    console.log(currentWork.category)
+  }
+
+  const onGenreTagClick = (value: string) => {
+    setCurrentWork((prevWork) => {
+      const isTagSelected = prevWork.genre.includes(value)
+
+      const updatedGenre = isTagSelected
+        ? prevWork.genre.filter((genre) => genre !== value)
+        : prevWork.genre.length < 5
+          ? [...prevWork.genre, value]
+          : prevWork.genre
+
+      return {
+        ...prevWork,
+        genre: updatedGenre,
+      }
+    })
+    console.log(currentWork.genre)
   }
 
   return (
-    <Modal modalType={ModalType.WORK}>
+    <Modal
+      modalType={ModalType.WORK}
+      primaryButtonText="Save"
+      secondaryButtonText="Cancel"
+      onPrimaryAction={handleSave}
+      onSecondaryAction={onClose}
+    >
       <div className="mx-20 mt-8 flex flex-col gap-5">
+        <div className="flex justify-center">
+          <ImageForm
+            isEditable={isEditable}
+            image={currentWork.imageUrl}
+            onImageChange={onImageChange}
+            onAIGenerateClick={onAIGenerateClick}
+          />
+        </div>
         <InputField
           type="text"
           labelValue="작품명"
@@ -58,16 +99,20 @@ const WorkModal: React.FC = () => {
           value={currentWork.title}
           onChange={(value) => handleInputChange('title', value)}
         />
-        <TagField
+        <ProjectTagField
           labelValue="분류"
           tagList={CATEGORY_LIST}
           isEditable={isEditable}
+          work={currentWork}
+          onTagClick={onCategoryTagClick}
         />
         <div className="w-3/4">
-          <TagField
+          <ProjectTagField
             labelValue="장르"
             tagList={GENRE_LIST}
             isEditable={isEditable}
+            work={currentWork}
+            onTagClick={onGenreTagClick}
           />
         </div>
         <TextAreaField
@@ -78,18 +123,6 @@ const WorkModal: React.FC = () => {
           value={currentWork.description}
           onChange={(value) => handleInputChange('description', value)}
         />
-        {/* imageUrl은 별도의 이미지 업로드 컴포넌트가 필요할 수 있습니다 */}
-        <div className="mt-8 flex justify-end gap-3">
-          <div className="w-1/5">
-            <SubButton value="뒤로" onClick={closeModal} />
-          </div>
-          <div className="w-1/5">
-            <MainButton
-              value={isEditable ? '저장' : '확인'}
-              onClick={isEditable ? handleSave : closeModal}
-            />
-          </div>
-        </div>
       </div>
     </Modal>
   )

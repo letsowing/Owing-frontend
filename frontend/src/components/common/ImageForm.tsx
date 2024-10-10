@@ -29,7 +29,7 @@ const ImageForm: React.FC<ImageFormProps> = ({
 
   return (
     <div className="flex flex-col ps-1">
-      <div className="flex w-[300px] justify-between">
+      <div className="flex w-80 justify-between">
         <label className="font-semibold dark:text-coldbeige">이미지</label>
         {isEditable && (
           <label htmlFor="imageUpload" className="cursor-pointer">

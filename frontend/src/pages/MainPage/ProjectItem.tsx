@@ -1,7 +1,7 @@
 import useNavigation from '@hooks/useNavigation'
 
 interface ProjectItemProps {
-  id: string
+  id: number
   name: string
   updatedAt: Date
   createdAt: Date

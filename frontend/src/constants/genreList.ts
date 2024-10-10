@@ -1,56 +1,74 @@
 export const GENRE_LIST = [
   {
-    value: '드라마',
+    name: '드라마',
+    value: 'DRAMA',
   },
   {
-    value: '로맨스',
+    name: '로맨스',
+    value: 'ROMANCE',
   },
   {
-    value: '범죄/느와르',
+    name: '범죄/느와르',
+    value: 'CRIME_NOIR',
   },
   {
-    value: '스릴러',
+    name: '스릴러',
+    value: 'THRILLER',
   },
   {
-    value: '어드벤처',
+    name: '어드벤처',
+    value: 'ADVENTURE',
   },
   {
-    value: '미스터리',
+    name: '미스터리',
+    value: 'MYSTERY',
   },
   {
-    value: '공포',
+    name: '공포',
+    value: 'HORROR',
   },
   {
-    value: '추리',
+    name: '추리',
+    value: 'DETECTIVE',
   },
   {
+    name: 'SF',
     value: 'SF',
   },
   {
-    value: '사극',
+    name: '사극',
+    value: 'HISTORICAL',
   },
   {
-    value: '무협',
+    name: '무협',
+    value: 'ACTION',
   },
   {
-    value: '예능',
+    name: '예능',
+    value: 'ENTERTAINMENT',
   },
   {
-    value: '코미디',
+    name: '코미디',
+    value: 'COMEDY',
   },
   {
-    value: '전쟁',
+    name: '전쟁',
+    value: 'WAR',
   },
   {
-    value: '음악/뮤지컬',
+    name: '음악/뮤지컬',
+    value: 'MUSICAL',
   },
   {
-    value: '팬픽',
+    name: '팬픽',
+    value: 'FANFICTION',
   },
   {
-    value: 'BL/GL',
+    name: 'BL/GL',
+    value: 'BL_GL',
   },
   {
-    value: '기타',
+    name: '기타',
+    value: 'OTHER',
   },
 ] as const
