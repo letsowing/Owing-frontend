@@ -87,11 +87,11 @@ export default function WorldViewDraggableBox({
   return (
     <div
       ref={ref}
-      className={`shadow-gray-300/50 m-4 flex w-full items-center rounded-[6px] bg-white p-6 shadow-lg ${
+      className={`shadow-gray-300/50 m-4 flex items-center rounded-[6px] bg-white p-6 shadow-lg ${
         isDragging ? 'opacity-20' : ''
       }`}
     >
-      <div className="flex items-center">
+      <div className="flex w-full items-center">
         {imageUrl ? (
           <div
             className="h-[240px] w-[240px] min-w-[240px] bg-cover bg-center bg-no-repeat"
@@ -109,7 +109,7 @@ export default function WorldViewDraggableBox({
             <div className="mt-4 text-redorange">이미지를 추가해 주세요!</div>
           </div>
         )}
-        <div className="mx-8 my-4 mb-auto flex w-[48rem] flex-grow flex-col">
+        <div className="m-4 mb-auto flex w-3/4 flex-grow flex-col">
           {isEditing ? (
             <>
               <input
@@ -135,7 +135,7 @@ export default function WorldViewDraggableBox({
         </div>
       </div>
 
-      <div className="ml-auto flex h-full w-1/4 flex-col items-end justify-between font-semibold">
+      <div className="ml-auto flex h-56 w-1/4 flex-col items-end justify-between font-semibold">
         {isEditing ? (
           <>
             <div className="mb-auto flex flex-col items-end">
