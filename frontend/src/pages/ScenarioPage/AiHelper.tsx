@@ -34,11 +34,11 @@ export function AiHelper() {
 
       <div className="space-y-1 rounded-b-lg">
         <textarea
-          className="h-[15rem] w-full resize-none overflow-y-auto rounded-[10px] border border-lightgray p-3 text-sm text-black focus:outline-none focus:ring-1 focus:ring-lightgray"
+          className="h-[10rem] w-full resize-none overflow-y-auto rounded-[10px] border border-lightgray p-3 text-sm text-black focus:outline-none focus:ring-1 focus:ring-lightgray"
           value={targetStory}
           onChange={(e) => setTargetStory(e.target.value)}
         />
-        <div className="h-[25rem] w-full resize-none overflow-y-auto rounded-[10px] bg-[#F7F7F7] p-3 text-sm text-black">
+        <div className="h-[20rem] w-full resize-none overflow-y-auto rounded-[10px] bg-[#F7F7F7] p-3 text-sm text-black">
           {result || '설정충돌 체크 응답'}
         </div>
       </div>
