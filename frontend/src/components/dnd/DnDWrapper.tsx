@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import WorldViewDraggableBox from '@pages/WorldViewPage/WorldViewDraggableBox'
-
 import { useDnd } from '@hooks/useDnd'
 import useNavigation from '@hooks/useNavigation'
 
@@ -18,17 +16,6 @@ export default function DnDWrapper({
   currentService,
 }: DnDWrapperProps) {
   const { items } = useDnd()
-  const { activePath } = useNavigation()
-
-  const getServiceAndComponent = () => {
-    return {
-      service: currentService,
-      Component:
-        activePath === 'worldView' ? WorldViewDraggableBox : DraggableBox,
-    }
-  }
-
-  const { Component } = getServiceAndComponent()
 
   const selectedFolder = items.find((folder) => folder.id === selectedFolderId)
 
@@ -48,7 +35,7 @@ export default function DnDWrapper({
           <div className="grid grid-cols-2 gap-4 xs:grid-cols-3 sm:grid-cols-4">
             {selectedFolder &&
               selectedFolder.files.map((file, index) => (
-                <Component
+                <DraggableBox
                   key={file.id}
                   id={file.id}
                   index={index}
