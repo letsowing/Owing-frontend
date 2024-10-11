@@ -20,7 +20,7 @@ export default function DnDWrapper({
   const selectedFolder = items.find((folder) => folder.id === selectedFolderId)
 
   return (
-    <div className="p-5">
+    <div className="p-6">
       {selectedFolder ? (
         !selectedFolder.files ? (
           <div className="mt-[200px] text-center">
