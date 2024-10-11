@@ -38,7 +38,7 @@ const RightHeader: React.FC = () => {
         to="/login"
         className="bg-gradient-to-b from-redorange to-orange bg-clip-text font-bold text-transparent dark:from-blue dark:to-skyblue"
       >
-        Login
+        Logout
       </Link>
       <button
         onClick={goToContactUs}
