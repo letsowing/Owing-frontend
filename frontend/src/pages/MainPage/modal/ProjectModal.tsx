@@ -7,6 +7,8 @@ import TextAreaField from '@components/common/TextAreaField'
 
 import ProjectTagField from './ProjectTagField'
 
+import Loader from '@components/common/Loader'
+
 import { CATEGORY_LIST } from '@constants/categoryList'
 import { GENRE_LIST } from '@constants/genreList'
 import { postGenerateAiImage } from '@services/workService'
@@ -23,6 +25,7 @@ const initialWork: Work = {
 
 const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
   const [currentWork, setCurrentWork] = useState<Work>(initialWork)
+  const [isGenerating, setIsGenerating] = useState(false)
 
   useEffect(() => {
     if (work) {
@@ -50,6 +53,7 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
 
   const onAiGenerateClick = () => {
     const generateAiImage = async () => {
+      setIsGenerating(true)
       try {
         const data = await postGenerateAiImage(
           currentWork.title,
@@ -60,6 +64,8 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
         onImageChange(data)
       } catch (error) {
         console.error('AI 이미지 생성 실패', error)
+      } finally {
+        setIsGenerating(false)
       }
     }
     generateAiImage()
@@ -100,12 +106,18 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
     >
       <div className="mx-20 mt-8 flex flex-col gap-5">
         <div className="flex justify-center">
-          <ImageForm
-            isEditable={isEditable}
-            image={currentWork.imageUrl}
-            onImageChange={onImageChange}
-            onAIGenerateClick={onAiGenerateClick}
-          />
+        {isGenerating ? (
+            <div className="flex h-[22rem] w-[22rem] items-center justify-center">
+              <Loader />
+            </div>
+          ) : (
+            <ImageForm
+              isEditable={isEditable}
+              image={currentWork.imageUrl}
+              onImageChange={onImageChange}
+              onAIGenerateClick={onAiGenerateClick}
+            />
+          )}
         </div>
         <InputField
           type="text"
