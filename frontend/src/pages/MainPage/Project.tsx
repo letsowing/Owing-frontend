@@ -16,7 +16,7 @@ const Project = ({ id, title, createdAt, imageUrl }: ProjectProps) => {
       onClick={() => goToProject(id)}
     >
       <div className="flex flex-1 bg-gray">
-        <img className="h-full w-full object-cover" src={`data:image/jpeg;base64,${imageUrl}`} />
+        <img className="h-full w-full object-cover" src={imageUrl} />
       </div>
       <div className="flex flex-col items-center">
         <label className="w-36 cursor-pointer truncate px-2 text-sm font-medium dark:text-gray">

@@ -19,7 +19,6 @@ export const postCreateWork = async (
       description,
       category,
       genres,
-      imageUrl,
     }
     const response = await axiosInstance.post('/project', payload)
     await putUploadImageToS3(response.data.presignedUrl, imageUrl)
@@ -44,7 +43,6 @@ export const postGenerateAiImage = async (
       genres,
     }
     const response = await axiosInstance.post('/project/image', payload)
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.error('프로젝트 AI 표지 생성 실패:', error)
