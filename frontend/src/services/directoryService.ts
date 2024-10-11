@@ -61,12 +61,9 @@ const createDirectoryService = (folderPath: string, filePath: string) => ({
     position: number,
   ): Promise<void> => {
     try {
-      await axiosInstance.patch(
-        `${folderPath}?storyFolderId=${storyFolderId}`,
-        {
-          position,
-        },
-      )
+      await axiosInstance.patch(`${folderPath}/${storyFolderId}`, {
+        position,
+      })
       console.log('폴더가 성공적으로 이동되었습니다.')
     } catch (error) {
       console.error('폴더 이동 실패:', error)
@@ -75,9 +72,12 @@ const createDirectoryService = (folderPath: string, filePath: string) => ({
   },
 
   // 파일 관련 함수
-  getFile: async (fileId: number): Promise<FileItem> => {
+  getFile: async (storyFolderId: number): Promise<FileItem> => {
     try {
-      const response = await axiosInstance.get(`${filePath}/${fileId}`)
+      const response = await axiosInstance.get(
+        `${filePath}?storyFolderId=${storyFolderId}`,
+      )
+      console.log(response.data)
       return response.data
     } catch (error) {
       console.error('파일 조회 실패:', error)
@@ -85,9 +85,13 @@ const createDirectoryService = (folderPath: string, filePath: string) => ({
     }
   },
 
-  postFile: async (folderId: number): Promise<FileItem> => {
+  postFile: async (data: {
+    name: string
+    description: string
+    folderId: number
+  }): Promise<FileItem> => {
     try {
-      const response = await axiosInstance.post(`${filePath}`, { folderId })
+      const response = await axiosInstance.post(`${filePath}`, data)
       return response.data
     } catch (error) {
       console.error('새 파일 생성 실패:', error)
@@ -119,15 +123,15 @@ const createDirectoryService = (folderPath: string, filePath: string) => ({
   },
 
   moveFile: async (
-    fileId: number,
-    position: number,
-    folderId: number,
+    storyPlotId: number,
+    data: {
+      position: number
+      folderId: number
+    },
   ): Promise<void> => {
     try {
-      await axiosInstance.patch(`${filePath}/${fileId}`, {
-        position,
-        folderId,
-      })
+      console.log(data, storyPlotId)
+      await axiosInstance.patch(`${filePath}/${storyPlotId}`, data)
       console.log('파일이 성공적으로 이동되었습니다.')
     } catch (error) {
       console.error('파일 이동 실패:', error)

@@ -1,19 +1,21 @@
-import useNavigation from '@hooks/useNavigation'
-
 interface ProjectProps {
   id: number
   title: string
   createdAt: Date
   imageUrl: string
+  onProjectClick: () => void
 }
 
-const Project = ({ id, title, createdAt, imageUrl }: ProjectProps) => {
-  const { goToProject } = useNavigation()
-
+const Project = ({
+  title,
+  createdAt,
+  imageUrl,
+  onProjectClick,
+}: ProjectProps) => {
   return (
     <div
       className="my-1 flex h-[15rem] w-[12rem] cursor-pointer flex-col justify-between overflow-hidden rounded-3xl bg-white shadow-lg dark:bg-coldbeige"
-      onClick={() => goToProject(id)}
+      onClick={onProjectClick}
     >
       <div className="flex flex-1 bg-gray">
         <img className="h-full w-full object-cover" src={imageUrl} />

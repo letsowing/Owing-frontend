@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef, useState } from 'react'
 
 import { useDnd } from '@hooks/useDnd'
 import useNavigation from '@hooks/useNavigation'
 
-import { scenarioDirectoryService } from '@services/directoryService'
 import { DraggableBoxProps } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 
@@ -13,6 +13,7 @@ export default function DraggableBox({
   name,
   description,
   folderId,
+  currentService,
 }: DraggableBoxProps) {
   const { moveFileItem, updateFile } = useDnd()
   const ref = useRef<HTMLDivElement>(null)
@@ -27,21 +28,19 @@ export default function DraggableBox({
       if (!ref.current) return
 
       const dragIndex = item.index
-      const hoverIndex = index
 
-      if (dragIndex === hoverIndex) return
+      if (dragIndex === index) return
 
-      moveFileItem(folderId, dragIndex, hoverIndex)
-      item.index = hoverIndex
-    },
-    drop(item: { id: number; index: number }) {
-      // 드롭이 완료되면 백엔드에 업데이트 요청
-      scenarioDirectoryService
-        .moveFile(item.id, index, folderId)
-        .catch((error: unknown) => {
-          console.error('파일 이동 실패:', error)
-          // 에러 처리 로직 (예: 사용자에게 알림, 상태 롤백 등)
-        })
+      moveFileItem(folderId, dragIndex, index)
+      item.index = index
+
+      const data = {
+        position: item.index,
+        folderId,
+      }
+      currentService.moveFile(item.id, data).catch((error: any) => {
+        console.error('파일 이동 실패:', error)
+      })
     },
   })
 
@@ -63,7 +62,7 @@ export default function DraggableBox({
   const handleSave = async (e: React.MouseEvent) => {
     e.stopPropagation()
     try {
-      await scenarioDirectoryService.putFile(id, {
+      await currentService.putFile(id, {
         name: editedName,
         description: editedDescription,
       })

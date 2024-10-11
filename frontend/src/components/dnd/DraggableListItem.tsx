@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 
 import { useDnd } from '@hooks/useDnd'
+import useNavigation from '@hooks/useNavigation'
 
 import { useDrag, useDrop } from 'react-dnd'
 import { GoPencil } from 'react-icons/go'
@@ -25,6 +26,7 @@ export default function DraggableListItem({
   currentService,
 }: DraggableListItemProps) {
   const { moveFileItem, updateFileName, deleteFile } = useDnd()
+  const { activePath, goToScenario } = useNavigation()
   const ref = useRef<HTMLLIElement>(null)
 
   const [isFileEditing, setIsFileEditing] = useState(false)
@@ -52,7 +54,11 @@ export default function DraggableListItem({
   const handleSaveFileName = async () => {
     if (newFileName.trim() && newFileName !== file.name) {
       try {
-        await currentService.putFile(id, { name: newFileName })
+        const data = {
+          name: newFileName,
+          description: file.description,
+        }
+        await currentService.putFile(id, data)
         updateFileName(folderId, id, newFileName)
       } catch (error) {
         console.error('파일 이름 업데이트 실패:', error)
@@ -77,6 +83,12 @@ export default function DraggableListItem({
     }
   }
 
+  const handleItemClick = () => {
+    if (activePath.includes('scenarioManagement')) {
+      goToScenario(id)
+    }
+  }
+
   const [{ isDragging }, drag] = useDrag({
     type: 'TAB_ITEM',
     item: { id, index },
@@ -91,15 +103,17 @@ export default function DraggableListItem({
       if (!ref.current) return
 
       const dragIndex = item.index
-      const hoverIndex = index
 
-      if (dragIndex === hoverIndex) return
+      if (dragIndex === index) return
 
-      moveFileItem(folderId, dragIndex, hoverIndex)
-      item.index = hoverIndex
-    },
-    drop(item: { id: number; index: number }) {
-      currentService.moveFile(item.id, index, folderId).catch((error: any) => {
+      moveFileItem(folderId, dragIndex, index)
+      item.index = index
+
+      const data = {
+        position: item.index,
+        folderId,
+      }
+      currentService.moveFile(item.id, data).catch((error: any) => {
         console.error('파일 이동 실패:', error)
       })
     },
@@ -121,8 +135,9 @@ export default function DraggableListItem({
     <li
       ref={ref}
       className={`${
-        isDragging ? 'bg-[#e0e0e0] opacity-50' : 'bg-[#f5f5f5]'
+        isDragging ? 'bg-[#e0e0e0] opacity-50' : ''
       } group my-2 flex h-10 w-full items-center justify-between rounded-[7px] hover:bg-white`}
+      onClick={handleItemClick}
     >
       <div className="flex items-center">
         <div className="h-1 w-1 rounded-full bg-redorange dark:bg-blue"></div>

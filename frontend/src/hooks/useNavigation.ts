@@ -7,9 +7,16 @@ const useNavigation = () => {
   const navigate = useNavigate()
   const { activePath, setActivePath } = useMenuStore()
 
-  const goTo = (path: MenuPath) => {
+  const goTo = (path: MenuPath, projectId?: number) => {
     setActivePath(path)
-    navigate(path)
+    if (
+      projectId !== undefined &&
+      ['character', 'scenarioManagement', 'worldView'].includes(path)
+    ) {
+      navigate(`/${path}/${projectId}`)
+    } else {
+      navigate(`/${path}`)
+    }
   }
 
   const goToMain = () => {
@@ -43,6 +50,14 @@ const useNavigation = () => {
     navigate(`/scenarioManagement/${projectId}`)
   }
 
+  const goToWorldView = (projectId: number) => {
+    navigate(`/worldView/${projectId}`)
+  }
+
+  const goToCharacter = (projectId: number) => {
+    navigate(`/character/${projectId}`)
+  }
+
   return {
     goTo,
     goToMain,
@@ -53,6 +68,8 @@ const useNavigation = () => {
     goToScenarioManagement,
     goToScenario,
     goToProject,
+    goToWorldView,
+    goToCharacter,
     activePath,
     setActivePath,
   }
