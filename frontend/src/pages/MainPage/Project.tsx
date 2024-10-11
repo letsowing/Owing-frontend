@@ -19,11 +19,11 @@ const Project = ({ id, title, createdAt, imageUrl }: ProjectProps) => {
         <img className="h-full w-full object-cover" src={imageUrl} />
       </div>
       <div className="flex flex-col items-center">
-        <label className="w-36 cursor-pointer truncate px-2 text-sm font-medium dark:text-gray">
+        <label className="w-36 cursor-pointer truncate px-2 text-sm font-medium dark:text-gray mt-1">
           {title}
         </label>
-        <label className="mb-2 cursor-pointer text-[11px] font-normal dark:text-gray">
-          {createdAt.toLocaleString()}
+        <label className="mb-1 cursor-pointer text-[11px] font-normal dark:text-gray">
+        {new Date(createdAt).toLocaleDateString()}  {new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
         </label>
       </div>
     </div>

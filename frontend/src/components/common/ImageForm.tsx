@@ -48,7 +48,7 @@ const ImageForm: React.FC<ImageFormProps> = ({
       <div className="my-1 flex h-80 w-80 justify-center rounded-xl border border-lightgray dark:border-lightdarkgray dark:bg-verydarkblack">
         {image ? (
           <img
-            src={image}
+            src={`data:image/jpeg;base64,${image}`}
             alt="Character"
             className="w-full rounded-xl object-cover"
           />
