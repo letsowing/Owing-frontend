@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useDnd } from '@hooks/useDnd'
-import useNavigation from '@hooks/useNavigation'
 
 import DraggableBox from './DraggableBox'
 
