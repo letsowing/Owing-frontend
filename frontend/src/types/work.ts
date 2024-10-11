@@ -8,3 +8,11 @@ export interface Work {
   createdAt?: Date
   updatedAt?: Date
 }
+
+export interface ProjectProps {
+  id: number
+  title: string
+  createdAt: Date
+  updatedAt?: Date
+  imageUrl: string
+}

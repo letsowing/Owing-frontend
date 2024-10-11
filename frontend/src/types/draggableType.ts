@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface DraggableBoxProps {
   id: number
   index: number
@@ -5,4 +6,5 @@ export interface DraggableBoxProps {
   description: string
   folderId: number
   imageUrl?: string
+  currentService: any
 }

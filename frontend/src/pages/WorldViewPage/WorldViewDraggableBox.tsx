@@ -1,10 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef, useState } from 'react'
 
 import { useDnd } from '@hooks/useDnd'
-import useNavigation from '@hooks/useNavigation'
 
 import AlertOwing from '@assets/common/AlertOwing.png'
-import { scenarioDirectoryService } from '@services/directoryService'
 import { DraggableBoxProps } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 
@@ -15,10 +14,10 @@ export default function WorldViewDraggableBox({
   description,
   folderId,
   imageUrl,
+  currentService,
 }: DraggableBoxProps) {
   const { moveFileItem, updateFile } = useDnd()
   const ref = useRef<HTMLDivElement>(null)
-  const { goToScenario } = useNavigation()
   const [isEditing, setIsEditing] = useState(false)
   const [editedName, setEditedName] = useState(name)
   const [editedDescription, setEditedDescription] = useState(description)
@@ -29,19 +28,19 @@ export default function WorldViewDraggableBox({
       if (!ref.current) return
 
       const dragIndex = item.index
-      const hoverIndex = index
 
-      if (dragIndex === hoverIndex) return
+      if (dragIndex === index) return
 
-      moveFileItem(folderId, dragIndex, hoverIndex)
-      item.index = hoverIndex
-    },
-    drop(item: { id: number; index: number }) {
-      scenarioDirectoryService
-        .moveFile(item.id, index, folderId)
-        .catch((error: unknown) => {
-          console.error('파일 이동 실패:', error)
-        })
+      moveFileItem(folderId, dragIndex, index)
+      item.index = index
+
+      const data = {
+        position: item.index,
+        folderId,
+      }
+      currentService.moveFile(item.id, data).catch((error: any) => {
+        console.error('파일 이동 실패:', error)
+      })
     },
   })
 
@@ -63,7 +62,7 @@ export default function WorldViewDraggableBox({
   const handleSave = async (e: React.MouseEvent) => {
     e.stopPropagation()
     try {
-      await scenarioDirectoryService.putFile(id, {
+      await currentService.putFile(id, {
         name: editedName,
         description: editedDescription,
       })
@@ -91,7 +90,6 @@ export default function WorldViewDraggableBox({
       className={`shadow-gray-300/50 m-4 flex w-full items-center rounded-[6px] bg-white p-6 shadow-lg ${
         isDragging ? 'opacity-20' : ''
       }`}
-      onClick={() => !isEditing && goToScenario(id)}
     >
       <div className="flex items-center">
         {imageUrl ? (

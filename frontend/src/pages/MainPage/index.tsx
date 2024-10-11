@@ -13,6 +13,7 @@ import Profile from './Profile'
 import QuickAccess from './QuickAccess'
 import WorkModal from './modal/ProjectModal'
 
+import useMenuStore from '@/stores/menuStore'
 import { WORD_COUNT_STATS } from '@datas/wordCountStats'
 import { getMember } from '@services/memberService'
 import { postCreateWork } from '@services/workService'
@@ -42,6 +43,7 @@ const Main = () => {
   const [member, setMember] = useState<Member>(initialMember)
   const [projects, setProjects] = useState<Project[]>([])
   const [sortedProjects, setSortedProjects] = useState<Project[]>([])
+  const setActivePath = useMenuStore((state) => state.setActivePath)
 
   useEffect(() => {
     const fetchMember = async () => {
@@ -73,8 +75,9 @@ const Main = () => {
     (work: Work) => {
       setCurrentWork(work)
       goToProject(work.id)
+      setActivePath('scenarioManagement')
     },
-    [goToProject, setCurrentWork],
+    [goToProject, setActivePath, setCurrentWork],
   )
 
   const handleCloseModal = useCallback(() => {
@@ -130,9 +133,16 @@ const Main = () => {
           </div>
         </div>
         <div className="mt-6 flex-col xl:w-[80%] 2xl:w-[75%]">
-          <QuickAccess handleAddWork={handleAddWork} projects={projects} />
+          <QuickAccess
+            handleAddWork={handleAddWork}
+            projects={projects}
+            onProjectClick={handleMoveWork}
+          />
           <div className="mb-20 mt-16 w-full dark:bg-darkblack">
-            <AllScenario projects={sortedProjects} />
+            <AllScenario
+              projects={sortedProjects}
+              onProjectClick={handleMoveWork}
+            />
           </div>
         </div>
       </div>

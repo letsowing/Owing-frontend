@@ -27,7 +27,7 @@ const FolderList: React.FC<FolderListProps> = ({
   currentService,
 }) => {
   const { moveFolder, addFile, updateFolderName, deleteFolder } = useDnd()
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(true)
   const [isFolderEditing, setIsEditingFolder] = useState(false)
   const [newFolderName, setNewFolderName] = useState(folder.name)
   const [isFileEditing, setIsFileEditing] = useState(false)
@@ -42,6 +42,7 @@ const FolderList: React.FC<FolderListProps> = ({
     setIsEditingFolder(true)
     setTimeout(() => moveCursorToEnd(), 0)
   }
+
   const moveCursorToEnd = () => {
     if (folderNameRef.current) {
       const range = document.createRange()
@@ -86,8 +87,13 @@ const FolderList: React.FC<FolderListProps> = ({
   const handleSaveFile = async () => {
     if (newFileName.trim()) {
       try {
-        const newFile = await currentService.postFile(folder.id)
-        addFile(folder.id, newFile.fileId, newFileName)
+        const data = {
+          name: newFileName,
+          description: 'This is a file description',
+          folderId: folder.id,
+        }
+        const newFile = await currentService.postFile(data)
+        addFile(folder.id, newFile.id, newFileName)
       } catch (error) {
         console.error('파일 추가 실패:', error)
       }
@@ -107,7 +113,7 @@ const FolderList: React.FC<FolderListProps> = ({
 
   const toggleFolder = () => {
     if (!isFolderEditing) {
-      setIsOpen(!isOpen)
+      setIsOpen((prev) => !prev)
       onSelectFolder(folder)
     }
   }
@@ -127,6 +133,10 @@ const FolderList: React.FC<FolderListProps> = ({
       if (item.index !== index) {
         moveFolder(item.index, index)
         item.index = index
+
+        currentService.moveFolder(folder.id, item.index).catch((error: any) => {
+          console.error('폴더 이동 실패:', error)
+        })
       }
     },
   })
@@ -198,7 +208,7 @@ const FolderList: React.FC<FolderListProps> = ({
       </div>
 
       {isOpen && (
-        <ul style={{ paddingLeft: '20px', paddingRight: '20px' }}>
+        <ul className="mx-5">
           {folder.files?.map((file: FileItem, fileIndex: number) => (
             <DraggableListItem
               key={file.id}

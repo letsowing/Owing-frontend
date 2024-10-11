@@ -26,7 +26,7 @@ export default function FolderTabLayout() {
     location.pathname === '/' || location.pathname === '/main'
 
   const currentService = useMemo(() => {
-    if (location.pathname.includes('/worldview')) {
+    if (location.pathname.includes('/worldView')) {
       return worldViewDirectoryService
     } else if (location.pathname.includes('/character')) {
       return characterDirectoryService

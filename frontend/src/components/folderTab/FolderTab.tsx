@@ -1,13 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from 'react'
 
+import { useWorkStore } from '@stores/workStore'
+
 import { useDnd } from '@hooks/useDnd'
+
+import { generateUUID } from '@utils/uuid'
 
 import FolderList from './FolderList'
 
 import { FolderItem } from '@types'
 import { CiFolderOn } from 'react-icons/ci'
 import { FaPlus } from 'react-icons/fa6'
+import { RiCloseLargeLine } from 'react-icons/ri'
 import { useParams } from 'react-router-dom'
 
 interface FolderTabProps {
@@ -28,6 +33,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
   const [isEditing, setIsEditing] = useState(false)
   const [newFolderName, setNewFolderName] = useState('')
   const { projectId } = useParams()
+  const currentWork = useWorkStore((state) => state.currentWork)
 
   const editableRef = useRef<HTMLDivElement>(null)
 
@@ -53,7 +59,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
       const folderData = {
         projectId,
         name: newFolderName,
-        description: 'This is a test folder',
+        description: 'This is a folder description',
       }
       const newFolder = await currentService.postFolder(folderData)
       setItems([...items, newFolder])
@@ -88,9 +94,12 @@ const FolderTab: React.FC<FolderTabProps> = ({
       } overflow-hidden`}
     >
       <div className="flex justify-between p-4">
-        <p className="font-bold">억만장자</p>
-        <button onClick={onClose} className="text-darkgray">
-          닫기
+        <p className="truncate font-bold">{currentWork?.title}</p>
+        <button
+          onClick={onClose}
+          className="mt-1 flex w-8 justify-end text-darkgray"
+        >
+          <RiCloseLargeLine />
         </button>
       </div>
 
@@ -109,7 +118,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
       >
         {items.map((folder: FolderItem, index: number) => (
           <FolderList
-            key={folder.id}
+            key={`folder-${generateUUID()}`}
             folder={folder}
             index={index}
             onSelectFolder={handleSelectFolder}

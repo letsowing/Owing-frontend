@@ -1,16 +1,13 @@
 import ProjectList from './ProjectList'
 
+import { ProjectProps, Work } from '@types'
+
 interface AllScenarioProps {
-  projects: {
-    id: number
-    title: string
-    updatedAt: Date
-    createdAt: Date
-    imageUrl: string
-  }[]
+  projects: ProjectProps[]
+  onProjectClick: (work: Work) => void
 }
 
-const AllScenario = ({ projects }: AllScenarioProps) => {
+const AllScenario = ({ projects, onProjectClick }: AllScenarioProps) => {
   return (
     <div className="flex flex-col">
       <div className="flex justify-between">
@@ -20,7 +17,7 @@ const AllScenario = ({ projects }: AllScenarioProps) => {
         {/* <select className="text-redorange"></select> */}
       </div>
       <div className="mt-3">
-        <ProjectList projects={projects} />
+        <ProjectList projects={projects} onProjectClick={onProjectClick} />
       </div>
     </div>
   )
