@@ -96,7 +96,7 @@ const ScenarioPage: React.FC = () => {
 
       <div className="w-full">
         <BlockNoteView
-          className="mx-10 h-full rounded-[10px] border border-lightgray"
+          className="mx-4 h-full rounded-[10px] border border-lightgray"
           editor={editor}
           formattingToolbar={false}
           onChange={() => handleContentChange(editor)}
