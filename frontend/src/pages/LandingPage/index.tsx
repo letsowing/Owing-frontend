@@ -16,6 +16,7 @@ import { CARD_LIST } from '@constants/cardList'
 import { INFO_LIST } from '@constants/characterRelationshipInfoList'
 import { motion } from 'framer-motion'
 import { SlArrowDown } from 'react-icons/sl'
+import { Link } from 'react-router-dom'
 
 const Landing = () => {
   return (
@@ -28,11 +29,13 @@ const Landing = () => {
         />
 
         <div className="flex flex-col items-center justify-center">
-          <img
-            src={GetStartedIcon}
-            alt="getStarted"
-            className="mb-16 mt-52 h-auto w-96"
-          />
+          <Link to="/main">
+            <img
+              src={GetStartedIcon}
+              alt="getStarted"
+              className="mb-16 mt-52 h-auto w-96"
+            />
+          </Link>
 
           <div className="mb-12 animate-bounce text-4xl text-lightgray">
             <SlArrowDown />
@@ -54,7 +57,7 @@ const Landing = () => {
             </div>
 
             <div className="container relative z-20 mx-auto px-4 pt-60">
-              <div className="animate-slider mb-10 flex flex-row gap-x-[2rem]">
+              <div className="mb-10 flex animate-slider flex-row gap-x-[2rem]">
                 {[...CARD_LIST, ...CARD_LIST, ...CARD_LIST].map(
                   (card, index) => (
                     <div key={index} className="inline-block p-2">

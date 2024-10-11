@@ -2,8 +2,12 @@ import React from 'react'
 
 import DarkModeToggle from '@components/common/DarkModeToggle'
 
+import useThemeStore from '@stores/themeStore'
+
 import MenuTabList from './MenuTabList'
 
+import DarkHeaderOwing from '@assets/common/DarkHeaderOwing.png'
+import HeaderOwing from '@assets/common/HeaderOwing.png'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface MenuTabProps {
@@ -19,6 +23,7 @@ const MenuTab: React.FC<MenuTabProps> = ({
   onToggle,
   onItemClick,
 }) => {
+  const { isDarkMode } = useThemeStore()
   return (
     <nav
       className="flex h-full flex-col bg-white dark:bg-darkblack"
@@ -26,9 +31,11 @@ const MenuTab: React.FC<MenuTabProps> = ({
     >
       <div className="flex items-center justify-between p-3">
         {isTabOpen && (
-          <div className="bg-gradient-to-b from-redorange to-orange bg-clip-text text-2xl font-bold text-transparent dark:from-blue dark:to-skyblue">
-            Owing
-          </div>
+          <img
+            src={isDarkMode ? DarkHeaderOwing : HeaderOwing}
+            alt={isDarkMode ? 'DarkHeaderOwing' : 'HeaderOwing'}
+            className="mx-auto ml-2 mt-4 h-auto w-[120px]"
+          />
         )}
         <button
           onClick={onToggle}

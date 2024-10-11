@@ -83,3 +83,23 @@ export const debouncedSave = debounce(
   },
   7000,
 )
+
+export const postStoryConflict = async (
+  id: number,
+  targetStory: string,
+): Promise<String> => {
+  try {
+    const payload = {
+      targetStory,
+    }
+    const response = await axiosInstance.post(
+      `/storyPlot/${id}/findStoryConflict`,
+      payload,
+    )
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error('일관성 체크 실패:', error)
+    throw error
+  }
+}
