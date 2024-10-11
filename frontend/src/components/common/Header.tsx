@@ -1,17 +1,24 @@
 import React from 'react'
 
+import useThemeStore from '@stores/themeStore'
+
 import useNavigation from '@hooks/useNavigation'
 
+import DarkHeaderOwing from '@assets/common/DarkHeaderOwing.png'
+import HeaderOwing from '@assets/common/HeaderOwing.png'
 import { Link } from 'react-router-dom'
 
 const LeftHeader: React.FC = () => {
+  const { isDarkMode } = useThemeStore()
+
   return (
     <div>
-      <Link
-        to="/"
-        className="bg-gradient-to-b from-redorange to-orange bg-clip-text text-2xl font-bold text-transparent dark:from-blue dark:to-skyblue"
-      >
-        Owing.
+      <Link to="/">
+        <img
+          src={isDarkMode ? DarkHeaderOwing : HeaderOwing}
+          alt={isDarkMode ? 'DarkHeaderOwing' : 'HeaderOwing'}
+          className="mx-auto ml-2 mt-4 h-auto w-[120px]"
+        />
       </Link>
     </div>
   )
