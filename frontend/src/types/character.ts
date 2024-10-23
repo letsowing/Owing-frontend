@@ -5,5 +5,9 @@ export interface Character {
   gender: string
   role: string
   details: string
+  position?: {
+    x: number
+    y: number
+  }
   imageUrl: string
 }

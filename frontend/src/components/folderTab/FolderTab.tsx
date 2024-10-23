@@ -127,7 +127,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
           />
         ))}
         {isEditing && (
-          <li className="border-gray-300 text-gray-700 mx-2 mb-4 flex items-center px-2 py-1 text-base dark:text-white">
+          <li className="mx-2 mb-4 flex items-center border-gray px-2 py-1 text-base text-gray">
             <CiFolderOn className="mr-2 h-auto w-[17px]" />
             <div
               ref={editableRef}

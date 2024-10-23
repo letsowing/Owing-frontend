@@ -135,12 +135,12 @@ export default function DraggableListItem({
     <li
       ref={ref}
       className={`${
-        isDragging ? 'bg-[#e0e0e0] opacity-50' : ''
+        isDragging ? 'bg-white opacity-50' : ''
       } group my-2 flex h-10 w-full items-center justify-between rounded-[7px] hover:bg-white`}
       onClick={handleItemClick}
     >
       <div className="flex items-center">
-        <div className="h-1 w-1 rounded-full bg-redorange dark:bg-blue"></div>
+        <div className="ms-2 h-1 w-1 rounded-full bg-redorange dark:bg-blue"></div>
 
         {isFileEditing ? (
           <div
@@ -150,12 +150,7 @@ export default function DraggableListItem({
             onInput={(e) => setNewFileName(e.currentTarget.textContent || '')}
             onBlur={handleSaveFileName}
             onKeyDown={handleFileNameKeyDown}
-            className="w-40 resize-none overflow-hidden bg-transparent px-2 text-base outline-none"
-            style={{
-              whiteSpace: 'pre-wrap',
-              maxWidth: '130px',
-              height: 'auto',
-            }}
+            className="h-auto w-40 max-w-[130px] resize-none overflow-hidden whitespace-pre-wrap bg-transparent px-2 text-base outline-none"
           ></div>
         ) : (
           <p className="mx-4 text-[15px] text-darkgray">{name}</p>
