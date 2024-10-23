@@ -62,11 +62,11 @@ const InputForm: React.FC<InputFormProps> = ({
       />
       <TextAreaField
         labelValue="세부사항"
-        value={character.details}
+        value={character.detail}
         isRequired={false}
         maxLength={1000}
         isEditable={isEditable}
-        onChange={(value) => onInputChange('details', value)}
+        onChange={(value) => onInputChange('detail', value)}
       />
     </div>
   )

@@ -1,4 +1,4 @@
-import { EdgeProps, Node, NodeProps } from '@xyflow/react'
+import { Edge, EdgeProps, Node, NodeProps } from '@xyflow/react'
 
 export interface CustomNodeData {
   name: string
@@ -18,6 +18,11 @@ export type NodeTypes = {
 }
 
 export type EdgeTypes = {
-  Directional: React.FC<EdgeProps>
-  Bidirectional: React.FC<EdgeProps>
+  DIRECTIONAL: React.FC<EdgeProps>
+  BIDIRECTIONAL: React.FC<EdgeProps>
+}
+
+export interface CustomEdge extends Edge {
+  uuid?: string
+  type: keyof EdgeTypes
 }

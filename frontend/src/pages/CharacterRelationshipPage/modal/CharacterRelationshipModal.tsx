@@ -22,7 +22,8 @@ const initialCharacter: Character = {
   age: 0,
   gender: '',
   role: '',
-  details: '',
+  detail: '',
+  position: { x: Math.random() * 500, y: Math.random() * 500 },
   imageUrl: '',
 }
 

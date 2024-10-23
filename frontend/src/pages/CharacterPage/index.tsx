@@ -1,30 +1,52 @@
-import React, { useState } from 'react'
-
-import MainButton from '@components/common/MainButton'
-import SubButton from '@components/common/SubButton'
+import React, { useEffect, useState } from 'react'
 
 import { useCharFlow } from '@hooks/useCharFlow'
 
-import CharacterImage from './CharacterImage'
+import CharacterActionButtons from './CharacterActionButtons'
+import CharacterImageSection from './CharacterImageSection'
 import CharacterInputForm from './CharacterInputForm'
+import PageTitle from './PageTitle'
 
-// import { characterDirectoryService } from '@services/directoryService'
+import {
+  deleteCharacter as deleteCharacterService,
+  getCharacter,
+  putCharacter,
+  uploadCharacterImage,
+} from '@services/characterService'
 import { Character } from '@types'
-import { BsPlusCircle } from 'react-icons/bs'
-import { MdLightbulbOutline } from 'react-icons/md'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const CharacterPage: React.FC = () => {
-  const { addCharacter, updateCharacter } = useCharFlow()
+  const { projectId } = useParams<{ projectId: string }>()
+  const navigate = useNavigate()
+  const { updateCharacter, deleteCharacter } = useCharFlow()
+
   const [characterData, setCharacterData] = useState<Character>({
     id: '',
     name: '',
     age: 0,
     gender: '',
     role: '',
-    details: '',
+    detail: '',
+    position: { x: 0, y: 0 },
     imageUrl: '',
   })
   const [isEditing, setIsEditing] = useState(false)
+
+  useEffect(() => {
+    const fetchCharacter = async () => {
+      try {
+        const data = await getCharacter(projectId!)
+        setCharacterData(data)
+      } catch (error) {
+        console.error('Failed to fetch character:', error)
+      }
+    }
+
+    if (projectId) {
+      fetchCharacter()
+    }
+  }, [projectId])
 
   const handleInputChange = (field: keyof Character, value: string) => {
     setCharacterData((prev) => ({
@@ -33,67 +55,58 @@ const CharacterPage: React.FC = () => {
     }))
   }
 
-  const handleSave = () => {
-    if (isEditing) {
-      updateCharacter(characterData)
-    } else {
-      const newCharacter = addCharacter(characterData)
-      setCharacterData(newCharacter)
+  const handleSave = async () => {
+    try {
+      const updatedCharacter = await putCharacter(characterData)
+      updateCharacter(updatedCharacter)
+      setCharacterData(updatedCharacter)
+      setIsEditing(false)
+    } catch (error) {
+      console.error('Failed to update character:', error)
     }
-    setIsEditing(false)
   }
 
   const handleEdit = () => {
     setIsEditing(true)
   }
 
-  const handleCancel = () => {
+  const handleCancel = async () => {
     setIsEditing(false)
-    // 필요한 경우 characterData를 원래 상태로 되돌립니다.
+    // 수정 취소시 원래 데이터로 복구
+    await getCharacter(projectId!).then(setCharacterData)
+  }
+
+  const handleDelete = async () => {
+    if (!window.confirm('캐릭터를 삭제하시겠습니까?')) return
+
+    try {
+      await deleteCharacterService(projectId!)
+      deleteCharacter(projectId!)
+      navigate('/characters')
+    } catch (error) {
+      console.error('Failed to delete character:', error)
+    }
+  }
+
+  const handleImageUpload = async (file: File) => {
+    try {
+      const imageUrl = await uploadCharacterImage(file)
+      setCharacterData((prev) => ({ ...prev, imageUrl }))
+    } catch (error) {
+      console.error('Failed to upload image:', error)
+    }
   }
 
   return (
     <div className="mx-[3%] flex w-[94%] flex-col items-center justify-center gap-2 p-4">
-      <div className="flex-start w-full">
-        <h1 className="mb-4 text-2xl font-bold dark:text-coldbeige">
-          캐릭터 {isEditing ? '수정' : '생성'}
-        </h1>
-      </div>
+      <PageTitle id={projectId} isEditing={isEditing} />
+
       <div className="flex w-full flex-col">
-        <div className="flex justify-center">
-          <div className="flex-col">
-            {isEditing && (
-              <label
-                htmlFor="imageUpload"
-                className="mb-1 flex w-80 cursor-pointer justify-end"
-                // onClick={ }
-              >
-                <BsPlusCircle className="mt-1 text-redorange dark:text-blue" />
-              </label>
-            )}
-            <div className="flex-center align-center flex h-80 w-80 rounded-xl bg-coldbeige">
-              <CharacterImage imageUrl={characterData.imageUrl} />
-            </div>
-            {isEditing && (
-              <div
-                // onClick={onAIGenerateClick}
-                className="my-3 flex w-80 cursor-pointer items-center justify-between rounded-full border border-lightgray p-3 px-4 dark:border-lightdarkgray"
-              >
-                <div className="flex items-center space-x-2">
-                  <div className="text-xl font-medium text-redorange dark:text-blue">
-                    <MdLightbulbOutline />
-                  </div>
-                  <span className="text-[10px] text-darkgray dark:text-coldbeige">
-                    AI를 활용하여 이미지를 생성할 수 있어요!
-                  </span>
-                </div>
-                <span className="mx-2 rounded-full bg-orange bg-opacity-20 px-2 text-sm text-redorange dark:bg-coldbeige dark:text-blue">
-                  Click
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
+        <CharacterImageSection
+          characterData={characterData}
+          isEditing={isEditing}
+          onImageUpload={handleImageUpload}
+        />
 
         <div className="w-full flex-1">
           <CharacterInputForm
@@ -101,22 +114,15 @@ const CharacterPage: React.FC = () => {
             onInputChange={handleInputChange}
             isEditable={isEditing}
           />
-          <div className="mt-4 flex justify-end gap-2">
-            {isEditing ? (
-              <>
-                <div className="w-[12rem]">
-                  <SubButton value="취소" onClick={handleCancel} />
-                </div>
-                <div className="w-[12rem]">
-                  <MainButton value="저장" onClick={handleSave} />
-                </div>
-              </>
-            ) : (
-              <div className="w-[12rem]">
-                <MainButton value="수정" onClick={handleEdit} />
-              </div>
-            )}
-          </div>
+
+          <CharacterActionButtons
+            isEditing={isEditing}
+            hasId={true}
+            onSave={handleSave}
+            onEdit={handleEdit}
+            onCancel={handleCancel}
+            onDelete={handleDelete}
+          />
         </div>
       </div>
     </div>

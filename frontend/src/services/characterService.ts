@@ -1,32 +1,16 @@
 import axiosInstance from '@utils/httpCommons'
 
-import { Character } from '@types'
-
-interface CharacterCoord {
-  x: number
-  y: number
-}
-
-interface CharacterGraph {
-  nodes: Character[]
-  edges: CharacterRelationship[]
-}
-
-interface CharacterRelationship {
-  sourceId: number
-  targetId: number
-  label: string
-  connectionType: 'DIRECTIONAL' | 'BIDIRECTIONAL'
-  sourceHandleStr: string
-  targetHandleStr: string
-}
+import {
+  Character,
+  CharacterCoord,
+  CharacterGraph,
+  CharacterRelationship,
+} from '@types'
 
 // GET /api/casting/{castingId}
 export const getCharacter = async (castingId: string): Promise<Character> => {
   try {
-    const response = await axiosInstance.get<Character>(
-      `/api/casting/${castingId}`,
-    )
+    const response = await axiosInstance.get<Character>(`/casting/${castingId}`)
     return response.data
   } catch (error) {
     console.error('Failed to get character:', error)
@@ -35,13 +19,11 @@ export const getCharacter = async (castingId: string): Promise<Character> => {
 }
 
 // PUT /api/casting/{castingId}
-export const putCharacter = async (
-  castingId: string,
-  data: Partial<Character>,
-): Promise<Character> => {
+export const putCharacter = async (data: Character): Promise<Character> => {
   try {
+    console.log(data)
     const response = await axiosInstance.put<Character>(
-      `/api/casting/${castingId}`,
+      `/casting/${data.id}`,
       data,
     )
     return response.data
@@ -54,7 +36,7 @@ export const putCharacter = async (
 // DELETE /api/casting/{castingId}
 export const deleteCharacter = async (castingId: string): Promise<void> => {
   try {
-    await axiosInstance.delete(`/api/casting/${castingId}`)
+    await axiosInstance.delete(`/casting/${castingId}`)
   } catch (error) {
     console.error('Failed to delete character:', error)
     throw error
@@ -68,7 +50,7 @@ export const putCharacterCoord = async (
 ): Promise<Character> => {
   try {
     const response = await axiosInstance.put<Character>(
-      `/api/casting/${castingId}/coord`,
+      `/casting/${castingId}/coord`,
       data,
     )
     return response.data
@@ -85,7 +67,7 @@ export const putCharacterRelationship = async (
 ): Promise<CharacterRelationship> => {
   try {
     const response = await axiosInstance.put<CharacterRelationship>(
-      `/api/casting/relationship/${uuid}`,
+      `/casting/relationship/${uuid}`,
       data,
     )
     return response.data
@@ -100,7 +82,7 @@ export const deleteCharacterRelationship = async (
   uuid: string,
 ): Promise<void> => {
   try {
-    await axiosInstance.delete(`/api/casting/relationship/${uuid}`)
+    await axiosInstance.delete(`/casting/relationship/${uuid}`)
   } catch (error) {
     console.error('Failed to delete character relationship:', error)
     throw error
@@ -111,7 +93,7 @@ export const deleteCharacterRelationship = async (
 export const getCharacters = async (folderId: string): Promise<Character[]> => {
   try {
     const response = await axiosInstance.get<Character[]>(
-      `/api/casting?folderId=${folderId}`,
+      `/casting?folderId=${folderId}`,
     )
     return response.data
   } catch (error) {
@@ -120,26 +102,20 @@ export const getCharacters = async (folderId: string): Promise<Character[]> => {
   }
 }
 
-// POST /api/casting
 export const postCharacter = async (
-  data: Partial<Character>,
+  character: Partial<Character>,
 ): Promise<Character> => {
-  try {
-    const response = await axiosInstance.post('/api/casting', data)
-    return response.data
-  } catch (error) {
-    console.error('Failed to create character:', error)
-    throw error
-  }
+  const response = await axiosInstance.post<Character>('/casting', character)
+  return response.data
 }
 
 // POST /api/casting/relationship
 export const postCharacterRelationship = async (
-  data: Omit<CharacterRelationship, 'uuid'>,
+  data: CharacterRelationship,
 ): Promise<CharacterRelationship> => {
   try {
     const response = await axiosInstance.post<CharacterRelationship>(
-      '/api/casting/relationship',
+      '/casting/relationship',
       data,
     )
     return response.data
@@ -154,10 +130,7 @@ export const uploadCharacterImage = async (
   data: Partial<Character>,
 ): Promise<string> => {
   try {
-    const response = await axiosInstance.post<string>(
-      '/api/casting/image',
-      data,
-    )
+    const response = await axiosInstance.post<string>('/casting/image', data)
     return response.data
   } catch (error) {
     console.error('Failed to upload character image:', error)
@@ -167,11 +140,11 @@ export const uploadCharacterImage = async (
 
 // GET /api/casting/graph
 export const getCharacterGraph = async (
-  projectId: string,
+  projectId: number,
 ): Promise<CharacterGraph> => {
   try {
     const response = await axiosInstance.get<CharacterGraph>(
-      `/api/casting/graph?projectId=${projectId}`,
+      `/casting/graph?projectId=${projectId}`,
     )
     return response.data
   } catch (error) {

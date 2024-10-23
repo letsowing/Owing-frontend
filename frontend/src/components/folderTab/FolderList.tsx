@@ -5,6 +5,7 @@ import DraggableListItem from '@components/dnd/DraggableListItem'
 
 import { useDnd } from '@hooks/useDnd'
 
+import { postCharacter } from '@services/characterService'
 import { FileItem, FolderItem } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 import { CiFolderOn } from 'react-icons/ci'
@@ -87,13 +88,18 @@ const FolderList: React.FC<FolderListProps> = ({
   const handleSaveFile = async () => {
     if (newFileName.trim()) {
       try {
-        const data = {
+        const newCharacter = {
           name: newFileName,
-          description: 'This is a file description',
+          age: 0,
+          gender: '',
+          role: '',
+          detail: '',
+          position: { x: Math.random() * 500, y: Math.random() * 500 },
           folderId: folder.id,
+          imageUrl: '',
         }
-        const newFile = await currentService.postFile(data)
-        addFile(folder.id, newFile.id, newFileName)
+        const newFile = await postCharacter(newCharacter)
+        addFile(folder.id, Number(newFile.id), newFileName)
       } catch (error) {
         console.error('파일 추가 실패:', error)
       }
@@ -129,12 +135,12 @@ const FolderList: React.FC<FolderListProps> = ({
 
   const [, drop] = useDrop({
     accept: 'FOLDER',
-    hover(item: { index: number }) {
+    hover(item: { index: number; id: number }) {
       if (item.index !== index) {
         moveFolder(item.index, index)
         item.index = index
 
-        currentService.moveFolder(folder.id, item.index).catch((error: any) => {
+        currentService.patchFolder(item.id, item.index).catch((error: any) => {
           console.error('폴더 이동 실패:', error)
         })
       }
@@ -143,7 +149,7 @@ const FolderList: React.FC<FolderListProps> = ({
 
   const [, drag] = useDrag({
     type: 'FOLDER',
-    item: { index },
+    item: { index, id: folder.id },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),

@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from 'react'
 import Header from '@/components/common/Header'
 import FolderTab from '@/components/folderTab/FolderTab'
 import MenuTab from '@/components/menuTab/MenuTab'
+import { useDnd } from '@/hooks/useDnd'
 import useFolderStore from '@/stores/folderStore'
 import useMenuStore from '@/stores/menuStore'
 import {
@@ -12,7 +13,7 @@ import {
 } from '@services/directoryService'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { Outlet, useLocation } from 'react-router-dom'
+import { Outlet, useLocation, useParams } from 'react-router-dom'
 
 export default function FolderTabLayout() {
   const { activePath } = useMenuStore()
@@ -20,6 +21,8 @@ export default function FolderTabLayout() {
   const [tabWidth, setTabWidth] = useState(256)
   const [isFolderTabOpen, setIsFolderTabOpen] = useState(false)
   const { setSelectedFolderId } = useFolderStore()
+  const { setItems } = useDnd()
+  const { projectId } = useParams()
 
   const location = useLocation()
   const isNotTabPage =
@@ -61,6 +64,31 @@ export default function FolderTabLayout() {
     setIsFolderTabOpen(false)
   }
 
+  useEffect(() => {
+    const fetchFolders = async () => {
+      try {
+        const fetchedFolders = await currentService.getFolders(
+          Number(projectId),
+        )
+        setItems(fetchedFolders)
+        // 첫 번째 폴더를 선택하도록 설정
+        if (fetchedFolders.length > 0) {
+          setSelectedFolderId(fetchedFolders[0].id)
+        }
+      } catch (err) {
+        console.error('폴더 목록 조회 실패:', err)
+      }
+    }
+
+    fetchFolders()
+  }, [
+    currentService,
+    projectId,
+    setItems,
+    setSelectedFolderId,
+    location.pathname,
+  ])
+
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="flex h-screen">
@@ -74,6 +102,7 @@ export default function FolderTabLayout() {
         )}
         <div className="flex h-full w-full flex-row">
           <FolderTab
+            projectId={Number(projectId)}
             isOpen={isFolderTabOpen}
             onClose={handleCloseFolderTab}
             setSelectedFolderId={setSelectedFolderId}

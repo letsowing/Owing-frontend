@@ -5,8 +5,20 @@ import { useCharacterStore } from '@stores/characterStore'
 import { Character } from '@types'
 
 export const useCharacter = () => {
-  const { characters, addCharacter, updateCharacter, deleteCharacter } =
-    useCharacterStore()
+  const {
+    characters,
+    setCharacters,
+    addCharacter,
+    updateCharacter,
+    deleteCharacter,
+  } = useCharacterStore()
+
+  const handleSetCharacters = useCallback(
+    (newCharacters: Character[]) => {
+      setCharacters(newCharacters)
+    },
+    [setCharacters],
+  )
 
   const handleAddCharacter = useCallback(
     (character: Character) => {
@@ -38,6 +50,7 @@ export const useCharacter = () => {
 
   return {
     characters,
+    setCharacters: handleSetCharacters,
     addCharacter: handleAddCharacter,
     updateCharacter: handleUpdateCharacter,
     deleteCharacter: handleDeleteCharacter,

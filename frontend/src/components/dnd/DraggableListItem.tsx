@@ -26,7 +26,7 @@ export default function DraggableListItem({
   currentService,
 }: DraggableListItemProps) {
   const { moveFileItem, updateFileName, deleteFile } = useDnd()
-  const { activePath, goToScenario } = useNavigation()
+  const { activePath, goToScenario, goToCharacter } = useNavigation()
   const ref = useRef<HTMLLIElement>(null)
 
   const [isFileEditing, setIsFileEditing] = useState(false)
@@ -87,6 +87,9 @@ export default function DraggableListItem({
     if (activePath.includes('scenarioManagement')) {
       goToScenario(id)
     }
+    if (activePath.includes('character')) {
+      goToCharacter(id)
+    }
   }
 
   const [{ isDragging }, drag] = useDrag({
@@ -113,7 +116,7 @@ export default function DraggableListItem({
         position: item.index,
         folderId,
       }
-      currentService.moveFile(item.id, data).catch((error: any) => {
+      currentService.patchFile(item.id, data).catch((error: any) => {
         console.error('파일 이동 실패:', error)
       })
     },
