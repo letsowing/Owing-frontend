@@ -3,7 +3,11 @@ import { useState } from 'react'
 import { postStoryConflict } from '@services/scenarioService'
 import { useParams } from 'react-router-dom'
 
-const onConflictCheck = (id: number, targetStory: string, setResult: any) => {
+const onConflictCheck = (
+  id: number,
+  targetStory: string,
+  setResult: React.Dispatch<React.SetStateAction<string>>,
+) => {
   const conflictCheck = async () => {
     try {
       const data = await postStoryConflict(id, targetStory)
@@ -22,8 +26,8 @@ export function AiHelper() {
   const [targetStory, setTargetStory] = useState('')
 
   return (
-    <div className="mx-auto mt-10 max-w-sm rounded-[10px] border border-lightgray p-4 shadow-sm">
-      <div className="mb-2 flex h-[4rem] rounded-[10px] bg-[#F7F7F7] p-2">
+    <div className="mx-auto mt-10 max-w-sm rounded-[10px] border border-white p-4 shadow-sm">
+      <div className="mb-2 flex h-[4rem] rounded-[10px] bg-verylightgray p-2">
         <button className="w-1/2 rounded-[10px] bg-white py-2 text-center font-semibold">
           AI Helper
         </button>
@@ -34,11 +38,11 @@ export function AiHelper() {
 
       <div className="space-y-1 rounded-b-lg">
         <textarea
-          className="h-[10rem] w-full resize-none overflow-y-auto rounded-[10px] border border-lightgray p-3 text-sm text-black focus:outline-none focus:ring-1 focus:ring-lightgray"
+          className="h-[10rem] w-full resize-none overflow-y-auto rounded-[10px] border p-3 text-sm text-black focus:outline-none focus:ring-1 focus:ring-lightgray"
           value={targetStory}
           onChange={(e) => setTargetStory(e.target.value)}
         />
-        <div className="h-[20rem] w-full resize-none overflow-y-auto rounded-[10px] bg-[#F7F7F7] p-3 text-sm text-black">
+        <div className="h-[20rem] w-full resize-none overflow-y-auto rounded-[10px] bg-white p-3 text-sm text-black">
           {result || '설정충돌 체크 응답'}
         </div>
       </div>

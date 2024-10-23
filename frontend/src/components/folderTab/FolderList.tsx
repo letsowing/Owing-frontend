@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import DraggableListItem from '@components/dnd/DraggableListItem'
 
@@ -151,6 +151,15 @@ const FolderList: React.FC<FolderListProps> = ({
 
   drag(drop(ref))
 
+  useEffect(() => {
+    if (isFolderEditing) {
+      if (folderNameRef.current) {
+        folderNameRef.current.textContent = newFolderName
+        moveCursorToEnd()
+      }
+    }
+  }, [isFolderEditing, newFolderName])
+
   return (
     <li className="mx-2 mb-4 list-none">
       <div
@@ -173,12 +182,7 @@ const FolderList: React.FC<FolderListProps> = ({
               }
               onBlur={handleSaveFolderName}
               onKeyDown={handleFolderNameKeyDown}
-              className="w-40 resize-none overflow-hidden bg-transparent px-2 text-base outline-none"
-              style={{
-                whiteSpace: 'pre-wrap',
-                maxWidth: '130px',
-                height: 'auto',
-              }}
+              className="h-auto w-40 max-w-[130px] resize-none overflow-hidden whitespace-pre-wrap bg-transparent px-2 text-base outline-none"
             />
           ) : (
             <p
@@ -208,7 +212,7 @@ const FolderList: React.FC<FolderListProps> = ({
       </div>
 
       {isOpen && (
-        <ul className="mx-5">
+        <ul className="pe-2 ps-4">
           {folder.files?.map((file: FileItem, fileIndex: number) => (
             <DraggableListItem
               key={file.id}

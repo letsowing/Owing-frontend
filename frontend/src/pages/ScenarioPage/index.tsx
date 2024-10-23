@@ -5,7 +5,7 @@ import { BlueButton } from './BlueButton'
 import { customDarkTheme, customLightTheme } from './ScenarioTheme'
 
 import useThemeStore from '@/stores/themeStore'
-import { BlockNoteEditor } from '@blocknote/core'
+import { BlockNoteEditor, PartialBlock } from '@blocknote/core'
 import '@blocknote/core/style.css'
 import { BlockNoteView } from '@blocknote/mantine'
 import {
@@ -23,7 +23,6 @@ import {
   useCreateBlockNote,
 } from '@blocknote/react'
 import {
-  Scenario,
   debouncedSave,
   getScenario,
   putScenario,
@@ -31,8 +30,8 @@ import {
 import { useParams } from 'react-router-dom'
 
 const ScenarioPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>()
-  const [scenario, setScenario] = useState<Scenario | null>(null)
+  const { projectId } = useParams<{ projectId: string }>()
+  const [scenario, setScenario] = useState<PartialBlock[] | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const { isDarkMode } = useThemeStore()
 
@@ -40,14 +39,15 @@ const ScenarioPage: React.FC = () => {
 
   useEffect(() => {
     const loadScenario = async () => {
-      if (id) {
+      if (projectId) {
         try {
           setIsLoading(true)
-          const scenarioData = await getScenario(Number(id))
+          const scenarioData = await getScenario(Number(projectId))
           setScenario(scenarioData)
 
-          if (editor && scenarioData.content) {
-            editor.replaceBlocks(editor.topLevelBlocks, scenarioData.content)
+          if (editor && scenarioData) {
+            editor.replaceBlocks(editor.topLevelBlocks, scenarioData)
+            editor.onEditorContentChange(() => {})
           }
         } catch (error) {
           console.error('시나리오 로드 실패:', error)
@@ -58,25 +58,31 @@ const ScenarioPage: React.FC = () => {
     }
 
     loadScenario()
-  }, [id, editor])
+  }, [projectId, editor])
 
   const handleContentChange = useCallback(
     (editor: BlockNoteEditor) => {
-      if (scenario && id) {
+      if (scenario && projectId) {
         const newContent = editor.topLevelBlocks
         const updatedScenario = { ...scenario, content: newContent }
         setScenario(updatedScenario)
-        debouncedSave(Number(id), newContent)
+        debouncedSave({
+          storyPlotId: Number(projectId),
+          blocks: newContent,
+        })
       }
     },
-    [scenario, id],
+    [scenario, projectId],
   )
 
   const handleSaveClick = async () => {
-    if (id && editor) {
+    if (projectId && editor) {
       const content = editor.topLevelBlocks
       try {
-        await putScenario(Number(id), content)
+        await putScenario({
+          storyPlotId: Number(projectId),
+          blocks: content,
+        })
         console.log('시나리오가 성공적으로 저장되었습니다.')
       } catch (error) {
         console.error('시나리오 저장 실패:', error)

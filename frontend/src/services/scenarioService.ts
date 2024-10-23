@@ -1,26 +1,35 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axiosInstance from '@utils/httpCommons'
 
 import { PartialBlock } from '@blocknote/core'
 
-export interface Scenario {
-  id: number
-  title: string
-  content: PartialBlock[]
-}
-
-export const getScenario = async (id: number): Promise<Scenario> => {
+export const getScenario = async (
+  storyPlotId: number,
+): Promise<PartialBlock[]> => {
   try {
-    const response = await axiosInstance.get(`/storyBlock/${id}`)
-    return response.data
-  } catch (error) {
+    const response = await axiosInstance.get(
+      `/storyPage?storyPlotId=${storyPlotId}`,
+    )
+    console.log(response.data.blocks)
+    return response.data.blocks
+  } catch (error: any) {
+    if (error.response && error.response.status === 404) {
+      console.log('시나리오를 찾을 수 없습니다. 새로 생성합니다.')
+      return await postScenario({
+        storyPlotId: storyPlotId,
+        blocks: [], // 빈 블록으로 새 시나리오 생성
+      })
+    }
     console.error('시나리오 조회 실패:', error)
     throw error
   }
 }
-
-export const postScenario = async (): Promise<Scenario> => {
+export const postScenario = async (data: {
+  storyPlotId: number
+  blocks: PartialBlock[]
+}): Promise<PartialBlock[]> => {
   try {
-    const response = await axiosInstance.post('/storyBlock')
+    const response = await axiosInstance.post('/storyPage', data)
     return response.data
   } catch (error) {
     console.error('새 시나리오 생성 실패:', error)
@@ -28,13 +37,12 @@ export const postScenario = async (): Promise<Scenario> => {
   }
 }
 
-export const putScenario = async (
-  id: number,
-  content: PartialBlock[],
-): Promise<void> => {
+export const putScenario = async (data: {
+  storyPlotId: number
+  blocks: PartialBlock[]
+}): Promise<void> => {
   try {
-    await axiosInstance.put(`/storyBlock/${id}`, { content })
-    console.log('시나리오가 성공적으로 저장되었습니다.')
+    await axiosInstance.put(`/storyPage`, data)
   } catch (error) {
     console.error('시나리오 저장 실패:', error)
     throw error
@@ -43,8 +51,7 @@ export const putScenario = async (
 
 export const deleteScenario = async (id: number): Promise<void> => {
   try {
-    await axiosInstance.delete(`/storyBlock/${id}`)
-    console.log('시나리오가 성공적으로 삭제되었습니다.')
+    await axiosInstance.delete(`/storyPage/${id}`)
   } catch (error) {
     console.error('시나리오 삭제 실패:', error)
     throw error
@@ -70,9 +77,12 @@ function debounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
 }
 
 export const debouncedSave = debounce(
-  async (id: number, content: PartialBlock[]): Promise<void> => {
+  async (data: {
+    storyPlotId: number
+    blocks: PartialBlock[]
+  }): Promise<void> => {
     try {
-      await putScenario(id, content)
+      await putScenario(data)
       console.log('시나리오가 성공적으로 저장되었습니다.')
     } catch (error) {
       console.error(
@@ -87,7 +97,7 @@ export const debouncedSave = debounce(
 export const postStoryConflict = async (
   id: number,
   targetStory: string,
-): Promise<String> => {
+): Promise<string> => {
   try {
     const payload = {
       targetStory,

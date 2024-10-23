@@ -54,7 +54,7 @@ const router = createBrowserRouter([
             element: <CharacterPage />,
           },
           {
-            path: 'scenario/:id',
+            path: 'scenario/:projectId',
             element: <ScenarioPage />,
           },
           {
