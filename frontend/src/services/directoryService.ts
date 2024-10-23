@@ -56,15 +56,11 @@ const createDirectoryService = (folderPath: string, filePath: string) => ({
     }
   },
 
-  moveFolder: async (
-    storyFolderId: number,
-    position: number,
-  ): Promise<void> => {
+  patchFolder: async (folderId: number, position: number): Promise<void> => {
     try {
-      await axiosInstance.patch(`${folderPath}/${storyFolderId}`, {
+      await axiosInstance.patch(`${folderPath}/${folderId}`, {
         position,
       })
-      console.log('폴더가 성공적으로 이동되었습니다.')
     } catch (error) {
       console.error('폴더 이동 실패:', error)
       throw error
@@ -91,7 +87,7 @@ const createDirectoryService = (folderPath: string, filePath: string) => ({
     folderId: number
   }): Promise<FileItem> => {
     try {
-      const response = await axiosInstance.post(`${filePath}`, data)
+      const response = await axiosInstance.post(`/${filePath}`, data)
       return response.data
     } catch (error) {
       console.error('새 파일 생성 실패:', error)
@@ -122,16 +118,15 @@ const createDirectoryService = (folderPath: string, filePath: string) => ({
     }
   },
 
-  moveFile: async (
-    storyPlotId: number,
+  patchFile: async (
+    fileId: number,
     data: {
       position: number
       folderId: number
     },
   ): Promise<void> => {
     try {
-      console.log(data, storyPlotId)
-      await axiosInstance.patch(`${filePath}/${storyPlotId}`, data)
+      await axiosInstance.patch(`${filePath}/${fileId}`, data)
       console.log('파일이 성공적으로 이동되었습니다.')
     } catch (error) {
       console.error('파일 이동 실패:', error)

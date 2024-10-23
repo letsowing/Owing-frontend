@@ -38,7 +38,7 @@ export default function WorldViewDraggableBox({
         position: item.index,
         folderId,
       }
-      currentService.moveFile(item.id, data).catch((error: any) => {
+      currentService.patchFile(item.id, data).catch((error: any) => {
         console.error('파일 이동 실패:', error)
       })
     },

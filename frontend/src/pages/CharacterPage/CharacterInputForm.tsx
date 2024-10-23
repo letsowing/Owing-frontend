@@ -66,12 +66,12 @@ const CharacterInputForm: React.FC<CharacterInputFormProps> = ({
       </div>
       <div className="mt-3">
         <TextAreaField
-          value={characterData.details}
+          value={characterData.detail}
           labelValue="상세 정보"
           isRequired={false}
           maxLength={1000}
           isEditable={isEditable}
-          onChange={(value) => onInputChange('details', value)}
+          onChange={(value) => onInputChange('detail', value)}
         />
       </div>
     </div>

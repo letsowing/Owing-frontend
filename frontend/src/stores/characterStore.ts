@@ -4,6 +4,7 @@ import { persist } from 'zustand/middleware'
 
 interface CharacterState {
   characters: Character[]
+  setCharacters: (characters: Character[]) => void
   addCharacter: (character: Character) => void
   updateCharacter: (character: Character) => void
   deleteCharacter: (id: string) => void
@@ -13,6 +14,7 @@ export const useCharacterStore = create(
   persist<CharacterState>(
     (set) => ({
       characters: [],
+      setCharacters: (characters: Character[]) => set({ characters }),
       addCharacter: (character: Character) => {
         set((state) => ({ characters: [...state.characters, character] }))
       },

@@ -6,7 +6,7 @@ import { EdgeProps } from '@xyflow/react'
 
 export interface CommonEdgeProps extends EdgeProps {
   onLabelChange: (edgeId: string, newLabel: string) => void
-  type: 'Directional' | 'Bidirectional'
+  type: 'DIRECTIONAL' | 'BIDIRECTIONAL'
 }
 
 export const useCommonEdge = (
@@ -18,7 +18,7 @@ export const useCommonEdge = (
   const { isDarkMode } = useThemeStore()
 
   const edgeColor =
-    type === 'Bidirectional' ? '#AEE156' : isDarkMode ? '#A49AFF' : '#FB5D2B'
+    type === 'BIDIRECTIONAL' ? '#AEE156' : isDarkMode ? '#A49AFF' : '#FB5D2B'
 
   const [isEditing, setIsEditing] = useState(false)
   const [labelText, setLabelText] = useState(

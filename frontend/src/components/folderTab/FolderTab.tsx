@@ -5,17 +5,15 @@ import { useWorkStore } from '@stores/workStore'
 
 import { useDnd } from '@hooks/useDnd'
 
-import { generateUUID } from '@utils/uuid'
-
 import FolderList from './FolderList'
 
 import { FolderItem } from '@types'
 import { CiFolderOn } from 'react-icons/ci'
 import { FaPlus } from 'react-icons/fa6'
 import { RiCloseLargeLine } from 'react-icons/ri'
-import { useParams } from 'react-router-dom'
 
 interface FolderTabProps {
+  projectId: number
   isOpen: boolean
   onClose: () => void
   setSelectedFolderId: (folderId: number) => void
@@ -23,6 +21,7 @@ interface FolderTabProps {
 }
 
 const FolderTab: React.FC<FolderTabProps> = ({
+  projectId,
   setSelectedFolderId,
   isOpen,
   onClose,
@@ -32,23 +31,9 @@ const FolderTab: React.FC<FolderTabProps> = ({
   const [activeFolderId, setActiveFolderId] = useState<number | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [newFolderName, setNewFolderName] = useState('')
-  const { projectId } = useParams()
   const currentWork = useWorkStore((state) => state.currentWork)
 
   const editableRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const fetchFolders = async () => {
-      try {
-        const folders = await currentService.getFolders(projectId)
-        setItems(folders)
-      } catch (err) {
-        console.error('폴더 목록 조회 실패:', err)
-      }
-    }
-
-    fetchFolders()
-  }, [setItems, currentService, projectId])
 
   const handleCreateFolder = () => {
     setIsEditing(true)
@@ -118,7 +103,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
       >
         {items.map((folder: FolderItem, index: number) => (
           <FolderList
-            key={`folder-${generateUUID()}`}
+            key={folder.id}
             folder={folder}
             index={index}
             onSelectFolder={handleSelectFolder}

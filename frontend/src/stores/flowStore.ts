@@ -1,12 +1,9 @@
-import { generateUUID } from '@utils/uuid'
-
-import { CustomNode, CustomNodeData } from '@types'
+import { CustomEdge, CustomNode, CustomNodeData } from '@types'
 import {
   Connection,
   Edge,
   EdgeChange,
   NodeChange,
-  OnConnect,
   OnEdgesChange,
   OnNodesChange,
   applyEdgeChanges,
@@ -24,7 +21,9 @@ interface FlowState {
 interface FlowActions {
   onNodesChange: OnNodesChange
   onEdgesChange: OnEdgesChange
-  onConnect: OnConnect
+  onConnect: (connection: Connection, id: string) => void
+  setNodes: (nodes: CustomNode[]) => void
+  setEdges: (edges: CustomEdge[]) => void
   addNode: (node: CustomNode) => void
   removeNode: (nodeId: string) => void
   updateNode: (nodeId: string, data: Partial<CustomNodeData>) => void
@@ -36,18 +35,20 @@ interface FlowActions {
 
 interface FlowStore extends FlowState, FlowActions {}
 
-const getInitialState = (): FlowState => {
-  const storedState = localStorage.getItem('flow-storage')
-  if (storedState) {
-    return JSON.parse(storedState)
-  }
-  return { nodes: [], edges: [], isBidirectionalEdge: false }
-}
-
 export const useFlowStore = create<FlowStore>()(
   persist(
     (set, get) => ({
-      ...getInitialState(),
+      nodes: [],
+      edges: [],
+      isBidirectionalEdge: false,
+
+      setNodes: (nodes: CustomNode[]) => {
+        set({ nodes })
+      },
+
+      setEdges: (edges: CustomEdge[]) => {
+        set({ edges })
+      },
 
       onNodesChange: (changes: NodeChange[]) => {
         set({
@@ -61,13 +62,11 @@ export const useFlowStore = create<FlowStore>()(
         })
       },
 
-      onConnect: (connection: Connection) => {
+      onConnect: (connection: Connection, id: string) => {
         set((state) => {
           const { edges, isBidirectionalEdge } = state
 
-          const edgeType = isBidirectionalEdge ? 'Bidirectional' : 'Directional'
-
-          const newEdgeId = generateUUID()
+          const edgeType = isBidirectionalEdge ? 'BIDIRECTIONAL' : 'DIRECTIONAL'
 
           let updatedEdges = [...edges]
 
@@ -89,7 +88,7 @@ export const useFlowStore = create<FlowStore>()(
             updatedEdges = updatedEdges.filter(
               (edge) =>
                 !(
-                  edge.type === 'Bidirectional' &&
+                  edge.type === 'BIDIRECTIONAL' &&
                   ((edge.source === connection.source &&
                     edge.target === connection.target) ||
                     (edge.source === connection.target &&
@@ -101,7 +100,7 @@ export const useFlowStore = create<FlowStore>()(
           // 새 엣지 추가
           updatedEdges.push({
             ...connection,
-            id: newEdgeId,
+            id,
             type: edgeType,
             label: '관계',
           })
