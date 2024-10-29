@@ -2,7 +2,7 @@ import axiosInstance from '@utils/httpCommons'
 
 import { putUploadImageToS3 } from './s3Service'
 
-export const postCreateWork = async (
+export const postCreateProject = async (
   title: string,
   description: string,
   category: string,
@@ -50,7 +50,7 @@ export const postGenerateAiImage = async (
   }
 }
 
-export const getAllWork = async (): Promise<{
+export const getAllProjects = async (): Promise<{
   projects: {
     id: number
     title: string

@@ -1,7 +1,8 @@
 import { useState } from 'react'
 
+import { useProjectStore } from '@stores/projectStore'
+
 import { postStoryConflict } from '@services/scenarioService'
-import { useParams } from 'react-router-dom'
 
 const onConflictCheck = (
   id: number,
@@ -20,7 +21,7 @@ const onConflictCheck = (
 }
 
 export function AiHelper() {
-  const { id } = useParams<{ id: string }>()
+  const { selectedFileId } = useProjectStore()
 
   const [result, setResult] = useState('')
   const [targetStory, setTargetStory] = useState('')
@@ -49,7 +50,9 @@ export function AiHelper() {
       <div className="flex justify-end">
         <button
           className="text-md mt-2 h-10 px-4 text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
-          onClick={() => onConflictCheck(Number(id), targetStory, setResult)}
+          onClick={() =>
+            onConflictCheck(selectedFileId, targetStory, setResult)
+          }
         >
           Create
         </button>

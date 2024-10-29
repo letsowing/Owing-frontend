@@ -3,7 +3,7 @@ import React from 'react'
 import InputField from '@components/common/InputField'
 import TextAreaField from '@components/common/TextAreaField'
 
-import { Character } from '@/types'
+import { Character } from '@types'
 
 interface InputFormProps {
   isEditable: boolean

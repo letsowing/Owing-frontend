@@ -1,22 +1,22 @@
 import ProjectItem from './ProjectItem'
 
-import { ProjectProps, Work } from '@types'
+import { Project, ProjectProps } from '@types'
 
 interface ProjectListProps {
   projects: ProjectProps[]
-  onProjectClick: (work: Work) => void
+  onProjectClick: (project: Project) => void
 }
 
 const ProjectList = ({ projects = [], onProjectClick }: ProjectListProps) => {
   const handleProjectClick = (project: ProjectProps) => {
-    const work: Work = {
+    const projectData: Project = {
       ...project,
       genres: [], // 기본값으로 빈 배열 제공
       category: '', // 선택적 필드이지만 빈 문자열로 초기화
       description: '', // 선택적 필드이지만 빈 문자열로 초기화
       updatedAt: project.createdAt, // updatedAt이 없으면 createdAt으로 초기화
     }
-    onProjectClick(work)
+    onProjectClick(projectData)
   }
   return (
     <div className="max-h-[25rem] overflow-x-auto overflow-y-auto">

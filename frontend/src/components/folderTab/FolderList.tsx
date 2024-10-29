@@ -4,8 +4,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import DraggableListItem from '@components/dnd/DraggableListItem'
 
 import { useDnd } from '@hooks/useDnd'
+import useNavigation from '@hooks/useNavigation'
 
-import { postCharacter } from '@services/characterService'
 import { FileItem, FolderItem } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 import { CiFolderOn } from 'react-icons/ci'
@@ -16,6 +16,7 @@ interface FolderListProps {
   folder: FolderItem
   index: number
   onSelectFolder: (folder: FolderItem) => void
+  onSelectFile: (fileId: number) => void
   isActive: boolean
   currentService: any
 }
@@ -24,6 +25,7 @@ const FolderList: React.FC<FolderListProps> = ({
   folder,
   index,
   onSelectFolder,
+  onSelectFile,
   isActive,
   currentService,
 }) => {
@@ -33,6 +35,7 @@ const FolderList: React.FC<FolderListProps> = ({
   const [newFolderName, setNewFolderName] = useState(folder.name)
   const [isFileEditing, setIsFileEditing] = useState(false)
   const [newFileName, setNewFileName] = useState('')
+  const { activePath } = useNavigation()
 
   const ref = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLDivElement>(null)
@@ -88,24 +91,37 @@ const FolderList: React.FC<FolderListProps> = ({
   const handleSaveFile = async () => {
     if (newFileName.trim()) {
       try {
-        const newCharacter = {
-          name: newFileName,
-          age: 0,
-          gender: '',
-          role: '',
-          detail: '',
-          position: { x: Math.random() * 500, y: Math.random() * 500 },
-          folderId: folder.id,
-          imageUrl: '',
+        let data
+        let newFile
+
+        if (activePath === 'character') {
+          data = {
+            name: newFileName,
+            age: 0,
+            gender: '',
+            role: '',
+            detail: '',
+            position: { x: Math.random() * 500, y: Math.random() * 500 },
+            folderId: folder.id,
+            imageUrl: '',
+          }
+          newFile = await currentService.postCharacter(data)
+        } else {
+          data = {
+            folderId: folder.id,
+            name: newFileName,
+            description: '',
+          }
+          newFile = await currentService.postFile(data)
         }
-        const newFile = await postCharacter(newCharacter)
-        addFile(folder.id, Number(newFile.id), newFileName)
+
+        addFile(folder.id, newFile.id, newFileName)
       } catch (error) {
         console.error('파일 추가 실패:', error)
       }
+      setNewFileName('')
+      setIsFileEditing(false)
     }
-    setNewFileName('')
-    setIsFileEditing(false)
   }
 
   const handleCancelFile = () => {
@@ -121,6 +137,7 @@ const FolderList: React.FC<FolderListProps> = ({
     if (!isFolderEditing) {
       setIsOpen((prev) => !prev)
       onSelectFolder(folder)
+      // onSelectFile(Number(folder.files[0].id || 0))
     }
   }
 
@@ -228,6 +245,7 @@ const FolderList: React.FC<FolderListProps> = ({
               folderId={folder.id}
               file={file}
               currentService={currentService}
+              onSelectFile={onSelectFile}
             />
           ))}
 

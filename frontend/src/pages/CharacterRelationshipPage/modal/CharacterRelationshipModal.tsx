@@ -53,7 +53,7 @@ const CharacterRelationshipModal = ({
     setEditableCharacter((prev) => ({ ...prev, [field]: value }))
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     onSave(editableCharacter)
   }
 

@@ -1,4 +1,4 @@
-import { useWorkStore } from '@stores/workStore'
+import { useProjectStore } from '@stores/projectStore'
 
 import useNavigation from '@hooks/useNavigation'
 
@@ -12,12 +12,12 @@ interface MenuTabListProps {
 
 const MenuTabList: React.FC<MenuTabListProps> = ({ onItemClick }) => {
   const { activePath, setActivePath, goTo } = useNavigation()
-  const currentWork = useWorkStore((state) => state.currentWork)
+  const currentProject = useProjectStore((state) => state.currentProject)
 
   const handleClickMenu = (path: MenuPath) => {
     setActivePath(path)
     if (['character', 'scenarioManagement', 'worldView'].includes(path)) {
-      const projectId: number = currentWork?.id ?? 0
+      const projectId = currentProject.id
       goTo(path, projectId)
     } else {
       goTo(path)

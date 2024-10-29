@@ -10,14 +10,13 @@ export const getScenario = async (
     const response = await axiosInstance.get(
       `/storyPage?storyPlotId=${storyPlotId}`,
     )
-    console.log(response.data.blocks)
     return response.data.blocks
   } catch (error: any) {
     if (error.response && error.response.status === 404) {
       console.log('시나리오를 찾을 수 없습니다. 새로 생성합니다.')
       return await postScenario({
         storyPlotId: storyPlotId,
-        blocks: [], // 빈 블록으로 새 시나리오 생성
+        blocks: [],
       })
     }
     console.error('시나리오 조회 실패:', error)

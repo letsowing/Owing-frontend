@@ -1,11 +1,14 @@
 import { useEffect, useMemo, useState } from 'react'
 
-import Header from '@/components/common/Header'
-import FolderTab from '@/components/folderTab/FolderTab'
-import MenuTab from '@/components/menuTab/MenuTab'
-import { useDnd } from '@/hooks/useDnd'
-import useFolderStore from '@/stores/folderStore'
-import useMenuStore from '@/stores/menuStore'
+import Header from '@components/common/Header'
+import FolderTab from '@components/folderTab/FolderTab'
+import MenuTab from '@components/menuTab/MenuTab'
+
+import { useMenuStore } from '@stores/menuStore'
+import { useProjectStore } from '@stores/projectStore'
+
+import { useDnd } from '@hooks/useDnd'
+
 import {
   characterDirectoryService,
   scenarioDirectoryService,
@@ -13,16 +16,16 @@ import {
 } from '@services/directoryService'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { Outlet, useLocation, useParams } from 'react-router-dom'
+import { Outlet, useLocation } from 'react-router-dom'
 
 export default function FolderTabLayout() {
   const { activePath } = useMenuStore()
   const [isTabOpen, setIsTabOpen] = useState(false)
   const [tabWidth, setTabWidth] = useState(256)
   const [isFolderTabOpen, setIsFolderTabOpen] = useState(false)
-  const { setSelectedFolderId } = useFolderStore()
+  const { currentProject, setSelectedFolderId, setSelectedFileId } =
+    useProjectStore()
   const { setItems } = useDnd()
-  const { projectId } = useParams()
 
   const location = useLocation()
   const isNotTabPage =
@@ -68,7 +71,7 @@ export default function FolderTabLayout() {
     const fetchFolders = async () => {
       try {
         const fetchedFolders = await currentService.getFolders(
-          Number(projectId),
+          currentProject.id,
         )
         setItems(fetchedFolders)
         // 첫 번째 폴더를 선택하도록 설정
@@ -83,7 +86,7 @@ export default function FolderTabLayout() {
     fetchFolders()
   }, [
     currentService,
-    projectId,
+    currentProject.id,
     setItems,
     setSelectedFolderId,
     location.pathname,
@@ -102,10 +105,11 @@ export default function FolderTabLayout() {
         )}
         <div className="flex h-full w-full flex-row">
           <FolderTab
-            projectId={Number(projectId)}
+            projectId={currentProject.id}
             isOpen={isFolderTabOpen}
             onClose={handleCloseFolderTab}
             setSelectedFolderId={setSelectedFolderId}
+            setSelectedFileId={setSelectedFileId}
             currentService={currentService}
           />
           <main className="h-full w-full overflow-y-auto dark:bg-darkblack">

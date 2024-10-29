@@ -7,24 +7,15 @@ interface MenuState {
   setActivePath: (path: MenuPath) => void
 }
 
-const useMenuStore = create<MenuState>()(
+export const useMenuStore = create<MenuState>()(
   persist(
-    (set) => {
-      const storedMenu = localStorage.getItem('menu')
-      const initialActivePath: MenuPath = storedMenu
-        ? JSON.parse(storedMenu).state.activePath
-        : 'ScenarioManagementPage'
-
-      return {
-        activePath: initialActivePath,
-        setActivePath: (path) => set({ activePath: path }),
-      }
-    },
+    (set) => ({
+      activePath: 'scenarioManagement',
+      setActivePath: (path: MenuPath) => set({ activePath: path }),
+    }),
     {
       name: 'menu',
       storage: createJSONStorage(() => localStorage),
     },
   ),
 )
-
-export default useMenuStore

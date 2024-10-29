@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react'
 
-import useThemeStore from '@stores/themeStore'
+import { useThemeStore } from '@stores/themeStore'
 
 import { EdgeProps } from '@xyflow/react'
 

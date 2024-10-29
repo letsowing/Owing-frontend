@@ -1,6 +1,6 @@
 import Tag from '@components/common/Tag'
 
-import { Work } from '@types'
+import { Project } from '@types'
 
 interface ProjectTagFieldProps {
   labelValue: string
@@ -9,7 +9,7 @@ interface ProjectTagFieldProps {
     name: string
   }[]
   isEditable: boolean
-  work: Work
+  project: Project
   onTagClick?: (value: string) => void
   type: 'category' | 'genres'
 }
@@ -18,15 +18,15 @@ const ProjectTagField = ({
   labelValue,
   tagList,
   isEditable,
-  work,
+  project,
   onTagClick,
   type,
 }: ProjectTagFieldProps) => {
   const isTagSelected = (tagValue: string) => {
     if (type === 'category') {
-      return work.category === tagValue
+      return project.category === tagValue
     }
-    return work.genres.includes(tagValue)
+    return project.genres.includes(tagValue)
   }
 
   return (

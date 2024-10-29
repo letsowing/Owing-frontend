@@ -1,6 +1,6 @@
 import { Character } from '@types'
 import { create } from 'zustand'
-import { persist } from 'zustand/middleware'
+import { createJSONStorage, persist } from 'zustand/middleware'
 
 interface CharacterState {
   characters: Character[]
@@ -14,16 +14,39 @@ export const useCharacterStore = create(
   persist<CharacterState>(
     (set) => ({
       characters: [],
-      setCharacters: (characters: Character[]) => set({ characters }),
+
+      setCharacters: (characters: Character[]) =>
+        set({
+          characters: characters.map((char) => ({
+            ...char,
+            position: { ...char.position },
+          })),
+        }),
+
       addCharacter: (character: Character) => {
-        set((state) => ({ characters: [...state.characters, character] }))
+        set((state) => ({
+          characters: [
+            ...state.characters,
+            {
+              ...character,
+              position: { ...character.position },
+            },
+          ],
+        }))
       },
+
       updateCharacter: (character: Character) =>
         set((state) => ({
           characters: state.characters.map((char) =>
-            char.id === character.id ? { ...character } : char,
+            char.id === character.id
+              ? {
+                  ...character,
+                  position: { ...character.position },
+                }
+              : char,
           ),
         })),
+
       deleteCharacter: (id) =>
         set((state) => ({
           characters: state.characters.filter((char) => char.id !== id),
@@ -31,7 +54,7 @@ export const useCharacterStore = create(
     }),
     {
       name: 'character-storage',
-      getStorage: () => localStorage,
+      storage: createJSONStorage(() => localStorage),
     },
   ),
 )

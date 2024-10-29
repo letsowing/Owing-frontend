@@ -2,7 +2,7 @@ import React from 'react'
 
 import DarkModeToggle from '@components/common/DarkModeToggle'
 
-import useThemeStore from '@stores/themeStore'
+import { useThemeStore } from '@stores/themeStore'
 
 import MenuTabList from './MenuTabList'
 

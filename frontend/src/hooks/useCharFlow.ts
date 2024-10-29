@@ -5,12 +5,7 @@ import { useFlow } from '@hooks/useFlow'
 
 import { generateUUID } from '@utils/uuid'
 
-import {
-  Character,
-  CharacterRelationship,
-  CustomEdge,
-  CustomNode,
-} from '@types'
+import { Character, CharacterRelationship } from '@types'
 import { Connection, Edge } from '@xyflow/react'
 
 export const useCharFlow = () => {
@@ -64,6 +59,7 @@ export const useCharFlow = () => {
     [removeEdge],
   )
 
+  // 초기화 함수들
   const setInitialCharacters = useCallback(
     (initialCharacters: Character[]) => {
       setCharacterStore(initialCharacters)
@@ -76,7 +72,7 @@ export const useCharFlow = () => {
       initialNodes: Partial<Character>[],
       initialRelationships: CharacterRelationship[],
     ) => {
-      const nodes: CustomNode[] = initialNodes.map((node) => ({
+      const nodes = initialNodes.map((node) => ({
         id: node.id?.toString() || generateUUID(),
         position: node.position || { x: 0, y: 0 },
         type: 'customNode',
@@ -86,8 +82,8 @@ export const useCharFlow = () => {
           image: node.imageUrl || '',
         },
       }))
-      onNodesSet(nodes)
-      const edges: CustomEdge[] = initialRelationships.map((rel) => ({
+
+      const edges = initialRelationships.map((rel) => ({
         id: rel.uuid ?? generateUUID(),
         source: rel.sourceId.toString(),
         target: rel.targetId.toString(),
@@ -96,11 +92,14 @@ export const useCharFlow = () => {
         sourceHandle: rel.sourceHandle.toLowerCase(),
         targetHandle: rel.targetHandle.toLowerCase(),
       }))
+
+      onNodesSet(nodes)
       onEdgesSet(edges)
     },
     [onNodesSet, onEdgesSet],
   )
 
+  // 동기화 함수들
   const addCharacter = useCallback(
     (character: Character) => {
       addCharacterToStore(character)
@@ -113,35 +112,32 @@ export const useCharFlow = () => {
         },
         character.position,
       )
-      return character
     },
     [addCharacterToStore, onNodeAdd],
   )
 
   const updateCharacter = useCallback(
     (character: Character) => {
-      updateCharacterInStore(character)
       const node = nodes.find((n) => n.id === character.id)
-      if (node) {
-        onNodeUpdate(node.id, {
-          name: character.name,
-          role: character.role,
-          image: character.imageUrl,
-        })
-      }
+      if (!node) return
+
+      updateCharacterInStore(character)
+      onNodeUpdate(character.id, {
+        name: character.name,
+        role: character.role,
+        image: character.imageUrl,
+      })
     },
     [updateCharacterInStore, onNodeUpdate, nodes],
   )
 
   const deleteCharacter = useCallback(
     (id: string) => {
-      if (getCharacterById(id)) {
-        console.log(id)
-        deleteCharacterFromStore(id)
-      }
-      if (nodes.find((n) => n.id === id)) {
-        onNodeRemove(id)
-      }
+      const exists = getCharacterById(id) || nodes.find((n) => n.id === id)
+      if (!exists) return
+
+      deleteCharacterFromStore(id)
+      onNodeRemove(id)
     },
     [deleteCharacterFromStore, onNodeRemove, nodes, getCharacterById],
   )

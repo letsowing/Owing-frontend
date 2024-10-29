@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import { useProjectStore } from '@stores/projectStore'
+
 import { useCharFlow } from '@hooks/useCharFlow'
 
 import CharacterActionButtons from './CharacterActionButtons'
@@ -14,10 +16,9 @@ import {
   uploadCharacterImage,
 } from '@services/characterService'
 import { Character } from '@types'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const CharacterPage: React.FC = () => {
-  const { projectId } = useParams<{ projectId: string }>()
   const navigate = useNavigate()
   const { updateCharacter, deleteCharacter } = useCharFlow()
 
@@ -32,21 +33,22 @@ const CharacterPage: React.FC = () => {
     imageUrl: '',
   })
   const [isEditing, setIsEditing] = useState(false)
+  const { selectedFileId } = useProjectStore()
 
   useEffect(() => {
     const fetchCharacter = async () => {
       try {
-        const data = await getCharacter(projectId!)
+        const data = await getCharacter(selectedFileId.toString())
         setCharacterData(data)
       } catch (error) {
         console.error('Failed to fetch character:', error)
       }
     }
 
-    if (projectId) {
+    if (selectedFileId) {
       fetchCharacter()
     }
-  }, [projectId])
+  }, [selectedFileId])
 
   const handleInputChange = (field: keyof Character, value: string) => {
     setCharacterData((prev) => ({
@@ -73,15 +75,15 @@ const CharacterPage: React.FC = () => {
   const handleCancel = async () => {
     setIsEditing(false)
     // 수정 취소시 원래 데이터로 복구
-    await getCharacter(projectId!).then(setCharacterData)
+    await getCharacter(selectedFileId.toString()).then(setCharacterData)
   }
 
   const handleDelete = async () => {
     if (!window.confirm('캐릭터를 삭제하시겠습니까?')) return
 
     try {
-      await deleteCharacterService(projectId!)
-      deleteCharacter(projectId!)
+      await deleteCharacterService(selectedFileId.toString())
+      deleteCharacter(selectedFileId.toString())
       navigate('/characters')
     } catch (error) {
       console.error('Failed to delete character:', error)
@@ -99,7 +101,7 @@ const CharacterPage: React.FC = () => {
 
   return (
     <div className="mx-[3%] flex w-[94%] flex-col items-center justify-center gap-2 p-4">
-      <PageTitle id={projectId} isEditing={isEditing} />
+      <PageTitle id={selectedFileId} isEditing={isEditing} />
 
       <div className="flex w-full flex-col">
         <CharacterImageSection

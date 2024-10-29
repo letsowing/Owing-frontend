@@ -6,7 +6,7 @@ interface ProjectProps {
   onProjectClick: () => void
 }
 
-const Project = ({
+const ProjectCarouselItem = ({
   title,
   createdAt,
   imageUrl,
@@ -21,15 +21,20 @@ const Project = ({
         <img className="h-full w-full object-cover" src={imageUrl} />
       </div>
       <div className="flex flex-col items-center">
-        <label className="w-36 cursor-pointer truncate px-2 text-sm font-medium dark:text-gray mt-1">
+        <label className="mt-1 w-36 cursor-pointer truncate px-2 text-sm font-medium dark:text-gray">
           {title}
         </label>
         <label className="mb-1 cursor-pointer text-[11px] font-normal dark:text-gray">
-        {new Date(createdAt).toLocaleDateString()}  {new Date(createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' })}
+          {new Date(createdAt).toLocaleDateString()}{' '}
+          {new Date(createdAt).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          })}
         </label>
       </div>
     </div>
   )
 }
 
-export default Project
+export default ProjectCarouselItem

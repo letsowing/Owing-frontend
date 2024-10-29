@@ -87,7 +87,28 @@ const createDirectoryService = (folderPath: string, filePath: string) => ({
     folderId: number
   }): Promise<FileItem> => {
     try {
-      const response = await axiosInstance.post(`/${filePath}`, data)
+      const response = await axiosInstance.post(`${filePath}`, data)
+      return response.data
+    } catch (error) {
+      console.error('새 파일 생성 실패:', error)
+      throw error
+    }
+  },
+
+  postCharacter: async (data: {
+    name: string
+    age: number
+    gender: string
+    role: string
+    detail: string
+    position: {
+      x: number
+      y: number
+    }
+    folderId: number
+  }): Promise<FileItem> => {
+    try {
+      const response = await axiosInstance.post(`${filePath}`, data)
       return response.data
     } catch (error) {
       console.error('새 파일 생성 실패:', error)

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from 'react'
 
-import { useWorkStore } from '@stores/workStore'
+import { useProjectStore } from '@stores/projectStore'
 
 import { useDnd } from '@hooks/useDnd'
 
@@ -17,12 +17,14 @@ interface FolderTabProps {
   isOpen: boolean
   onClose: () => void
   setSelectedFolderId: (folderId: number) => void
+  setSelectedFileId: (fileId: number) => void
   currentService: any
 }
 
 const FolderTab: React.FC<FolderTabProps> = ({
   projectId,
   setSelectedFolderId,
+  setSelectedFileId,
   isOpen,
   onClose,
   currentService,
@@ -31,7 +33,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
   const [activeFolderId, setActiveFolderId] = useState<number | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [newFolderName, setNewFolderName] = useState('')
-  const currentWork = useWorkStore((state) => state.currentWork)
+  const currentProject = useProjectStore((state) => state.currentProject)
 
   const editableRef = useRef<HTMLDivElement>(null)
 
@@ -79,7 +81,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
       } overflow-hidden`}
     >
       <div className="flex justify-between p-4">
-        <p className="truncate font-bold">{currentWork?.title}</p>
+        <p className="truncate font-bold">{currentProject.title}</p>
         <button
           onClick={onClose}
           className="mt-1 flex w-8 justify-end text-darkgray"
@@ -107,6 +109,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
             folder={folder}
             index={index}
             onSelectFolder={handleSelectFolder}
+            onSelectFile={setSelectedFileId}
             isActive={activeFolderId === folder.id}
             currentService={currentService}
           />

@@ -1,29 +1,58 @@
-import { useDndStore } from '@stores/dndStore'
+import { useCallback } from 'react'
+
+import { useFileStore } from '@stores/fileStore'
+import { useFolderStore } from '@stores/folderStore'
 
 export const useDnd = () => {
-  const items = useDndStore((state) => state.items)
-  const setItems = useDndStore((state) => state.setItems)
-  const moveFolder = useDndStore((state) => state.moveFolder)
-  const moveFileItem = useDndStore((state) => state.moveFileItem)
-  const addFolder = useDndStore((state) => state.addFolder)
-  const addFile = useDndStore((state) => state.addFile)
-  const updateFolderName = useDndStore((state) => state.updateFolderName)
-  const updateFileName = useDndStore((state) => state.updateFileName)
-  const updateFile = useDndStore((state) => state.updateFile)
-  const deleteFolder = useDndStore((state) => state.deleteFolder)
-  const deleteFile = useDndStore((state) => state.deleteFile)
+  // 폴더 관련 상태와 액션들
+  const {
+    items,
+    setItems,
+    moveFolder,
+    addFolder,
+    updateFolderName,
+    deleteFolder,
+  } = useFolderStore(
+    useCallback(
+      (state) => ({
+        items: state.items,
+        setItems: state.setItems,
+        moveFolder: state.moveFolder,
+        addFolder: state.addFolder,
+        updateFolderName: state.updateFolderName,
+        deleteFolder: state.deleteFolder,
+      }),
+      [],
+    ),
+  )
+
+  // 파일 관련 액션들
+  const { moveFileItem, addFile, updateFileName, updateFile, deleteFile } =
+    useFileStore(
+      useCallback(
+        (state) => ({
+          moveFileItem: state.moveFileItem,
+          addFile: state.addFile,
+          updateFileName: state.updateFileName,
+          updateFile: state.updateFile,
+          deleteFile: state.deleteFile,
+        }),
+        [],
+      ),
+    )
 
   return {
     items,
     setItems,
     moveFolder,
-    moveFileItem,
     addFolder,
-    addFile,
     updateFolderName,
+    deleteFolder,
+
+    moveFileItem,
+    addFile,
     updateFileName,
     updateFile,
-    deleteFolder,
     deleteFile,
   }
 }
