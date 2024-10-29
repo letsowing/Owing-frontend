@@ -1,6 +1,6 @@
 import React from 'react'
 
-import DocumentIcon from '@/assets/landing/document.png'
+import DocumentIcon from '@assets/landing/document.png'
 
 interface InfoProps {
   text: string

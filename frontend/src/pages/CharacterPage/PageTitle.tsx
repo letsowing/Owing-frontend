@@ -1,5 +1,5 @@
 interface PageTitleProps {
-  id: string | undefined
+  id: number
   isEditing: boolean
 }
 

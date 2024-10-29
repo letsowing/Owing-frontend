@@ -1,11 +1,11 @@
 interface NewProjectProps {
-  handleAddWork: () => void
+  handleAddProject: () => void
 }
 
-const NewProject = ({ handleAddWork }: NewProjectProps) => {
+const NewProject = ({ handleAddProject }: NewProjectProps) => {
   return (
     <div
-      onClick={handleAddWork}
+      onClick={handleAddProject}
       className="my-1 flex h-[15rem] w-[12rem] cursor-pointer items-center justify-center rounded-3xl border border-dashed dark:border-gray dark:bg-coldbeige"
     >
       <label className="cursor-pointer text-sm font-semibold dark:text-gray">

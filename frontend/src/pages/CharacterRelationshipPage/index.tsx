@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
-import useThemeStore from '@stores/themeStore'
-import { useWorkStore } from '@stores/workStore'
+import { useProjectStore } from '@stores/projectStore'
+import { useThemeStore } from '@stores/themeStore'
 
 import { useCharFlow } from '@hooks/useCharFlow'
 import { useModalManagement } from '@hooks/useModal'
+
+import { generateUUID } from '@utils/uuid'
 
 import AddButton from './AddButton'
 import BidirectionalEdge from './BidirectionalEdge'
@@ -13,7 +15,6 @@ import DirectionalEdge from './DirectionalEdge'
 import SelectEdgeButton from './SelectEdgeButton'
 import CharacterRelationshipModal from './modal/CharacterRelationshipModal'
 
-import { generateUUID } from '@/utils/uuid'
 import {
   deleteCharacter,
   deleteCharacterRelationship,
@@ -69,7 +70,7 @@ const FlowWithProvider: React.FC = () => {
 
   const { isDarkMode } = useThemeStore()
   const { modals, openModal, closeModal } = useModalManagement()
-  const { currentWork } = useWorkStore()
+  const { currentProject } = useProjectStore()
 
   const [isEditable, setIsEditable] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -78,11 +79,7 @@ const FlowWithProvider: React.FC = () => {
     const fetchInitialData = async () => {
       try {
         setIsLoading(true)
-        const projectId = currentWork?.id
-        if (!projectId) {
-          throw new Error('프로젝트 ID가 없습니다.')
-        }
-        const graphData = await getCharacterGraph(projectId)
+        const graphData = await getCharacterGraph(currentProject.id)
         setInitialFlow(graphData.nodes, graphData.edges)
       } catch (error) {
         console.error('초기 그래프 데이터를 가져오는 데 실패했습니다:', error)
@@ -92,7 +89,7 @@ const FlowWithProvider: React.FC = () => {
     }
 
     fetchInitialData()
-  }, [currentWork?.id, setInitialFlow])
+  }, [currentProject.id, setInitialFlow])
 
   const isValidConnection = () => {
     return true // 모든 연결 허용
@@ -141,7 +138,7 @@ const FlowWithProvider: React.FC = () => {
             detail: character.detail,
             position: character.position,
             imageUrl: character.imageUrl,
-            folderId: 24,
+            folderId: 29,
           }
           const newCharacter = await postCharacter(characterData)
           addCharacter(newCharacter)

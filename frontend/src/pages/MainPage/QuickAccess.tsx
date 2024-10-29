@@ -1,15 +1,15 @@
 import ProjectCarousel from './ProjectCarousel'
 
-import { ProjectProps, Work } from '@types'
+import { Project, ProjectProps } from '@types'
 
 interface QuickAccessProps {
-  handleAddWork: () => void
+  handleAddProject: () => void
   projects: ProjectProps[]
-  onProjectClick: (work: Work) => void
+  onProjectClick: (project: Project) => void
 }
 
 const QuickAccess = ({
-  handleAddWork,
+  handleAddProject,
   projects,
   onProjectClick,
 }: QuickAccessProps) => {
@@ -20,7 +20,7 @@ const QuickAccess = ({
       </label>
       <div className="mt-6">
         <ProjectCarousel
-          handleAddWork={handleAddWork}
+          handleAddProject={handleAddProject}
           onProjectClick={onProjectClick}
           projects={projects || []}
         />

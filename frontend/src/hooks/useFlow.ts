@@ -22,7 +22,28 @@ export const useFlow = () => {
     removeEdge,
     setIsBidirectionalEdge,
     updateEdgeLabel,
-  } = useFlowStore()
+  } = useFlowStore(
+    useCallback(
+      (state) => ({
+        nodes: state.nodes as Node<CustomNodeData>[],
+        edges: state.edges,
+        isBidirectionalEdge: state.isBidirectionalEdge,
+        onNodesChange: state.onNodesChange,
+        onEdgesChange: state.onEdgesChange,
+        onConnect: state.onConnect,
+        reconnect: state.reconnect,
+        setNodes: state.setNodes,
+        setEdges: state.setEdges,
+        addNode: state.addNode,
+        removeNode: state.removeNode,
+        updateNode: state.updateNode,
+        removeEdge: state.removeEdge,
+        setIsBidirectionalEdge: state.setIsBidirectionalEdge,
+        updateEdgeLabel: state.updateEdgeLabel,
+      }),
+      [],
+    ),
+  )
 
   const onNodesSet = useCallback(
     (newNodes: Node<CustomNodeData>[]) => {
@@ -40,22 +61,14 @@ export const useFlow = () => {
 
   const onNodeAdd = useCallback(
     (id: string, data: CustomNodeData, position: { x: number; y: number }) => {
-      const newNode: Node<CustomNodeData> = {
+      addNode({
         id,
         data,
         position,
         type: 'customNode',
-      }
-      addNode(newNode)
+      } as CustomNode)
     },
     [addNode],
-  )
-
-  const onNodeRemove = useCallback(
-    (nodeId: string) => {
-      removeNode(nodeId)
-    },
-    [removeNode],
   )
 
   const onNodeUpdate = useCallback(
@@ -65,22 +78,23 @@ export const useFlow = () => {
     [updateNode],
   )
 
+  const onNodeRemove = useCallback(
+    (nodeId: string) => removeNode(nodeId),
+    [removeNode],
+  )
+
   const onEdgeRemove = useCallback(
-    (edgeId: string) => {
-      removeEdge(edgeId)
-    },
+    (edgeId: string) => removeEdge(edgeId),
     [removeEdge],
   )
 
   const onEdgeLabelChange = useCallback(
-    (edgeId: string, newLabel: string) => {
-      updateEdgeLabel(edgeId, newLabel)
-    },
+    (edgeId: string, newLabel: string) => updateEdgeLabel(edgeId, newLabel),
     [updateEdgeLabel],
   )
 
   return {
-    nodes: nodes as Node<CustomNodeData>[],
+    nodes,
     edges,
     isBidirectionalEdge,
     onNodesChange,
@@ -91,10 +105,10 @@ export const useFlow = () => {
     onNodesSet,
     onEdgesSet,
     onNodeAdd,
-    onNodeRemove,
     onNodeUpdate,
-    onEdgeRemove,
     setIsBidirectionalEdge,
+    onNodeRemove,
+    onEdgeRemove,
     onEdgeLabelChange,
   }
 }

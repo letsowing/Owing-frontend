@@ -2,23 +2,23 @@ import { useCallback, useEffect, useState } from 'react'
 
 import ThemeToggleSwitch from '@components/common/DarkModeToggle'
 
-import { useWorkStore } from '@stores/workStore'
+import { useMenuStore } from '@stores/menuStore'
+import { useProjectStore } from '@stores/projectStore'
 
 import { useModalManagement } from '@hooks/useModal'
 import useNavigation from '@hooks/useNavigation'
 
-import AllScenario from './AllScenario'
+import AllProjects from './AllScenario'
 import Dashboard from './Dashboard'
 import Profile from './Profile'
 import QuickAccess from './QuickAccess'
-import WorkModal from './modal/ProjectModal'
+import ProjectModal from './modal/ProjectModal'
 
-import useMenuStore from '@/stores/menuStore'
 import { WORD_COUNT_STATS } from '@datas/wordCountStats'
 import { getMember } from '@services/memberService'
-import { postCreateWork } from '@services/workService'
-import { getAllWork } from '@services/workService'
-import { Member, ModalType, Work } from '@types'
+import { postCreateProject } from '@services/projectService'
+import { getAllProjects } from '@services/projectService'
+import { Member, ModalType, Project, ProjectSummary } from '@types'
 
 const initialMember: Member = {
   id: 0,
@@ -28,21 +28,13 @@ const initialMember: Member = {
   imageUrl: '',
 }
 
-interface Project {
-  id: number
-  title: string
-  createdAt: Date
-  updatedAt: Date
-  imageUrl: string
-}
-
 const Main = () => {
   const { modals, openModal, closeModal } = useModalManagement()
   const { goToProject } = useNavigation()
-  const { setCurrentWork } = useWorkStore()
+  const { setCurrentProject } = useProjectStore()
   const [member, setMember] = useState<Member>(initialMember)
-  const [projects, setProjects] = useState<Project[]>([])
-  const [sortedProjects, setSortedProjects] = useState<Project[]>([])
+  const [projects, setProjects] = useState<ProjectSummary[]>([])
+  const [sortedProjects, setSortedProjects] = useState<ProjectSummary[]>([])
   const setActivePath = useMenuStore((state) => state.setActivePath)
 
   useEffect(() => {
@@ -56,10 +48,10 @@ const Main = () => {
     }
     const fetchProjects = async () => {
       try {
-        const fetchedProjects = await getAllWork()
+        const fetchedProjects = await getAllProjects()
         setProjects(fetchedProjects.projects)
         const sortedProjectsList = fetchedProjects.projects.sort(
-          (a: Project, b: Project) =>
+          (a: ProjectSummary, b: ProjectSummary) =>
             new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         )
         setSortedProjects(sortedProjectsList)
@@ -71,49 +63,49 @@ const Main = () => {
     fetchProjects()
   }, [])
 
-  const handleMoveWork = useCallback(
-    (work: Work) => {
-      setCurrentWork(work)
-      goToProject(work.id)
+  const handleMoveProject = useCallback(
+    (project: Project) => {
+      setCurrentProject(project)
+      goToProject(project.id)
       setActivePath('scenarioManagement')
     },
-    [goToProject, setActivePath, setCurrentWork],
+    [goToProject, setActivePath, setCurrentProject],
   )
 
   const handleCloseModal = useCallback(() => {
     closeModal()
   }, [closeModal])
 
-  const handleSaveWork = useCallback(
-    (work: Work) => {
-      const saveWork = async () => {
+  const handleSaveProject = useCallback(
+    (project: Project) => {
+      const saveProject = async () => {
         try {
-          const savedWork = await postCreateWork(
-            work.title,
-            work.description || '',
-            work.category || '',
-            work.genres || [],
-            work.imageUrl,
+          const savedProject = await postCreateProject(
+            project.title,
+            project.description || '',
+            project.category || '',
+            project.genres || [],
+            project.imageUrl,
           )
-          work.id = savedWork.id
-          handleMoveWork(work)
+          project.id = savedProject.id
+          handleMoveProject(project)
         } catch (error) {
           console.error('프로젝트 생성 실패:', error)
         }
       }
-      saveWork()
+      saveProject()
     },
-    [handleMoveWork],
+    [handleMoveProject],
   )
 
-  const handleAddWork = useCallback(() => {
+  const handleAddProject = useCallback(() => {
     openModal({
-      type: ModalType.WORK,
+      type: ModalType.PROJECT,
       isEditable: true,
-      onSave: handleSaveWork,
+      onSave: handleSaveProject,
       onClose: handleCloseModal,
     })
-  }, [handleCloseModal, handleSaveWork, openModal])
+  }, [openModal, handleSaveProject, handleCloseModal])
 
   return (
     <>
@@ -134,28 +126,28 @@ const Main = () => {
         </div>
         <div className="mt-6 flex-col xl:w-[80%] 2xl:w-[75%]">
           <QuickAccess
-            handleAddWork={handleAddWork}
+            handleAddProject={handleAddProject}
             projects={projects}
-            onProjectClick={handleMoveWork}
+            onProjectClick={handleMoveProject}
           />
           <div className="mb-20 mt-16 w-full dark:bg-darkblack">
-            <AllScenario
+            <AllProjects
               projects={sortedProjects}
-              onProjectClick={handleMoveWork}
+              onProjectClick={handleMoveProject}
             />
           </div>
         </div>
       </div>
       {modals.map((modal, index) => {
-        if (modal.type === 'WORK') {
+        if (modal.type === 'PROJECT') {
           return (
-            <WorkModal
+            <ProjectModal
               key={index}
-              onSave={handleSaveWork}
+              onSave={handleSaveProject}
               isEditable={true}
               onClose={handleCloseModal}
-              type={ModalType.WORK}
-              work={modal.work}
+              type={ModalType.PROJECT}
+              project={modal.project}
             />
           )
         }

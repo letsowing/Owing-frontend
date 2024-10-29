@@ -1,8 +1,9 @@
 import React from 'react'
 
+import { CommonEdgeProps, useCommonEdge } from '@hooks/useCommonEdge'
+
 import { getSpecialPath } from './getSpecialPath'
 
-import { CommonEdgeProps, useCommonEdge } from '@/hooks/useCommonEdge'
 import { EdgeLabelRenderer } from '@xyflow/react'
 
 export default function DirectionalEdge({

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import useThemeStore from '@stores/themeStore'
+import { useThemeStore } from '@stores/themeStore'
 
 import useNavigation from '@hooks/useNavigation'
 

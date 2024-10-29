@@ -11,7 +11,18 @@ export const useCharacter = () => {
     addCharacter,
     updateCharacter,
     deleteCharacter,
-  } = useCharacterStore()
+  } = useCharacterStore(
+    useCallback(
+      (state) => ({
+        characters: state.characters,
+        setCharacters: state.setCharacters,
+        addCharacter: state.addCharacter,
+        updateCharacter: state.updateCharacter,
+        deleteCharacter: state.deleteCharacter,
+      }),
+      [],
+    ),
+  )
 
   const handleSetCharacters = useCallback(
     (newCharacters: Character[]) => {
@@ -42,9 +53,7 @@ export const useCharacter = () => {
   )
 
   const getCharacterById = useCallback(
-    (id: string) => {
-      return characters.find((char) => char.id === id)
-    },
+    (id: string) => characters.find((char) => char.id === id),
     [characters],
   )
 

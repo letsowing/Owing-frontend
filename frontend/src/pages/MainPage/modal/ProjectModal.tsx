@@ -2,19 +2,18 @@ import { useEffect, useState } from 'react'
 
 import ImageForm from '@components/common/ImageForm'
 import InputField from '@components/common/InputField'
+import Loader from '@components/common/Loader'
 import Modal from '@components/common/Modal'
 import TextAreaField from '@components/common/TextAreaField'
 
 import ProjectTagField from './ProjectTagField'
 
-import Loader from '@components/common/Loader'
-
 import { CATEGORY_LIST } from '@constants/categoryList'
 import { GENRE_LIST } from '@constants/genreList'
-import { postGenerateAiImage } from '@services/workService'
-import { ModalType, Work, WorkModalProps } from '@types'
+import { postGenerateAiImage } from '@services/projectService'
+import { ModalType, Project, ProjectModalProps } from '@types'
 
-const initialWork: Work = {
+const initialProject: Project = {
   id: 0,
   title: '',
   genres: [],
@@ -23,29 +22,34 @@ const initialWork: Work = {
   imageUrl: '',
 }
 
-const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
-  const [currentWork, setCurrentWork] = useState<Work>(initialWork)
+const ProjectModal = ({
+  isEditable,
+  project,
+  onSave,
+  onClose,
+}: ProjectModalProps) => {
+  const [currentProject, setCurrentProject] = useState<Project>(initialProject)
   const [isGenerating, setIsGenerating] = useState(false)
 
   useEffect(() => {
-    if (work) {
-      setCurrentWork(work)
+    if (project) {
+      setCurrentProject(project)
     } else {
-      setCurrentWork(initialWork)
+      setCurrentProject(initialProject)
     }
-  }, [work])
+  }, [project])
 
-  const handleInputChange = (field: keyof Work, value: string) => {
-    setCurrentWork((prev) => ({ ...prev, [field]: value }))
+  const handleInputChange = (field: keyof Project, value: string) => {
+    setCurrentProject((prev) => ({ ...prev, [field]: value }))
   }
 
   const handleSave = () => {
-    onSave(currentWork)
+    onSave(currentProject)
     onClose()
   }
 
   const onImageChange = (imageUrl: string) => {
-    setCurrentWork((prev) => ({
+    setCurrentProject((prev) => ({
       ...prev,
       imageUrl: imageUrl,
     }))
@@ -56,10 +60,10 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
       setIsGenerating(true)
       try {
         const data = await postGenerateAiImage(
-          currentWork.title,
-          currentWork.description || '',
-          currentWork.category || '',
-          currentWork.genres || [],
+          currentProject.title,
+          currentProject.description || '',
+          currentProject.category || '',
+          currentProject.genres || [],
         )
         onImageChange(data)
       } catch (error) {
@@ -72,33 +76,33 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
   }
 
   const onCategoryTagClick = (value: string) => {
-    setCurrentWork((prevWork) => ({
-      ...prevWork,
-      category: prevWork.category === value ? '' : value,
+    setCurrentProject((prevProject) => ({
+      ...prevProject,
+      category: prevProject.category === value ? '' : value,
     }))
   }
 
   const onGenreTagClick = (value: string) => {
-    setCurrentWork((prevWork) => {
-      const isTagSelected = prevWork.genres.includes(value)
+    setCurrentProject((prevProject) => {
+      const isTagSelected = prevProject.genres.includes(value)
 
       const updatedGenres = isTagSelected
-        ? prevWork.genres.filter((genre) => genre !== value)
-        : prevWork.genres.length < 5
-          ? [...prevWork.genres, value]
-          : prevWork.genres
+        ? prevProject.genres.filter((genre) => genre !== value)
+        : prevProject.genres.length < 5
+          ? [...prevProject.genres, value]
+          : prevProject.genres
 
       return {
-        ...prevWork,
+        ...prevProject,
         genres: updatedGenres,
       }
     })
-    console.log(currentWork.genres)
+    console.log(currentProject.genres)
   }
 
   return (
     <Modal
-      modalType={ModalType.WORK}
+      modalType={ModalType.PROJECT}
       primaryButtonText="Save"
       secondaryButtonText="Cancel"
       onPrimaryAction={handleSave}
@@ -106,14 +110,14 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
     >
       <div className="mx-20 mt-8 flex flex-col gap-5">
         <div className="flex justify-center">
-        {isGenerating ? (
+          {isGenerating ? (
             <div className="flex h-[22rem] w-[22rem] items-center justify-center">
               <Loader />
             </div>
           ) : (
             <ImageForm
               isEditable={isEditable}
-              image={currentWork.imageUrl}
+              image={currentProject.imageUrl}
               onImageChange={onImageChange}
               onAIGenerateClick={onAiGenerateClick}
             />
@@ -125,14 +129,14 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
           isRequired={isEditable}
           maxLength={50}
           isEditable={isEditable}
-          value={currentWork.title}
+          value={currentProject.title}
           onChange={(value) => handleInputChange('title', value)}
         />
         <ProjectTagField
           labelValue="분류"
           tagList={CATEGORY_LIST}
           isEditable={isEditable}
-          work={currentWork}
+          project={currentProject}
           onTagClick={onCategoryTagClick}
           type="category"
         />
@@ -141,7 +145,7 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
             labelValue="장르"
             tagList={GENRE_LIST}
             isEditable={isEditable}
-            work={currentWork}
+            project={currentProject}
             onTagClick={onGenreTagClick}
             type="genres"
           />
@@ -151,7 +155,7 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
           isRequired={isEditable}
           maxLength={1000}
           isEditable={isEditable}
-          value={currentWork.description || ''}
+          value={currentProject.description || ''}
           onChange={(value) => handleInputChange('description', value)}
         />
       </div>
@@ -159,4 +163,4 @@ const WorkModal = ({ isEditable, work, onSave, onClose }: WorkModalProps) => {
   )
 }
 
-export default WorkModal
+export default ProjectModal

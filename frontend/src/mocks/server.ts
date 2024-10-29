@@ -1,4 +1,4 @@
-import { handlers } from '@/mocks/handlers'
+import { handlers } from '@mocks/handlers'
 import { setupServer } from 'msw/node'
 import { afterAll, afterEach, beforeAll } from 'vitest'
 

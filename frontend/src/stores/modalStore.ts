@@ -15,8 +15,14 @@ export const useModalStore = create<ModalState>((set) => ({
       modals: [...state.modals, modal],
     })),
   closeModal: () =>
-    set((state) => ({
-      modals: state.modals.slice(0, -1),
-    })),
-  closeAllModals: () => set({ modals: [] }),
+    set((state) => {
+      if (state.modals.length === 0) return state
+      return { modals: state.modals.slice(0, -1) }
+    }),
+
+  closeAllModals: () =>
+    set((state) => {
+      if (state.modals.length === 0) return state
+      return { modals: [] }
+    }),
 }))

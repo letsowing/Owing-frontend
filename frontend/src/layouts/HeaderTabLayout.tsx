@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 
-import Header from '@/components/common/Header'
-import MenuTab from '@/components/menuTab/MenuTab'
+import Header from '@components/common/Header'
+import MenuTab from '@components/menuTab/MenuTab'
+
 import { Outlet, useLocation } from 'react-router-dom'
 
 const HeaderTabLayout: React.FC = () => {

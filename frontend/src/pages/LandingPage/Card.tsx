@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ProfileImageIcon from '@/assets/landing/profileImage.png'
+import ProfileImageIcon from '@assets/landing/profileImage.png'
 
 interface CardProps {
   text: string

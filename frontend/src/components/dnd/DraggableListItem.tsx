@@ -15,6 +15,7 @@ interface DraggableListItemProps {
   name: string
   folderId: number
   currentService: any
+  onSelectFile: (fileId: number) => void
 }
 
 export default function DraggableListItem({
@@ -24,6 +25,7 @@ export default function DraggableListItem({
   name,
   folderId,
   currentService,
+  onSelectFile,
 }: DraggableListItemProps) {
   const { moveFileItem, updateFileName, deleteFile } = useDnd()
   const { activePath, goToScenario, goToCharacter } = useNavigation()
@@ -84,6 +86,7 @@ export default function DraggableListItem({
   }
 
   const handleItemClick = () => {
+    onSelectFile(id)
     if (activePath.includes('scenarioManagement')) {
       goToScenario(id)
     }

@@ -1,4 +1,4 @@
-export interface Work {
+export interface Project {
   id: number
   title: string
   category?: string
@@ -7,6 +7,14 @@ export interface Work {
   imageUrl: string
   createdAt?: Date
   updatedAt?: Date
+}
+
+export interface ProjectSummary {
+  id: number
+  title: string
+  createdAt: Date
+  updatedAt: Date
+  imageUrl: string
 }
 
 export interface ProjectProps {

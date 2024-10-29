@@ -6,38 +6,26 @@ interface ThemeState {
   toggleDarkMode: () => void
 }
 
-const useThemeStore = create<ThemeState>()(
+export const useThemeStore = create<ThemeState>()(
   persist(
-    (set) => {
-      const storedTheme = localStorage.getItem('dark-mode')
-      const isDarkMode = storedTheme
-        ? JSON.parse(storedTheme).state.isDarkMode
-        : false
-
-      // 초기 다크 모드 설정
-      if (isDarkMode) {
-        document.documentElement.classList.add('dark')
-      }
-
-      return {
-        isDarkMode,
-        toggleDarkMode: () => {
-          set((state) => {
-            document.documentElement.classList.toggle('dark', !state.isDarkMode)
-            localStorage.setItem(
-              'dark-mode',
-              JSON.stringify({ state: { isDarkMode: !state.isDarkMode } }),
-            )
-            return { isDarkMode: !state.isDarkMode }
-          })
-        },
-      }
-    },
+    (set) => ({
+      isDarkMode: false,
+      toggleDarkMode: () =>
+        set((state) => {
+          const newDarkMode = !state.isDarkMode
+          document.documentElement.classList.toggle('dark', newDarkMode)
+          return { isDarkMode: newDarkMode }
+        }),
+    }),
     {
       name: 'dark-mode',
       storage: createJSONStorage(() => localStorage),
+      onRehydrateStorage: () => (state) => {
+        // 초기 로드 시 다크 모드 클래스 적용
+        if (state?.isDarkMode) {
+          document.documentElement.classList.add('dark')
+        }
+      },
     },
   ),
 )
-
-export default useThemeStore

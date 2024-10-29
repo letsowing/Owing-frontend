@@ -1,18 +1,18 @@
 import ProjectList from './ProjectList'
 
-import { ProjectProps, Work } from '@types'
+import { Project, ProjectProps } from '@types'
 
-interface AllScenarioProps {
+interface AllProjectsProps {
   projects: ProjectProps[]
-  onProjectClick: (work: Work) => void
+  onProjectClick: (project: Project) => void
 }
 
-const AllScenario = ({ projects, onProjectClick }: AllScenarioProps) => {
+const AllProjects = ({ projects, onProjectClick }: AllProjectsProps) => {
   return (
     <div className="flex flex-col">
       <div className="flex justify-between">
         <label className="text-sm font-semibold text-redorange dark:text-blue">
-          All Scenarios
+          All Projects
         </label>
         {/* <select className="text-redorange"></select> */}
       </div>
@@ -23,4 +23,4 @@ const AllScenario = ({ projects, onProjectClick }: AllScenarioProps) => {
   )
 }
 
-export default AllScenario
+export default AllProjects

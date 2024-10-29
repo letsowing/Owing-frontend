@@ -1,9 +1,9 @@
-import { Character, Work } from '@types'
+import { Character, Project } from '@types'
 
 export enum ModalType {
   CHARACTER_RELATIONSHIP = 'CHARACTER_RELATIONSHIP',
   WORLD_SETTING = 'WORLD_SETTING',
-  WORK = 'WORK',
+  PROJECT = 'PROJECT',
   IMAGE = 'IMAGE',
 }
 
@@ -23,17 +23,17 @@ export interface CharacterRelationshipModalProps extends ModalProps<Character> {
   onClose: () => void
 }
 
-export interface WorkModalProps extends ModalProps<Work> {
-  type: ModalType.WORK
+export interface ProjectModalProps extends ModalProps<Project> {
+  type: ModalType.PROJECT
   isEditable: boolean
-  work?: Work | null
-  onSave: ActionFunction<Work>
+  project?: Project | null
+  onSave: ActionFunction<Project>
   onClose: () => void
 }
 
-export interface WorldSettingModalProps extends ModalProps<Work> {
+export interface WorldSettingModalProps extends ModalProps<Project> {
   type: ModalType.WORLD_SETTING
-  onAction: (work: Work) => void
+  onAction: (project: Project) => void
 }
 
 export interface ImageModalProps extends ModalProps<string> {
@@ -44,5 +44,5 @@ export interface ImageModalProps extends ModalProps<string> {
 export type AnyModalProps =
   | CharacterRelationshipModalProps
   | WorldSettingModalProps
-  | WorkModalProps
+  | ProjectModalProps
   | ImageModalProps
