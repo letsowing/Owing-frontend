@@ -1,4 +1,4 @@
-import { Edge, EdgeProps, Node, NodeProps } from '@xyflow/react'
+import { Edge, EdgeProps, Node, NodeProps, Position } from '@xyflow/react'
 
 export interface CustomNodeData {
   name: string
@@ -24,5 +24,18 @@ export type EdgeTypes = {
 
 export interface CustomEdge extends Edge {
   uuid?: string
+  type: keyof EdgeTypes
+}
+
+export interface CommonEdgeProps {
+  id: string
+  sourceX: number
+  sourceY: number
+  targetX: number
+  targetY: number
+  label?: React.ReactNode
+  sourcePosition?: Position
+  targetPosition?: Position
+  onLabelChange: (edgeId: string, newLabel: string) => void
   type: keyof EdgeTypes
 }

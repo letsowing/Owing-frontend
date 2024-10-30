@@ -6,40 +6,42 @@ import useNavigation from '@hooks/useNavigation'
 
 import DarkHeaderOwing from '@assets/common/DarkHeaderOwing.png'
 import HeaderOwing from '@assets/common/HeaderOwing.png'
-import { Link } from 'react-router-dom'
 
 const LeftHeader: React.FC = () => {
   const { isDarkMode } = useThemeStore()
+  const { goToMain } = useNavigation()
 
   return (
-    <div>
-      <Link to="/">
+    <>
+      <button onClick={goToMain}>
         <img
           src={isDarkMode ? DarkHeaderOwing : HeaderOwing}
           alt={isDarkMode ? 'DarkHeaderOwing' : 'HeaderOwing'}
           className="mx-auto ml-2 mt-4 h-auto w-[120px]"
         />
-      </Link>
-    </div>
+      </button>
+    </>
   )
 }
 
 const RightHeader: React.FC = () => {
-  const { goToContactUs } = useNavigation()
+  const { goToLanding, goToContactUs, goToLogin } = useNavigation()
   return (
     <nav className="flex items-center space-x-12">
-      <Link
-        to="/"
+      <button
+        onClick={goToLanding}
         className="bg-gradient-to-b from-redorange to-orange bg-clip-text font-bold text-transparent dark:from-blue dark:to-skyblue"
       >
         How to use
-      </Link>
-      <Link
-        to="/login"
+      </button>
+
+      <button
+        onClick={goToLogin}
         className="bg-gradient-to-b from-redorange to-orange bg-clip-text font-bold text-transparent dark:from-blue dark:to-skyblue"
       >
         Logout
-      </Link>
+      </button>
+
       <button
         onClick={goToContactUs}
         className="rounded-full bg-gradient-to-r from-redorange to-orange px-6 py-2 font-bold text-white dark:from-blue dark:to-skyblue"
