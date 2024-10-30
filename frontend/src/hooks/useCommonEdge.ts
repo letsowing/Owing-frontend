@@ -1,52 +1,58 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { useThemeStore } from '@stores/themeStore'
 
-import { EdgeProps } from '@xyflow/react'
+export type EdgeType = 'DIRECTIONAL' | 'BIDIRECTIONAL'
 
-export interface CommonEdgeProps extends EdgeProps {
+interface UseCommonEdgeParams {
+  id: string
+  label: React.ReactNode
   onLabelChange: (edgeId: string, newLabel: string) => void
-  type: 'DIRECTIONAL' | 'BIDIRECTIONAL'
 }
 
-export const useCommonEdge = (
-  id: string,
-  label: React.ReactNode,
-  onLabelChange: (edgeId: string, newLabel: string) => void,
-  type: string,
-) => {
-  const { isDarkMode } = useThemeStore()
-
-  const edgeColor =
-    type === 'BIDIRECTIONAL' ? '#AEE156' : isDarkMode ? '#A49AFF' : '#FB5D2B'
-
+export const useCommonEdge = ({
+  id,
+  label,
+  onLabelChange,
+}: UseCommonEdgeParams) => {
   const [isEditing, setIsEditing] = useState(false)
-  const [labelText, setLabelText] = useState(
-    typeof label === 'string' ? label : '',
-  )
+  const [labelText, setLabelText] = useState('')
+
+  useEffect(() => {
+    setLabelText(typeof label === 'string' ? label : '')
+  }, [label])
 
   const handleLabelClick = useCallback(() => {
     setIsEditing(true)
   }, [])
 
-  const handleLabelChange = useCallback(
+  const handleLabelInputChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setLabelText(event.target.value)
     },
     [],
   )
 
-  const handleLabelBlur = useCallback(() => {
+  const handleFinishEditing = useCallback(() => {
     setIsEditing(false)
     onLabelChange(id, labelText)
   }, [id, labelText, onLabelChange])
 
   return {
-    edgeColor,
-    isEditing,
     labelText,
+    isEditing,
     handleLabelClick,
-    handleLabelChange,
-    handleLabelBlur,
+    handleLabelInputChange,
+    handleFinishEditing,
   }
+}
+
+export const useEdgeColor = (type: EdgeType): string => {
+  const { isDarkMode } = useThemeStore()
+
+  return type === 'BIDIRECTIONAL'
+    ? '#AEE156'
+    : isDarkMode
+      ? '#A49AFF'
+      : '#FB5D2B'
 }

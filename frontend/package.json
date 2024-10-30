@@ -17,7 +17,9 @@
     "@rollup/plugin-commonjs": "^28.0.0",
     "@rollup/plugin-node-resolve": "^15.3.0",
     "@tanstack/react-query": "^5.55.4",
+    "@tinymce/tinymce-react": "^5.1.1",
     "@types/react-modal": "^3.16.3",
+    "@types/tinymce": "^4.6.9",
     "@xyflow/react": "^12.3.0",
     "apexcharts": "^3.54.0",
     "axios": "^1.7.7",
@@ -40,6 +42,7 @@
     "slick-carousel": "^1.8.1",
     "sort-by": "^1.2.0",
     "tailwind-scrollbar-hide": "^1.1.7",
+    "tinymce": "^7.4.1",
     "uuid": "^10.0.0",
     "zustand": "^4.5.5"
   },

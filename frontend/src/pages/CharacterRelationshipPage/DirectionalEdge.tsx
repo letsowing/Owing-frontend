@@ -1,10 +1,12 @@
 import React from 'react'
 
-import { CommonEdgeProps, useCommonEdge } from '@hooks/useCommonEdge'
+import { useCommonEdge, useEdgeColor } from '@hooks/useCommonEdge'
 
+import { EdgePath } from './EdgeComponents'
+import { EdgeLabel, EdgeMarker } from './EdgeComponents'
 import { getSpecialPath } from './getSpecialPath'
 
-import { EdgeLabelRenderer } from '@xyflow/react'
+import { CommonEdgeProps } from '@types'
 
 export default function DirectionalEdge({
   id,
@@ -17,13 +19,14 @@ export default function DirectionalEdge({
   type,
 }: CommonEdgeProps) {
   const {
-    edgeColor,
     isEditing,
     labelText,
     handleLabelClick,
-    handleLabelChange,
-    handleLabelBlur,
-  } = useCommonEdge(id, label, onLabelChange, type)
+    handleLabelInputChange,
+    handleFinishEditing,
+  } = useCommonEdge({ id, label, onLabelChange })
+
+  const edgeColor = useEdgeColor(type)
 
   const [edgePath, labelX, labelY] = React.useMemo(() => {
     const offset = sourceX < targetX ? 50 : -50
@@ -40,50 +43,24 @@ export default function DirectionalEdge({
 
   return (
     <>
-      <path
+      <EdgePath
         id={id}
-        style={{ stroke: edgeColor }}
-        className="react-flow__edge-path"
-        d={edgePath}
+        edgeColor={edgeColor}
+        pathData={edgePath}
         markerEnd={`url(#${id}-marker)`}
       />
-      <EdgeLabelRenderer>
-        <div
-          className="nodrag nopan pointer-events-auto absolute z-20 -translate-x-1/2 -translate-y-1/2 transform text-xs"
-          style={{
-            transform: `translate(-50%, -50%) translate(${labelX}px,${labelY}px)`,
-          }}
-        >
-          {isEditing ? (
-            <input
-              value={labelText}
-              onChange={handleLabelChange}
-              onBlur={handleLabelBlur}
-              className="rounded border border-2 border-redorange bg-white px-1 py-0.5 text-xs text-darkgray outline-none dark:border-violet"
-              autoFocus
-            />
-          ) : (
-            <div
-              className="cursor-pointer rounded border border-2 border-redorange bg-white px-1 py-0.5 text-xs text-darkgray dark:border-violet"
-              onClick={handleLabelClick}
-            >
-              {label}
-            </div>
-          )}
-        </div>
-      </EdgeLabelRenderer>
-      <marker
-        id={`${id}-marker`}
-        viewBox="0 0 10 10"
-        refX="5"
-        refY="5"
-        markerUnits="strokeWidth"
-        markerWidth="10"
-        markerHeight="10"
-        orient="auto"
-      >
-        <path d="M 0 0 L 10 5 L 0 10 z" fill={edgeColor} />
-      </marker>
+      <EdgeLabel
+        labelX={labelX}
+        labelY={labelY}
+        isEditing={isEditing}
+        label={label}
+        labelText={labelText}
+        handleLabelInputChange={handleLabelInputChange}
+        handleLabelClick={handleLabelClick}
+        handleFinishEditing={handleFinishEditing}
+        borderColor="redorange dark:violet"
+      />
+      <EdgeMarker id={id} color={edgeColor} />
     </>
   )
 }

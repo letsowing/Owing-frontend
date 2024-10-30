@@ -37,6 +37,7 @@ const useNavigation = () => {
 
   const navigationActions = useCallback(
     () => ({
+      goToLanding: () => navigate('/'),
       goToMain: () => navigate('/main'),
       goToLogin: () => navigate('/login'),
       goToRegister: () => navigate('/register'),

@@ -4,6 +4,8 @@ import DarkModeToggle from '@components/common/DarkModeToggle'
 
 import { useThemeStore } from '@stores/themeStore'
 
+import useNavigation from '@hooks/useNavigation'
+
 import MenuTabList from './MenuTabList'
 
 import DarkHeaderOwing from '@assets/common/DarkHeaderOwing.png'
@@ -24,6 +26,8 @@ const MenuTab: React.FC<MenuTabProps> = ({
   onItemClick,
 }) => {
   const { isDarkMode } = useThemeStore()
+  const { goToMain } = useNavigation()
+
   return (
     <nav
       className="flex h-full flex-col bg-white dark:bg-darkblack"
@@ -34,14 +38,15 @@ const MenuTab: React.FC<MenuTabProps> = ({
           <img
             src={isDarkMode ? DarkHeaderOwing : HeaderOwing}
             alt={isDarkMode ? 'DarkHeaderOwing' : 'HeaderOwing'}
-            className="mx-auto ml-2 mt-4 h-auto w-[120px]"
+            className="ml-2 h-auto w-16 cursor-pointer"
+            onClick={goToMain}
           />
         )}
         <button
           onClick={onToggle}
           className="ml-auto text-gray dark:text-coldbeige"
         >
-          {isTabOpen ? <ChevronRight size={24} /> : <ChevronLeft size={24} />}
+          {isTabOpen ? <ChevronLeft size={24} /> : <ChevronRight size={24} />}
         </button>
       </div>
       <div className="flex-grow overflow-x-hidden">
