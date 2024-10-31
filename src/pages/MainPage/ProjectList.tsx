@@ -19,25 +19,25 @@ const ProjectList = ({ projects = [], onProjectClick }: ProjectListProps) => {
     onProjectClick(projectData)
   }
   return (
-    <div className="max-h-[25rem] overflow-x-auto overflow-y-auto">
-      <table className="divide-y-lightgray min-w-full">
-        <thead>
+    <div className="scrollbar-thin scrollbar-thumb-lightredorange scrollbar-track-white dark:scrollbar-thumb-skyblue dark:scrollbar-track-darkblack mt-2 max-h-72 overflow-x-auto overflow-y-auto">
+      <table className="divide-y-lightgray w-full">
+        <thead className="text-lightgray dark:text-skyblue">
           <tr>
             <th
               scope="col"
-              className="w-3/5 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-lightgray dark:text-skyblue"
+              className="w-1/2 py-1 pl-4 pr-3 text-left text-sm font-semibold"
             >
               Name
             </th>
             <th
               scope="col"
-              className="px-3 py-3.5 text-center text-sm font-semibold text-lightgray dark:text-skyblue"
+              className="px-3 text-center text-sm font-semibold text-lightgray dark:text-skyblue"
             >
               Last Modified
             </th>
             <th
               scope="col"
-              className="px-3 py-3.5 text-center text-sm font-semibold text-lightgray dark:text-skyblue"
+              className="text-center text-sm font-semibold text-lightgray dark:text-skyblue"
             >
               Created
             </th>
