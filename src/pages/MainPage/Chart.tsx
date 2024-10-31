@@ -1,5 +1,3 @@
-import { useThemeStore } from '@stores/themeStore'
-
 import ApexCharts from 'react-apexcharts'
 
 interface ChartProps {
@@ -10,12 +8,6 @@ interface ChartProps {
 }
 
 const Chart = ({ dailyStats }: ChartProps) => {
-  const { isDarkMode } = useThemeStore()
-
-  const gradientColors = isDarkMode
-    ? { start: '#C3DCFE', end: '#3082F6' }
-    : { start: '#EF931A', end: '#FB5D2B' }
-
   return (
     <ApexCharts
       type="line"
@@ -24,33 +16,20 @@ const Chart = ({ dailyStats }: ChartProps) => {
       ]}
       options={{
         chart: {
-          height: 500,
+          height: 300,
+          width: 500,
           toolbar: { show: false },
           background: 'transparent',
-          parentHeightOffset: 0,
         },
         stroke: {
           curve: 'smooth',
-          width: 3,
+          width: 4,
         },
         grid: { show: true },
-        yaxis: {
-          show: true,
-          labels: {
-            formatter: (value) => Math.round(value).toString(),
-            minWidth: 20,
-            offsetX: -5,
-          },
-          floating: false,
-          tickAmount: 4,
-        },
+        yaxis: { show: true },
         xaxis: {
-          labels: {
-            show: true,
-            rotate: -45,
-            offsetY: -2,
-          },
-          axisTicks: { show: true },
+          labels: { show: true },
+          axisTicks: { show: false },
           axisBorder: { show: true },
           categories: dailyStats.map((stat) => stat.day.getTime()),
           type: 'datetime',
@@ -61,28 +40,12 @@ const Chart = ({ dailyStats }: ChartProps) => {
         },
         fill: {
           type: 'gradient',
-          gradient: {
-            gradientToColors: [gradientColors.end],
-            stops: [0, 100],
-          },
+          gradient: { gradientToColors: ['#FB5D2B'], stops: [0, 100] },
         },
-        colors: [gradientColors.start],
+        colors: ['#FB5D2B'],
         tooltip: {
           y: { formatter: (value: number) => `${value}` },
         },
-        responsive: [
-          {
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: '100%',
-              },
-              yaxis: {
-                tickAmount: 3,
-              },
-            },
-          },
-        ],
       }}
     />
   )
