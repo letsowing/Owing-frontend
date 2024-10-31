@@ -1,12 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 
+import ThemeToggleSwitch from '@components/common/DarkModeToggle'
+
 import { useMenuStore } from '@stores/menuStore'
 import { useProjectStore } from '@stores/projectStore'
 
 import { useModalManagement } from '@hooks/useModal'
 import useNavigation from '@hooks/useNavigation'
 
-import AllProjects from './AllProjects'
+import AllProjects from './AllScenario'
 import Dashboard from './Dashboard'
 import Profile from './Profile'
 import QuickAccess from './QuickAccess'
@@ -107,10 +109,10 @@ const Main = () => {
 
   return (
     <>
-      <div className="container mx-auto px-4 md:px-8 lg:px-12">
-        <div className="flex flex-col gap-8 lg:flex-row">
-          <div className="mt-6 lg:w-1/4">
-            <Profile member={member} />
+      <div className="mx-[5%] flex w-[90%]">
+        <div className="mt-5 flex-col xl:w-[20%] 2xl:w-[25%]">
+          <Profile member={member} />
+          <div className="my-9">
             <Dashboard
               todayWordCount={WORD_COUNT_STATS.todayWordCount}
               monthTotalWordCount={WORD_COUNT_STATS.monthTotalWordCount}
@@ -118,12 +120,17 @@ const Main = () => {
               dailyStats={WORD_COUNT_STATS.dailyStats}
             />
           </div>
-          <div className="lg:w-3/4">
-            <QuickAccess
-              handleAddProject={handleAddProject}
-              projects={projects}
-              onProjectClick={handleMoveProject}
-            />
+          <div className="flex w-[85%] justify-center">
+            <ThemeToggleSwitch />
+          </div>
+        </div>
+        <div className="mt-6 flex-col xl:w-[80%] 2xl:w-[75%]">
+          <QuickAccess
+            handleAddProject={handleAddProject}
+            projects={projects}
+            onProjectClick={handleMoveProject}
+          />
+          <div className="mb-20 mt-16 w-full dark:bg-darkblack">
             <AllProjects
               projects={sortedProjects}
               onProjectClick={handleMoveProject}

@@ -55,7 +55,6 @@ export default {
   },
   plugins: [
     require('tailwind-scrollbar-hide'),
-    require('tailwind-scrollbar')({ nocompatible: true }),
     plugin(function ({ matchUtilities, theme }) {
       matchUtilities(
         {

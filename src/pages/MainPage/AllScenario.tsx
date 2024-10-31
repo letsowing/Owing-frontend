@@ -9,14 +9,16 @@ interface AllProjectsProps {
 
 const AllProjects = ({ projects, onProjectClick }: AllProjectsProps) => {
   return (
-    <div className="mt-9 flex flex-col">
+    <div className="flex flex-col">
       <div className="flex justify-between">
         <label className="text-sm font-semibold text-redorange dark:text-blue">
           All Projects
         </label>
         {/* <select className="text-redorange"></select> */}
       </div>
-      <ProjectList projects={projects} onProjectClick={onProjectClick} />
+      <div className="mt-3">
+        <ProjectList projects={projects} onProjectClick={onProjectClick} />
+      </div>
     </div>
   )
 }
