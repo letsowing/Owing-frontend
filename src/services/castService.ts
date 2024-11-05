@@ -1,11 +1,17 @@
 import axiosInstance from '@utils/httpCommons'
 
-import { Cast, CastCoord, CastGraph, CastRelationship } from '@types'
+import {
+  Cast,
+  CastCoord,
+  CastGraph,
+  CastPostRequest,
+  CastRelationship,
+} from '@types'
 
-// GET /api/cast/{castingId}
-export const getCast = async (castingId: string): Promise<Cast> => {
+// GET /api/cast/{castId}
+export const getCast = async (castId: string): Promise<Cast> => {
   try {
-    const response = await axiosInstance.get<Cast>(`/cast/${castingId}`)
+    const response = await axiosInstance.get<Cast>(`/cast/${castId}`)
     return response.data
   } catch (error) {
     console.error('Failed to get cast:', error)
@@ -92,9 +98,14 @@ export const getCasts = async (folderId: string): Promise<Cast[]> => {
   }
 }
 
-export const postCast = async (cast: Partial<Cast>): Promise<Cast> => {
-  const response = await axiosInstance.post<Cast>('/cast', cast)
-  return response.data
+export const postCast = async (
+  cast: Partial<CastPostRequest>,
+): Promise<Cast> => {
+  const response = await axiosInstance.post('/cast', cast)
+  return {
+    ...response.data,
+    position: response.data.coordinate,
+  }
 }
 
 // POST /api/cast/relationship

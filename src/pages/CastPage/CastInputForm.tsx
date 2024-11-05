@@ -66,12 +66,12 @@ const CastInputForm: React.FC<CastInputFormProps> = ({
       </div>
       <div className="mt-3">
         <TextAreaField
-          value={castData.detail}
+          value={castData.description}
           labelValue="상세 정보"
           isRequired={false}
           maxLength={1000}
           isEditable={isEditable}
-          onChange={(value) => onInputChange('detail', value)}
+          onChange={(value) => onInputChange('description', value)}
         />
       </div>
     </div>

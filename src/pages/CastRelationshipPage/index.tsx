@@ -131,14 +131,13 @@ const FlowWithProvider: React.FC = () => {
         } else {
           // 새 캐릭터 생성
           const castData = {
+            folderId: 29,
             name: cast.name,
             age: cast.age,
             gender: cast.gender,
             role: cast.role,
-            detail: cast.detail,
-            position: cast.position,
+            description: cast.description,
             imageUrl: cast.imageUrl,
-            folderId: 29,
           }
           const newCast = await postCast(castData)
           addCast(newCast)

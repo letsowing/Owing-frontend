@@ -17,7 +17,7 @@ const CastTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
     age: 0,
     gender: '',
     role: '',
-    detail: '',
+    description: '',
     position: { x: 0, y: 0 },
     imageUrl: '',
   })
@@ -100,7 +100,7 @@ const CastTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
             </div>
             <div className="mt-3">
               <InputField
-                value={cast.detail}
+                value={cast.description}
                 labelValue="상세 정보"
                 isTextArea={true}
               />

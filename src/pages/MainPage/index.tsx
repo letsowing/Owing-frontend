@@ -14,11 +14,7 @@ import ProjectModal from './modal/ProjectModal'
 
 import { WORD_COUNT_STATS } from '@datas/wordCountStats'
 import { getMember } from '@services/memberService'
-import {
-  getAllProjectsAccessedAt,
-  getAllProjectsCreatedAt,
-  postCreateProject,
-} from '@services/projectService'
+import { getAllProjects, postCreateProject } from '@services/projectService'
 import { Member, ModalType, Project, ProjectSummary } from '@types'
 
 const initialMember: Member = {
@@ -49,9 +45,9 @@ const Main = () => {
     }
     const fetchProjects = async () => {
       try {
-        const fetchedProjects = await getAllProjectsCreatedAt('CREATED_AT')
+        const fetchedProjects = await getAllProjects('CREATED_AT')
         setProjects(fetchedProjects)
-        const sortedProjectsList = await getAllProjectsAccessedAt('ACCESSED_AT')
+        const sortedProjectsList = await getAllProjects('ACCESSED_AT')
         setSortedProjects(sortedProjectsList)
       } catch (error) {
         console.error('프로젝트 리스트 조회 실패:', error)

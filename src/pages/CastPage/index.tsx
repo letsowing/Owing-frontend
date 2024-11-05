@@ -29,7 +29,7 @@ const CastPage: React.FC = () => {
     age: 0,
     gender: '',
     role: '',
-    detail: '',
+    description: '',
     position: { x: 0, y: 0 },
     imageUrl: '',
   })

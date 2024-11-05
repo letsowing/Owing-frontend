@@ -6,7 +6,7 @@ export interface Cast {
   age: number
   gender: string
   role: string
-  detail: string
+  description: string
   imageUrl: string
   position: {
     x: number
@@ -29,6 +29,30 @@ export interface CastRelationship {
 }
 export interface CastCoord {
   position: {
+    x: number
+    y: number
+  }
+}
+
+export interface CastPostRequest {
+  folderId: number
+  name: string
+  age: number
+  gender: string
+  role: string
+  description: string
+  imageUrl: string
+}
+
+export interface CastResponse {
+  id: number
+  name: string
+  age: number
+  gender: string
+  role: string
+  description: string
+  imageUrl: string
+  coordinate: {
     x: number
     y: number
   }

@@ -93,7 +93,7 @@ export const getTrashcanElementCast = async (
       age: 28,
       gender: '남성',
       role: '주인공',
-      detail:
+      description:
         '밝고 긍정적인 성격의 소프트웨어 엔지니어. 주변 사람들을 도와주는 것을 좋아하며 문제 해결에 탁월한 능력을 보임.',
       position: { x: 150, y: 200 },
       imageUrl: '',

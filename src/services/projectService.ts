@@ -2,7 +2,7 @@ import axiosInstance from '@utils/httpCommons'
 
 import { putUploadImageToS3 } from './s3Service'
 
-import { ProjectPutResponse, ProjectSummary } from '@types'
+import { ProjectSummary } from '@types'
 
 export const postCreateProject = async (
   title: string,
@@ -48,23 +48,11 @@ export const postGenerateAiImage = async (
   }
 }
 
-export const getAllProjectsCreatedAt = async (
+export const getAllProjects = async (
   sort: string,
 ): Promise<ProjectSummary[]> => {
   try {
-    const response = await axiosInstance.get(`/projects/projectSort=${sort}`)
-    return response.data.content
-  } catch (error) {
-    console.error('프로젝트 리스트 조회 실패:', error)
-    throw error
-  }
-}
-
-export const getAllProjectsAccessedAt = async (
-  sort: string,
-): Promise<ProjectSummary[]> => {
-  try {
-    const response = await axiosInstance.get(`/projects/projectSort=${sort}`)
+    const response = await axiosInstance.get(`/projects?projectSort=${sort}`)
     return response.data.content
   } catch (error) {
     console.error('프로젝트 리스트 조회 실패:', error)
@@ -79,7 +67,7 @@ export const putProject = async (
   category: string,
   genres: string[],
   coverUrl: string,
-): Promise<ProjectPutResponse> => {
+): Promise<void> => {
   try {
     const payload = {
       title,
@@ -88,8 +76,7 @@ export const putProject = async (
       genres,
       coverUrl,
     }
-    const response = await axiosInstance.post(`/projects/${projectId}`, payload)
-    return response.data
+    await axiosInstance.post(`/projects/${projectId}`, payload)
   } catch (error) {
     console.error('프로젝트 생성 실패:', error)
     throw error

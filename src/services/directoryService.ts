@@ -100,7 +100,7 @@ const createDirectoryService = (folderPath: string, filePath: string) => ({
     age: number
     gender: string
     role: string
-    detail: string
+    description: string
     position: {
       x: number
       y: number

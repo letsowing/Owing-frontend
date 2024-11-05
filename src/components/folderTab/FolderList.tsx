@@ -105,7 +105,7 @@ const FolderList: React.FC<FolderListProps> = ({
           age: 0,
           gender: '',
           role: '',
-          detail: '',
+          description: '',
           position: { x: Math.random() * 500, y: Math.random() * 500 },
           folderId: folder.id,
           imageUrl: '',
