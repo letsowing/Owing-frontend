@@ -9,6 +9,7 @@ import CastImageSection from './CastImageSection'
 import CastInputForm from './CastInputForm'
 import PageTitle from './PageTitle'
 
+import EmptyFolder from '@/components/common/EmptyFolder'
 import {
   deleteCast as deleteCastService,
   getCast,
@@ -33,9 +34,10 @@ const CastPage: React.FC = () => {
     imageUrl: '',
   })
   const [isEditing, setIsEditing] = useState(false)
-  const { selectedFileId } = useProjectStore()
+  const { selectedFileId, selectedFolderId } = useProjectStore()
 
   useEffect(() => {
+    if (!selectedFileId) return
     const fetchCast = async () => {
       try {
         const data = await getCast(selectedFileId.toString())
@@ -49,6 +51,10 @@ const CastPage: React.FC = () => {
       fetchCast()
     }
   }, [selectedFileId])
+
+  if (!selectedFolderId || !selectedFileId) {
+    return <EmptyFolder isFolderEmpty={!selectedFolderId} />
+  }
 
   const handleInputChange = (field: keyof Cast, value: string) => {
     setCastData((prev) => ({

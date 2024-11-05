@@ -14,8 +14,8 @@ const DEFAULT_PROJECT: Project = {
 interface ProjectStoreState {
   projects: Project[]
   currentProject: Project
-  selectedFolderId: number
-  selectedFileId: number
+  selectedFolderId: number | null
+  selectedFileId: number | null
 }
 
 interface ProjectStoreActions {
@@ -23,8 +23,8 @@ interface ProjectStoreActions {
   updateProject: (project: Project) => void
   addProject: (project: Project) => void
   deleteProject: (id: number) => void
-  setSelectedFolderId: (id: number) => void
-  setSelectedFileId: (id: number) => void
+  setSelectedFolderId: (id: number | null) => void
+  setSelectedFileId: (id: number | null) => void
 }
 
 type ProjectStore = ProjectStoreState & ProjectStoreActions
@@ -32,7 +32,6 @@ type ProjectStore = ProjectStoreState & ProjectStoreActions
 const createProjectCopy = (project: Project): Project => ({
   ...project,
   genres: [...project.genres],
-  // optional 필드들에 대한 조건부 복사
   createdAt: project.createdAt ? new Date(project.createdAt) : undefined,
   updatedAt: project.updatedAt ? new Date(project.updatedAt) : undefined,
 })
@@ -42,8 +41,8 @@ export const useProjectStore = create(
     (set) => ({
       projects: [],
       currentProject: DEFAULT_PROJECT,
-      selectedFolderId: 0,
-      selectedFileId: 0,
+      selectedFolderId: null,
+      selectedFileId: null,
 
       setCurrentProject: (project) =>
         set({

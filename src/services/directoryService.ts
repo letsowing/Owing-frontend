@@ -158,7 +158,7 @@ const createDirectoryService = (folderPath: string, filePath: string) => ({
 
 export const castDirectoryService = createDirectoryService(
   '/castingFolder',
-  '/casting',
+  '/cast',
 )
 export const universeDirectoryService = createDirectoryService(
   '/universeFolder',

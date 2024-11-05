@@ -16,7 +16,7 @@ interface FolderListProps {
   folder: FolderItem
   index: number
   onSelectFolder: (folder: FolderItem) => void
-  onSelectFile: (fileId: number) => void
+  onSelectFile: (fileId: number | null) => void
   isActive: boolean
   currentService: any
 }
@@ -59,22 +59,23 @@ const FolderList: React.FC<FolderListProps> = ({
   }
 
   const handleSaveFolderName = async () => {
-    if (newFolderName.trim() && newFolderName !== folder.name) {
-      try {
-        const data = {
-          name: newFolderName,
-          description: folder.description,
-        }
-        await currentService.putFolder(folder.id, data)
-        updateFolderName(folder.id, newFolderName)
-      } catch (error) {
-        console.error('폴더 이름 업데이트 실패:', error)
-        setNewFolderName(folder.name)
-      }
-    } else {
-      setNewFolderName(folder.name)
+    const trimmedFolderName = newFolderName.trim()
+    if (!trimmedFolderName || trimmedFolderName === folder.name) {
+      return
     }
-    setIsEditingFolder(false)
+    try {
+      const data = {
+        name: newFolderName,
+        description: folder.description,
+      }
+      await currentService.putFolder(folder.id, data)
+      updateFolderName(folder.id, newFolderName)
+    } catch (error) {
+      console.error('폴더 이름 업데이트 실패:', error)
+      setNewFolderName(folder.name)
+    } finally {
+      setIsEditingFolder(false)
+    }
   }
 
   const handleFolderNameKeyDown = (e: React.KeyboardEvent) => {
@@ -89,39 +90,42 @@ const FolderList: React.FC<FolderListProps> = ({
   }
 
   const handleSaveFile = async () => {
-    if (newFileName.trim()) {
-      try {
-        let data
-        let newFile
-
-        if (activePath === 'cast') {
-          data = {
-            name: newFileName,
-            age: 0,
-            gender: '',
-            role: '',
-            detail: '',
-            position: { x: Math.random() * 500, y: Math.random() * 500 },
-            folderId: folder.id,
-            imageUrl: '',
-          }
-          newFile = await currentService.postCast(data)
-        } else {
-          data = {
-            folderId: folder.id,
-            name: newFileName,
-            description: '',
-          }
-          newFile = await currentService.postFile(data)
-        }
-
-        addFile(folder.id, newFile.id, newFileName)
-      } catch (error) {
-        console.error('파일 추가 실패:', error)
-      }
-      setNewFileName('')
-      setIsFileEditing(false)
+    const trimmedFileName = newFileName.trim()
+    if (!trimmedFileName) {
+      return
     }
+
+    try {
+      let data
+      let newFile
+
+      if (activePath === 'cast') {
+        data = {
+          name: trimmedFileName,
+          age: 0,
+          gender: '',
+          role: '',
+          detail: '',
+          position: { x: Math.random() * 500, y: Math.random() * 500 },
+          folderId: folder.id,
+          imageUrl: '',
+        }
+        newFile = await currentService.postCast(data)
+      } else {
+        data = {
+          folderId: folder.id,
+          name: trimmedFileName,
+          description: '',
+        }
+        newFile = await currentService.postFile(data)
+      }
+
+      addFile(folder.id, newFile.id, trimmedFileName)
+    } catch (error) {
+      console.error('파일 추가 실패:', error)
+    }
+    setNewFileName('')
+    setIsFileEditing(false)
   }
 
   const handleCancelFile = () => {
@@ -137,7 +141,7 @@ const FolderList: React.FC<FolderListProps> = ({
     if (!isFolderEditing) {
       setIsOpen((prev) => !prev)
       onSelectFolder(folder)
-      // onSelectFile(Number(folder.files[0].id || 0))
+      onSelectFile(folder.files?.length > 0 ? folder.files?.[0].id : null)
     }
   }
 
@@ -147,6 +151,14 @@ const FolderList: React.FC<FolderListProps> = ({
       deleteFolder(folder.id)
     } catch (error) {
       console.error('폴더 삭제 실패:', error)
+    }
+  }
+  const handleFileNameInput = (e: React.FormEvent<HTMLDivElement>) => {
+    const content = e.currentTarget.textContent || ''
+    const trimmedContent = content.trim()
+
+    if (trimmedContent.length <= 50) {
+      setNewFileName(trimmedContent)
     }
   }
 
@@ -200,9 +212,7 @@ const FolderList: React.FC<FolderListProps> = ({
               ref={folderNameRef}
               contentEditable={isFolderEditing}
               suppressContentEditableWarning={true}
-              onInput={(e) =>
-                setNewFolderName(e.currentTarget.textContent || '')
-              }
+              onInput={handleFileNameInput}
               onBlur={handleSaveFolderName}
               onKeyDown={handleFolderNameKeyDown}
               className="h-auto w-40 max-w-[130px] resize-none overflow-hidden whitespace-pre-wrap bg-transparent px-2 text-base outline-none"
@@ -245,7 +255,10 @@ const FolderList: React.FC<FolderListProps> = ({
               folderId={folder.id}
               file={file}
               currentService={currentService}
-              onSelectFile={onSelectFile}
+              onSelectFile={(id) => {
+                onSelectFolder(folder)
+                onSelectFile(id)
+              }}
             />
           ))}
 
