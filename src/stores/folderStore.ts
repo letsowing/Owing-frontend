@@ -1,4 +1,4 @@
-import { SCENARIO_LIST } from '@datas/scenarioList'
+import { SCENARIO_LIST } from '@datas/storyList'
 import { FolderItem } from '@types'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'

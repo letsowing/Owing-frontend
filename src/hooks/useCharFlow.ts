@@ -1,22 +1,22 @@
 import { useCallback, useRef } from 'react'
 
-import { useCharacter } from '@hooks/useCharacter'
+import { useCast } from '@hooks/useCast'
 import { useFlow } from '@hooks/useFlow'
 
 import { generateUUID } from '@utils/uuid'
 
-import { Character, CharacterRelationship } from '@types'
+import { Cast, CastRelationship } from '@types'
 import { Connection, Edge } from '@xyflow/react'
 
 export const useCharFlow = () => {
   const {
-    characters,
-    setCharacters: setCharacterStore,
-    addCharacter: addCharacterToStore,
-    updateCharacter: updateCharacterInStore,
-    deleteCharacter: deleteCharacterFromStore,
-    getCharacterById,
-  } = useCharacter()
+    casts,
+    setCasts: setCastStore,
+    addCast: addCastToStore,
+    updateCast: updateCastInStore,
+    deleteCast: deleteCastFromStore,
+    getCastById,
+  } = useCast()
 
   const {
     nodes,
@@ -60,17 +60,17 @@ export const useCharFlow = () => {
   )
 
   // 초기화 함수들
-  const setInitialCharacters = useCallback(
-    (initialCharacters: Character[]) => {
-      setCharacterStore(initialCharacters)
+  const setInitialCasts = useCallback(
+    (initialCasts: Cast[]) => {
+      setCastStore(initialCasts)
     },
-    [setCharacterStore],
+    [setCastStore],
   )
 
   const setInitialFlow = useCallback(
     (
-      initialNodes: Partial<Character>[],
-      initialRelationships: CharacterRelationship[],
+      initialNodes: Partial<Cast>[],
+      initialRelationships: CastRelationship[],
     ) => {
       const nodes = initialNodes.map((node) => ({
         id: node.id?.toString() || generateUUID(),
@@ -100,54 +100,54 @@ export const useCharFlow = () => {
   )
 
   // 동기화 함수들
-  const addCharacter = useCallback(
-    (character: Character) => {
-      addCharacterToStore(character)
+  const addCast = useCallback(
+    (cast: Cast) => {
+      addCastToStore(cast)
       onNodeAdd(
-        character.id,
+        cast.id,
         {
-          name: character.name,
-          role: character.role,
-          image: character.imageUrl,
+          name: cast.name,
+          role: cast.role,
+          image: cast.imageUrl,
         },
-        character.position,
+        cast.position,
       )
     },
-    [addCharacterToStore, onNodeAdd],
+    [addCastToStore, onNodeAdd],
   )
 
-  const updateCharacter = useCallback(
-    (character: Character) => {
-      const node = nodes.find((n) => n.id === character.id)
+  const updateCast = useCallback(
+    (cast: Cast) => {
+      const node = nodes.find((n) => n.id === cast.id)
       if (!node) return
 
-      updateCharacterInStore(character)
-      onNodeUpdate(character.id, {
-        name: character.name,
-        role: character.role,
-        image: character.imageUrl,
+      updateCastInStore(cast)
+      onNodeUpdate(cast.id, {
+        name: cast.name,
+        role: cast.role,
+        image: cast.imageUrl,
       })
     },
-    [updateCharacterInStore, onNodeUpdate, nodes],
+    [updateCastInStore, onNodeUpdate, nodes],
   )
 
-  const deleteCharacter = useCallback(
+  const deleteCast = useCallback(
     (id: string) => {
-      const exists = getCharacterById(id) || nodes.find((n) => n.id === id)
+      const exists = getCastById(id) || nodes.find((n) => n.id === id)
       if (!exists) return
 
-      deleteCharacterFromStore(id)
+      deleteCastFromStore(id)
       onNodeRemove(id)
     },
-    [deleteCharacterFromStore, onNodeRemove, nodes, getCharacterById],
+    [deleteCastFromStore, onNodeRemove, nodes, getCastById],
   )
 
   return {
-    characters,
+    casts,
     nodes,
     edges,
     edgeReconnectSuccessful,
-    setInitialCharacters,
+    setInitialCasts,
     setInitialFlow,
     onNodesChange,
     onEdgesChange,
@@ -158,9 +158,9 @@ export const useCharFlow = () => {
     isBidirectionalEdge,
     setIsBidirectionalEdge,
     onEdgeLabelChange,
-    addCharacter,
-    updateCharacter,
-    deleteCharacter,
-    getCharacterById,
+    addCast,
+    updateCast,
+    deleteCast,
+    getCastById,
   }
 }

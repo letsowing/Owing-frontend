@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useRef, useState } from 'react'
 
-import DraggableListItem from '@components/dnd/DraggableListItem'
-
 import { useDnd } from '@hooks/useDnd'
 import useNavigation from '@hooks/useNavigation'
+
+import FolderListItem from './FolderListItem'
 
 import { FileItem, FolderItem } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
@@ -94,7 +94,7 @@ const FolderList: React.FC<FolderListProps> = ({
         let data
         let newFile
 
-        if (activePath === 'character') {
+        if (activePath === 'cast') {
           data = {
             name: newFileName,
             age: 0,
@@ -105,7 +105,7 @@ const FolderList: React.FC<FolderListProps> = ({
             folderId: folder.id,
             imageUrl: '',
           }
-          newFile = await currentService.postCharacter(data)
+          newFile = await currentService.postCast(data)
         } else {
           data = {
             folderId: folder.id,
@@ -209,7 +209,7 @@ const FolderList: React.FC<FolderListProps> = ({
             />
           ) : (
             <p
-              className={`px-2 text-base ${
+              className={`max-w-36 truncate px-2 text-base ${
                 isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'
               }`}
             >
@@ -237,7 +237,7 @@ const FolderList: React.FC<FolderListProps> = ({
       {isOpen && (
         <ul className="pe-2 ps-4">
           {folder.files?.map((file: FileItem, fileIndex: number) => (
-            <DraggableListItem
+            <FolderListItem
               key={file.id}
               id={file.id}
               index={fileIndex}

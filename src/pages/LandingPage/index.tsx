@@ -1,5 +1,5 @@
 import Card from '@pages/LandingPage/Card'
-import CharacterRelationshipGrid from '@pages/LandingPage/CharacterRelationshipGrid'
+import CastRelationshipGrid from '@pages/LandingPage/CastRelationshipGrid'
 import Footer from '@pages/LandingPage/Footer'
 import Ribbon from '@pages/LandingPage/Ribbon'
 import Title from '@pages/LandingPage/Title'
@@ -13,7 +13,7 @@ import MemoIcon from '@assets/landing/memo.png'
 import TemplateIcon from '@assets/landing/template.png'
 import UniverseIcon from '@assets/landing/universe.png'
 import { CARD_LIST } from '@constants/cardList'
-import { INFO_LIST } from '@constants/characterRelationshipInfoList'
+import { INFO_LIST } from '@constants/castRelationshipInfoList'
 import { motion } from 'framer-motion'
 import { SlArrowDown } from 'react-icons/sl'
 import { Link } from 'react-router-dom'
@@ -232,7 +232,7 @@ const Landing = () => {
             transition={{ ease: 'easeInOut', duration: 0.6 }}
             className="mx-80 mt-32"
           >
-            <CharacterRelationshipGrid infoList={INFO_LIST} />
+            <CastRelationshipGrid infoList={INFO_LIST} />
           </motion.div>
         </div>
 

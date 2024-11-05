@@ -9,10 +9,11 @@ import { useProjectStore } from '@stores/projectStore'
 
 import { useDnd } from '@hooks/useDnd'
 
+import { useMenuTab } from '@/hooks/useMenuTab'
 import {
-  characterDirectoryService,
-  scenarioDirectoryService,
-  worldViewDirectoryService,
+  castDirectoryService,
+  storyDirectoryService,
+  universeDirectoryService,
 } from '@services/directoryService'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -20,8 +21,7 @@ import { Outlet, useLocation } from 'react-router-dom'
 
 export default function FolderTabLayout() {
   const { activePath } = useMenuStore()
-  const [isTabOpen, setIsTabOpen] = useState(false)
-  const [tabWidth, setTabWidth] = useState(256)
+  const { isTabOpen, tabWidth, toggleTab } = useMenuTab()
   const [isFolderTabOpen, setIsFolderTabOpen] = useState(false)
   const { currentProject, setSelectedFolderId, setSelectedFileId } =
     useProjectStore()
@@ -32,32 +32,26 @@ export default function FolderTabLayout() {
     location.pathname === '/' || location.pathname === '/main'
 
   const currentService = useMemo(() => {
-    if (location.pathname.includes('/worldView')) {
-      return worldViewDirectoryService
-    } else if (location.pathname.includes('/character')) {
-      return characterDirectoryService
+    if (location.pathname.includes('/universe')) {
+      return universeDirectoryService
+    } else if (location.pathname.includes('/cast')) {
+      return castDirectoryService
     } else {
-      return scenarioDirectoryService
+      return storyDirectoryService
     }
   }, [location.pathname])
 
   useEffect(() => {
     if (
-      activePath === 'worldView' ||
-      activePath === 'scenarioManagement' ||
-      activePath === 'character'
+      activePath === 'universe' ||
+      activePath === 'storyManagement' ||
+      activePath === 'cast'
     ) {
       setIsFolderTabOpen(true)
     } else {
       setIsFolderTabOpen(false)
     }
-
-    setTabWidth(isTabOpen ? 256 : 41)
   }, [isTabOpen, activePath])
-
-  const toggleTab = () => {
-    setIsTabOpen(!isTabOpen)
-  }
 
   const handleMenuItemClick = () => {
     setIsFolderTabOpen(true)
@@ -77,6 +71,9 @@ export default function FolderTabLayout() {
         // 첫 번째 폴더를 선택하도록 설정
         if (fetchedFolders.length > 0) {
           setSelectedFolderId(fetchedFolders[0].id)
+          if (fetchedFolders[0].files.length > 0) {
+            setSelectedFileId(fetchedFolders[0].files[0].id)
+          }
         }
       } catch (err) {
         console.error('폴더 목록 조회 실패:', err)
@@ -90,6 +87,7 @@ export default function FolderTabLayout() {
     setItems,
     setSelectedFolderId,
     location.pathname,
+    setSelectedFileId,
   ])
 
   return (

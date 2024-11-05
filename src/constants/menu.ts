@@ -10,27 +10,27 @@ export const MENU_LIST = [
   {
     icon: BsFeather,
     text: '스토리 원고',
-    path: 'scenarioManagement',
+    path: 'storyManagement',
   },
   {
     icon: TbCirclesRelation,
     text: '인물관계도',
-    path: 'characterRelationship',
+    path: 'castRelationship',
   },
   {
     icon: GoPerson,
     text: '캐릭터',
-    path: 'character',
+    path: 'cast',
   },
   {
     icon: RiEarthFill,
     text: '세계관',
-    path: 'worldView',
+    path: 'universe',
   },
   {
     icon: HiOutlineTrash,
     text: '휴지통',
-    path: 'trash',
+    path: 'trashCan',
   },
   {
     icon: LuHelpCircle,

@@ -14,8 +14,11 @@ import ProjectModal from './modal/ProjectModal'
 
 import { WORD_COUNT_STATS } from '@datas/wordCountStats'
 import { getMember } from '@services/memberService'
-import { postCreateProject } from '@services/projectService'
-import { getAllProjects } from '@services/projectService'
+import {
+  getAllProjectsAccessedAt,
+  getAllProjectsCreatedAt,
+  postCreateProject,
+} from '@services/projectService'
 import { Member, ModalType, Project, ProjectSummary } from '@types'
 
 const initialMember: Member = {
@@ -46,12 +49,9 @@ const Main = () => {
     }
     const fetchProjects = async () => {
       try {
-        const fetchedProjects = await getAllProjects()
-        setProjects(fetchedProjects.projects)
-        const sortedProjectsList = fetchedProjects.projects.sort(
-          (a: ProjectSummary, b: ProjectSummary) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-        )
+        const fetchedProjects = await getAllProjectsCreatedAt('CREATED_AT')
+        setProjects(fetchedProjects)
+        const sortedProjectsList = await getAllProjectsAccessedAt('ACCESSED_AT')
         setSortedProjects(sortedProjectsList)
       } catch (error) {
         console.error('프로젝트 리스트 조회 실패:', error)
@@ -65,7 +65,7 @@ const Main = () => {
     (project: Project) => {
       setCurrentProject(project)
       goToProject(project.id)
-      setActivePath('scenarioManagement')
+      setActivePath('storyManagement')
     },
     [goToProject, setActivePath, setCurrentProject],
   )
@@ -83,7 +83,7 @@ const Main = () => {
             project.description || '',
             project.category || '',
             project.genres || [],
-            project.imageUrl,
+            project.coverUrl,
           )
           project.id = savedProject.id
           handleMoveProject(project)

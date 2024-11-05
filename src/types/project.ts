@@ -4,23 +4,34 @@ export interface Project {
   category?: string
   genres: string[]
   description?: string
-  imageUrl: string
+  coverUrl: string
   createdAt?: Date
   updatedAt?: Date
+  accessedAt?: Date
 }
 
 export interface ProjectSummary {
   id: number
   title: string
+  coverUrl: string
   createdAt: Date
   updatedAt: Date
-  imageUrl: string
+  accessedAt?: Date
 }
 
 export interface ProjectProps {
   id: number
   title: string
+  coverUrl: string
   createdAt: Date
   updatedAt?: Date
-  imageUrl: string
+}
+
+export interface ProjectPutResponse {
+  id: number
+  title: string
+  description: string
+  category: string
+  genres: string[]
+  coverUrl: string
 }

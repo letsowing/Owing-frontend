@@ -19,7 +19,7 @@ const initialProject: Project = {
   genres: [],
   category: '',
   description: '',
-  imageUrl: '',
+  coverUrl: '',
 }
 
 const ProjectModal = ({
@@ -117,7 +117,7 @@ const ProjectModal = ({
           ) : (
             <ImageForm
               isEditable={isEditable}
-              image={currentProject.imageUrl}
+              image={currentProject.coverUrl}
               onImageChange={onImageChange}
               onAIGenerateClick={onAiGenerateClick}
             />
