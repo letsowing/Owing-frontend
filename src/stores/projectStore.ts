@@ -6,7 +6,7 @@ const DEFAULT_PROJECT: Project = {
   id: 0,
   title: '',
   genres: [],
-  imageUrl: '',
+  coverUrl: '',
   category: '',
   description: '',
 }

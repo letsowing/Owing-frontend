@@ -7,4 +7,5 @@ export interface DraggableBoxProps {
   folderId: number
   imageUrl?: string
   currentService: any
+  onSelectFile?: (id: number) => void
 }

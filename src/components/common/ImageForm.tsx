@@ -52,7 +52,7 @@ const ImageForm: React.FC<ImageFormProps> = ({
               ? image
               : `data:image/jpeg;base64,${image}`
           }
-          alt="Character"
+          alt="Cast"
           className="w-full rounded-xl object-cover"
         />
       </div>

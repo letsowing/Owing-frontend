@@ -11,14 +11,14 @@ interface MenuTabListProps {
 }
 
 const MenuTabList: React.FC<MenuTabListProps> = ({ onItemClick }) => {
-  const { activePath, setActivePath, goTo } = useNavigation()
+  const { activePath, setActivePath, goTo, goToStoryManagement } =
+    useNavigation()
   const currentProject = useProjectStore((state) => state.currentProject)
 
   const handleClickMenu = (path: MenuPath) => {
     setActivePath(path)
-    if (['character', 'scenarioManagement', 'worldView'].includes(path)) {
-      const projectId = currentProject.id
-      goTo(path, projectId)
+    if (path === 'storyManagement') {
+      goToStoryManagement(currentProject.id)
     } else {
       goTo(path)
     }

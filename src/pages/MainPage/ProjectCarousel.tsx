@@ -49,7 +49,7 @@ const ProjectCarousel = ({
               id={project.id}
               title={project.title}
               createdAt={project.createdAt}
-              imageUrl={project.imageUrl}
+              imageUrl={project.coverUrl}
               onProjectClick={() => handleProjectClick(project)}
             />
           ))}

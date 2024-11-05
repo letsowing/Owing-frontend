@@ -72,6 +72,9 @@ const FolderTab: React.FC<FolderTabProps> = ({
   const handleSelectFolder = (folder: FolderItem) => {
     setSelectedFolderId(folder.id)
     setActiveFolderId(folder.id)
+    if (folder.files.length > 0) {
+      setSelectedFileId(folder.files[0].id)
+    }
   }
 
   return (
@@ -92,17 +95,13 @@ const FolderTab: React.FC<FolderTabProps> = ({
 
       <button
         onClick={handleCreateFolder}
-        className="mx-4 mb-4 flex h-10 w-52 items-center justify-center rounded-md border border-solid bg-white text-sm dark:bg-darkgray"
-        style={{ borderColor: '#e8e8e8' }}
+        className="border-whitegray mx-4 mb-4 flex h-10 w-52 items-center justify-center rounded-md border border-solid bg-white text-sm dark:bg-darkgray"
       >
         <FaPlus className="dark:text-white" size={12} />
         <p className="px-1 dark:text-white">Create Folder</p>
       </button>
 
-      <ul
-        className="m-0 p-0"
-        style={{ maxHeight: '780px', overflow: 'overlay' }}
-      >
+      <ul className="max-h-[780px] overflow-auto">
         {items.map((folder: FolderItem, index: number) => (
           <FolderList
             key={folder.id}

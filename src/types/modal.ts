@@ -1,4 +1,4 @@
-import { Character, Project } from '@types'
+import { Cast, Project } from '@types'
 
 export enum ModalType {
   CHARACTER_RELATIONSHIP = 'CHARACTER_RELATIONSHIP',
@@ -14,11 +14,11 @@ export interface ModalProps<T> {
   onAction?: (t: T) => void
 }
 
-export interface CharacterRelationshipModalProps extends ModalProps<Character> {
+export interface CastRelationshipModalProps extends ModalProps<Cast> {
   type: ModalType.CHARACTER_RELATIONSHIP
   isEditable: boolean
-  character: Character | null
-  onSave: ActionFunction<Character>
+  cast: Cast | null
+  onSave: ActionFunction<Cast>
   onEdit: () => void
   onClose: () => void
 }
@@ -42,7 +42,7 @@ export interface ImageModalProps extends ModalProps<string> {
 }
 
 export type AnyModalProps =
-  | CharacterRelationshipModalProps
+  | CastRelationshipModalProps
   | WorldSettingModalProps
   | ProjectModalProps
   | ImageModalProps

@@ -1,26 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
 import Header from '@components/common/Header'
 import MenuTab from '@components/menuTab/MenuTab'
 
+import { useMenuTab } from '@/hooks/useMenuTab'
 import { Outlet, useLocation } from 'react-router-dom'
 
 const HeaderTabLayout: React.FC = () => {
-  const [isTabOpen, setIsTabOpen] = useState(false)
-  const [tabWidth, setTabWidth] = useState(256) // 기본 탭 너비
+  const { isTabOpen, tabWidth, toggleTab } = useMenuTab()
+
   const location = useLocation()
   const isNotTabPage =
     location.pathname === '/' ||
     location.pathname === '/main' ||
     location.pathname === '/contactUs'
-
-  useEffect(() => {
-    setTabWidth(isTabOpen ? 256 : 41)
-  }, [isTabOpen])
-
-  const toggleTab = () => {
-    setIsTabOpen(!isTabOpen)
-  }
 
   return (
     <div className="flex h-screen">

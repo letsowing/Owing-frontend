@@ -95,7 +95,7 @@ const createDirectoryService = (folderPath: string, filePath: string) => ({
     }
   },
 
-  postCharacter: async (data: {
+  postCast: async (data: {
     name: string
     age: number
     gender: string
@@ -156,15 +156,15 @@ const createDirectoryService = (folderPath: string, filePath: string) => ({
   },
 })
 
-export const characterDirectoryService = createDirectoryService(
+export const castDirectoryService = createDirectoryService(
   '/castingFolder',
   '/casting',
 )
-export const worldViewDirectoryService = createDirectoryService(
+export const universeDirectoryService = createDirectoryService(
   '/universeFolder',
   '/universe',
 )
-export const scenarioDirectoryService = createDirectoryService(
+export const storyDirectoryService = createDirectoryService(
   '/storyFolder',
   '/storyPlot',
 )
