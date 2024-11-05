@@ -16,8 +16,8 @@ interface FolderTabProps {
   projectId: number
   isOpen: boolean
   onClose: () => void
-  setSelectedFolderId: (folderId: number) => void
-  setSelectedFileId: (fileId: number) => void
+  setSelectedFolderId: (folderId: number | null) => void
+  setSelectedFileId: (fileId: number | null) => void
   currentService: any
 }
 
@@ -42,6 +42,10 @@ const FolderTab: React.FC<FolderTabProps> = ({
   }
 
   const handleSaveFolder = async () => {
+    const trimmedFolderName = newFolderName.trim()
+    if (!trimmedFolderName) {
+      return
+    }
     try {
       const folderData = {
         projectId,

@@ -2,10 +2,10 @@ import axiosInstance from '@utils/httpCommons'
 
 import { Cast, CastCoord, CastGraph, CastRelationship } from '@types'
 
-// GET /api/casting/{castingId}
+// GET /api/cast/{castingId}
 export const getCast = async (castingId: string): Promise<Cast> => {
   try {
-    const response = await axiosInstance.get<Cast>(`/casting/${castingId}`)
+    const response = await axiosInstance.get<Cast>(`/cast/${castingId}`)
     return response.data
   } catch (error) {
     console.error('Failed to get cast:', error)
@@ -13,11 +13,11 @@ export const getCast = async (castingId: string): Promise<Cast> => {
   }
 }
 
-// PUT /api/casting/{castingId}
+// PUT /api/cast/{castingId}
 export const putCast = async (data: Cast): Promise<Cast> => {
   try {
     console.log(data)
-    const response = await axiosInstance.put<Cast>(`/casting/${data.id}`, data)
+    const response = await axiosInstance.put<Cast>(`/cast/${data.id}`, data)
     return response.data
   } catch (error) {
     console.error('Failed to update cast:', error)
@@ -25,24 +25,24 @@ export const putCast = async (data: Cast): Promise<Cast> => {
   }
 }
 
-// DELETE /api/casting/{castingId}
+// DELETE /api/cast/{castingId}
 export const deleteCast = async (castingId: string): Promise<void> => {
   try {
-    await axiosInstance.delete(`/casting/${castingId}`)
+    await axiosInstance.delete(`/cast/${castingId}`)
   } catch (error) {
     console.error('Failed to delete cast:', error)
     throw error
   }
 }
 
-// PUT /api/casting/{castingId}/coord
+// PUT /api/cast/{castingId}/coord
 export const putCastCoord = async (
   castingId: string,
   data: CastCoord,
 ): Promise<Cast> => {
   try {
     const response = await axiosInstance.put<Cast>(
-      `/casting/${castingId}/coord`,
+      `/cast/${castingId}/coord`,
       data,
     )
     return response.data
@@ -52,14 +52,14 @@ export const putCastCoord = async (
   }
 }
 
-// PUT /api/casting/relationship/{uuid}
+// PUT /api/cast/relationship/{uuid}
 export const putCastRelationship = async (
   uuid: string,
   data: CastRelationship,
 ): Promise<CastRelationship> => {
   try {
     const response = await axiosInstance.put<CastRelationship>(
-      `/casting/relationship/${uuid}`,
+      `/cast/relationship/${uuid}`,
       data,
     )
     return response.data
@@ -69,21 +69,21 @@ export const putCastRelationship = async (
   }
 }
 
-// DELETE /api/casting/relationship/{uuid}
+// DELETE /api/cast/relationship/{uuid}
 export const deleteCastRelationship = async (uuid: string): Promise<void> => {
   try {
-    await axiosInstance.delete(`/casting/relationship/${uuid}`)
+    await axiosInstance.delete(`/cast/relationship/${uuid}`)
   } catch (error) {
     console.error('Failed to delete cast relationship:', error)
     throw error
   }
 }
 
-// GET /api/casting
+// GET /api/cast
 export const getCasts = async (folderId: string): Promise<Cast[]> => {
   try {
     const response = await axiosInstance.get<Cast[]>(
-      `/casting?folderId=${folderId}`,
+      `/cast?folderId=${folderId}`,
     )
     return response.data
   } catch (error) {
@@ -93,17 +93,17 @@ export const getCasts = async (folderId: string): Promise<Cast[]> => {
 }
 
 export const postCast = async (cast: Partial<Cast>): Promise<Cast> => {
-  const response = await axiosInstance.post<Cast>('/casting', cast)
+  const response = await axiosInstance.post<Cast>('/cast', cast)
   return response.data
 }
 
-// POST /api/casting/relationship
+// POST /api/cast/relationship
 export const postCastRelationship = async (
   data: CastRelationship,
 ): Promise<CastRelationship> => {
   try {
     const response = await axiosInstance.post<CastRelationship>(
-      '/casting/relationship',
+      '/cast/relationship',
       data,
     )
     return response.data
@@ -113,10 +113,10 @@ export const postCastRelationship = async (
   }
 }
 
-// POST /api/casting/image
+// POST /api/cast/image
 export const uploadCastImage = async (data: Partial<Cast>): Promise<string> => {
   try {
-    const response = await axiosInstance.post<string>('/casting/image', data)
+    const response = await axiosInstance.post<string>('/cast/image', data)
     return response.data
   } catch (error) {
     console.error('Failed to upload cast image:', error)
@@ -124,11 +124,11 @@ export const uploadCastImage = async (data: Partial<Cast>): Promise<string> => {
   }
 }
 
-// GET /api/casting/graph
+// GET /api/cast/graph
 export const getCastGraph = async (projectId: number): Promise<CastGraph> => {
   try {
     const response = await axiosInstance.get<CastGraph>(
-      `/casting/graph?projectId=${projectId}`,
+      `/cast/graph?projectId=${projectId}`,
     )
     return response.data
   } catch (error) {

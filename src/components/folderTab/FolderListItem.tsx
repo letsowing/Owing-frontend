@@ -54,22 +54,23 @@ export default function FolderListItem({
   }
 
   const handleSaveFileName = async () => {
-    if (newFileName.trim() && newFileName !== file.name) {
-      try {
-        const data = {
-          name: newFileName,
-          description: file.description,
-        }
-        await currentService.putFile(id, data)
-        updateFileName(folderId, id, newFileName)
-      } catch (error) {
-        console.error('파일 이름 업데이트 실패:', error)
-        setNewFileName(file.name)
-      }
-    } else {
-      setNewFileName(file.name)
+    const trimmedFileName = newFileName.trim()
+    if (!trimmedFileName || trimmedFileName === file.name) {
+      return
     }
-    setIsFileEditing(false)
+    try {
+      const data = {
+        name: trimmedFileName,
+        description: file.description,
+      }
+      await currentService.putFile(id, data)
+      updateFileName(folderId, id, trimmedFileName)
+    } catch (error) {
+      console.error('파일 이름 업데이트 실패:', error)
+      setNewFileName(file.name)
+    } finally {
+      setIsFileEditing(false)
+    }
   }
 
   const handleFileNameKeyDown = (e: React.KeyboardEvent) => {
@@ -89,6 +90,14 @@ export default function FolderListItem({
     onSelectFile(id)
     if (activePath.includes('storyManagement')) {
       goToStory(id)
+    }
+  }
+
+  const handleFileNameInput = (e: React.FormEvent<HTMLDivElement>) => {
+    const content = e.currentTarget.textContent || ''
+
+    if (content.trim().length <= 50) {
+      setNewFileName(content.trim())
     }
   }
 
@@ -150,7 +159,7 @@ export default function FolderListItem({
             ref={fileNameRef}
             contentEditable={isFileEditing}
             suppressContentEditableWarning={true}
-            onInput={(e) => setNewFileName(e.currentTarget.textContent || '')}
+            onInput={handleFileNameInput}
             onBlur={handleSaveFileName}
             onKeyDown={handleFileNameKeyDown}
             className="h-auto w-40 max-w-[130px] resize-none overflow-hidden whitespace-pre-wrap bg-transparent px-2 text-base outline-none"

@@ -51,7 +51,7 @@ export function AiHelper() {
         <button
           className="text-md mt-2 h-10 px-4 text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
           onClick={() =>
-            onConflictCheck(selectedFileId, targetStory, setResult)
+            onConflictCheck(selectedFileId!, targetStory, setResult)
           }
         >
           Create

@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: 'https://api.letsowing.com/api',
+  baseURL: 'https://api.letsowing.com/v1',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
