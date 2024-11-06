@@ -14,9 +14,9 @@ export interface ProjectSummary {
   id: number
   title: string
   coverUrl: string
+  accessedAt?: Date
   createdAt: Date
   updatedAt: Date
-  accessedAt?: Date
 }
 
 export interface ProjectProps {

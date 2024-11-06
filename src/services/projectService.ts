@@ -17,6 +17,7 @@ export const postCreateProject = async (
       description,
       category,
       genres,
+      coverUrl,
     }
     const response = await axiosInstance.post('/projects', payload)
     await putUploadImageToS3(response.data.presignedUrl, coverUrl)
@@ -53,7 +54,7 @@ export const getAllProjects = async (
 ): Promise<ProjectSummary[]> => {
   try {
     const response = await axiosInstance.get(`/projects?projectSort=${sort}`)
-    return response.data.content
+    return response.data.projectList.content
   } catch (error) {
     console.error('프로젝트 리스트 조회 실패:', error)
     throw error
