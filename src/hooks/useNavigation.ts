@@ -33,8 +33,7 @@ const useNavigation = () => {
       goToRegister: () => navigate('/register'),
       goToContactUs: () => navigate('/contactUs'),
       goToStory: (storyId: number) => navigate(`/story/${storyId}`),
-      goToProject: (projectId: number) =>
-        navigate(`/storyManagement/${projectId}`),
+      goToProject: () => navigate(`/projectInfo`),
       goToStoryManagement: (projectId: number) =>
         navigate(`/storyManagement/${projectId}`),
     }),

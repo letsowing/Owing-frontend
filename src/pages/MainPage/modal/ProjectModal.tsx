@@ -4,9 +4,8 @@ import ImageForm from '@components/common/ImageForm'
 import InputField from '@components/common/InputField'
 import Loader from '@components/common/Loader'
 import Modal from '@components/common/Modal'
+import ProjectTagField from '@components/common/ProjectTagField'
 import TextAreaField from '@components/common/TextAreaField'
-
-import ProjectTagField from './ProjectTagField'
 
 import { CATEGORY_LIST } from '@constants/categoryList'
 import { GENRE_LIST } from '@constants/genreList'
@@ -28,30 +27,30 @@ const ProjectModal = ({
   onSave,
   onClose,
 }: ProjectModalProps) => {
-  const [currentProject, setCurrentProject] = useState<Project>(initialProject)
+  const [projectInput, setProjectInput] = useState<Project>(initialProject)
   const [isGenerating, setIsGenerating] = useState(false)
 
   useEffect(() => {
     if (project) {
-      setCurrentProject(project)
+      setProjectInput(project)
     } else {
-      setCurrentProject(initialProject)
+      setProjectInput(initialProject)
     }
   }, [project])
 
   const handleInputChange = (field: keyof Project, value: string) => {
-    setCurrentProject((prev) => ({ ...prev, [field]: value }))
+    setProjectInput((prev) => ({ ...prev, [field]: value }))
   }
 
   const handleSave = () => {
-    onSave(currentProject)
+    onSave(projectInput)
     onClose()
   }
 
-  const onImageChange = (imageUrl: string) => {
-    setCurrentProject((prev) => ({
+  const onImageChange = (coverUrl: string) => {
+    setProjectInput((prev) => ({
       ...prev,
-      imageUrl: imageUrl,
+      coverUrl: coverUrl,
     }))
   }
 
@@ -60,10 +59,10 @@ const ProjectModal = ({
       setIsGenerating(true)
       try {
         const data = await postGenerateAiImage(
-          currentProject.title,
-          currentProject.description || '',
-          currentProject.category || '',
-          currentProject.genres || [],
+          projectInput.title,
+          projectInput.description || '',
+          projectInput.category || '',
+          projectInput.genres || [],
         )
         onImageChange(data)
       } catch (error) {
@@ -76,14 +75,14 @@ const ProjectModal = ({
   }
 
   const onCategoryTagClick = (value: string) => {
-    setCurrentProject((prevProject) => ({
+    setProjectInput((prevProject) => ({
       ...prevProject,
       category: prevProject.category === value ? '' : value,
     }))
   }
 
   const onGenreTagClick = (value: string) => {
-    setCurrentProject((prevProject) => {
+    setProjectInput((prevProject) => {
       const isTagSelected = prevProject.genres.includes(value)
 
       const updatedGenres = isTagSelected
@@ -97,7 +96,6 @@ const ProjectModal = ({
         genres: updatedGenres,
       }
     })
-    console.log(currentProject.genres)
   }
 
   return (
@@ -108,7 +106,7 @@ const ProjectModal = ({
       onPrimaryAction={handleSave}
       onSecondaryAction={onClose}
     >
-      <div className="mx-20 mt-8 flex flex-col gap-5">
+      <div className="mx-20 mt-8 flex flex-col gap-7">
         <div className="flex justify-center">
           {isGenerating ? (
             <div className="flex h-[22rem] w-[22rem] items-center justify-center">
@@ -117,7 +115,7 @@ const ProjectModal = ({
           ) : (
             <ImageForm
               isEditable={isEditable}
-              image={currentProject.coverUrl}
+              image={projectInput.coverUrl}
               onImageChange={onImageChange}
               onAIGenerateClick={onAiGenerateClick}
             />
@@ -129,33 +127,31 @@ const ProjectModal = ({
           isRequired={isEditable}
           maxLength={50}
           isEditable={isEditable}
-          value={currentProject.title}
+          value={projectInput.title}
           onChange={(value) => handleInputChange('title', value)}
         />
         <ProjectTagField
           labelValue="분류"
           tagList={CATEGORY_LIST}
           isEditable={isEditable}
-          project={currentProject}
+          project={projectInput}
           onTagClick={onCategoryTagClick}
           type="category"
         />
-        <div className="w-3/4">
-          <ProjectTagField
-            labelValue="장르"
-            tagList={GENRE_LIST}
-            isEditable={isEditable}
-            project={currentProject}
-            onTagClick={onGenreTagClick}
-            type="genres"
-          />
-        </div>
+        <ProjectTagField
+          labelValue="장르"
+          tagList={GENRE_LIST}
+          isEditable={isEditable}
+          project={projectInput}
+          onTagClick={onGenreTagClick}
+          type="genres"
+        />
         <TextAreaField
           labelValue="작품 설명"
           isRequired={isEditable}
           maxLength={1000}
           isEditable={isEditable}
-          value={currentProject.description || ''}
+          value={projectInput.description || ''}
           onChange={(value) => handleInputChange('description', value)}
         />
       </div>
