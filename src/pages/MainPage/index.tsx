@@ -49,6 +49,7 @@ const Main = () => {
         setProjects(fetchedProjects)
         const sortedProjectsList = await getAllProjects('ACCESSED_AT')
         setSortedProjects(sortedProjectsList)
+        console.log(sortedProjectsList)
       } catch (error) {
         console.error('프로젝트 리스트 조회 실패:', error)
       }
@@ -60,8 +61,8 @@ const Main = () => {
   const handleMoveProject = useCallback(
     (project: Project) => {
       setCurrentProject(project)
-      goToProject(project.id)
-      setActivePath('storyManagement')
+      goToProject()
+      setActivePath('projectInfo')
     },
     [goToProject, setActivePath, setCurrentProject],
   )
@@ -76,12 +77,15 @@ const Main = () => {
         try {
           const savedProject = await postCreateProject(
             project.title,
-            project.description || '',
-            project.category || '',
-            project.genres || [],
+            project.description,
+            project.category,
+            project.genres,
             project.coverUrl,
           )
           project.id = savedProject.id
+          project.accessedAt = savedProject.accessedAt
+          project.createdAt = savedProject.createdAt
+          project.updatedAt = savedProject.updatedAt
           handleMoveProject(project)
         } catch (error) {
           console.error('프로젝트 생성 실패:', error)

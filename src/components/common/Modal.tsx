@@ -34,12 +34,12 @@ const Modal: React.FC<ModalProps> = ({
       isOpen={isOpen}
       ariaHideApp={false}
       onRequestClose={closeModal}
-      className="modal-content z-50 mx-auto mt-[4%] flex h-[88%] w-[70%] flex-col overflow-y-auto rounded-3xl bg-white drop-shadow-lg scrollbar-hide dark:bg-darkblack"
+      className="modal-content z-50 mx-auto mt-[4%] flex h-5/6 w-3/5 flex-col overflow-y-auto rounded-3xl bg-white drop-shadow-lg scrollbar-hide dark:bg-darkblack"
       overlayClassName="modal-overlay fixed inset-0 bg-gray bg-opacity-80 dark:bg-opacity-70 flex z-40"
     >
-      <div className="flex h-full flex-col">
-        <div className="flex-grow">{children}</div>
-        <div className="my-10 me-20 ml-auto flex w-1/3 gap-4">
+      <div className="flex flex-col">
+        {children}
+        <div className="mb-6 me-20 ml-auto mt-16 flex w-1/3 gap-4">
           <SubButton value={secondaryButtonText} onClick={onSecondaryAction} />
           <MainButton value={primaryButtonText} onClick={onPrimaryAction} />
         </div>

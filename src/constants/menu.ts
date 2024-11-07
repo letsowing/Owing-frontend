@@ -1,4 +1,5 @@
 import { BsFeather } from 'react-icons/bs'
+import { FaBook } from 'react-icons/fa'
 import { GoPerson } from 'react-icons/go'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { LuSettings } from 'react-icons/lu'
@@ -7,6 +8,11 @@ import { RiEarthFill } from 'react-icons/ri'
 import { TbCirclesRelation } from 'react-icons/tb'
 
 export const MENU_LIST = [
+  {
+    icon: FaBook,
+    text: '작품',
+    path: 'projectInfo',
+  },
   {
     icon: BsFeather,
     text: '스토리 원고',

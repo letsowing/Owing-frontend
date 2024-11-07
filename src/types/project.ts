@@ -1,9 +1,9 @@
 export interface Project {
   id: number
   title: string
-  category?: string
+  category: string
   genres: string[]
-  description?: string
+  description: string
   coverUrl: string
   createdAt?: Date
   updatedAt?: Date
@@ -25,6 +25,14 @@ export interface ProjectProps {
   coverUrl: string
   createdAt: Date
   updatedAt?: Date
+}
+
+export interface ProjectPutRequest {
+  title: string
+  description: string
+  category: string
+  genres: string[]
+  coverUrl: string
 }
 
 export interface ProjectPutResponse {

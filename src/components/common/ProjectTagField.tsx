@@ -10,7 +10,7 @@ interface ProjectTagFieldProps {
   }[]
   isEditable: boolean
   project: Project
-  onTagClick?: (value: string) => void
+  onTagClick: (value: string) => void
   type: 'category' | 'genres'
 }
 
@@ -45,6 +45,7 @@ const ProjectTagField = ({
             key={tag.name}
             onClick={onTagClick}
             isSelected={isTagSelected(tag.value)}
+            isEditable={isEditable}
           />
         ))}
       </div>

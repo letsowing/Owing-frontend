@@ -7,6 +7,7 @@ import ContactUsPage from '@pages/ContactUsPage'
 import Landing from '@pages/LandingPage'
 import Login from '@pages/LoginPage'
 import Main from '@pages/MainPage'
+import ProjectInfoPage from '@pages/ProjectInfoPage'
 import Register from '@pages/RegisterPage'
 import StoryManagementPage from '@pages/StoryManagementPage'
 import StoryPage from '@pages/StoryPage'
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
           {
             path: 'main',
             element: <Main />,
+          },
+          {
+            path: 'projectInfo',
+            element: <ProjectInfoPage />,
           },
         ],
       },
