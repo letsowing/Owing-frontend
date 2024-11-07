@@ -5,7 +5,7 @@ import { useDnd } from '@hooks/useDnd'
 
 import DraggableBox from './DraggableBox'
 
-import EmptyFolder from '@/components/common/EmptyFolder'
+import EmptyFolder from 'components/common/EmptyFolder'
 
 interface DnDWrapperProps {
   selectedFolderId: number | null

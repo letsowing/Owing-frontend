@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import UniverseDraggableBox from '@pages/UniversePage/UniverseDraggableBox'
 
-import { useDnd } from '@hooks/useDnd'
+import EmptyFolder from '@components/common/EmptyFolder'
 
-import EmptyFolder from '@/components/common/EmptyFolder'
+import { useDnd } from '@hooks/useDnd'
 
 interface DnDWrapperProps {
   selectedFolderId: number | null
