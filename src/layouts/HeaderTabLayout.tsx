@@ -3,7 +3,8 @@ import React from 'react'
 import Header from '@components/common/Header'
 import MenuTab from '@components/menuTab/MenuTab'
 
-import { useMenuTab } from '@/hooks/useMenuTab'
+import { useMenuTab } from '@hooks/useMenuTab'
+
 import { Outlet, useLocation } from 'react-router-dom'
 
 const HeaderTabLayout: React.FC = () => {

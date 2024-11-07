@@ -1,67 +1,84 @@
 import {
-  deleteTrashcanElement,
-  deleteTrashcans,
-  postRestoreTrashcanElement,
+  deleteAllTrashes,
+  deleteTrashcanFile,
+  deleteTrashcanFolder,
+  postRestoreTrashcanFile,
+  postRestoreTrashcanFolder,
 } from '@services/trashService'
-import { TrashSetters, TrashState } from '@types'
+import { FolderItem, TrashSetters, TrashState } from '@types'
 
 export const useTrashActions = (state: TrashState, setters: TrashSetters) => {
-  const removeFromList = (elementId: number) => {
-    const updatedItems = {
-      ...state.items,
-      [state.selectedType]: state.items[state.selectedType].filter(
-        (folder) => folder.id !== elementId,
-      ),
+  // 파일 상태 업데이트 공통 로직
+  const updateFileState = (fileId: number) => {
+    if (state.selectedFolder) {
+      const updatedFolder = {
+        ...state.selectedFolder,
+        files: state.selectedFolder.files.filter((file) => file.id !== fileId),
+      }
+      setters.setSelectedFolder(updatedFolder)
     }
-    setters.setItems(updatedItems)
-
-    if (state.selectedFolder?.id === elementId) {
-      setters.setSelectedFolder(null)
+    if (state.selectedFile?.id === fileId) {
       setters.setSelectedFile(null)
     }
   }
 
-  const handleDeleteFolder = async (elementId: number, projectId: number) => {
-    try {
-      await deleteTrashcanElement(elementId, projectId)
-      removeFromList(elementId)
-    } catch (error) {
-      console.error('폴더 삭제 실패:', error)
+  // 폴더 상태 업데이트 공통 로직
+  const updateFolderState = (folderId: number) => {
+    const updatedItems = {
+      ...state.items,
+      [state.selectedType]: state.items[state.selectedType].filter(
+        (folder: FolderItem) => folder.id !== folderId,
+      ),
+    }
+    setters.setItems(updatedItems)
+    if (state.selectedFolder?.id === folderId) {
+      setters.setSelectedFolder(null)
     }
   }
 
-  const handleRestore = async (elementId: number, projectId: number) => {
+  const handleDeleteFile = async (fileId: number) => {
     try {
-      await postRestoreTrashcanElement(elementId, projectId)
-      removeFromList(elementId)
-    } catch (error) {
-      console.error('복원 실패:', error)
-    }
-  }
-
-  const handleDeleteFile = async (elementId: number, projectId: number) => {
-    try {
-      await deleteTrashcanElement(elementId, projectId)
-      if (state.selectedFolder) {
-        const updatedFolder = {
-          ...state.selectedFolder,
-          files: state.selectedFolder.files.filter(
-            (file) => file.id !== elementId,
-          ),
-        }
-        setters.setSelectedFolder(updatedFolder)
-      }
-      if (state.selectedFile?.id === elementId) {
-        setters.setSelectedFile(null)
-      }
+      await deleteTrashcanFile(fileId)
+      updateFileState(fileId)
     } catch (error) {
       console.error('파일 삭제 실패:', error)
+      throw error
+    }
+  }
+
+  const handleDeleteFolder = async (folderId: number) => {
+    try {
+      await deleteTrashcanFolder(folderId)
+      updateFolderState(folderId)
+    } catch (error) {
+      console.error('폴더 삭제 실패:', error)
+      throw error
+    }
+  }
+
+  const handleRestoreFile = async (fileId: number) => {
+    try {
+      await postRestoreTrashcanFile(fileId)
+      updateFileState(fileId)
+    } catch (error) {
+      console.error('파일 복원 실패:', error)
+      throw error
+    }
+  }
+
+  const handleRestoreFolder = async (folderId: number) => {
+    try {
+      await postRestoreTrashcanFolder(folderId)
+      updateFolderState(folderId)
+    } catch (error) {
+      console.error('폴더 복원 실패:', error)
+      throw error
     }
   }
 
   const handleEmptyTrash = async (projectId: number) => {
     try {
-      await deleteTrashcans(projectId)
+      await deleteAllTrashes(projectId)
       setters.setItems({
         story: [],
         cast: [],
@@ -71,13 +88,32 @@ export const useTrashActions = (state: TrashState, setters: TrashSetters) => {
       setters.setSelectedFile(null)
     } catch (error) {
       console.error('휴지통 비우기 실패:', error)
+      throw error
+    }
+  }
+
+  const handleRestore = async (
+    elementId: number,
+    isFolder: boolean = false,
+  ) => {
+    if (isFolder) {
+      await handleRestoreFolder(elementId)
+    } else {
+      await handleRestoreFile(elementId)
+    }
+  }
+
+  const handleDelete = async (elementId: number, isFolder: boolean = false) => {
+    if (isFolder) {
+      await handleDeleteFolder(elementId)
+    } else {
+      await handleDeleteFile(elementId)
     }
   }
 
   return {
-    onDeleteFolder: handleDeleteFolder,
+    onDelete: handleDelete,
     onRestore: handleRestore,
-    onDeleteFile: handleDeleteFile,
     onEmptyTrash: handleEmptyTrash,
   }
 }

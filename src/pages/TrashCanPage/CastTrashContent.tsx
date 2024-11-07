@@ -5,7 +5,7 @@ import { useProjectStore } from '@stores/projectStore'
 import EmptyTrash from './EmptyTrash'
 import InputField from './InputField'
 
-import { getTrashcanElementCast } from '@services/trashService'
+import { getTrashcanContent } from '@services/trashService'
 import { Cast, TrashContentProps } from '@types'
 
 const CastTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
@@ -28,9 +28,9 @@ const CastTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
         return
       }
       try {
-        const data = await getTrashcanElementCast(
+        const data = await getTrashcanContent(
           selection.selectedFile!.id,
-          currentProject.id,
+          'cast', // contentType
         )
         setCast(data)
       } catch (err) {

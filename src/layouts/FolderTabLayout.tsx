@@ -7,8 +7,8 @@ import MenuTab from '@components/menuTab/MenuTab'
 import { useProjectStore } from '@stores/projectStore'
 
 import { useDnd } from '@hooks/useDnd'
+import { useMenuTab } from '@hooks/useMenuTab'
 
-import { useMenuTab } from '@/hooks/useMenuTab'
 import {
   castDirectoryService,
   storyDirectoryService,

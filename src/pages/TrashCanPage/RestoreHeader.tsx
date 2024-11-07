@@ -1,13 +1,15 @@
-import { useProjectStore } from '@stores/projectStore'
-
 import { TrashContentProps } from '@types'
 
 const RestoreHeader: React.FC<TrashContentProps> = ({ selection, actions }) => {
-  const currentProject = useProjectStore((state) => state.currentProject)
+  if (!selection.selectedFile || !selection.selectedFolder) {
+    return null
+  }
+
+  const { id } = selection.selectedFile
 
   const handleRestore = async () => {
     try {
-      actions.onRestore(selection.selectedFile!.id, currentProject.id)
+      actions.onRestore(id)
     } catch (error) {
       console.error('복구 실패:', error)
       alert('복구 중 오류가 발생했습니다.')
@@ -16,7 +18,7 @@ const RestoreHeader: React.FC<TrashContentProps> = ({ selection, actions }) => {
 
   const handleDelete = async () => {
     try {
-      actions.onDeleteFile(selection.selectedFile!.id, currentProject.id)
+      actions.onDelete(id)
     } catch (error) {
       console.error('삭제 실패:', error)
       alert('삭제 중 오류가 발생했습니다.')

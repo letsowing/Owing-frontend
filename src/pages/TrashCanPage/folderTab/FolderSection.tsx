@@ -29,11 +29,6 @@ const FolderSection: React.FC<FolderSectionProps> = ({
 
   const toggleSection = () => {
     setIsExpanded(!isExpanded)
-    actions.setSelectedType(selectedType)
-    actions.onFolderSelect(items?.length > 0 ? items[0] : null)
-    actions.onFileSelect(
-      items?.length > 0 ? (items[0].files?.[0] ?? null) : null,
-    )
   }
 
   return (
@@ -65,7 +60,7 @@ const FolderSection: React.FC<FolderSectionProps> = ({
           ))}
         </>
       )}
-      <div className="bg-whitegray mx-4 mt-4 h-[1px]" />
+      <div className="mx-4 mt-4 h-[1px] bg-whitegray" />
     </div>
   )
 }

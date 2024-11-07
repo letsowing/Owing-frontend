@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import EmptyFolder from '@components/common/EmptyFolder'
+
 import { useProjectStore } from '@stores/projectStore'
 
 import { useCharFlow } from '@hooks/useCharFlow'
@@ -9,7 +11,6 @@ import CastImageSection from './CastImageSection'
 import CastInputForm from './CastInputForm'
 import PageTitle from './PageTitle'
 
-import EmptyFolder from '@/components/common/EmptyFolder'
 import {
   deleteCast as deleteCastService,
   getCast,

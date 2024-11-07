@@ -1,4 +1,3 @@
-import { useProjectStore } from '@/stores/projectStore'
 import { FileItem, TrashActions, TrashSelection } from '@types'
 import { PiTrashSimpleLight } from 'react-icons/pi'
 import { TbArrowBackUp } from 'react-icons/tb'
@@ -15,11 +14,9 @@ export default function FolderListItem({
   actions,
   toggleFile,
 }: FolderListItemProps) {
-  const currentProject = useProjectStore((state) => state.currentProject)
-
   const handleRestoreFile = async () => {
     try {
-      await actions.onRestore(file.id, currentProject.id)
+      await actions.onRestore(file.id)
     } catch (error) {
       console.error('파일 삭제 실패:', error)
     }
@@ -27,7 +24,7 @@ export default function FolderListItem({
 
   const handleDeleteFile = async () => {
     try {
-      await actions.onDeleteFile(file.id, currentProject.id)
+      await actions.onDelete(file.id)
     } catch (error) {
       console.error('파일 삭제 실패:', error)
     }
