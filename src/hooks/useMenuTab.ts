@@ -13,7 +13,7 @@ export const useMenuTab = ({
   collapsedWidth = 41,
   autoOpenPaths = ['storyManagement'],
 }: UseMenuTabProps = {}) => {
-  const [isTabOpen, setIsTabOpen] = useState(false)
+  const [isTabOpen, setIsTabOpen] = useState(true)
   const [tabWidth, setTabWidth] = useState(defaultWidth)
   const location = useLocation()
 

@@ -51,12 +51,12 @@ export const EdgeLabel = ({
             onChange={handleLabelInputChange}
             onBlur={handleFinishEditing}
             onKeyDown={(e) => e.key === 'Enter' && handleFinishEditing()}
-            className={`rounded border border-2 border-${borderColor} bg-white px-1 py-0.5 text-xs text-darkgray outline-none`}
+            className={`rounded border-2 border-${borderColor} bg-white px-1 py-0.5 text-xs text-darkgray outline-none`}
             autoFocus
           />
         ) : (
           <div
-            className={`cursor-pointer rounded border border-2 border-${borderColor} bg-white px-1 py-0.5 text-xs text-darkgray`}
+            className={`cursor-pointer rounded border-2 border-${borderColor} bg-white px-1 py-0.5 text-xs text-darkgray`}
             onClick={handleLabelClick}
           >
             {label}
