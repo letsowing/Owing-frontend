@@ -5,3 +5,8 @@ export interface Member {
   nickname: string
   profileUrl: string
 }
+
+export interface Token {
+  accessToken: string
+  grantType: string
+}
