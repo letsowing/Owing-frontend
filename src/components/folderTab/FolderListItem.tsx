@@ -4,29 +4,31 @@ import { useEffect, useRef, useState } from 'react'
 import { useDnd } from '@hooks/useDnd'
 import useNavigation from '@hooks/useNavigation'
 
+import { FileItem } from '@/types'
 import { useDrag, useDrop } from 'react-dnd'
 import { GoPencil } from 'react-icons/go'
 import { PiTrashSimpleLight } from 'react-icons/pi'
 
 interface FolderListItemProps {
   id: number
-  file: any
   index: number
   name: string
   folderId: number
+  files: FileItem[]
   currentService: any
   onSelectFile: (fileId: number) => void
 }
 
 export default function FolderListItem({
   id,
-  file,
   index,
   name,
   folderId,
+  files,
   currentService,
   onSelectFile,
 }: FolderListItemProps) {
+  const file = files[index]
   const { moveFileItem, updateFileName, deleteFile } = useDnd()
   const { activePath, goToStory } = useNavigation()
   const ref = useRef<HTMLLIElement>(null)
@@ -115,19 +117,31 @@ export default function FolderListItem({
       if (!ref.current) return
 
       const dragIndex = item.index
-
       if (dragIndex === index) return
+
+      let beforeId = -1
+      let afterId = -1
+
+      if (index > 0) {
+        beforeId = files[index - 1].id
+      }
+
+      if (index < files.length - 1) {
+        afterId = files[index].id
+      }
 
       moveFileItem(folderId, dragIndex, index)
       item.index = index
 
-      const data = {
-        position: item.index,
-        folderId,
-      }
-      currentService.patchFile(item.id, data).catch((error: any) => {
-        console.error('파일 이동 실패:', error)
-      })
+      currentService
+        .patchFile(item.id, {
+          beforeId,
+          afterId,
+          folderId,
+        })
+        .catch((error: any) => {
+          console.error('파일 이동 실패:', error)
+        })
     },
   })
 

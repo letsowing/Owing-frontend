@@ -123,14 +123,21 @@ const FlowWithProvider: React.FC = () => {
 
   const handleCastAction = useCallback(
     async (cast: Cast) => {
+      let castData
       try {
         if (cast.id) {
-          // 기존 캐릭터 업데이트
-          const updatedCast = await putCast(cast)
-          updateCast(updatedCast)
+          castData = {
+            name: cast.name,
+            age: cast.age,
+            gender: cast.gender,
+            role: cast.role,
+            description: cast.description,
+            imageUrl: cast.imageUrl,
+          }
+          await putCast(cast.id, castData)
+          updateCast(cast)
         } else {
-          // 새 캐릭터 생성
-          const castData = {
+          castData = {
             folderId: 29,
             name: cast.name,
             age: cast.age,
@@ -138,6 +145,7 @@ const FlowWithProvider: React.FC = () => {
             role: cast.role,
             description: cast.description,
             imageUrl: cast.imageUrl,
+            coordinate: cast.position,
           }
           const newCast = await postCast(castData)
           addCast(newCast)

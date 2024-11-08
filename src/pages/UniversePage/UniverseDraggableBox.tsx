@@ -21,6 +21,7 @@ export default function UniverseDraggableBox({
   const [isEditing, setIsEditing] = useState(false)
   const [editedName, setEditedName] = useState(name)
   const [editedDescription, setEditedDescription] = useState(description)
+  // const [editedImageUrl, setEditedImageUrl] = useState(imageUrl)
 
   const [, drop] = useDrop({
     accept: 'GRID_ITEM',
@@ -65,11 +66,13 @@ export default function UniverseDraggableBox({
       await currentService.putFile(id, {
         name: editedName,
         description: editedDescription,
+        imageUrl: imageUrl,
       })
 
       updateFile(folderId, id, {
         name: editedName,
         description: editedDescription,
+        imageUrl: imageUrl,
       })
       setIsEditing(false)
     } catch (error) {

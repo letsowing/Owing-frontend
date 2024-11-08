@@ -5,6 +5,7 @@ import {
   CastCoord,
   CastGraph,
   CastPostRequest,
+  CastPutRequest,
   CastRelationship,
 } from '@types'
 
@@ -20,11 +21,12 @@ export const getCast = async (castId: string): Promise<Cast> => {
 }
 
 // PUT /api/cast/{castingId}
-export const putCast = async (data: Cast): Promise<Cast> => {
+export const putCast = async (
+  castId: string,
+  cast: CastPutRequest,
+): Promise<void> => {
   try {
-    console.log(data)
-    const response = await axiosInstance.put<Cast>(`/cast/${data.id}`, data)
-    return response.data
+    await axiosInstance.put<Cast>(`/cast/${castId}`, cast)
   } catch (error) {
     console.error('Failed to update cast:', error)
     throw error
