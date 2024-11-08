@@ -66,9 +66,17 @@ const CastPage: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      const updatedCast = await putCast(castData)
-      updateCast(updatedCast)
-      setCastData(updatedCast)
+      const cast = {
+        name: castData.name,
+        age: castData.age,
+        gender: castData.gender,
+        role: castData.role,
+        description: castData.description,
+        imageUrl: castData.imageUrl,
+      }
+      await putCast(castData.id, cast)
+      updateCast(castData)
+      setCastData(castData)
       setIsEditing(false)
     } catch (error) {
       console.error('Failed to update cast:', error)
