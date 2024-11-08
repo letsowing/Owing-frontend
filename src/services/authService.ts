@@ -2,7 +2,7 @@ import axiosInstance from '@utils/httpCommons'
 
 import { Token } from '@types'
 
-export const oauthLogin = async (
+export const postOauthLogin = async (
   idToken: string,
   provider: string,
 ): Promise<Token> => {
@@ -19,7 +19,7 @@ export const oauthLogin = async (
   }
 }
 
-export const refrehToken = async (): Promise<Token> => {
+export const postRefrehToken = async (): Promise<Token> => {
   try {
     const response = await axiosInstance.post('/auth/refresh')
     return response.data
@@ -29,7 +29,7 @@ export const refrehToken = async (): Promise<Token> => {
   }
 }
 
-export const logout = async (): Promise<void> => {
+export const postLogout = async (): Promise<void> => {
   try {
     await axiosInstance.post('/auth/logout')
   } catch (error) {
