@@ -41,6 +41,6 @@ export const postLogout = async (): Promise<void> => {
     throw error
   } finally {
     useMemberStore.getState().logout()
-    window.location.href = '/login'
+    window.location.href = '/'
   }
 }
