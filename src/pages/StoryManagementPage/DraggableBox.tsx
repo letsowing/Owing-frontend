@@ -2,6 +2,7 @@
 import { useRef, useState } from 'react'
 
 import { useDnd } from '@hooks/useDnd'
+import useNavigation from '@hooks/useNavigation'
 
 import { DraggableBoxProps } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
@@ -20,6 +21,7 @@ export default function DraggableBox({
   const [isEditing, setIsEditing] = useState(false)
   const [editedName, setEditedName] = useState(name)
   const [editedDescription, setEditedDescription] = useState(description)
+  const { goToStory } = useNavigation()
 
   const [, drop] = useDrop({
     accept: 'GRID_ITEM',
@@ -85,6 +87,7 @@ export default function DraggableBox({
 
   const handleItemClick = (id: number) => {
     onSelectFile!(id)
+    goToStory(id)
   }
 
   return (

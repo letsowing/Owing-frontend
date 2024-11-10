@@ -1,18 +1,17 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 
-import { SearchView } from '@components/AIHelper/aiSearch/searchView'
-import { FeatureSelection } from '@components/AIHelper/main/FeatureSelection'
-import { SpellingView } from '@components/AIHelper/spellingValidation/SpellingView'
-import { ValidationView } from '@components/AIHelper/storyValidation/ValidationView'
+import { TabItem } from '@components/aiHelper/TabItem'
+import { SearchView } from '@components/aiHelper/aiSearch/SearchView'
+import { SpellingView } from '@components/aiHelper/spellingValidation/SpellingView'
+import { ValidationView } from '@components/aiHelper/storyValidation/ValidationView'
 
 import { StoryEditor } from './StoryEditor'
 
+import { AIHelper } from '@/components/aiHelper/aiHelper'
 import { Feature } from '@types'
 
-export const StoryWrapper: React.FC = () => {
-  const [selectedFeature, setSelectedFeature] = useState<Feature['id'] | null>(
-    null,
-  )
+const StoryWrapper = () => {
+  const [selectedFeature, setSelectedFeature] = useState<Feature['id']>('home')
 
   const renderContent = () => {
     switch (selectedFeature) {
@@ -22,14 +21,41 @@ export const StoryWrapper: React.FC = () => {
         return <SpellingView />
       case 'search':
         return <SearchView />
-      default:
-        return <FeatureSelection onSelectFeature={setSelectedFeature} />
+      case 'home':
+        return <AIHelper onFeatureSelect={setSelectedFeature} />
     }
   }
+
   return (
     <>
       <StoryEditor />
-      {renderContent()}
+      <div className="flex">
+        <div className="flex-1">{renderContent()}</div>
+        {selectedFeature && (
+          <div className="flex flex-col border-l">
+            <TabItem
+              label="홈"
+              isActive={selectedFeature === 'home'}
+              onClick={() => setSelectedFeature('home')}
+            />
+            <TabItem
+              label="검증"
+              isActive={selectedFeature === 'validation'}
+              onClick={() => setSelectedFeature('validation')}
+            />
+            <TabItem
+              label="맞춤법"
+              isActive={selectedFeature === 'spelling'}
+              onClick={() => setSelectedFeature('spelling')}
+            />
+            <TabItem
+              label="검색어"
+              isActive={selectedFeature === 'search'}
+              onClick={() => setSelectedFeature('search')}
+            />
+          </div>
+        )}
+      </div>
     </>
   )
 }
