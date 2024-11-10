@@ -10,7 +10,7 @@ import {
 } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
 
-const clientId = import.meta.env.REACT_APP_GOOGLE_CLIENT_ID
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
 
 interface JwtPayload {
   sub: number
