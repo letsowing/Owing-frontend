@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
 
-import { useProjectStore } from '@stores/projectStore'
-
 import FolderListItem from './FolderListItem'
 
 import {
+  FileItem,
   FolderItem,
   TrashActions,
   TrashContentType,
@@ -30,13 +29,25 @@ const FolderList: React.FC<FolderListProps> = ({
   isActive,
 }) => {
   const [isOpen, setIsOpen] = useState(true)
-  const currentProject = useProjectStore((state) => state.currentProject)
 
   const handleRestoreFolder = async () => {
-    await actions.onRestore(folder.id, currentProject.id)
+    await actions.onRestore(folder.id, true)
   }
 
+  const handleDeleteFolder = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    try {
+      if (folder.id) {
+        await actions.onDelete(folder.id, true)
+      }
+    } catch (error) {
+      console.error('폴더 삭제 실패:', error)
+    }
+  }
   const toggleFolder = () => {
+    if (selectedType === 'story') {
+      actions.setIsStoryDetail(false)
+    }
     setIsOpen((prev) => !prev)
     actions.setSelectedType(selectedType)
     actions.onFolderSelect(folder)
@@ -45,14 +56,13 @@ const FolderList: React.FC<FolderListProps> = ({
     )
   }
 
-  const handleDeleteFolder = async (e: React.MouseEvent) => {
-    e.stopPropagation()
-    try {
-      if (folder.id) {
-        await actions.onDeleteFolder(folder.id, currentProject.id)
-      }
-    } catch (error) {
-      console.error('폴더 삭제 실패:', error)
+  const handleSelectItem = (file: FileItem) => {
+    actions.onFolderSelect(folder)
+    actions.onFileSelect(file)
+    actions.setSelectedType(selectedType)
+    if (selectedType === 'story') {
+      // 스토리에서 파일을 클릭하면
+      actions.setIsStoryDetail(true)
     }
   }
 
@@ -97,9 +107,7 @@ const FolderList: React.FC<FolderListProps> = ({
               selection={selection}
               actions={actions}
               toggleFile={() => {
-                actions.setSelectedType(selectedType)
-                actions.onFolderSelect(folder)
-                actions.onFileSelect(file)
+                handleSelectItem(file)
               }}
             />
           ))}

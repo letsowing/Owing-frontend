@@ -42,6 +42,18 @@ export interface CastPostRequest {
   role: string
   description: string
   imageUrl: string
+  coordinate: {
+    x: number
+    y: number
+  }
+}
+export interface CastPutRequest {
+  name: string
+  age: number
+  gender: string
+  role: string
+  description: string
+  imageUrl: string
 }
 
 export interface CastResponse {

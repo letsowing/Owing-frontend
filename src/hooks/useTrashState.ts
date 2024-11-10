@@ -4,12 +4,14 @@ import { useProjectStore } from '@stores/projectStore'
 
 import { useTrashActions } from './useTrashActions'
 
-import { getTrashcansList } from '@services/trashService'
+import { getTrashcanList } from '@services/trashService'
 import {
   FileItem,
   FolderItem,
   TrashContentType,
   TrashFolderData,
+  TrashSelection,
+  TrashSetters,
   TrashState,
 } from '@types'
 
@@ -25,9 +27,10 @@ export const useTrashState = () => {
     },
     selectedFolder: null,
     selectedFile: null,
+    isStoryDetail: false, // Added to match TrashState interface
   })
 
-  const setters = useMemo(
+  const setters: TrashSetters = useMemo(
     () => ({
       setSelectedType: (type: TrashContentType) =>
         setState((prev) => ({ ...prev, selectedType: type })),
@@ -38,6 +41,8 @@ export const useTrashState = () => {
       },
       setSelectedFile: (file: FileItem | null) =>
         setState((prev) => ({ ...prev, selectedFile: file })),
+      setIsStoryDetail: (check: boolean) =>
+        setState((prev) => ({ ...prev, isStoryDetail: check })),
     }),
     [],
   )
@@ -45,7 +50,7 @@ export const useTrashState = () => {
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const fetchedFolders = await getTrashcansList(currentProject.id)
+        const fetchedFolders = await getTrashcanList(currentProject.id)
         setters.setItems(fetchedFolders)
         if (fetchedFolders.story.length > 0) {
           const firstFolder = fetchedFolders.story[0]
@@ -69,14 +74,18 @@ export const useTrashState = () => {
     onFileSelect: setters.setSelectedFile,
     ...useTrashActions(state, setters),
     setSelectedType: setters.setSelectedType,
+    setIsStoryDetail: setters.setIsStoryDetail,
+  }
+
+  const selection: TrashSelection = {
+    selectedType: state.selectedType,
+    selectedFolder: state.selectedFolder,
+    selectedFile: state.selectedFile,
+    isStoryDetail: state.isStoryDetail,
   }
 
   return {
-    selection: {
-      selectedType: state.selectedType,
-      selectedFolder: state.selectedFolder,
-      selectedFile: state.selectedFile,
-    },
+    selection,
     actions,
     items: state.items,
   }

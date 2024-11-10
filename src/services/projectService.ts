@@ -1,8 +1,7 @@
 import axiosInstance from '@utils/httpCommons'
 
-import { putUploadImageToS3 } from './s3Service'
-
-import { ProjectSummary } from '@types'
+// import { putUploadImageToS3 } from './s3Service'
+import { ProjectPutRequest, ProjectSummary } from '@types'
 
 export const postCreateProject = async (
   title: string,
@@ -19,8 +18,11 @@ export const postCreateProject = async (
       genres,
       coverUrl,
     }
-    const response = await axiosInstance.post('/projects', payload)
-    await putUploadImageToS3(response.data.presignedUrl, coverUrl)
+    const response = await axiosInstance.post<ProjectSummary>(
+      '/projects',
+      payload,
+    )
+    //await putUploadImageToS3(response.data.presignedUrl, coverUrl)
     return response.data
   } catch (error) {
     console.error('프로젝트 생성 실패:', error)
@@ -63,21 +65,10 @@ export const getAllProjects = async (
 
 export const putProject = async (
   projectId: number,
-  title: string,
-  description: string,
-  category: string,
-  genres: string[],
-  coverUrl: string,
+  data: ProjectPutRequest,
 ): Promise<void> => {
   try {
-    const payload = {
-      title,
-      description,
-      category,
-      genres,
-      coverUrl,
-    }
-    await axiosInstance.post(`/projects/${projectId}`, payload)
+    await axiosInstance.put(`/projects/${projectId}`, data)
   } catch (error) {
     console.error('프로젝트 생성 실패:', error)
     throw error
@@ -86,7 +77,7 @@ export const putProject = async (
 
 export const deleteProject = async (projectId: number): Promise<void> => {
   try {
-    await axiosInstance.post(`/projects/${projectId}`)
+    await axiosInstance.delete(`/projects/${projectId}`)
   } catch (error) {
     console.error('프로젝트 생성 실패:', error)
     throw error

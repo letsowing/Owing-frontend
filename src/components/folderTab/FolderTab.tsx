@@ -99,7 +99,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
 
       <button
         onClick={handleCreateFolder}
-        className="border-whitegray mx-4 mb-4 flex h-10 w-52 items-center justify-center rounded-md border border-solid bg-white text-sm dark:bg-darkgray"
+        className="mx-4 mb-4 flex h-10 w-52 items-center justify-center rounded-md border border-solid border-whitegray bg-white text-sm dark:bg-darkgray"
       >
         <FaPlus className="dark:text-white" size={12} />
         <p className="px-1 dark:text-white">Create Folder</p>
@@ -108,8 +108,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
       <ul className="max-h-[780px] overflow-auto">
         {items.map((folder: FolderItem, index: number) => (
           <FolderList
-            key={folder.id}
-            folder={folder}
+            folders={items}
             index={index}
             onSelectFolder={handleSelectFolder}
             onSelectFile={setSelectedFileId}

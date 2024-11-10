@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import EmptyFolder from '@components/common/EmptyFolder'
+
 import { useProjectStore } from '@stores/projectStore'
 
 import { useCharFlow } from '@hooks/useCharFlow'
@@ -9,7 +11,6 @@ import CastImageSection from './CastImageSection'
 import CastInputForm from './CastInputForm'
 import PageTitle from './PageTitle'
 
-import EmptyFolder from '@/components/common/EmptyFolder'
 import {
   deleteCast as deleteCastService,
   getCast,
@@ -65,9 +66,17 @@ const CastPage: React.FC = () => {
 
   const handleSave = async () => {
     try {
-      const updatedCast = await putCast(castData)
-      updateCast(updatedCast)
-      setCastData(updatedCast)
+      const cast = {
+        name: castData.name,
+        age: castData.age,
+        gender: castData.gender,
+        role: castData.role,
+        description: castData.description,
+        imageUrl: castData.imageUrl,
+      }
+      await putCast(castData.id, cast)
+      updateCast(castData)
+      setCastData(castData)
       setIsEditing(false)
     } catch (error) {
       console.error('Failed to update cast:', error)

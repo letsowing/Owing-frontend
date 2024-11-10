@@ -36,10 +36,17 @@ const InputField: React.FC<InputFieldProps> = ({
   return (
     <div className="flex flex-col">
       <div className="flex justify-between">
-        <label className="font-semibold text-darkgray dark:text-white">
+        <label className="flex font-semibold text-darkgray dark:text-white">
           {labelValue}
-          {isRequired && (
-            <span className="ml-1 text-redorange dark:text-blue">*</span>
+          {isRequired && isEditable && (
+            <div className="flex items-center gap-3">
+              <span className="ml-1 text-redorange dark:text-blue">*</span>
+              {!inputValue && (
+                <p className="text-xs font-normal text-redorange dark:text-blue">
+                  입력값이 없습니다.
+                </p>
+              )}
+            </div>
           )}
         </label>
         <span className="text-sm font-medium text-redorange dark:text-blue">

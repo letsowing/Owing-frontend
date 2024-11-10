@@ -1,6 +1,5 @@
 export * from '@types/flow'
 export * from '@types/cast'
-export * from '@types/universe'
 export * from '@types/project'
 export * from '@types/modal'
 export * from '@types/draggableType'

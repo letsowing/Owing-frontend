@@ -11,17 +11,18 @@ export interface TrashFolderData {
 export interface TrashActions {
   onFolderSelect: (folder: FolderItem | null) => void
   onFileSelect: (file: FileItem | null) => void
-  onDeleteFolder: (elementId: number, projectId: number) => Promise<void>
-  onDeleteFile: (elementId: number, projectId: number) => Promise<void>
-  onRestore: (elementId: number, projectId: number) => Promise<void>
+  onDelete: (elementId: number, isFolder?: boolean) => Promise<void>
+  onRestore: (elementId: number, isFolder?: boolean) => Promise<void>
   onEmptyTrash: (projectId: number) => Promise<void>
   setSelectedType: (type: TrashContentType) => void
+  setIsStoryDetail: (check: boolean) => void
 }
 
 export interface TrashSelection {
   selectedType: TrashContentType
   selectedFolder: FolderItem | null
   selectedFile: FileItem | null
+  isStoryDetail: boolean
 }
 
 export interface TrashContentProps {
@@ -34,12 +35,15 @@ export interface TrashState {
   items: TrashFolderData
   selectedFolder: FolderItem | null
   selectedFile: FileItem | null
+  isStoryDetail: boolean
 }
+
 export interface TrashSetters {
   setSelectedType: (type: TrashContentType) => void
   setItems: (items: TrashFolderData) => void
   setSelectedFolder: (folder: FolderItem | null) => void
   setSelectedFile: (file: FileItem | null) => void
+  setIsStoryDetail: (check: boolean) => void
 }
 
 export interface TrashActionsProps {

@@ -13,7 +13,7 @@ import { GoPencil } from 'react-icons/go'
 import { PiFilePlusLight, PiTrashSimpleLight } from 'react-icons/pi'
 
 interface FolderListProps {
-  folder: FolderItem
+  folders: FolderItem[]
   index: number
   onSelectFolder: (folder: FolderItem) => void
   onSelectFile: (fileId: number | null) => void
@@ -22,13 +22,14 @@ interface FolderListProps {
 }
 
 const FolderList: React.FC<FolderListProps> = ({
-  folder,
+  folders,
   index,
   onSelectFolder,
   onSelectFile,
   isActive,
   currentService,
 }) => {
+  const folder = folders[index]
   const { moveFolder, addFile, updateFolderName, deleteFolder } = useDnd()
   const [isOpen, setIsOpen] = useState(true)
   const [isFolderEditing, setIsEditingFolder] = useState(false)
@@ -101,14 +102,13 @@ const FolderList: React.FC<FolderListProps> = ({
 
       if (activePath === 'cast') {
         data = {
+          folderId: folder.id,
           name: trimmedFileName,
           age: 0,
           gender: '',
           role: '',
           description: '',
-          position: { x: Math.random() * 500, y: Math.random() * 500 },
-          folderId: folder.id,
-          imageUrl: '',
+          coordinate: { x: Math.random() * 500, y: Math.random() * 500 },
         }
         newFile = await currentService.postCast(data)
       } else {
@@ -166,12 +166,28 @@ const FolderList: React.FC<FolderListProps> = ({
     accept: 'FOLDER',
     hover(item: { index: number; id: number }) {
       if (item.index !== index) {
+        let beforeId = -1
+        let afterId = -1
+
+        if (index > 0) {
+          beforeId = folders[index - 1].id
+        }
+
+        if (index < folders.length - 1) {
+          afterId = folders[index].id
+        }
+
+        currentService
+          .patchFolder(item.id, {
+            beforeId,
+            afterId,
+          })
+          .catch((error: any) => {
+            console.error('폴더 이동 실패:', error)
+          })
+
         moveFolder(item.index, index)
         item.index = index
-
-        currentService.patchFolder(item.id, item.index).catch((error: any) => {
-          console.error('폴더 이동 실패:', error)
-        })
       }
     },
   })
@@ -253,10 +269,10 @@ const FolderList: React.FC<FolderListProps> = ({
               index={fileIndex}
               name={file.name}
               folderId={folder.id}
-              file={file}
+              files={folder.files}
               currentService={currentService}
               onSelectFile={(id) => {
-                onSelectFolder(folder)
+                onSelectFolder(folders[index])
                 onSelectFile(id)
               }}
             />
