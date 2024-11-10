@@ -3,8 +3,7 @@ import React from 'react'
 import { MessageBubble } from './MessageBubble'
 
 interface Message {
-  id: string
-  type: 'user' | 'ai'
+  id: number
   content: string
 }
 
@@ -20,13 +19,9 @@ export const MessageList: React.FC<MessageListProps> = ({ messages }) => {
   }, [messages])
 
   return (
-    <div className="flex-1 space-y-4 overflow-y-auto p-4">
+    <div className="flex-1 flex-col gap-3">
       {messages.map((message) => (
-        <MessageBubble
-          key={message.id}
-          type={message.type}
-          content={message.content}
-        />
+        <MessageBubble key={message.id} content={message.content} />
       ))}
       <div ref={messagesEndRef} />
     </div>

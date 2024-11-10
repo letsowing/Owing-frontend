@@ -1,14 +1,14 @@
-import React from 'react'
-
 import { ValidationChat } from './ValidationChat'
 
 import { Header } from '@/components/aiHelper/Header'
 
-export const ValidationView: React.FC = () => {
+export const ValidationView = () => {
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex flex-1 flex-col bg-white">
       <Header />
-      <ValidationChat />
+      <div className="flex flex-1">
+        <ValidationChat />
+      </div>
     </div>
   )
 }
