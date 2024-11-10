@@ -49,7 +49,6 @@ const Main = () => {
         setProjects(fetchedProjects)
         const sortedProjectsList = await getAllProjects('ACCESSED_AT')
         setSortedProjects(sortedProjectsList)
-        console.log(sortedProjectsList)
       } catch (error) {
         console.error('프로젝트 리스트 조회 실패:', error)
       }
