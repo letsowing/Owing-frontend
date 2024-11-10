@@ -19,7 +19,7 @@ export const postOauthLogin = async (
   }
 }
 
-export const postRefrehToken = async (): Promise<Token> => {
+export const postRefreshToken = async (): Promise<Token> => {
   try {
     const response = await axiosInstance.post('/auth/refresh')
     return response.data
