@@ -17,7 +17,7 @@ import { WORD_COUNT_STATS } from '@datas/wordCountStats'
 import { getAllProjects, postCreateProject } from '@services/projectService'
 import { ModalType, Project, ProjectSummary } from '@types'
 
-const initialMember: Member = {
+const initialMember = {
   id: 0,
   email: '',
   name: '',
