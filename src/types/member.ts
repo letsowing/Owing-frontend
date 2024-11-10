@@ -3,5 +3,10 @@ export interface Member {
   email: string
   name: string
   nickname: string
-  imageUrl: string
+  profileUrl: string
+}
+
+export interface Token {
+  accessToken: string
+  grantType: string
 }

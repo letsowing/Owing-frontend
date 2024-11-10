@@ -22,7 +22,7 @@ const initialMember: Member = {
   email: '',
   name: '',
   nickname: '',
-  imageUrl: '',
+  profileUrl: '',
 }
 
 const Main = () => {

@@ -2,8 +2,8 @@ import DemoProfile from '@assets/profile/DemoProfile.png'
 
 interface ProfileProps {
   member: {
-    imageUrl: string
-    name: string
+    profileUrl: string
+    nickname: string
   }
 }
 
@@ -14,7 +14,7 @@ const Profile = ({ member }: ProfileProps) => {
       <img src={DemoProfile} alt="DemoProfile" className="w-36 rounded-2xl" />
       {/* <img src={member.imageUrl} /> */}
       <label className="mt-5 text-2xl font-semibold dark:text-darkblack">
-        {member.name}
+        {member.nickname}
       </label>
     </div>
   )
