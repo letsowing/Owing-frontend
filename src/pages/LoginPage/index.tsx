@@ -14,8 +14,8 @@ const Login = () => {
               />
             </div>
             <div className="space-y-2 text-center">
-              <h1 className="text-gray-800 text-3xl font-bold">환영합니다!</h1>
-              <p className="text-gray-600 text-sm">
+              <h1 className="text-3xl font-bold">환영합니다!</h1>
+              <p className="text-sm text-gray">
                 로그인하여 창작의 여정을 시작하세요
               </p>
             </div>
