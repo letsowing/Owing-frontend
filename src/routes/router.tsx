@@ -46,6 +46,10 @@ const router = createBrowserRouter([
             path: 'projectInfo',
             element: <ProjectInfoPage />,
           },
+          {
+            path: 'login',
+            element: <Login />,
+          },
         ],
       },
       {
@@ -68,10 +72,6 @@ const router = createBrowserRouter([
             element: <UniversePage />,
           },
         ],
-      },
-      {
-        path: 'login',
-        element: <Login />,
       },
       {
         path: 'register',
