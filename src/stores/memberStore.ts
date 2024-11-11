@@ -1,13 +1,6 @@
+import { Member } from '@types'
 import { create } from 'zustand'
 import { createJSONStorage, persist } from 'zustand/middleware'
-
-interface Member {
-  id: number
-  email: string
-  name: string
-  nickname: string
-  profileUrl: string
-}
 
 interface MemberState {
   member: Member | null

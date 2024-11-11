@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 
+import useMemberStore from '@stores/memberStore'
 import { useMenuStore } from '@stores/menuStore'
 import { useProjectStore } from '@stores/projectStore'
 
@@ -13,11 +14,10 @@ import QuickAccess from './QuickAccess'
 import ProjectModal from './modal/ProjectModal'
 
 import { WORD_COUNT_STATS } from '@datas/wordCountStats'
-import { getMember } from '@services/memberService'
 import { getAllProjects, postCreateProject } from '@services/projectService'
-import { Member, ModalType, Project, ProjectSummary } from '@types'
+import { ModalType, Project, ProjectSummary } from '@types'
 
-const initialMember: Member = {
+const initialMember = {
   id: 0,
   email: '',
   name: '',
@@ -29,20 +29,12 @@ const Main = () => {
   const { modals, openModal, closeModal } = useModalManagement()
   const { goToProject } = useNavigation()
   const { setCurrentProject } = useProjectStore()
-  const [member, setMember] = useState<Member>(initialMember)
+  const { member } = useMemberStore()
   const [projects, setProjects] = useState<ProjectSummary[]>([])
   const [sortedProjects, setSortedProjects] = useState<ProjectSummary[]>([])
   const setActivePath = useMenuStore((state) => state.setActivePath)
 
   useEffect(() => {
-    const fetchMember = async () => {
-      try {
-        const fetchedMember = await getMember(1)
-        setMember(fetchedMember)
-      } catch (error) {
-        console.error('회원 조회 실패', error)
-      }
-    }
     const fetchProjects = async () => {
       try {
         const fetchedProjects = await getAllProjects('CREATED_AT')
@@ -53,7 +45,6 @@ const Main = () => {
         console.error('프로젝트 리스트 조회 실패:', error)
       }
     }
-    fetchMember()
     fetchProjects()
   }, [])
 
@@ -109,7 +100,7 @@ const Main = () => {
       <div className="container mx-auto px-4 md:px-8 lg:px-12">
         <div className="flex flex-col gap-8 lg:flex-row">
           <div className="mt-6 lg:w-1/4">
-            <Profile member={member} />
+            <Profile member={member || initialMember} />
             <Dashboard
               todayWordCount={WORD_COUNT_STATS.todayWordCount}
               monthTotalWordCount={WORD_COUNT_STATS.monthTotalWordCount}
