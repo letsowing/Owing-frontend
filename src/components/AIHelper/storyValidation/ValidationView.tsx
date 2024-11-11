@@ -1,6 +1,6 @@
-import { ValidationChat } from './ValidationChat'
+import { Header } from '@components/aiHelper/Header'
 
-import { Header } from '@/components/aiHelper/Header'
+import { ValidationChat } from './ValidationChat'
 
 export const ValidationView = () => {
   return (

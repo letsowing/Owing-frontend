@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Header } from '@/components/aiHelper/Header'
+import { Header } from '@components/aiHelper/Header'
 
 export const SpellingView: React.FC = () => {
   return (
