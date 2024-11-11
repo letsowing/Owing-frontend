@@ -1,11 +1,13 @@
 import React from 'react'
 
+import useMemberStore from '@stores/memberStore'
 import { useThemeStore } from '@stores/themeStore'
 
 import useNavigation from '@hooks/useNavigation'
 
 import DarkHeaderOwing from '@assets/common/DarkHeaderOwing.png'
 import HeaderOwing from '@assets/common/HeaderOwing.png'
+import { postLogout } from '@services/authService'
 
 const LeftHeader: React.FC = () => {
   const { isDarkMode } = useThemeStore()
@@ -26,6 +28,18 @@ const LeftHeader: React.FC = () => {
 
 const RightHeader: React.FC = () => {
   const { goToLanding, goToContactUs, goToLogin } = useNavigation()
+  const { isLoggedIn, logout } = useMemberStore()
+
+  const handleAuthClick = () => {
+    if (isLoggedIn) {
+      logout()
+      postLogout()
+      goToLanding()
+    } else {
+      goToLogin()
+    }
+  }
+
   return (
     <nav className="flex items-center space-x-12">
       <button
@@ -36,10 +50,10 @@ const RightHeader: React.FC = () => {
       </button>
 
       <button
-        onClick={goToLogin}
+        onClick={handleAuthClick}
         className="bg-gradient-to-b from-redorange to-orange bg-clip-text font-bold text-transparent dark:from-blue dark:to-skyblue"
       >
-        Logout
+        {isLoggedIn ? 'Logout' : 'Login'}
       </button>
 
       <button

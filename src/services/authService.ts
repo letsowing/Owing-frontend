@@ -1,3 +1,5 @@
+import useMemberStore from '@stores/memberStore'
+
 import axiosInstance from '@utils/httpCommons'
 
 import { Token } from '@types'
@@ -25,6 +27,8 @@ export const postRefreshToken = async (): Promise<Token> => {
     return response.data
   } catch (error) {
     console.error('토큰 재발급 실패:', error)
+    useMemberStore.getState().logout()
+    window.location.href = '/login'
     throw error
   }
 }
@@ -35,5 +39,8 @@ export const postLogout = async (): Promise<void> => {
   } catch (error) {
     console.error('로그아웃 실패', error)
     throw error
+  } finally {
+    useMemberStore.getState().logout()
+    window.location.href = '/'
   }
 }

@@ -14,7 +14,8 @@ const HeaderTabLayout: React.FC = () => {
   const isNotTabPage =
     location.pathname === '/' ||
     location.pathname === '/main' ||
-    location.pathname === '/contactUs'
+    location.pathname === '/contactUs' ||
+    location.pathname === '/login'
 
   return (
     <div className="flex h-screen">
