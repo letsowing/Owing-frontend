@@ -16,12 +16,12 @@ export const FeatureButton: React.FC<FeatureButtonProps> = ({
     <button
       type="button"
       onClick={onClick}
-      className="hover:bg-gray-50 flex w-full items-center rounded-lg border p-4 text-left transition-colors"
+      className="flex w-full items-center rounded-lg border border-lightgray p-4 text-left hover:bg-beige dark:hover:bg-coldbeige"
     >
       <span className="mr-4 flex-shrink-0 text-2xl">{icon}</span>
       <div>
-        <h3 className="text-gray-900 font-medium">{title}</h3>
-        <p className="text-gray-600 mt-1 text-sm">{description}</p>
+        <p className="text-xs text-gray">{description}</p>
+        <h3 className="font-medium">{title}</h3>
       </div>
     </button>
   )

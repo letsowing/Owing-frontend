@@ -1,6 +1,5 @@
 import { FeatureButton } from './FeatureButton'
 
-import { Header } from '@/components/aiHelper/Header'
 import { Feature } from '@types'
 
 interface FeatureSelectionProps {
@@ -13,7 +12,7 @@ export const FeatureSelection = ({
   const features: Feature[] = [
     {
       id: 'validation',
-      title: '검증하기',
+      title: '설정 검사',
       icon: '💡',
       description: '오늘은 무엇을 도와드릴까요?',
     },
@@ -32,17 +31,14 @@ export const FeatureSelection = ({
   ]
 
   return (
-    <div className="flex h-full flex-col">
-      <Header />
-      <main className="flex flex-col gap-4 bg-white p-6">
-        {features.map((feature) => (
-          <FeatureButton
-            key={feature.id}
-            {...feature}
-            onClick={() => onSelectFeature(feature.id)}
-          />
-        ))}
-      </main>
-    </div>
+    <main className="flex flex-col gap-3 px-6 pb-5">
+      {features.map((feature) => (
+        <FeatureButton
+          key={feature.id}
+          {...feature}
+          onClick={() => onSelectFeature(feature.id)}
+        />
+      ))}
+    </main>
   )
 }

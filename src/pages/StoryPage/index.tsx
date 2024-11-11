@@ -9,9 +9,16 @@ import { ValidationView } from '@components/aiHelper/storyValidation/ValidationV
 import { StoryEditor } from './StoryEditor'
 
 import { Feature } from '@types'
+import { createPortal } from 'react-dom'
+import { BiMessageError } from 'react-icons/bi'
+import { ImMenu } from 'react-icons/im'
+import { LiaSearchSolid } from 'react-icons/lia'
+import { MdOutlineThumbUp } from 'react-icons/md'
 
 const StoryWrapper = () => {
-  const [selectedFeature, setSelectedFeature] = useState<Feature['id']>('home')
+  const [selectedFeature, setSelectedFeature] = useState<Feature['id'] | null>(
+    null,
+  )
 
   const renderContent = () => {
     switch (selectedFeature) {
@@ -21,40 +28,50 @@ const StoryWrapper = () => {
         return <SpellingView />
       case 'search':
         return <SearchView />
-      case 'home':
-        return <AIHelper onFeatureSelect={setSelectedFeature} />
+      default:
+        return <AIHelper onSelectFeature={setSelectedFeature} />
     }
   }
 
   return (
     <>
-      <StoryEditor />
-      <div className="flex">
-        <div className="flex-1">{renderContent()}</div>
-        {selectedFeature && (
-          <div className="flex flex-col border-l">
-            <TabItem
-              label="홈"
-              isActive={selectedFeature === 'home'}
-              onClick={() => setSelectedFeature('home')}
-            />
-            <TabItem
-              label="검증"
-              isActive={selectedFeature === 'validation'}
-              onClick={() => setSelectedFeature('validation')}
-            />
-            <TabItem
-              label="맞춤법"
-              isActive={selectedFeature === 'spelling'}
-              onClick={() => setSelectedFeature('spelling')}
-            />
-            <TabItem
-              label="검색어"
-              isActive={selectedFeature === 'search'}
-              onClick={() => setSelectedFeature('search')}
-            />
+      {createPortal(
+        <div className="z-999 absolute right-10 top-20 h-3/4 w-1/3 rounded-lg border border-lightgray bg-white pl-1 text-darkgray">
+          <div className="flex h-full">
+            <div className="flex-1">{renderContent()}</div>
+            {selectedFeature && (
+              <div className="flex flex-col border-l">
+                <TabItem
+                  label="홈"
+                  icon={ImMenu}
+                  onClick={() => setSelectedFeature(null)}
+                />
+                <TabItem
+                  label="설정 검사"
+                  icon={BiMessageError}
+                  isActive={selectedFeature === 'validation'}
+                  onClick={() => setSelectedFeature('validation')}
+                />
+                <TabItem
+                  label="맞춤법 검사"
+                  icon={MdOutlineThumbUp}
+                  isActive={selectedFeature === 'spelling'}
+                  onClick={() => setSelectedFeature('spelling')}
+                />
+                <TabItem
+                  label="검색어 추천"
+                  icon={LiaSearchSolid}
+                  isActive={selectedFeature === 'search'}
+                  onClick={() => setSelectedFeature('search')}
+                />
+              </div>
+            )}
           </div>
-        )}
+        </div>,
+        document.body,
+      )}
+      <div className="relative z-0 mt-10">
+        <StoryEditor />
       </div>
     </>
   )

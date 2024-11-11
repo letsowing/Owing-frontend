@@ -7,6 +7,7 @@ export const editorConfig = {
   icons: 'thin',
   menubar: true,
   placeholder: 'Ask a question or post an update...',
+  z_index: 100,
 
   // 모든 무료 플러그인 포함
   plugins: [

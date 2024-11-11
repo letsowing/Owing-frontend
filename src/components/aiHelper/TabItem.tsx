@@ -1,21 +1,35 @@
+import { IconType } from 'react-icons/lib'
+
 interface TabItemProps {
   label: string
-  isActive: boolean
+  icon: IconType
+  isActive?: boolean
   onClick: () => void
 }
 
-export const TabItem = ({ label, isActive, onClick }: TabItemProps) => {
+export const TabItem = ({
+  label,
+  icon: Icon,
+  isActive,
+  onClick,
+}: TabItemProps) => {
   return (
-    <button
-      type="button"
-      className={`focus:ring-blue-200 w-full px-4 py-3 text-left font-medium outline-none focus:ring-2 ${
-        isActive
-          ? 'border-blue-500 text-blue-500 bg-blue-50 border-r-2'
-          : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
+    <div
+      className={`mx-3 my-3 flex cursor-pointer flex-col items-center text-center ${
+        isActive ? 'text-redorange dark:text-blue' : ''
       }`}
       onClick={onClick}
     >
-      {label}
-    </button>
+      <div
+        className={`mb-1 p-3 ${
+          isActive ? 'rounded-full bg-beige dark:bg-coldbeige' : ''
+        }`}
+      >
+        <Icon className="h-6 w-6" />
+      </div>
+      <button type="button" className="text-xs font-medium">
+        {label}
+      </button>
+    </div>
   )
 }

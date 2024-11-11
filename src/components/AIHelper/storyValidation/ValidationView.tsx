@@ -4,11 +4,9 @@ import { ValidationChat } from './ValidationChat'
 
 export const ValidationView = () => {
   return (
-    <div className="flex flex-1 flex-col bg-white">
+    <div className="flex flex-col">
       <Header />
-      <div className="flex flex-1">
-        <ValidationChat />
-      </div>
+      <ValidationChat />
     </div>
   )
 }
