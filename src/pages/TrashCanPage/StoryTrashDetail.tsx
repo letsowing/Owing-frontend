@@ -1,4 +1,4 @@
-import { TrashContentProps } from '@/types'
+import { TrashContentProps } from '@types'
 
 const StoryTrashDetail = ({ selection }: TrashContentProps) => {
   if (!selection.selectedFile || !selection.selectedFolder) {

@@ -2,13 +2,13 @@ import useMemberStore from '@stores/memberStore'
 
 import useNavigation from '@hooks/useNavigation'
 
-import { postOauthLogin } from '@/services/authService'
 import {
   CredentialResponse,
   GoogleLogin,
   GoogleOAuthProvider,
 } from '@react-oauth/google'
 import { jwtDecode } from 'jwt-decode'
+import { postOauthLogin } from 'services/authService'
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
 

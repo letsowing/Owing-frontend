@@ -4,3 +4,7 @@ export type Feature = {
   icon: string
   description: string
 }
+export type Message = {
+  id: number
+  content: string
+}

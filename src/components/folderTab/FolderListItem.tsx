@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useDnd } from '@hooks/useDnd'
 import useNavigation from '@hooks/useNavigation'
 
-import { FileItem } from '@/types'
+import { FileItem } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 import { GoPencil } from 'react-icons/go'
 import { PiTrashSimpleLight } from 'react-icons/pi'

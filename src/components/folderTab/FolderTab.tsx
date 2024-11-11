@@ -108,6 +108,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
       <ul className="max-h-[780px] overflow-auto">
         {items.map((folder: FolderItem, index: number) => (
           <FolderList
+            key={folder.id}
             folders={items}
             index={index}
             onSelectFolder={handleSelectFolder}
