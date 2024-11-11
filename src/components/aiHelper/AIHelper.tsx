@@ -1,6 +1,7 @@
+import { Header } from '@components/aiHelper/Header'
+
 import { FeatureSelection } from './main/FeatureSelection'
 
-import { Header } from '@/components/aiHelper/Header'
 import { Feature } from '@types'
 import { FcIdea } from 'react-icons/fc'
 import { MdErrorOutline } from 'react-icons/md'
