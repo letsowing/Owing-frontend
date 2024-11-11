@@ -1,7 +1,6 @@
-import { Header } from '@components/aiHelper/Header'
-
 import { FeatureButton } from './FeatureButton'
 
+import { Header } from '@/components/aiHelper/Header'
 import { Feature } from '@types'
 
 interface FeatureSelectionProps {

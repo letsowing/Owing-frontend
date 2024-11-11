@@ -1,13 +1,12 @@
 import { useState } from 'react'
 
-import { AIHelper } from '@components/aiHelper/AIHelper'
-import { TabItem } from '@components/aiHelper/TabItem'
-import { SearchView } from '@components/aiHelper/aiSearch/SearchView'
-import { SpellingView } from '@components/aiHelper/spellingValidation/SpellingView'
-import { ValidationView } from '@components/aiHelper/storyValidation/ValidationView'
-
 import { StoryEditor } from './StoryEditor'
 
+import { AIHelper } from '@/components/aiHelper/AIHelper'
+import { TabItem } from '@/components/aiHelper/TabItem'
+import { SearchView } from '@/components/aiHelper/aiSearch/SearchView'
+import { SpellingView } from '@/components/aiHelper/spellingValidation/SpellingView'
+import { ValidationView } from '@/components/aiHelper/storyValidation/ValidationView'
 import { Feature } from '@types'
 
 const StoryWrapper = () => {
