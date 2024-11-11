@@ -36,11 +36,11 @@ const StoryWrapper = () => {
   return (
     <>
       {createPortal(
-        <div className="z-999 absolute right-10 top-20 h-3/4 w-1/3 rounded-lg border border-lightgray bg-white pl-1 text-darkgray">
+        <div className="z-999 absolute right-10 top-20 h-4/5 w-1/3 rounded-lg border border-lightgray bg-white pl-1 text-darkgray">
           <div className="flex h-full">
-            <div className="flex-1">{renderContent()}</div>
+            <div className="h-2/3 flex-1">{renderContent()}</div>
             {selectedFeature && (
-              <div className="flex flex-col border-l">
+              <div className="flex flex-col bg-beige dark:bg-coldbeige">
                 <TabItem
                   label="홈"
                   icon={ImMenu}

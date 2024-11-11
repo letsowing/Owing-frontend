@@ -8,7 +8,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ title = '호쇼기' }) => {
   return (
-    <header className="flex items-center justify-between bg-white px-4 py-3">
+    <header className="flex items-center justify-between px-5 py-3">
       <div className="flex flex-col">
         <h1 className="flex items-center font-semibold">
           <span>{title}</span>

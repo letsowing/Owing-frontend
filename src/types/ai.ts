@@ -7,4 +7,5 @@ export type Feature = {
 export type Message = {
   id: number
   content: string
+  date: string
 }

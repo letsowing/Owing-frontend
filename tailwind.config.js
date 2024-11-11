@@ -8,6 +8,7 @@ export default {
     extend: {
       colors: {
         beige: '#FDF8F3',
+        darkbeige: '#FFECD8',
         orange: '#EF931A',
         redorange: '#FB5D2B',
         lightredorange: '#FF9060',
@@ -23,6 +24,7 @@ export default {
 
         // dark mode
         coldbeige: '#F5F7FF',
+        darkcoldbeige: '#DDEBFF',
         skyblue: '#C3DCFE',
         cornflowerblue: '#809CFF',
         blue: '#3082F6',
