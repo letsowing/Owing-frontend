@@ -12,3 +12,32 @@ export const putUniverseDescription = async (
     throw error
   }
 }
+
+export const postUniverseGenerateAiImage = async (data: {
+  name: string
+  description: string
+}): Promise<{ imageUrl: string }> => {
+  try {
+    const response = await axiosInstance.post('/universes/images', data)
+    return response.data
+  } catch (error) {
+    console.error('세계관 AI 이미지 생성 실패', error)
+    throw error
+  }
+}
+
+export const getUniversePresignedUrl = async (
+  fileName: string,
+): Promise<{
+  presignedUrl: string
+  fileURl: string
+  fileName: string
+}> => {
+  try {
+    const response = await axiosInstance.get(`/universes/files/${fileName}`)
+    return response.data
+  } catch (error) {
+    console.error('세계관 Presigned Url 생성 실패:', error)
+    throw error
+  }
+}

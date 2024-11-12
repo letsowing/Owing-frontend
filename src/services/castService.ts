@@ -2,6 +2,7 @@ import axiosInstance from '@utils/httpCommons'
 
 import {
   Cast,
+  CastAiImageRequest,
   CastCoord,
   CastGraph,
   CastPostRequest,
@@ -146,6 +147,34 @@ export const getCastGraph = async (projectId: number): Promise<CastGraph> => {
     return response.data
   } catch (error) {
     console.error('Failed to get cast graph:', error)
+    throw error
+  }
+}
+
+export const postCastGenerateAiImage = async (
+  data: CastAiImageRequest,
+): Promise<{ imageUrl: string }> => {
+  try {
+    const response = await axiosInstance.post('cast/images', data)
+    return response.data
+  } catch (error) {
+    console.error('Failed to generate cast AI iamge:', error)
+    throw error
+  }
+}
+
+export const getCastPresignedUrl = async (
+  fileName: string,
+): Promise<{
+  presignedUrl: string
+  fileURl: string
+  fileName: string
+}> => {
+  try {
+    const response = await axiosInstance.get(`/cast/files/${fileName}`)
+    return response.data
+  } catch (error) {
+    console.error('인물 Presigned Url 생성 실패:', error)
     throw error
   }
 }

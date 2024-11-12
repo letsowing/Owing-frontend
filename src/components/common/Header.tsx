@@ -46,21 +46,20 @@ const RightHeader: React.FC = () => {
         onClick={goToLanding}
         className="bg-gradient-to-b from-redorange to-orange bg-clip-text font-bold text-transparent dark:from-blue dark:to-skyblue"
       >
-        How to use
+        서비스 소개
       </button>
-
       <button
         onClick={handleAuthClick}
         className="bg-gradient-to-b from-redorange to-orange bg-clip-text font-bold text-transparent dark:from-blue dark:to-skyblue"
       >
-        {isLoggedIn ? 'Logout' : 'Login'}
+        {isLoggedIn ? '로그아웃' : '로그인'}
       </button>
 
       <button
         onClick={goToContactUs}
         className="rounded-full bg-gradient-to-r from-redorange to-orange px-6 py-2 font-bold text-white dark:from-blue dark:to-skyblue"
       >
-        Contact us
+        문의하기
       </button>
     </nav>
   )

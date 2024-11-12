@@ -30,12 +30,12 @@ export const postCreateProject = async (
   }
 }
 
-export const postGenerateAiImage = async (
+export const postProjectGenerateAiImage = async (
   title: string,
   description: string,
   category: string,
   genres: string[],
-): Promise<string> => {
+): Promise<{ imageUrl: string }> => {
   try {
     const payload = {
       title,
@@ -43,7 +43,7 @@ export const postGenerateAiImage = async (
       category,
       genres,
     }
-    const response = await axiosInstance.post('/projects/image', payload)
+    const response = await axiosInstance.post('/projects/images', payload)
     return response.data
   } catch (error) {
     console.error('프로젝트 AI 표지 생성 실패:', error)
@@ -80,6 +80,22 @@ export const deleteProject = async (projectId: number): Promise<void> => {
     await axiosInstance.delete(`/projects/${projectId}`)
   } catch (error) {
     console.error('프로젝트 생성 실패:', error)
+    throw error
+  }
+}
+
+export const getProjectPresignedUrl = async (
+  fileName: string
+): Promise<{ 
+  presignedUrl: string
+  fileURl: string
+  fileName: string
+}> => {
+  try {
+    const response = await axiosInstance.get(`/projects/files/${fileName}`)
+    return response.data
+  } catch (error) {
+    console.error('프로젝트 Presigned Url 생성 실패:', error)
     throw error
   }
 }

@@ -45,7 +45,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-      <div className="fixed bottom-4 text-center text-sm text-gray">
+      <div className="fixed bottom-4 text-center text-sm text-gray dark:text-coldbeige">
         © 2024. (주)_상류사회 Co, Ltd. All rights reserved.
       </div>
     </div>
