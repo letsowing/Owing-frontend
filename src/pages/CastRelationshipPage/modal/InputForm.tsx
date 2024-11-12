@@ -3,18 +3,26 @@ import React from 'react'
 import InputField from '@components/common/InputField'
 import TextAreaField from '@components/common/TextAreaField'
 
-import { Cast } from '@types'
+import FolderSelectList from './FolderSelectList'
+
+import { Cast, FolderSummary } from '@types'
 
 interface InputFormProps {
   isEditable: boolean
   cast: Cast
+  selectedFolderId?: number
+  folderList: FolderSummary[]
   onInputChange: (field: keyof Cast, value: string | number) => void
+  onFolderSelect: (folderId: number) => void
 }
 
 const InputForm: React.FC<InputFormProps> = ({
   isEditable,
   cast,
+  selectedFolderId,
+  folderList,
   onInputChange,
+  onFolderSelect,
 }) => {
   return (
     <div className="flex flex-col space-y-9 pe-1">
@@ -51,15 +59,27 @@ const InputForm: React.FC<InputFormProps> = ({
           />
         </div>
       </div>
-      <InputField
-        type="text"
-        labelValue="역할/직업"
-        value={cast.role}
-        isRequired={true}
-        maxLength={200}
-        isEditable={isEditable}
-        onChange={(value) => onInputChange('role', value)}
-      />
+      <div className="flex justify-evenly gap-4">
+        <div className="w-full">
+          <InputField
+            type="text"
+            labelValue="역할/직업"
+            value={cast.role}
+            isRequired={true}
+            maxLength={200}
+            isEditable={isEditable}
+            onChange={(value) => onInputChange('role', value)}
+          />
+        </div>
+        <div className="w-full">
+          <FolderSelectList
+            folders={folderList}
+            selectedFolderId={selectedFolderId}
+            onFolderSelect={onFolderSelect}
+            isEditable={isEditable}
+          />
+        </div>
+      </div>
       <TextAreaField
         labelValue="세부사항"
         value={cast.description}

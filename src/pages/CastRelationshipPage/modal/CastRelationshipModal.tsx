@@ -29,28 +29,39 @@ const initialCast: Cast = {
 
 const CastRelationshipModal = ({
   isEditable,
+  folderId,
+  folderList,
   onEdit,
   onSave,
   onClose,
 }: CastRelationshipModalProps) => {
   const { modals } = useModalManagement()
   const [editableCast, setEditableCast] = useState<Cast>(initialCast)
+  const [selectedFolderId, setSelectedFolderId] = useState<number | undefined>()
 
   useEffect(() => {
     if (modals.length > 0) {
       const currentModal = modals[modals.length - 1]
       if (currentModal.type === ModalType.CHARACTER_RELATIONSHIP) {
         setEditableCast(currentModal.cast || initialCast)
+
+        if (folderId) {
+          setSelectedFolderId(folderId)
+        }
       }
     }
-  }, [modals])
+  }, [folderId, modals])
 
   const handleInputChange = (field: keyof Cast, value: string | number) => {
     setEditableCast((prev) => ({ ...prev, [field]: value }))
   }
 
+  const handleFolderSelect = (folderId: number) => {
+    setSelectedFolderId(folderId)
+  }
+
   const handleSave = async () => {
-    onSave(editableCast)
+    onSave(editableCast, selectedFolderId)
   }
 
   const handleAIImageGeneration = () => {
@@ -86,7 +97,10 @@ const CastRelationshipModal = ({
           <InputForm
             isEditable={isEditable}
             cast={editableCast}
+            selectedFolderId={selectedFolderId}
+            folderList={folderList}
             onInputChange={handleInputChange}
+            onFolderSelect={handleFolderSelect}
           />
           {!isEditable && (
             <div className="mt-8">

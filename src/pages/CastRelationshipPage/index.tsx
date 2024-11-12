@@ -18,6 +18,7 @@ import {
   deleteCastRelationship,
   getCast,
   getCastGraph,
+  getFolderList,
   patchCastCoord,
   patchCastRelationship,
   postCast,
@@ -29,6 +30,7 @@ import {
   CustomNodeProps,
   CustomNode as CustomNodeType,
   EdgeTypes,
+  FolderSummary,
   ModalType,
   NodeTypes,
 } from '@types'
@@ -71,6 +73,7 @@ const FlowWithProvider: React.FC = () => {
 
   const [isEditable, setIsEditable] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [folderList, setFolderList] = useState<FolderSummary[]>([])
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -78,6 +81,9 @@ const FlowWithProvider: React.FC = () => {
         setIsLoading(true)
         const graphData = await getCastGraph(currentProject.id)
         setInitialFlow(graphData.nodes, graphData.edges)
+
+        const list = await getFolderList(currentProject.id)
+        setFolderList(list)
       } catch (error) {
         console.error('초기 그래프 데이터를 가져오는 데 실패했습니다:', error)
       } finally {
@@ -119,7 +125,7 @@ const FlowWithProvider: React.FC = () => {
   )
 
   const handleCastAction = useCallback(
-    async (cast: Cast) => {
+    async (cast: Cast, selectedFolderId: number | undefined) => {
       try {
         const castData = {
           name: cast.name,
@@ -138,7 +144,7 @@ const FlowWithProvider: React.FC = () => {
           // 생성의 경우
           const newCastData = {
             ...castData,
-            folderId: 29,
+            folderId: selectedFolderId,
             coordinate: cast.position,
           }
           const newCast = await postCast(newCastData)
@@ -162,12 +168,14 @@ const FlowWithProvider: React.FC = () => {
     async (_event: React.MouseEvent, node: CustomNodeType) => {
       try {
         setIsLoading(true)
-        const cast = await getCast(node.id)
-        if (cast) {
+        const data = await getCast(node.id)
+        if (data) {
           openModal({
             type: ModalType.CHARACTER_RELATIONSHIP,
-            cast,
+            cast: data.cast,
             isEditable: false,
+            folderId: data.folderId,
+            folderList: folderList,
             onSave: handleCastAction,
             onEdit: toggleEditMode,
             onClose: handleCloseModal,
@@ -180,20 +188,28 @@ const FlowWithProvider: React.FC = () => {
         setIsLoading(false)
       }
     },
-    [handleCastAction, handleCloseModal, openModal, toggleEditMode],
+    [folderList, handleCastAction, handleCloseModal, openModal, toggleEditMode],
   )
 
-  const handleAddCast = useCallback(() => {
+  const handleAddCast = useCallback(async () => {
     openModal({
       type: ModalType.CHARACTER_RELATIONSHIP,
       cast: null,
       isEditable: true,
+      folderId: undefined,
+      folderList: folderList,
       onSave: handleCastAction,
       onEdit: toggleEditMode,
       onClose: handleCloseModal,
     })
     setIsEditable(true)
-  }, [handleCloseModal, handleCastAction, openModal, toggleEditMode])
+  }, [
+    openModal,
+    folderList,
+    handleCastAction,
+    toggleEditMode,
+    handleCloseModal,
+  ])
 
   const handleNodeRemove = useCallback(
     async (nodeId: string) => {
@@ -349,6 +365,8 @@ const FlowWithProvider: React.FC = () => {
             <CastRelationshipModal
               key={index}
               isEditable={isEditable}
+              folderId={modal.folderId}
+              folderList={modal.folderList}
               onEdit={() => setIsEditable(true)}
               onSave={handleCastAction}
               onClose={handleCloseModal}
