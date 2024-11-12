@@ -32,7 +32,6 @@ export const postCreateProject = async (
       '/projects',
       payload,
     )
-    //await putUploadImageToS3(response.data.presignedUrl, coverUrl)
     return response.data
   } catch (error) {
     console.error('프로젝트 생성 실패:', error)
@@ -78,9 +77,16 @@ export const putProject = async (
   data: ProjectPutRequest,
 ): Promise<void> => {
   try {
+    if (data.coverUrl.startsWith('data:')) {
+      const presignedUrlData = await getProjectPresignedUrl(
+        getImageExtensionFromBase64(data.coverUrl),
+      )
+      await putUploadImageToS3(presignedUrlData.presignedUrl, data.coverUrl)
+      data.coverUrl = presignedUrlData.fileURl
+    }
     await axiosInstance.put(`/projects/${projectId}`, data)
   } catch (error) {
-    console.error('프로젝트 생성 실패:', error)
+    console.error('프로젝트 수정 실패:', error)
     throw error
   }
 }
