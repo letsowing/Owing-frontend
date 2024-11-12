@@ -4,24 +4,23 @@ import { useRef, useState } from 'react'
 import { useDnd } from '@hooks/useDnd'
 
 import AlertOwing from '@assets/common/AlertOwing.png'
+import { putUniverseDescription } from '@services/universeService'
 import { DraggableBoxProps } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 
 export default function UniverseDraggableBox({
-  id,
   index,
-  name,
-  description,
+  files,
   folderId,
-  imageUrl,
   currentService,
 }: DraggableBoxProps) {
+  const file = files[index]
   const { moveFileItem, updateFile } = useDnd()
   const ref = useRef<HTMLDivElement>(null)
   const [isEditing, setIsEditing] = useState(false)
-  const [editedName, setEditedName] = useState(name)
-  const [editedDescription, setEditedDescription] = useState(description)
-  // const [editedImageUrl, setEditedImageUrl] = useState(imageUrl)
+  const [editedName, setEditedName] = useState(file.name)
+  const [editedDescription, setEditedDescription] = useState(file.description)
+  // const [editedImageUrl, setEditedImageUrl] = useState(file.imageUrl)
 
   const [, drop] = useDrop({
     accept: 'GRID_ITEM',
@@ -29,25 +28,37 @@ export default function UniverseDraggableBox({
       if (!ref.current) return
 
       const dragIndex = item.index
-
       if (dragIndex === index) return
+
+      let beforeId = null
+      let afterId = null
+
+      if (index > 0) {
+        beforeId = files[index - 1].id
+      }
+
+      if (index < files.length - 1) {
+        afterId = files[index].id
+      }
 
       moveFileItem(folderId, dragIndex, index)
       item.index = index
 
-      const data = {
-        position: item.index,
-        folderId,
-      }
-      currentService.patchFile(item.id, data).catch((error: any) => {
-        console.error('파일 이동 실패:', error)
-      })
+      currentService
+        .patchFilePosition(item.id, {
+          beforeId,
+          afterId,
+          folderId,
+        })
+        .catch((error: any) => {
+          console.error('파일 이동 실패:', error)
+        })
     },
   })
 
   const [{ isDragging }, drag] = useDrag({
     type: 'GRID_ITEM',
-    item: { id, index },
+    item: { id: file.id, index },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -63,16 +74,16 @@ export default function UniverseDraggableBox({
   const handleSave = async (e: React.MouseEvent) => {
     e.stopPropagation()
     try {
-      await currentService.putFile(id, {
+      await putUniverseDescription(file.id, {
         name: editedName,
         description: editedDescription,
-        imageUrl: imageUrl,
+        imageUrl: file.imageUrl!,
       })
 
-      updateFile(folderId, id, {
+      updateFile(folderId, file.id, {
         name: editedName,
         description: editedDescription,
-        imageUrl: imageUrl,
+        imageUrl: file.imageUrl,
       })
       setIsEditing(false)
     } catch (error) {
@@ -82,8 +93,8 @@ export default function UniverseDraggableBox({
 
   const handleCancel = (e: React.MouseEvent) => {
     e.stopPropagation()
-    setEditedName(name)
-    setEditedDescription(description)
+    setEditedName(file.name)
+    setEditedDescription(file.description)
     setIsEditing(false)
   }
 
@@ -95,11 +106,11 @@ export default function UniverseDraggableBox({
       }`}
     >
       <div className="flex w-full items-center">
-        {imageUrl ? (
+        {file.imageUrl ? (
           <div
             className="h-[240px] w-[240px] min-w-[240px] bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url(${imageUrl})`,
+              backgroundImage: `url(${file.imageUrl})`,
             }}
           ></div>
         ) : (
@@ -129,9 +140,9 @@ export default function UniverseDraggableBox({
             </>
           ) : (
             <>
-              <strong className="text-2xl font-semibold">{name}</strong>
+              <strong className="text-2xl font-semibold">{file.name}</strong>
               <p className="mt-4 h-[11rem] overflow-y-auto text-darkgray">
-                {description}
+                {file.description}
               </p>
             </>
           )}

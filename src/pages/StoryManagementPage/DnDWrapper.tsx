@@ -17,11 +17,11 @@ export default function DnDWrapper({
   currentService,
 }: DnDWrapperProps) {
   const { items } = useDnd()
-
-  const selectedFolder = items.find((folder) => folder.id === selectedFolderId)
   const { setSelectedFileId } = useProjectStore()
 
-  if (!selectedFolder || !selectedFolder.files) {
+  const selectedFolder = items.find((folder) => folder.id === selectedFolderId)
+
+  if (!selectedFolder || !selectedFolder.files.length) {
     return <EmptyFolder isFolderEmpty={!selectedFolder} />
   }
 
@@ -32,10 +32,8 @@ export default function DnDWrapper({
           selectedFolder.files.map((file, index) => (
             <DraggableBox
               key={file.id}
-              id={file.id}
               index={index}
-              name={file.name}
-              description={file.description}
+              files={selectedFolder.files}
               folderId={selectedFolder.id}
               currentService={currentService}
               onSelectFile={setSelectedFileId}

@@ -11,7 +11,6 @@ import { jwtDecode } from 'jwt-decode'
 import { postOauthLogin } from 'services/authService'
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID
-
 interface JwtPayload {
   sub: number
   email: string
