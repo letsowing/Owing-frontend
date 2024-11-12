@@ -53,6 +53,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
         description: 'This is a folder description',
       }
       const newFolder = await currentService.postFolder(folderData)
+      newFolder.files = []
       setItems([...items, newFolder])
     } catch (error) {
       console.error('새 폴더 생성 실패:', error)

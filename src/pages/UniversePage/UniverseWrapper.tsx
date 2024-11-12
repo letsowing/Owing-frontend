@@ -18,7 +18,7 @@ export default function UniverseWrapper({
 
   const selectedFolder = items.find((folder) => folder.id === selectedFolderId)
 
-  if (!selectedFolder || !selectedFolder.files) {
+  if (!selectedFolder || !selectedFolder.files.length) {
     return <EmptyFolder isFolderEmpty={!selectedFolder} />
   }
 
@@ -31,17 +31,14 @@ export default function UniverseWrapper({
         </p>
       </div>
 
-      <div className="flex flex-grow flex-col bg-[#FCFBFA] py-2">
+      <div className="flex flex-grow flex-col bg-beige py-2">
         {selectedFolder &&
           selectedFolder.files.map((file, index) => (
             <UniverseDraggableBox
               key={file.id}
-              id={file.id}
               index={index}
-              name={file.name}
-              description={file.description}
+              files={selectedFolder.files}
               folderId={selectedFolder.id}
-              imageUrl={file.imageUrl}
               currentService={currentService}
             />
           ))}

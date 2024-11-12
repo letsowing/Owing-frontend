@@ -2,7 +2,7 @@ import axiosInstance from '@utils/httpCommons'
 
 export const putUniverseDescription = async (
   fileId: number,
-  data: { name: string; description: string; imageUrl?: string },
+  data: { name: string; description: string; imageUrl: string },
 ): Promise<void> => {
   try {
     await axiosInstance.put(`universes/${fileId}`, data)

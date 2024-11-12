@@ -5,20 +5,29 @@ import {
   CastPostRequest,
   CastPutRequest,
   FileItem,
-  FilePostRequest,
-  FilePutRequest,
   FolderItem,
-  UpdateFilePositionRequest,
-  UpdateFolderPositionRequest,
+  PatchFilePositionRequest,
+  PatchFolderPositionRequest,
+  PostFileRequest,
 } from '@types'
 
 const createDirectoryService = (path: string) => ({
   // 폴더 관련 함수
-  getFolders: async (projectId: number): Promise<FolderItem[]> => {
+  getFolders: async (parentId: number): Promise<FolderItem[]> => {
     try {
       const response = await axiosInstance.get(
-        `${path}/folders?projectId=${projectId}`,
+        `${path}/folders?parentId=${parentId}`,
       )
+      return response.data.folderList
+    } catch (error) {
+      console.error('폴더 목록 조회 실패:', error)
+      throw error
+    }
+  },
+
+  getFolder: async (projectId: number): Promise<FolderItem[]> => {
+    try {
+      const response = await axiosInstance.get(`${path}/folders/${projectId}`)
       return response.data
     } catch (error) {
       console.error('폴더 목록 조회 실패:', error)
@@ -32,7 +41,7 @@ const createDirectoryService = (path: string) => ({
     description: string
   }): Promise<FolderItem> => {
     try {
-      const response = await axiosInstance.post(`${path}/folders`, data)
+      const response = await axiosInstance.post(`${path}/folders/dnd`, data)
       return response.data
     } catch (error) {
       console.error('새 폴더 생성 실패:', error)
@@ -40,18 +49,31 @@ const createDirectoryService = (path: string) => ({
     }
   },
 
-  putFolder: async (
+  patchFolderTitle: async (
     folderId: string,
-    data: {
-      name: string
-      description: string
-    },
+    data: { name: string },
   ): Promise<void> => {
     try {
-      await axiosInstance.put(`${path}/folders/${folderId}`, data)
+      await axiosInstance.patch(`${path}/folders/${folderId}/title`, data)
       console.log('폴더가 성공적으로 수정되었습니다.')
     } catch (error) {
       console.error('폴더 수정 실패:', error)
+      throw error
+    }
+  },
+
+  patchFolderPosition: async (
+    folderId: number,
+    { beforeId, afterId, projectId }: PatchFolderPositionRequest,
+  ): Promise<void> => {
+    try {
+      await axiosInstance.patch(`${path}/folders/${folderId}/position`, {
+        beforeId,
+        afterId,
+        projectId,
+      })
+    } catch (error) {
+      console.error('폴더 이동 실패:', error)
       throw error
     }
   },
@@ -66,36 +88,9 @@ const createDirectoryService = (path: string) => ({
     }
   },
 
-  patchFolder: async (
-    folderId: number,
-    { beforeId, afterId }: UpdateFolderPositionRequest,
-  ): Promise<void> => {
+  postFile: async (data: PostFileRequest): Promise<FileItem> => {
     try {
-      await axiosInstance.patch(`${path}/folders/${folderId}`, {
-        beforeId,
-        afterId,
-      })
-    } catch (error) {
-      console.error('폴더 이동 실패:', error)
-      throw error
-    }
-  },
-
-  // 파일 관련 함수
-  getFile: async (fileId: number): Promise<FileItem> => {
-    try {
-      const response = await axiosInstance.get(`${path}/${fileId}`)
-      console.log(response.data)
-      return response.data
-    } catch (error) {
-      console.error('파일 조회 실패:', error)
-      throw error
-    }
-  },
-
-  postFile: async (data: FilePostRequest): Promise<FileItem> => {
-    try {
-      const response = await axiosInstance.post(`${path}`, data)
+      const response = await axiosInstance.post(`${path}/dnd`, data)
       return response.data
     } catch (error) {
       console.error('새 파일 생성 실패:', error)
@@ -103,6 +98,7 @@ const createDirectoryService = (path: string) => ({
     }
   },
 
+  // postFile과 병합되면 지울 예정
   postCast: async (cast: Partial<CastPostRequest>): Promise<FileItem> => {
     try {
       const response = await axiosInstance.post(`${path}`, cast)
@@ -113,12 +109,28 @@ const createDirectoryService = (path: string) => ({
     }
   },
 
-  putFile: async (fileId: number, data: FilePutRequest): Promise<void> => {
+  patchFileTitle: async (
+    fileId: number,
+    data: { name: string },
+  ): Promise<void> => {
     try {
-      await axiosInstance.put(`${path}/${fileId}`, data)
+      await axiosInstance.patch(`${path}/${fileId}/title`, data)
       console.log('파일이 성공적으로 저장되었습니다.')
     } catch (error) {
       console.error('파일 저장 실패:', error)
+      throw error
+    }
+  },
+
+  patchFilePosition: async (
+    fileId: number,
+    data: PatchFilePositionRequest,
+  ): Promise<void> => {
+    try {
+      await axiosInstance.patch(`${path}/${fileId}/position`, data)
+      console.log('파일이 성공적으로 이동되었습니다.')
+    } catch (error) {
+      console.error('파일 이동 실패:', error)
       throw error
     }
   },
@@ -138,19 +150,6 @@ const createDirectoryService = (path: string) => ({
       console.log('파일이 성공적으로 삭제되었습니다.')
     } catch (error) {
       console.error('파일 삭제 실패:', error)
-      throw error
-    }
-  },
-
-  patchFile: async (
-    fileId: number,
-    data: UpdateFilePositionRequest,
-  ): Promise<void> => {
-    try {
-      await axiosInstance.patch(`${path}/${fileId}`, data)
-      console.log('파일이 성공적으로 이동되었습니다.')
-    } catch (error) {
-      console.error('파일 이동 실패:', error)
       throw error
     }
   },
