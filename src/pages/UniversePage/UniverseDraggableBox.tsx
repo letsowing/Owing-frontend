@@ -4,7 +4,10 @@ import { useRef, useState } from 'react'
 import { useDnd } from '@hooks/useDnd'
 
 import AlertOwing from '@assets/common/AlertOwing.png'
-import { putUniverseDescription } from '@services/universeService'
+import {
+  postUniverseGenerateAiImage,
+  putUniverseDescription,
+} from '@services/universeService'
 import { DraggableBoxProps } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 
@@ -20,7 +23,7 @@ export default function UniverseDraggableBox({
   const [isEditing, setIsEditing] = useState(false)
   const [editedName, setEditedName] = useState(file.name)
   const [editedDescription, setEditedDescription] = useState(file.description)
-  // const [editedImageUrl, setEditedImageUrl] = useState(file.imageUrl)
+  const [editedImageUrl, setEditedImageUrl] = useState(file.imageUrl)
 
   const [, drop] = useDrop({
     accept: 'GRID_ITEM',
@@ -98,6 +101,19 @@ export default function UniverseDraggableBox({
     setIsEditing(false)
   }
 
+  const handleAiImage = async () => {
+    try {
+      const data = await postUniverseGenerateAiImage({
+        name: editedName,
+        description: editedDescription,
+      })
+
+      setEditedImageUrl(data.imageUrl)
+    } catch (error) {
+      console.error('세계관 AI 이미지 생성 실패:', error)
+    }
+  }
+
   return (
     <div
       ref={ref}
@@ -106,11 +122,11 @@ export default function UniverseDraggableBox({
       }`}
     >
       <div className="flex w-full items-center">
-        {file.imageUrl ? (
+        {editedImageUrl ? (
           <div
             className="h-[240px] w-[240px] min-w-[240px] bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url(${file.imageUrl})`,
+              backgroundImage: `url(${editedImageUrl})`,
             }}
           ></div>
         ) : (
@@ -153,7 +169,10 @@ export default function UniverseDraggableBox({
         {isEditing ? (
           <>
             <div className="mb-auto flex flex-col items-end">
-              <button className="h-10 from-redorange to-orange px-4 text-sm text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white">
+              <button
+                className="h-10 from-redorange to-orange px-4 text-sm text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white"
+                onClick={handleAiImage}
+              >
                 + Create Image with AI
               </button>
               <button className="mt-2 h-10 px-4 text-sm text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white">
