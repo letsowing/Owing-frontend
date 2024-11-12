@@ -20,6 +20,7 @@ export default function UniverseDraggableBox({
   const file = files[index]
   const { moveFileItem, updateFile } = useDnd()
   const ref = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [editedName, setEditedName] = useState(file.name)
   const [editedDescription, setEditedDescription] = useState(file.description)
@@ -114,6 +115,21 @@ export default function UniverseDraggableBox({
     }
   }
 
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setEditedImageUrl(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
   return (
     <div
       ref={ref}
@@ -175,9 +191,19 @@ export default function UniverseDraggableBox({
               >
                 + Create Image with AI
               </button>
-              <button className="mt-2 h-10 px-4 text-sm text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white">
+              <button
+                className="mt-2 h-10 px-4 text-sm text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
+                onClick={handleUploadClick}
+              >
                 + Upload Image locally
               </button>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                className="hidden"
+              />
             </div>
             <div className="mt-auto flex flex-row items-center space-x-2">
               <button
