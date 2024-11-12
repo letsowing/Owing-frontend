@@ -25,3 +25,19 @@ export const postUniverseGenerateAiImage = async (data: {
     throw error
   }
 }
+
+export const getUniversePresignedUrl = async (
+  fileName: string,
+): Promise<{
+  presignedUrl: string
+  fileURl: string
+  fileName: string
+}> => {
+  try {
+    const response = await axiosInstance.get(`/universes/files/${fileName}`)
+    return response.data
+  } catch (error) {
+    console.error('세계관 Presigned Url 생성 실패:', error)
+    throw error
+  }
+}

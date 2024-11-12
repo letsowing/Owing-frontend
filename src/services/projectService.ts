@@ -83,3 +83,19 @@ export const deleteProject = async (projectId: number): Promise<void> => {
     throw error
   }
 }
+
+export const getProjectPresignedUrl = async (
+  fileName: string
+): Promise<{ 
+  presignedUrl: string
+  fileURl: string
+  fileName: string
+}> => {
+  try {
+    const response = await axiosInstance.get(`/projects/files/${fileName}`)
+    return response.data
+  } catch (error) {
+    console.error('프로젝트 Presigned Url 생성 실패:', error)
+    throw error
+  }
+}
