@@ -1,6 +1,8 @@
 import axiosInstance from '@utils/httpCommons'
 
-// import { putUploadImageToS3 } from './s3Service'
+import { putUploadImageToS3 } from './s3Service'
+
+import { getImageExtensionFromBase64 } from '@/utils/base64'
 import { ProjectPutRequest, ProjectSummary } from '@types'
 
 export const postCreateProject = async (
@@ -12,6 +14,11 @@ export const postCreateProject = async (
 ): Promise<ProjectSummary> => {
   try {
     if (coverUrl.startsWith('data:')) {
+      const presignedUrlData = await getProjectPresignedUrl(
+        getImageExtensionFromBase64(coverUrl),
+      )
+      await putUploadImageToS3(presignedUrlData.presignedUrl, coverUrl)
+      coverUrl = presignedUrlData.fileURl
     }
 
     const payload = {
