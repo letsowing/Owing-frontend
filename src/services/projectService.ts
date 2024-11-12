@@ -30,7 +30,7 @@ export const postCreateProject = async (
   }
 }
 
-export const postGenerateAiImage = async (
+export const postProjectGenerateAiImage = async (
   title: string,
   description: string,
   category: string,

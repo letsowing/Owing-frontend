@@ -151,7 +151,7 @@ export const getCastGraph = async (projectId: number): Promise<CastGraph> => {
   }
 }
 
-export const postGenerateAiImage = async (
+export const postCastGenerateAiImage = async (
   data: CastAiImageRequest,
 ): Promise<{ imageUrl: string }> => {
   try {
