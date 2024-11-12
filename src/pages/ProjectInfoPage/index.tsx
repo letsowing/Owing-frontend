@@ -9,7 +9,7 @@ import ProjectInfoForm from './ProjectInfoFormProps '
 
 import {
   deleteProject,
-  postGenerateAiImage,
+  postProjectGenerateAiImage,
   putProject,
 } from '@services/projectService'
 import { Project } from '@types'
@@ -114,13 +114,13 @@ const ProjectInfoPage = () => {
   const onAiGenerateClick = async () => {
     setIsGenerating(true)
     try {
-      const data = await postGenerateAiImage(
+      const data = await postProjectGenerateAiImage(
         project.title,
         project.description || '',
         project.category || '',
         project.genres || [],
       )
-      onImageChange(data)
+      onImageChange(data.imageUrl)
     } catch (error) {
       console.error('AI 이미지 생성 실패', error)
     } finally {
