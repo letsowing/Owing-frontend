@@ -18,7 +18,7 @@ export const postCreateProject = async (
         getImageExtensionFromBase64(coverUrl),
       )
       await putUploadImageToS3(presignedUrlData.presignedUrl, coverUrl)
-      coverUrl = presignedUrlData.fileURl
+      coverUrl = presignedUrlData.fileUrl
     }
 
     const payload = {
@@ -82,7 +82,7 @@ export const putProject = async (
         getImageExtensionFromBase64(data.coverUrl),
       )
       await putUploadImageToS3(presignedUrlData.presignedUrl, data.coverUrl)
-      data.coverUrl = presignedUrlData.fileURl
+      data.coverUrl = presignedUrlData.fileUrl
     }
     await axiosInstance.put(`/projects/${projectId}`, data)
   } catch (error) {
@@ -104,7 +104,7 @@ export const getProjectPresignedUrl = async (
   fileExtension: string,
 ): Promise<{
   presignedUrl: string
-  fileURl: string
+  fileUrl: string
 }> => {
   try {
     const response = await axiosInstance.get(`/projects/files/${fileExtension}`)

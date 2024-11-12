@@ -167,7 +167,7 @@ export const getCastPresignedUrl = async (
   fileExtension: string,
 ): Promise<{
   presignedUrl: string
-  fileURl: string
+  fileUrl: string
 }> => {
   try {
     const response = await axiosInstance.get(`/cast/files/${fileExtension}`)
