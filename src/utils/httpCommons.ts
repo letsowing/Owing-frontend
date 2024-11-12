@@ -6,8 +6,6 @@ const axiosInstance = axios.create({
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
-    Authorization:
-      'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwibmlja25hbWUiOiLsobDrsJXsgqwiLCJwcm9maWxlVXJsIjoiaHR0cHM6Ly9lbmNyeXB0ZWQtdGJuMC5nc3RhdGljLmNvbS9pbWFnZXM_cT10Ym46QU5kOUdjUmFfaUdQcDhsRUo1ZWpaSEg3a1dfS1FCLTk4UkRab2Ewb0ZBJnMiLCJleHAiOjQ4ODY3MDQ2NzV9.04woMcXQTjKEG4bf4C1fmJeOic7DFYaElectsbDKlFtKtH7IsKZkxzSSbPtCWDvQG9ZRuDRpRgMZwlQqVsjC0w',
   },
   withCredentials: true, // 세션 쿠키를 포함하여 요청
 })
