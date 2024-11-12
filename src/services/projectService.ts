@@ -11,6 +11,9 @@ export const postCreateProject = async (
   coverUrl: string,
 ): Promise<ProjectSummary> => {
   try {
+    if (coverUrl.startsWith('data:')) {
+    }
+
     const payload = {
       title,
       description,
@@ -85,14 +88,13 @@ export const deleteProject = async (projectId: number): Promise<void> => {
 }
 
 export const getProjectPresignedUrl = async (
-  fileName: string
-): Promise<{ 
+  fileExtension: string,
+): Promise<{
   presignedUrl: string
   fileURl: string
-  fileName: string
 }> => {
   try {
-    const response = await axiosInstance.get(`/projects/files/${fileName}`)
+    const response = await axiosInstance.get(`/projects/files/${fileExtension}`)
     return response.data
   } catch (error) {
     console.error('프로젝트 Presigned Url 생성 실패:', error)
