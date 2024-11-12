@@ -8,12 +8,28 @@ import {
   CastPostRequest,
   CastPutRequest,
   CastRelationship,
+  FolderSummary,
   PostCastRelationshipRequest,
+  getCastResponse,
 } from '@types'
 
-export const getCast = async (castId: string): Promise<Cast> => {
+export const getCast = async (castId: string): Promise<getCastResponse> => {
   try {
-    const response = await axiosInstance.get<Cast>(`/cast/${castId}`)
+    const response = await axiosInstance.get<getCastResponse>(`/cast/${castId}`)
+    return response.data
+  } catch (error) {
+    console.error('Failed to get cast:', error)
+    throw error
+  }
+}
+
+export const getFolderList = async (
+  projectId: number,
+): Promise<FolderSummary[]> => {
+  try {
+    const response = await axiosInstance.get<FolderSummary[]>(
+      `/cast/${projectId}/folderList`,
+    )
     return response.data
   } catch (error) {
     console.error('Failed to get cast:', error)
@@ -81,9 +97,9 @@ export const patchCastRelationship = async (
 }
 
 // DELETE /api/cast/relationship/{uuid}
-export const deleteCastRelationship = async (uuid: string): Promise<void> => {
+export const deleteCastRelationship = async (id: string): Promise<void> => {
   try {
-    await axiosInstance.delete(`/cast/relationship/${uuid}`)
+    await axiosInstance.delete(`/cast/relationship/${id}`)
   } catch (error) {
     console.error('Failed to delete cast relationship:', error)
     throw error

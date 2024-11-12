@@ -13,6 +13,11 @@ export interface FolderItem {
   files: FileItem[]
 }
 
+export interface FolderSummary {
+  id: number
+  name: string
+}
+
 export interface PatchFolderPositionRequest {
   beforeId: number | null
   afterId: number | null

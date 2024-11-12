@@ -13,6 +13,7 @@ export interface Cast {
     y: number
   }
 }
+
 export interface CastGraph {
   nodes: CustomNode[]
   edges: CastRelationship[]
@@ -41,8 +42,25 @@ export interface CastCoord {
   y: number
 }
 
-export interface CastPostRequest {
+export interface getCastResponse {
   folderId: number
+  cast: {
+    id: string
+    name: string
+    age: number
+    gender: string
+    role: string
+    description: string
+    imageUrl: string
+    position: {
+      x: number
+      y: number
+    }
+  }
+}
+
+export interface CastPostRequest {
+  folderId: number | undefined
   name: string
   age: number
   gender: string
