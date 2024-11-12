@@ -26,7 +26,7 @@ export interface PostFileRequest {
 }
 
 export interface PatchFilePositionRequest {
-  beforeId: number
-  afterId: number
+  beforeId: number | null
+  afterId: number | null
   folderId: number
 }

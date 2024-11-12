@@ -1,9 +1,7 @@
-import { getImageExtensionFromBase64 } from '@utils/base64'
 import axiosInstance from '@utils/httpCommons'
 
-import { putUploadImageToS3 } from './s3Service'
-
-import { ProjectPutRequest, ProjectSummary } from '@types'
+// import { putUploadImageToS3 } from './s3Service'
+import { Project, ProjectPutRequest, ProjectSummary } from '@types'
 
 export const postCreateProject = async (
   title: string,
@@ -13,14 +11,6 @@ export const postCreateProject = async (
   coverUrl: string,
 ): Promise<ProjectSummary> => {
   try {
-    if (coverUrl.startsWith('data:')) {
-      const presignedUrlData = await getProjectPresignedUrl(
-        getImageExtensionFromBase64(coverUrl),
-      )
-      await putUploadImageToS3(presignedUrlData.presignedUrl, coverUrl)
-      coverUrl = presignedUrlData.fileURl
-    }
-
     const payload = {
       title,
       description,
@@ -32,6 +22,7 @@ export const postCreateProject = async (
       '/projects',
       payload,
     )
+    //await putUploadImageToS3(response.data.presignedUrl, coverUrl)
     return response.data
   } catch (error) {
     console.error('프로젝트 생성 실패:', error)
@@ -72,21 +63,24 @@ export const getAllProjects = async (
   }
 }
 
+export const getProject = async (projectId: number): Promise<Project> => {
+  try {
+    const response = await axiosInstance.get(`/projects/${projectId}`)
+    return response.data
+  } catch (error) {
+    console.error('프로젝트 리스트 조회 실패:', error)
+    throw error
+  }
+}
+
 export const putProject = async (
   projectId: number,
   data: ProjectPutRequest,
 ): Promise<void> => {
   try {
-    if (data.coverUrl.startsWith('data:')) {
-      const presignedUrlData = await getProjectPresignedUrl(
-        getImageExtensionFromBase64(data.coverUrl),
-      )
-      await putUploadImageToS3(presignedUrlData.presignedUrl, data.coverUrl)
-      data.coverUrl = presignedUrlData.fileURl
-    }
     await axiosInstance.put(`/projects/${projectId}`, data)
   } catch (error) {
-    console.error('프로젝트 수정 실패:', error)
+    console.error('프로젝트 생성 실패:', error)
     throw error
   }
 }
@@ -101,13 +95,14 @@ export const deleteProject = async (projectId: number): Promise<void> => {
 }
 
 export const getProjectPresignedUrl = async (
-  fileExtension: string,
+  fileName: string,
 ): Promise<{
   presignedUrl: string
   fileURl: string
+  fileName: string
 }> => {
   try {
-    const response = await axiosInstance.get(`/projects/files/${fileExtension}`)
+    const response = await axiosInstance.get(`/projects/files/${fileName}`)
     return response.data
   } catch (error) {
     console.error('프로젝트 Presigned Url 생성 실패:', error)

@@ -54,6 +54,8 @@ export default function FolderListItem({
   const handleSaveFileName = async () => {
     const trimmedFileName = newFileName.trim()
     if (!trimmedFileName || trimmedFileName === file.name) {
+      setNewFileName(file.name)
+      setIsFileEditing(false)
       return
     }
     try {

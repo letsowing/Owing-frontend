@@ -6,8 +6,6 @@ import { useThemeStore } from '@stores/themeStore'
 import { useCharFlow } from '@hooks/useCharFlow'
 import { useModalManagement } from '@hooks/useModal'
 
-import { generateUUID } from '@utils/uuid'
-
 import AddButton from './AddButton'
 import BidirectionalEdge from './BidirectionalEdge'
 import CustomNode from './CustomNode'
@@ -20,15 +18,14 @@ import {
   deleteCastRelationship,
   getCast,
   getCastGraph,
+  patchCastCoord,
+  patchCastRelationship,
   postCast,
   postCastRelationship,
   putCast,
-  putCastCoord,
-  putCastRelationship,
 } from '@services/castService'
 import {
   Cast,
-  CastCoord,
   CustomNodeProps,
   CustomNode as CustomNodeType,
   EdgeTypes,
@@ -105,7 +102,7 @@ const FlowWithProvider: React.FC = () => {
       const edge = edges.find((e) => e.id === edgeId)
       if (edge) {
         try {
-          await putCastRelationship(edgeId, {
+          await patchCastRelationship(edgeId, {
             sourceId: Number(edge.source),
             targetId: Number(edge.target),
             label: newLabel,
@@ -123,31 +120,28 @@ const FlowWithProvider: React.FC = () => {
 
   const handleCastAction = useCallback(
     async (cast: Cast) => {
-      let castData
       try {
+        const castData = {
+          name: cast.name,
+          age: cast.age,
+          gender: cast.gender,
+          role: cast.role,
+          description: cast.description,
+          imageUrl: cast.imageUrl,
+        }
+
         if (cast.id) {
-          castData = {
-            name: cast.name,
-            age: cast.age,
-            gender: cast.gender,
-            role: cast.role,
-            description: cast.description,
-            imageUrl: cast.imageUrl,
-          }
+          // 수정의 경우
           await putCast(cast.id, castData)
           updateCast(cast)
         } else {
-          castData = {
+          // 생성의 경우
+          const newCastData = {
+            ...castData,
             folderId: 29,
-            name: cast.name,
-            age: cast.age,
-            gender: cast.gender,
-            role: cast.role,
-            description: cast.description,
-            imageUrl: cast.imageUrl,
             coordinate: cast.position,
           }
-          const newCast = await postCast(castData)
+          const newCast = await postCast(newCastData)
           addCast(newCast)
         }
         closeModal()
@@ -218,12 +212,8 @@ const FlowWithProvider: React.FC = () => {
 
   const onConnect = useCallback(
     async (connection: Connection) => {
-      const newEdgeId = generateUUID()
-      onConnectFromStore(connection, newEdgeId)
-
       try {
-        await postCastRelationship({
-          uuid: newEdgeId,
+        const newCast = await postCastRelationship({
           sourceId: Number(connection.source),
           targetId: Number(connection.target),
           label: '관계',
@@ -231,6 +221,7 @@ const FlowWithProvider: React.FC = () => {
           sourceHandle: connection.sourceHandle || 'left',
           targetHandle: connection.targetHandle || 'right',
         })
+        onConnectFromStore(connection, newCast.id)
       } catch (error) {
         console.error('Failed to create cast relationship:', error)
       }
@@ -248,12 +239,10 @@ const FlowWithProvider: React.FC = () => {
         if (change.type === 'position' && 'position' in change) {
           const { id, position } = change
           try {
-            await putCastCoord(id, {
-              position: {
-                x: position?.x ?? 0,
-                y: position?.y ?? 0,
-              },
-            } as unknown as CastCoord)
+            await patchCastCoord(id, {
+              x: position?.x ?? 0,
+              y: position?.y ?? 0,
+            })
           } catch (error) {
             console.error('Failed to update cast position:', error)
           }

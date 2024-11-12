@@ -10,7 +10,7 @@ const CastImage: React.FC<CastImageProps> = ({ imageUrl }) => {
       <div className="aspect-w-1 aspect-h-1 bg-gray-200 overflow-hidden rounded-lg">
         {imageUrl ? (
           <img
-            src={imageUrl}
+            src={imageUrl || ''}
             alt="Cast"
             className="h-full w-full object-cover"
           />

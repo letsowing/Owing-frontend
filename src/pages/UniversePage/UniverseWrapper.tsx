@@ -24,14 +24,14 @@ export default function UniverseWrapper({
 
   return (
     <>
-      <div className="m-4">
+      <div className="w-full bg-white px-4 pb-2">
         <h3 className="text-[24px] font-semibold">{selectedFolder.name}</h3>
         <p className="my-5 text-[18px] text-gray">
           {selectedFolder.description}
         </p>
       </div>
 
-      <div className="flex flex-grow flex-col bg-beige py-2">
+      <div className="flex flex-col py-2">
         {selectedFolder &&
           selectedFolder.files.map((file, index) => (
             <UniverseDraggableBox

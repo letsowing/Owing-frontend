@@ -23,12 +23,12 @@ export const postStory = async (
   }
 }
 
-export const putStoryDescription = async (
+export const putStory = async (
   fileId: number,
   data: { name: string; description: string },
 ): Promise<void> => {
   try {
-    await axiosInstance.put(`universes/${fileId}`, data)
+    await axiosInstance.put(`stories/${fileId}`, data)
     console.log('파일이 성공적으로 저장되었습니다.')
   } catch (error) {
     console.error('파일 저장 실패:', error)
