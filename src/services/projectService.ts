@@ -35,7 +35,7 @@ export const postGenerateAiImage = async (
   description: string,
   category: string,
   genres: string[],
-): Promise<string> => {
+): Promise<{ imageUrl: string }> => {
   try {
     const payload = {
       title,
@@ -43,7 +43,7 @@ export const postGenerateAiImage = async (
       category,
       genres,
     }
-    const response = await axiosInstance.post('/projects/image', payload)
+    const response = await axiosInstance.post('/projects/images', payload)
     return response.data
   } catch (error) {
     console.error('프로젝트 AI 표지 생성 실패:', error)
