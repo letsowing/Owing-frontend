@@ -47,6 +47,7 @@ export interface CastPostRequest {
     y: number
   }
 }
+
 export interface CastPutRequest {
   name: string
   age: number
@@ -68,4 +69,12 @@ export interface CastResponse {
     x: number
     y: number
   }
+}
+
+export interface CastAiImageRequest {
+  name: string
+  age: number
+  gender: string
+  role: string
+  description: string
 }
