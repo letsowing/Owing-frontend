@@ -9,7 +9,7 @@ import TextAreaField from '@components/common/TextAreaField'
 
 import { CATEGORY_LIST } from '@constants/categoryList'
 import { GENRE_LIST } from '@constants/genreList'
-import { postGenerateAiImage } from '@services/projectService'
+import { postProjectGenerateAiImage } from '@services/projectService'
 import { ModalType, Project, ProjectModalProps } from '@types'
 
 const initialProject: Project = {
@@ -58,13 +58,13 @@ const ProjectModal = ({
     const generateAiImage = async () => {
       setIsGenerating(true)
       try {
-        const data = await postGenerateAiImage(
+        const data = await postProjectGenerateAiImage(
           projectInput.title,
           projectInput.description || '',
           projectInput.category || '',
           projectInput.genres || [],
         )
-        onImageChange(data)
+        onImageChange(data.imageUrl)
       } catch (error) {
         console.error('AI 이미지 생성 실패', error)
       } finally {
