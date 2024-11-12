@@ -1,16 +1,10 @@
-import { base64ToBlob } from '@utils/base64'
-
 import axios from 'axios'
 
-export const putUploadImageToS3 = async (
-  presignedUrl: string,
-  base64Image: string,
-) => {
+export const putUploadImageToS3 = async (presignedUrl: string, file: File) => {
   try {
-    const imageBlob = base64ToBlob(base64Image)
-    await axios.put(presignedUrl, imageBlob, {
+    await axios.put(presignedUrl, file, {
       headers: {
-        'Content-Type': imageBlob.type,
+        'Content-Type': file.type,
       },
     })
   } catch (error) {

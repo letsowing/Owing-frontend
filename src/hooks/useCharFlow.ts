@@ -84,7 +84,7 @@ export const useCharFlow = () => {
       }))
 
       const edges = initialRelationships.map((rel) => ({
-        id: rel.uuid ?? generateUUID(),
+        id: rel.id ?? generateUUID(),
         source: rel.sourceId.toString(),
         target: rel.targetId.toString(),
         label: rel.label,

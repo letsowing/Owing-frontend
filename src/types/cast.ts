@@ -19,7 +19,16 @@ export interface CastGraph {
 }
 
 export interface CastRelationship {
-  uuid?: string
+  id: string
+  sourceId: number
+  targetId: number
+  label: string
+  type: keyof EdgeTypes
+  sourceHandle: string
+  targetHandle: string
+}
+
+export interface PostCastRelationshipRequest {
   sourceId: number
   targetId: number
   label: string
@@ -28,10 +37,8 @@ export interface CastRelationship {
   targetHandle: string
 }
 export interface CastCoord {
-  position: {
-    x: number
-    y: number
-  }
+  x: number
+  y: number
 }
 
 export interface CastPostRequest {

@@ -33,7 +33,7 @@ const CastInputForm: React.FC<CastInputFormProps> = ({
         <div className="w-full">
           <InputField
             type="number"
-            value={castData.age.toString()}
+            value={castData.age?.toString() || '0'}
             labelValue="나이"
             isRequired={false}
             maxLength={50}
@@ -44,7 +44,7 @@ const CastInputForm: React.FC<CastInputFormProps> = ({
         <div className="w-full">
           <InputField
             type="text"
-            value={castData.gender}
+            value={castData.gender || ''}
             labelValue="성별"
             isRequired={false}
             maxLength={50}
@@ -56,7 +56,7 @@ const CastInputForm: React.FC<CastInputFormProps> = ({
       <div className="mt-3">
         <InputField
           type="text"
-          value={castData.role}
+          value={castData.role || ''}
           labelValue="역할"
           isRequired={true}
           maxLength={200}
@@ -66,7 +66,7 @@ const CastInputForm: React.FC<CastInputFormProps> = ({
       </div>
       <div className="mt-3">
         <TextAreaField
-          value={castData.description}
+          value={castData.description || ''}
           labelValue="상세 정보"
           isRequired={false}
           maxLength={1000}

@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import { useDnd } from '@hooks/useDnd'
 
 import AlertOwing from '@assets/common/AlertOwing.png'
-import { putUniverseDescription } from '@services/universeService'
+import { putUniverse } from '@services/universeService'
 import { DraggableBoxProps } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 
@@ -72,16 +72,22 @@ export default function UniverseDraggableBox({
   }
 
   const handleSave = async (e: React.MouseEvent) => {
+    const trimmedEditedName = editedName.trim()
+    if (!trimmedEditedName) {
+      setIsEditing(false)
+      return
+    }
     e.stopPropagation()
+    console.log(editedDescription)
     try {
-      await putUniverseDescription(file.id, {
-        name: editedName,
+      await putUniverse(file.id, {
+        name: trimmedEditedName,
         description: editedDescription,
         imageUrl: file.imageUrl!,
       })
 
       updateFile(folderId, file.id, {
-        name: editedName,
+        name: trimmedEditedName,
         description: editedDescription,
         imageUrl: file.imageUrl,
       })
@@ -91,8 +97,7 @@ export default function UniverseDraggableBox({
     }
   }
 
-  const handleCancel = (e: React.MouseEvent) => {
-    e.stopPropagation()
+  const handleCancel = () => {
     setEditedName(file.name)
     setEditedDescription(file.description)
     setIsEditing(false)
@@ -101,7 +106,7 @@ export default function UniverseDraggableBox({
   return (
     <div
       ref={ref}
-      className={`shadow-gray-300/50 m-4 flex items-center rounded-[6px] bg-white p-6 shadow-lg ${
+      className={`shadow-gray-300/50 m-4 flex items-center rounded-md bg-white p-6 shadow-lg ${
         isDragging ? 'opacity-20' : ''
       }`}
     >
@@ -123,6 +128,7 @@ export default function UniverseDraggableBox({
             <div className="mt-4 text-redorange">이미지를 추가해 주세요!</div>
           </div>
         )}
+
         <div className="m-4 mb-auto flex w-3/4 flex-grow flex-col">
           {isEditing ? (
             <>
@@ -134,7 +140,7 @@ export default function UniverseDraggableBox({
               <textarea
                 className="mt-1 h-[11rem] w-full min-w-full overflow-y-auto rounded border border-lightgray p-2 text-darkgray"
                 rows={5}
-                value={editedDescription}
+                value={editedDescription || ''}
                 onChange={(e) => setEditedDescription(e.target.value)}
               />
             </>

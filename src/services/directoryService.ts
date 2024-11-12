@@ -1,9 +1,6 @@
 import axiosInstance from '@utils/httpCommons'
 
 import {
-  Cast,
-  CastPostRequest,
-  CastPutRequest,
   FileItem,
   FolderItem,
   PatchFilePositionRequest,
@@ -98,17 +95,6 @@ const createDirectoryService = (path: string) => ({
     }
   },
 
-  // postFile과 병합되면 지울 예정
-  postCast: async (cast: Partial<CastPostRequest>): Promise<FileItem> => {
-    try {
-      const response = await axiosInstance.post(`${path}`, cast)
-      return response.data
-    } catch (error) {
-      console.error('새 파일 생성 실패:', error)
-      throw error
-    }
-  },
-
   patchFileTitle: async (
     fileId: number,
     data: { name: string },
@@ -131,15 +117,6 @@ const createDirectoryService = (path: string) => ({
       console.log('파일이 성공적으로 이동되었습니다.')
     } catch (error) {
       console.error('파일 이동 실패:', error)
-      throw error
-    }
-  },
-
-  putCast: async (castId: string, cast: CastPutRequest): Promise<void> => {
-    try {
-      await axiosInstance.put<Cast>(`${path}/${castId}`, cast)
-    } catch (error) {
-      console.error('Failed to update cast:', error)
       throw error
     }
   },

@@ -8,9 +8,9 @@ import {
   CastPostRequest,
   CastPutRequest,
   CastRelationship,
+  PostCastRelationshipRequest,
 } from '@types'
 
-// GET /api/cast/{castId}
 export const getCast = async (castId: string): Promise<Cast> => {
   try {
     const response = await axiosInstance.get<Cast>(`/cast/${castId}`)
@@ -21,7 +21,14 @@ export const getCast = async (castId: string): Promise<Cast> => {
   }
 }
 
-// PUT /api/cast/{castingId}
+export const postCast = async (cast: CastPostRequest): Promise<Cast> => {
+  const response = await axiosInstance.post('/cast', cast)
+  return {
+    ...response.data,
+    position: response.data.coordinate,
+  }
+}
+
 export const putCast = async (
   castId: string,
   cast: CastPutRequest,
@@ -34,26 +41,21 @@ export const putCast = async (
   }
 }
 
-// DELETE /api/cast/{castingId}
-export const deleteCast = async (castingId: string): Promise<void> => {
+export const deleteCast = async (castId: string): Promise<void> => {
   try {
-    await axiosInstance.delete(`/cast/${castingId}`)
+    await axiosInstance.delete(`/cast/${castId}`)
   } catch (error) {
     console.error('Failed to delete cast:', error)
     throw error
   }
 }
 
-// PUT /api/cast/{castingId}/coord
-export const putCastCoord = async (
-  castingId: string,
+export const patchCastCoord = async (
+  castId: string,
   data: CastCoord,
 ): Promise<Cast> => {
   try {
-    const response = await axiosInstance.put<Cast>(
-      `/cast/${castingId}/coord`,
-      data,
-    )
+    const response = await axiosInstance.patch<Cast>(`/cast/${castId}`, data)
     return response.data
   } catch (error) {
     console.error('Failed to update cast coord:', error)
@@ -62,13 +64,13 @@ export const putCastCoord = async (
 }
 
 // PUT /api/cast/relationship/{uuid}
-export const putCastRelationship = async (
-  uuid: string,
-  data: CastRelationship,
+export const patchCastRelationship = async (
+  id: string,
+  data: PostCastRelationshipRequest,
 ): Promise<CastRelationship> => {
   try {
     const response = await axiosInstance.put<CastRelationship>(
-      `/cast/relationship/${uuid}`,
+      `/cast/relationship/${id}`,
       data,
     )
     return response.data
@@ -101,19 +103,9 @@ export const getCasts = async (folderId: string): Promise<Cast[]> => {
   }
 }
 
-export const postCast = async (
-  cast: Partial<CastPostRequest>,
-): Promise<Cast> => {
-  const response = await axiosInstance.post('/cast', cast)
-  return {
-    ...response.data,
-    position: response.data.coordinate,
-  }
-}
-
 // POST /api/cast/relationship
 export const postCastRelationship = async (
-  data: CastRelationship,
+  data: PostCastRelationshipRequest,
 ): Promise<CastRelationship> => {
   try {
     const response = await axiosInstance.post<CastRelationship>(
@@ -164,13 +156,14 @@ export const postCastGenerateAiImage = async (
 }
 
 export const getCastPresignedUrl = async (
-  fileExtension: string,
+  fileName: string,
 ): Promise<{
   presignedUrl: string
   fileURl: string
+  fileName: string
 }> => {
   try {
-    const response = await axiosInstance.get(`/cast/files/${fileExtension}`)
+    const response = await axiosInstance.get(`/cast/files/${fileName}`)
     return response.data
   } catch (error) {
     console.error('인물 Presigned Url 생성 실패:', error)
