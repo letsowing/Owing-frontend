@@ -10,9 +10,7 @@ import { GoPencil } from 'react-icons/go'
 import { PiTrashSimpleLight } from 'react-icons/pi'
 
 interface FolderListItemProps {
-  id: number
   index: number
-  name: string
   folderId: number
   files: FileItem[]
   currentService: any
@@ -20,9 +18,7 @@ interface FolderListItemProps {
 }
 
 export default function FolderListItem({
-  id,
   index,
-  name,
   folderId,
   files,
   currentService,
@@ -61,12 +57,8 @@ export default function FolderListItem({
       return
     }
     try {
-      const data = {
-        name: trimmedFileName,
-        description: file.description,
-      }
-      await currentService.putFile(id, data)
-      updateFileName(folderId, id, trimmedFileName)
+      await currentService.patchFileTitle(file.id, { name: trimmedFileName })
+      updateFileName(folderId, file.id, trimmedFileName)
     } catch (error) {
       console.error('파일 이름 업데이트 실패:', error)
       setNewFileName(file.name)
@@ -81,17 +73,17 @@ export default function FolderListItem({
 
   const handleDeleteFile = async () => {
     try {
-      await currentService.deleteFile(id)
-      deleteFile(folderId, id)
+      await currentService.deleteFile(file.id)
+      deleteFile(folderId, file.id)
     } catch (error) {
       console.error('파일 삭제 실패:', error)
     }
   }
 
   const handleItemClick = () => {
-    onSelectFile(id)
+    onSelectFile(file.id)
     if (activePath.includes('storyManagement')) {
-      goToStory(id)
+      goToStory(file.id)
     }
   }
 
@@ -105,7 +97,7 @@ export default function FolderListItem({
 
   const [{ isDragging }, drag] = useDrag({
     type: 'TAB_ITEM',
-    item: { id, index },
+    item: { id: file.id, index },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -119,8 +111,8 @@ export default function FolderListItem({
       const dragIndex = item.index
       if (dragIndex === index) return
 
-      let beforeId = -1
-      let afterId = -1
+      let beforeId = null
+      let afterId = null
 
       if (index > 0) {
         beforeId = files[index - 1].id
@@ -134,7 +126,7 @@ export default function FolderListItem({
       item.index = index
 
       currentService
-        .patchFile(item.id, {
+        .patchFilePosition(item.id, {
           beforeId,
           afterId,
           folderId,
@@ -180,7 +172,7 @@ export default function FolderListItem({
           ></div>
         ) : (
           <p className="mx-2 max-w-32 truncate text-[15px] text-darkgray">
-            {name}
+            {file.name}
           </p>
         )}
       </div>

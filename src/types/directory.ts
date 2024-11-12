@@ -13,26 +13,20 @@ export interface FolderItem {
   files: FileItem[]
 }
 
-export interface UpdateFolderPositionRequest {
-  beforeId: number
-  afterId: number
+export interface PatchFolderPositionRequest {
+  beforeId: number | null
+  afterId: number | null
+  projectId: number
 }
 
-export interface UpdateFilePositionRequest {
-  beforeId: number
-  afterId: number
-  folderId: number
-}
-
-export interface FilePostRequest {
+export interface PostFileRequest {
   folderId: number
   name: string
-  description: string
   imageUrl?: string
 }
 
-export interface FilePutRequest {
-  name: string
-  description: string
-  imageUrl?: string
+export interface PatchFilePositionRequest {
+  beforeId: number
+  afterId: number
+  folderId: number
 }

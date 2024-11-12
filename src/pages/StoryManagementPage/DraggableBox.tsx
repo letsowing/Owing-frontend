@@ -4,23 +4,23 @@ import { useRef, useState } from 'react'
 import { useDnd } from '@hooks/useDnd'
 import useNavigation from '@hooks/useNavigation'
 
+import { putStoryDescription } from '@services/storyService'
 import { DraggableBoxProps } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 
 export default function DraggableBox({
-  id,
   index,
-  name,
-  description,
   folderId,
+  files,
   currentService,
   onSelectFile,
 }: DraggableBoxProps) {
+  const file = files[index]
   const { moveFileItem, updateFile } = useDnd()
   const ref = useRef<HTMLDivElement>(null)
   const [isEditing, setIsEditing] = useState(false)
-  const [editedName, setEditedName] = useState(name)
-  const [editedDescription, setEditedDescription] = useState(description)
+  const [editedName, setEditedName] = useState(file.name)
+  const [editedDescription, setEditedDescription] = useState(file.description)
   const { goToStory } = useNavigation()
 
   const [, drop] = useDrop({
@@ -29,25 +29,37 @@ export default function DraggableBox({
       if (!ref.current) return
 
       const dragIndex = item.index
-
       if (dragIndex === index) return
+
+      let beforeId = null
+      let afterId = null
+
+      if (index > 0) {
+        beforeId = files[index - 1].id
+      }
+
+      if (index < files.length - 1) {
+        afterId = files[index].id
+      }
 
       moveFileItem(folderId, dragIndex, index)
       item.index = index
 
-      const data = {
-        position: item.index,
-        folderId,
-      }
-      currentService.patchFile(item.id, data).catch((error: any) => {
-        console.error('파일 이동 실패:', error)
-      })
+      currentService
+        .patchFilePosition(item.id, {
+          beforeId,
+          afterId,
+          folderId,
+        })
+        .catch((error: any) => {
+          console.error('파일 이동 실패:', error)
+        })
     },
   })
 
   const [{ isDragging }, drag] = useDrag({
     type: 'GRID_ITEM',
-    item: { id, index },
+    item: { id: file.id, index },
     collect: (monitor) => ({
       isDragging: !!monitor.isDragging(),
     }),
@@ -63,12 +75,12 @@ export default function DraggableBox({
   const handleSave = async (e: React.MouseEvent) => {
     e.stopPropagation()
     try {
-      await currentService.putFile(id, {
+      await putStoryDescription(file.id, {
         name: editedName,
         description: editedDescription,
       })
 
-      updateFile(folderId, id, {
+      updateFile(folderId, file.id, {
         name: editedName,
         description: editedDescription,
       })
@@ -80,8 +92,8 @@ export default function DraggableBox({
 
   const handleCancel = (e: React.MouseEvent) => {
     e.stopPropagation()
-    setEditedName(name)
-    setEditedDescription(description)
+    setEditedName(file.name)
+    setEditedDescription(file.description)
     setIsEditing(false)
   }
 
@@ -96,7 +108,7 @@ export default function DraggableBox({
       className={`shadow-gray-300/50 m-2 flex h-56 flex-col rounded-md bg-white p-2 shadow-lg dark:bg-verydarkblack dark:text-coldbeige ${
         isDragging ? 'opacity-20' : ''
       }`}
-      onClick={() => !isEditing && handleItemClick(id)}
+      onClick={() => !isEditing && handleItemClick(file.id)}
     >
       {isEditing ? (
         <>
@@ -128,8 +140,8 @@ export default function DraggableBox({
         </>
       ) : (
         <>
-          <h3 className="mb-1 font-semibold">{name}</h3>
-          <p>{description}</p>
+          <h3 className="mb-1 font-semibold">{file.name}</h3>
+          <p>{file.description}</p>
           <button
             onClick={handleEdit}
             className="text-md ml-auto mt-auto h-7 from-redorange to-orange px-4 text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white dark:from-blue dark:to-skyblue dark:text-blue dark:hover:text-coldbeige"

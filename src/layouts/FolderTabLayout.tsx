@@ -49,7 +49,9 @@ export default function FolderTabLayout() {
         )
         setSelectedFileId(
           fetchedFolders?.length > 0
-            ? (fetchedFolders[0].files?.[0].id ?? null)
+            ? fetchedFolders[0].files?.length > 0
+              ? fetchedFolders[0].files[0].id
+              : null
             : null,
         )
       } catch (err) {
