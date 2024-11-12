@@ -1,10 +1,20 @@
+import { getImageExtensionFromBase64 } from '@utils/base64'
 import axiosInstance from '@utils/httpCommons'
+
+import { putUploadImageToS3 } from './s3Service'
 
 export const putUniverseDescription = async (
   fileId: number,
   data: { name: string; description: string; imageUrl: string },
 ): Promise<void> => {
   try {
+    if (data.imageUrl.startsWith('data:')) {
+      const presignedUrlData = await getUniversePresignedUrl(
+        getImageExtensionFromBase64(data.imageUrl),
+      )
+      await putUploadImageToS3(presignedUrlData.presignedUrl, data.imageUrl)
+      data.imageUrl = presignedUrlData.fileUrl
+    }
     await axiosInstance.put(`universes/${fileId}`, data)
     console.log('파일이 성공적으로 저장되었습니다.')
   } catch (error) {
@@ -30,7 +40,7 @@ export const getUniversePresignedUrl = async (
   fileExtension: string,
 ): Promise<{
   presignedUrl: string
-  fileURl: string
+  fileUrl: string
 }> => {
   try {
     const response = await axiosInstance.get(
