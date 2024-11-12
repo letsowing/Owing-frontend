@@ -1,8 +1,8 @@
+import { getImageExtensionFromBase64 } from '@utils/base64'
 import axiosInstance from '@utils/httpCommons'
 
 import { putUploadImageToS3 } from './s3Service'
 
-import { getImageExtensionFromBase64 } from '@/utils/base64'
 import { ProjectPutRequest, ProjectSummary } from '@types'
 
 export const postCreateProject = async (

@@ -1,4 +1,5 @@
-import { base64ToBlob } from '@/utils/base64'
+import { base64ToBlob } from '@utils/base64'
+
 import axios from 'axios'
 
 export const putUploadImageToS3 = async (
