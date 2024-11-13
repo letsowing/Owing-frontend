@@ -48,7 +48,7 @@ const CastImageSection: React.FC<CastImageSectionProps> = ({
           </label>
         )}
         <div className="flex-center align-center flex h-80 w-80 rounded-xl bg-beige dark:bg-coldbeige">
-          <CastImage imageUrl={editedImageUrl || ''} />
+          <CastImage imageUrl={castData.imageUrl || editedImageUrl || ''} />
         </div>
         {isEditing && <AIImageGenerationPrompt />}
       </div>
