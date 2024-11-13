@@ -5,9 +5,9 @@ export const getStory = async (
 ): Promise<{
   storyId: number
   name: string
-  description: string
+  description?: string
   textCount: number
-  content: string
+  content?: string
 }> => {
   try {
     const response = await axiosInstance.get(`/stories/${storyId}`)
