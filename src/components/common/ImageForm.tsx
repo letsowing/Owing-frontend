@@ -61,8 +61,8 @@ const ImageForm: React.FC<ImageFormProps> = ({
                 : `data:image/jpeg;base64,${image}`
               : imageUrl
           }
-          alt="Cast"
-          className="w-full rounded-xl object-cover"
+          alt="잘못된 경로입니다."
+          className="w-full rounded-xl object-cover text-xs text-gray"
         />
       </div>
       {isEditable && (

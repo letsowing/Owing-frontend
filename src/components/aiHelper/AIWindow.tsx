@@ -33,7 +33,7 @@ export const AIWindow = ({
         {selectedFeature ? (
           <div className="flex flex-col rounded-r-lg bg-beige dark:bg-coldbeige">
             <button onClick={onClose} className="absolute end-0 top-0 p-2">
-              <RiCloseLine className="hover:dark:bg-darkcoldbeige hover:bg-darkbeige h-4 w-4 hover:rounded-full" />
+              <RiCloseLine className="h-4 w-4 hover:rounded-full hover:bg-darkbeige hover:dark:bg-darkcoldbeige" />
             </button>
             <div className="mt-7">
               <TabItem label="홈" icon={ImMenu} onClick={onHomeClick} />
@@ -47,19 +47,21 @@ export const AIWindow = ({
                 label="맞춤법 검사"
                 icon={MdOutlineThumbUp}
                 isActive={selectedFeature === 'spelling'}
-                onClick={() => onSelectFeature('spelling')}
+                // onClick={() => onSelectFeature('spelling')}
+                onClick={() => {}}
               />
               <TabItem
                 label="검색어 추천"
                 icon={LiaSearchSolid}
                 isActive={selectedFeature === 'search'}
-                onClick={() => onSelectFeature('search')}
+                // onClick={() => onSelectFeature('search')}
+                onClick={() => {}}
               />
             </div>
           </div>
         ) : (
           <button onClick={onClose} className="absolute end-0 top-0 p-2">
-            <RiCloseLine className="hover:dark:bg-darkcoldbeige hover:bg-darkbeige h-4 w-4 self-start hover:rounded-full" />
+            <RiCloseLine className="h-4 w-4 self-start hover:rounded-full hover:bg-darkbeige hover:dark:bg-darkcoldbeige" />
           </button>
         )}
       </div>
