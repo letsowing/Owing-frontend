@@ -81,13 +81,13 @@ export default function UniverseDraggableBox({
       await putUniverseDescription(file.id, {
         name: editedName,
         description: editedDescription,
-        imageUrl: file.imageUrl!,
+        imageUrl: editedImageUrl || '',
       })
 
       updateFile(folderId, file.id, {
         name: editedName,
         description: editedDescription,
-        imageUrl: file.imageUrl,
+        imageUrl: editedImageUrl,
       })
       setIsEditing(false)
     } catch (error) {
