@@ -1,6 +1,9 @@
 import React from 'react'
 
+import { useThemeStore } from '@stores/themeStore'
+
 import AlertOwing from '@assets/common/AlertOwing.png'
+import DarkAlertOwing from '@assets/common/DarkAlertOwing.png'
 import { BsPlusCircle } from 'react-icons/bs'
 import { MdLightbulbOutline } from 'react-icons/md'
 
@@ -17,6 +20,9 @@ const ImageForm: React.FC<ImageFormProps> = ({
   onImageChange,
   onAIGenerateClick,
 }) => {
+  const isDarkMode = useThemeStore((state) => state.isDarkMode)
+  const imageUrl = image || isDarkMode ? DarkAlertOwing : AlertOwing
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file) {
@@ -46,23 +52,18 @@ const ImageForm: React.FC<ImageFormProps> = ({
           disabled={!isEditable}
         />
       </div>
-      <div className="my-1 flex h-80 w-80 justify-center rounded-xl border border-lightgray dark:border-lightdarkgray dark:bg-verydarkblack">
-        {image ? (
-          <img
-            src={image}
-            alt="image"
-            className="w-full rounded-xl object-cover"
-          />
-        ) : (
-          <div className="flex w-full flex-col items-center justify-center rounded-[6px] border border-[#CFCDCD]">
-            <img
-              src={AlertOwing}
-              alt="AlertOwing"
-              className="mx-auto h-auto w-12"
-            />
-            <div className="mt-4 text-redorange">이미지를 추가해 주세요!</div>
-          </div>
-        )}
+      <div className="my-1 flex h-80 w-80 items-center justify-center rounded-xl border border-lightgray dark:border-lightdarkgray dark:bg-verydarkblack">
+        <img
+          src={
+            image
+              ? image.startsWith('data:')
+                ? image
+                : `data:image/jpeg;base64,${image}`
+              : imageUrl
+          }
+          alt="Cast"
+          className="w-full rounded-xl object-cover"
+        />
       </div>
       {isEditable && (
         <div

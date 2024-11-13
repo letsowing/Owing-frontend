@@ -21,7 +21,7 @@ const CastInputForm: React.FC<CastInputFormProps> = ({
       <div className="mt-3">
         <InputField
           type="text"
-          value={castData.name}
+          value={castData.name || ''}
           labelValue="이름"
           isRequired={true}
           maxLength={50}

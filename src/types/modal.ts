@@ -22,6 +22,7 @@ export interface CastRelationshipModalProps extends ModalProps<Cast> {
   folderList: FolderSummary[]
   onSave: (data: Cast, folderId: number | undefined) => Promise<void>
   onEdit: () => void
+  onSelect: (folderId: number) => void
   onClose: () => void
 }
 

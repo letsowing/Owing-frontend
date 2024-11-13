@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useProjectStore } from '@stores/projectStore'
 import { useThemeStore } from '@stores/themeStore'
 
-import { useCharFlow } from '@hooks/useCharFlow'
 import { useModalManagement } from '@hooks/useModal'
 
 import AddButton from './AddButton'
@@ -13,18 +12,8 @@ import DirectionalEdge from './DirectionalEdge'
 import SelectEdgeButton from './SelectEdgeButton'
 import CastRelationshipModal from './modal/CastRelationshipModal'
 
-import {
-  deleteCast,
-  deleteCastRelationship,
-  getCast,
-  getCastGraph,
-  getFolderList,
-  patchCastCoord,
-  patchCastRelationship,
-  postCast,
-  postCastRelationship,
-  putCast,
-} from '@services/castService'
+import { useFlow } from '@/hooks/useFlow'
+import { getCast, getFolderList } from '@services/castService'
 import {
   Cast,
   CustomNodeProps,
@@ -36,13 +25,10 @@ import {
 } from '@types'
 import {
   Background,
-  Connection,
   ConnectionMode,
   Controls,
-  Edge,
   EdgeProps,
   MiniMap,
-  NodeChange,
   ReactFlow,
   ReactFlowProvider,
 } from '@xyflow/react'
@@ -52,20 +38,19 @@ const FlowWithProvider: React.FC = () => {
   const {
     nodes,
     edges,
-    edgeReconnectSuccessful,
-    onNodesChange: onNodesChangeFromStore,
-    onConnect: onConnectFromStore,
+    isBidirectionalEdge,
+    onNodesChange,
+    onConnect,
     onReconnectStart,
     onReconnect,
-    onReconnectEnd: onReconnectEndFromStore,
-    addCast,
-    updateCast,
-    deleteCast: deleteCastFromStore,
-    isBidirectionalEdge,
-    setIsBidirectionalEdge,
-    onEdgeLabelChange: onEdgeLabelChangeFromStore,
+    onReconnectEnd,
+    onNodeAdd,
+    onNodeUpdate,
+    onNodeRemove,
+    onEdgeLabelChange,
     setInitialFlow,
-  } = useCharFlow()
+    setIsBidirectionalEdge,
+  } = useFlow()
 
   const { isDarkMode } = useThemeStore()
   const { modals, openModal, closeModal } = useModalManagement()
@@ -74,13 +59,13 @@ const FlowWithProvider: React.FC = () => {
   const [isEditable, setIsEditable] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [folderList, setFolderList] = useState<FolderSummary[]>([])
+  const [selectedFolderId, setSelectedFolderId] = useState<number | undefined>()
 
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
         setIsLoading(true)
-        const graphData = await getCastGraph(currentProject.id)
-        setInitialFlow(graphData.nodes, graphData.edges)
+        await setInitialFlow(currentProject.id)
 
         const list = await getFolderList(currentProject.id)
         setFolderList(list)
@@ -92,7 +77,7 @@ const FlowWithProvider: React.FC = () => {
     }
 
     fetchInitialData()
-  }, [currentProject.id, setInitialFlow])
+  }, [currentProject.id, setFolderList, setInitialFlow])
 
   const isValidConnection = () => {
     return true // 모든 연결 허용
@@ -102,82 +87,46 @@ const FlowWithProvider: React.FC = () => {
     setIsEditable((prev) => !prev)
   }, [])
 
-  const handleEdgeLabelChange = useCallback(
-    async (edgeId: string, newLabel: string) => {
-      onEdgeLabelChangeFromStore(edgeId, newLabel)
-      const edge = edges.find((e) => e.id === edgeId)
-      if (edge) {
-        try {
-          await patchCastRelationship(edgeId, {
-            sourceId: Number(edge.source),
-            targetId: Number(edge.target),
-            label: newLabel,
-            type: edge.type as keyof EdgeTypes,
-            sourceHandle: edge.sourceHandle || 'left',
-            targetHandle: edge.targetHandle || 'right',
-          })
-        } catch (error) {
-          console.error('Failed to update cast relationship:', error)
-        }
-      }
-    },
-    [onEdgeLabelChangeFromStore, edges],
-  )
-
-  const handleCastAction = useCallback(
-    async (cast: Cast, selectedFolderId: number | undefined) => {
-      try {
-        const castData = {
-          name: cast.name,
-          age: cast.age,
-          gender: cast.gender,
-          role: cast.role,
-          description: cast.description,
-          imageUrl: cast.imageUrl,
-        }
-
-        if (cast.id) {
-          // 수정의 경우
-          await putCast(cast.id, castData)
-          updateCast(cast)
-        } else {
-          // 생성의 경우
-          const newCastData = {
-            ...castData,
-            folderId: selectedFolderId,
-            coordinate: cast.position,
-          }
-          const newCast = await postCast(newCastData)
-          addCast(newCast)
-        }
-        closeModal()
-        setIsEditable(false)
-      } catch (error) {
-        console.error('Failed to handle cast action:', error)
-      }
-    },
-    [updateCast, addCast, closeModal],
-  )
-
   const handleCloseModal = useCallback(() => {
     closeModal()
     setIsEditable(false)
   }, [closeModal])
+
+  const handleCastAction = useCallback(
+    async (cast: Cast, selectedFolderId: number | undefined) => {
+      try {
+        if (cast.id) {
+          onNodeUpdate(cast.id, cast)
+        } else {
+          onNodeAdd(cast, selectedFolderId)
+        }
+        handleCloseModal()
+      } catch (error) {
+        console.error('Failed to handle cast action:', error)
+      }
+    },
+    [onNodeUpdate, onNodeAdd, handleCloseModal],
+  )
 
   const handleNodeClick = useCallback(
     async (_event: React.MouseEvent, node: CustomNodeType) => {
       try {
         setIsLoading(true)
         const data = await getCast(node.id)
+        setSelectedFolderId(data.folderId)
         if (data) {
           openModal({
             type: ModalType.CHARACTER_RELATIONSHIP,
-            cast: data.cast,
+            cast: {
+              ...data.cast,
+              position: data.cast.coordinate,
+            },
             isEditable: false,
-            folderId: data.folderId,
+            folderId: selectedFolderId,
             folderList: folderList,
             onSave: handleCastAction,
             onEdit: toggleEditMode,
+            onSelect: setSelectedFolderId,
             onClose: handleCloseModal,
           })
           setIsEditable(false)
@@ -188,7 +137,14 @@ const FlowWithProvider: React.FC = () => {
         setIsLoading(false)
       }
     },
-    [folderList, handleCastAction, handleCloseModal, openModal, toggleEditMode],
+    [
+      folderList,
+      handleCastAction,
+      handleCloseModal,
+      openModal,
+      selectedFolderId,
+      toggleEditMode,
+    ],
   )
 
   const handleAddCast = useCallback(async () => {
@@ -200,6 +156,7 @@ const FlowWithProvider: React.FC = () => {
       folderList: folderList,
       onSave: handleCastAction,
       onEdit: toggleEditMode,
+      onSelect: setSelectedFolderId,
       onClose: handleCloseModal,
     })
     setIsEditable(true)
@@ -212,76 +169,10 @@ const FlowWithProvider: React.FC = () => {
   ])
 
   const handleNodeRemove = useCallback(
-    async (nodeId: string) => {
-      setIsLoading(true)
-      try {
-        await deleteCast(nodeId)
-        deleteCastFromStore(nodeId)
-      } catch (err) {
-        console.error('Failed to remove node:', err)
-      } finally {
-        setIsLoading(false)
-      }
+    (nodeId: string) => {
+      onNodeRemove(nodeId)
     },
-    [deleteCastFromStore],
-  )
-
-  const onConnect = useCallback(
-    async (connection: Connection) => {
-      try {
-        const newCast = await postCastRelationship({
-          sourceId: Number(connection.source),
-          targetId: Number(connection.target),
-          label: '관계',
-          type: isBidirectionalEdge ? 'BIDIRECTIONAL' : 'DIRECTIONAL',
-          sourceHandle: connection.sourceHandle || 'left',
-          targetHandle: connection.targetHandle || 'right',
-        })
-        onConnectFromStore(connection, newCast.id)
-      } catch (error) {
-        console.error('Failed to create cast relationship:', error)
-      }
-    },
-    [onConnectFromStore, isBidirectionalEdge],
-  )
-
-  const onNodesChange = useCallback(
-    async (changes: NodeChange[]) => {
-      const positionChanges = changes.filter(
-        (change) => change.type === 'position' && change.dragging === false,
-      )
-
-      for (const change of positionChanges) {
-        if (change.type === 'position' && 'position' in change) {
-          const { id, position } = change
-          try {
-            await patchCastCoord(id, {
-              x: position?.x ?? 0,
-              y: position?.y ?? 0,
-            })
-          } catch (error) {
-            console.error('Failed to update cast position:', error)
-          }
-        }
-      }
-
-      onNodesChangeFromStore(changes)
-    },
-    [onNodesChangeFromStore],
-  )
-
-  const onReconnectEnd = useCallback(
-    async (event: MouseEvent | TouchEvent, edge: Edge) => {
-      try {
-        if (!edgeReconnectSuccessful.current) {
-          await deleteCastRelationship(edge.id)
-          onReconnectEndFromStore(event, edge as Edge)
-        }
-      } catch (error) {
-        console.error('Failed to delete cast relationship:', error)
-      }
-    },
-    [edgeReconnectSuccessful, onReconnectEndFromStore],
+    [onNodeRemove],
   )
 
   const nodeTypes = useMemo<NodeTypes>(
@@ -302,19 +193,19 @@ const FlowWithProvider: React.FC = () => {
       DIRECTIONAL: (props: EdgeProps) => (
         <DirectionalEdge
           {...props}
-          onLabelChange={handleEdgeLabelChange}
+          onLabelChange={onEdgeLabelChange}
           type="DIRECTIONAL"
         />
       ),
       BIDIRECTIONAL: (props: EdgeProps) => (
         <BidirectionalEdge
           {...props}
-          onLabelChange={handleEdgeLabelChange}
+          onLabelChange={onEdgeLabelChange}
           type="BIDIRECTIONAL"
         />
       ),
     }),
-    [handleEdgeLabelChange],
+    [onEdgeLabelChange],
   )
 
   const defaultEdgeOptions = useMemo(
@@ -367,8 +258,9 @@ const FlowWithProvider: React.FC = () => {
               isEditable={isEditable}
               folderId={modal.folderId}
               folderList={modal.folderList}
-              onEdit={() => setIsEditable(true)}
               onSave={handleCastAction}
+              onEdit={() => setIsEditable(true)}
+              onSelect={setSelectedFolderId}
               onClose={handleCloseModal}
               type={ModalType.CHARACTER_RELATIONSHIP}
               cast={modal.cast}

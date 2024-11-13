@@ -4,19 +4,13 @@ import EmptyFolder from '@components/common/EmptyFolder'
 
 import { useProjectStore } from '@stores/projectStore'
 
-import { useCharFlow } from '@hooks/useCharFlow'
+import { useCast } from '@hooks/useCast'
 
 import CastActionButtons from './CastActionButtons'
 import CastImageSection from './CastImageSection'
 import CastInputForm from './CastInputForm'
 import PageTitle from './PageTitle'
 
-import {
-  deleteCast as deleteCastService,
-  getCast,
-  putCast,
-  uploadCastImage,
-} from '@services/castService'
 import { Cast } from '@types'
 import { useNavigate } from 'react-router-dom'
 
@@ -33,7 +27,7 @@ const initialCastData: Cast = {
 
 const CastPage: React.FC = () => {
   const navigate = useNavigate()
-  const { updateCast, deleteCast } = useCharFlow()
+  const { updateCast, deleteCast, getCast, uploadImage } = useCast()
 
   const [originalCastData, setOriginalCastData] =
     useState<Cast>(initialCastData)
@@ -46,8 +40,8 @@ const CastPage: React.FC = () => {
     const fetchCast = async () => {
       try {
         const data = await getCast(selectedFileId.toString())
-        setCastData(data.cast)
-        setOriginalCastData(data.cast)
+        setCastData({ ...data, position: data.coordinate })
+        setOriginalCastData({ ...data, position: data.coordinate })
       } catch (error) {
         console.error('Failed to fetch cast:', error)
       }
@@ -56,7 +50,7 @@ const CastPage: React.FC = () => {
     if (selectedFileId) {
       fetchCast()
     }
-  }, [selectedFileId])
+  }, [selectedFileId, getCast])
 
   if (!selectedFolderId || !selectedFileId) {
     return <EmptyFolder isFolderEmpty={!selectedFolderId} />
@@ -79,8 +73,7 @@ const CastPage: React.FC = () => {
         description: castData.description,
         imageUrl: castData.imageUrl,
       }
-      await putCast(castData.id, cast)
-      updateCast(castData)
+      await updateCast(castData.id, cast)
       setCastData(castData)
       setIsEditing(false)
     } catch (error) {
@@ -102,8 +95,7 @@ const CastPage: React.FC = () => {
     if (!window.confirm('캐릭터를 삭제하시겠습니까?')) return
 
     try {
-      await deleteCastService(selectedFileId.toString())
-      deleteCast(selectedFileId.toString())
+      await deleteCast(selectedFileId.toString())
       navigate('/casts')
     } catch (error) {
       console.error('Failed to delete cast:', error)
@@ -112,7 +104,7 @@ const CastPage: React.FC = () => {
 
   const handleImageUpload = async (file: File) => {
     try {
-      const imageUrl = await uploadCastImage(file)
+      const imageUrl = await uploadImage(file)
       setCastData((prev) => ({ ...prev, imageUrl }))
     } catch (error) {
       console.error('Failed to upload image:', error)
