@@ -5,7 +5,6 @@ import { putUploadImageToS3 } from './s3Service'
 
 import {
   Cast,
-  CastAiImageRequest,
   CastCoord,
   CastGraph,
   CastPostRequest,
@@ -76,6 +75,7 @@ export const putCast = async (
   cast: CastPutRequest,
 ): Promise<void> => {
   try {
+    cast.imageUrl = cast.imageUrl || ''
     if (cast.imageUrl.startsWith('data:')) {
       const presignedUrlData = await getCastPresignedUrl(
         getImageExtensionFromBase64(cast.imageUrl),
@@ -172,12 +172,15 @@ export const deleteCastRelationship = async (
 }
 
 // image
-export const postCastGenerateAiImage = async (
-  data: Partial<Cast>,
-): Promise<{ imageUrl: string }> => {
+export const postCastGenerateAiImage = async (data: {
+  name: string
+  age: number
+  gender: string
+  role: string
+  description: string
+}): Promise<{ imageUrl: string }> => {
   try {
     const response = await axiosInstance.post('cast/images', data)
-    console.log('요청요청')
     return response.data
   } catch (error) {
     console.error('Failed to generate cast AI iamge:', error)

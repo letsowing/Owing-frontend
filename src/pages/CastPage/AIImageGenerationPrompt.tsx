@@ -1,8 +1,17 @@
 import { MdLightbulbOutline } from 'react-icons/md'
 
-const AIImageGenerationPrompt: React.FC = () => {
+interface AIImageGenerationPromptProps {
+  onGenerateAiImageClick: () => void
+}
+
+const AIImageGenerationPrompt = ({
+  onGenerateAiImageClick,
+}: AIImageGenerationPromptProps) => {
   return (
-    <div className="my-3 flex w-80 cursor-pointer items-center justify-between rounded-full border border-lightgray p-3 px-4 dark:border-lightdarkgray">
+    <div
+      className="my-3 flex w-80 cursor-pointer items-center justify-between rounded-full border border-lightgray p-3 px-4 dark:border-lightdarkgray"
+      onClick={onGenerateAiImageClick}
+    >
       <div className="flex items-center space-x-2">
         <div className="text-xl font-medium text-redorange dark:text-blue">
           <MdLightbulbOutline />

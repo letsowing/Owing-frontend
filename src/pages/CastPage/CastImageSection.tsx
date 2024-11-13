@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import AIImageGenerationPrompt from './AIImageGenerationPrompt'
 import CastImage from './CastImage'
 
+import { postCastGenerateAiImage } from '@services/castService'
 import { Cast } from '@types'
 import { BsPlusCircle } from 'react-icons/bs'
 
@@ -29,6 +30,22 @@ const CastImageSection: React.FC<CastImageSectionProps> = ({
     }
   }
 
+  const handleGenerateAiImage = async () => {
+    try {
+      const data = await postCastGenerateAiImage({
+        name: castData.name,
+        age: castData.age || 0,
+        gender: castData.gender,
+        role: castData.role,
+        description: castData.description,
+      })
+      castData.imageUrl = data.imageUrl
+      setEditedImageUrl(data.imageUrl)
+    } catch (error) {
+      console.error('인물 AI 이미지 생성 실패:', error)
+    }
+  }
+
   return (
     <div className="flex justify-center">
       <div className="flex-col">
@@ -50,7 +67,11 @@ const CastImageSection: React.FC<CastImageSectionProps> = ({
         <div className="flex-center align-center flex h-80 w-80 rounded-xl bg-beige dark:bg-coldbeige">
           <CastImage imageUrl={castData.imageUrl || editedImageUrl || ''} />
         </div>
-        {isEditing && <AIImageGenerationPrompt />}
+        {isEditing && (
+          <AIImageGenerationPrompt
+            onGenerateAiImageClick={handleGenerateAiImage}
+          />
+        )}
       </div>
     </div>
   )
