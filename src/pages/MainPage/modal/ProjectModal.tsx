@@ -108,18 +108,13 @@ const ProjectModal = ({
     >
       <div className="mx-20 mt-8 flex flex-col gap-7">
         <div className="flex justify-center">
-          {isGenerating ? (
-            <div className="flex h-[22rem] w-[22rem] items-center justify-center">
-              <Loader />
-            </div>
-          ) : (
-            <ImageForm
-              isEditable={isEditable}
-              image={projectInput.coverUrl}
-              onImageChange={onImageChange}
-              onAIGenerateClick={onAiGenerateClick}
-            />
-          )}
+          <ImageForm
+            isEditable={isEditable}
+            image={projectInput.coverUrl}
+            onImageChange={onImageChange}
+            onAIGenerateClick={onAiGenerateClick}
+            isGenerating={isGenerating}
+          />
         </div>
         <InputField
           type="text"
