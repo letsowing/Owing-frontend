@@ -2,6 +2,8 @@ import React from 'react'
 
 import { useThemeStore } from '@stores/themeStore'
 
+import Loader from './Loader'
+
 import AlertOwing from '@assets/common/AlertOwing.png'
 import DarkAlertOwing from '@assets/common/DarkAlertOwing.png'
 import { BsPlusCircle } from 'react-icons/bs'
@@ -12,6 +14,7 @@ interface ImageFormProps {
   image: string
   onImageChange: (image: string) => void
   onAIGenerateClick: () => void
+  isGenerating?: boolean
 }
 
 const ImageForm: React.FC<ImageFormProps> = ({
@@ -19,6 +22,7 @@ const ImageForm: React.FC<ImageFormProps> = ({
   image,
   onImageChange,
   onAIGenerateClick,
+  isGenerating = false,
 }) => {
   const isDarkMode = useThemeStore((state) => state.isDarkMode)
   const imageUrl = image || isDarkMode ? DarkAlertOwing : AlertOwing
@@ -53,16 +57,29 @@ const ImageForm: React.FC<ImageFormProps> = ({
         />
       </div>
       <div className="my-1 flex h-80 w-80 items-center justify-center rounded-xl border border-lightgray dark:border-lightdarkgray dark:bg-verydarkblack">
-        <img
-          src={image ? image : imageUrl}
-          alt="잘못된 경로입니다."
-          className="h-full w-full rounded-xl object-cover text-xs text-gray"
-        />
+        {isGenerating ? (
+          <div className="flex-col">
+            <div className="my-10">
+              <Loader />
+            </div>
+            <label className="py-10 text-sm font-black text-orange text-opacity-60 dark:text-cornflowerblue dark:text-opacity-70">
+              이미지 생성에 1분 정도 소요됩니다.
+            </label>
+          </div>
+        ) : (
+          <img
+            src={image ? image : imageUrl}
+            alt="잘못된 경로입니다."
+            className="h-80 w-80 rounded-xl bg-contain text-xs text-gray"
+          />
+        )}
       </div>
       {isEditable && (
         <div
           onClick={onAIGenerateClick}
-          className="mt-3 flex w-80 cursor-pointer items-center justify-between rounded-full border border-lightgray p-3 px-4 dark:border-lightdarkgray"
+          className={`mt-3 flex w-80 items-center justify-between rounded-full border border-lightgray p-3 px-4 dark:border-lightdarkgray ${
+            !isGenerating ? 'cursor-pointer' : 'cursor-not-allowed'
+          }`}
         >
           <div className="flex items-center space-x-2">
             <div className="text-xl font-medium text-redorange dark:text-blue">

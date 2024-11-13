@@ -1,6 +1,5 @@
 import ImageForm from '@components/common/ImageForm'
 import InputField from '@components/common/InputField'
-import Loader from '@components/common/Loader'
 import ProjectTagField from '@components/common/ProjectTagField'
 import TextAreaField from '@components/common/TextAreaField'
 
@@ -32,18 +31,13 @@ const ProjectInfoForm = ({
   return (
     <>
       <div className="flex justify-center">
-        {isGenerating ? (
-          <div className="flex h-[22rem] w-[22rem] items-center justify-center">
-            <Loader />
-          </div>
-        ) : (
-          <ImageForm
-            isEditable={isEditable}
-            image={project.coverUrl}
-            onImageChange={onImageChange}
-            onAIGenerateClick={onAIGenerateClick}
-          />
-        )}
+        <ImageForm
+          isEditable={isEditable}
+          image={project.coverUrl}
+          onImageChange={onImageChange}
+          onAIGenerateClick={onAIGenerateClick}
+          isGenerating={isGenerating}
+        />
       </div>
       <InputField
         type="text"
