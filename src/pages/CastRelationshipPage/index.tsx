@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useProjectStore } from '@stores/projectStore'
 import { useThemeStore } from '@stores/themeStore'
 
+import { useFlow } from '@hooks/useFlow'
 import { useModalManagement } from '@hooks/useModal'
 
 import AddButton from './AddButton'
@@ -12,7 +13,6 @@ import DirectionalEdge from './DirectionalEdge'
 import SelectEdgeButton from './SelectEdgeButton'
 import CastRelationshipModal from './modal/CastRelationshipModal'
 
-import { useFlow } from '@/hooks/useFlow'
 import { getCast, getFolderList } from '@services/castService'
 import {
   Cast,

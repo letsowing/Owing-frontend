@@ -1,6 +1,8 @@
 import React, { memo, useCallback } from 'react'
 
-import castImage from '@assets/cast/cast.png'
+import { useThemeStore } from '@/stores/themeStore'
+import AlertOwing from '@assets/common/AlertOwing.png'
+import DarkAlertOwing from '@assets/common/DarkAlertOwing.png'
 import { CustomNodeProps, CustomNode as CustomNodeType } from '@types'
 import { Handle, Position } from '@xyflow/react'
 import { MdDelete } from 'react-icons/md'
@@ -16,6 +18,9 @@ const CustomNode: React.FC<CustomNodeRemoveProps> = ({
   onNodeRemove,
   onNodeClick,
 }) => {
+  const isDarkMode = useThemeStore((state) => state.isDarkMode)
+  const imageUrl = data.image || isDarkMode ? DarkAlertOwing : AlertOwing
+
   const handleDelete = useCallback(
     (event: React.MouseEvent) => {
       event.stopPropagation()
@@ -38,12 +43,12 @@ const CustomNode: React.FC<CustomNodeRemoveProps> = ({
     >
       <div className="flex justify-between border-b border-lightgray px-2 py-2">
         <div>
-          <div className="truncate text-xs font-semibold text-gray">
+          <p className="line-clamp-1 text-xs font-semibold text-gray">
             {data.name}
-          </div>
-          <div className="truncate text-xs font-semibold text-gray">
+          </p>
+          <p className="mt-1 line-clamp-1 text-xs font-semibold text-gray">
             {data.role}
-          </div>
+          </p>
         </div>
         <button
           onClick={handleDelete}
@@ -52,11 +57,11 @@ const CustomNode: React.FC<CustomNodeRemoveProps> = ({
           <MdDelete />
         </button>
       </div>
-      <div className="p-2">
+      <div className="h-full w-full p-2">
         <img
-          src={data.image || castImage}
-          alt={data.name}
-          className="m-auto h-20 w-20 object-cover"
+          src={data.image || imageUrl}
+          alt={'잘못된 경로입니다'}
+          className="m-auto w-5/6 object-cover text-xs text-gray"
         />
       </div>
       <Handle type="source" position={Position.Top} id="top" />

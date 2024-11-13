@@ -29,14 +29,17 @@ export const FeatureSelection = ({
       description: '효과적인 검색어를 추천해드립니다',
     },
   ]
-
   return (
     <main className="flex flex-col gap-3 px-6 pb-5">
       {features.map((feature) => (
         <FeatureButton
           key={feature.id}
           {...feature}
-          onClick={() => onSelectFeature(feature.id)}
+          onClick={() => {
+            if (feature.id !== 'spelling' && feature.id !== 'search') {
+              onSelectFeature(feature.id)
+            }
+          }}
         />
       ))}
     </main>

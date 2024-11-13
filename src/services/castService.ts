@@ -46,7 +46,6 @@ export const getCastGraph = async (projectId: number): Promise<CastGraph> => {
     const response = await axiosInstance.get<CastGraph>(
       `/cast/graph?projectId=${projectId}`,
     )
-    console.log(response.data)
     return response.data
   } catch (error) {
     console.error('Failed to get cast graph:', error)

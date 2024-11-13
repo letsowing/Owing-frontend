@@ -11,7 +11,7 @@ import {
   postCast,
   postCastRelationship,
   putCast,
-} from '@/services/castService'
+} from '@services/castService'
 import { Cast, CustomNode } from '@types'
 import { Connection, Edge, NodeChange } from '@xyflow/react'
 
