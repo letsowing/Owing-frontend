@@ -54,13 +54,7 @@ const ImageForm: React.FC<ImageFormProps> = ({
       </div>
       <div className="my-1 flex h-80 w-80 items-center justify-center rounded-xl border border-lightgray dark:border-lightdarkgray dark:bg-verydarkblack">
         <img
-          src={
-            image
-              ? image.startsWith('data:')
-                ? image
-                : `data:image/jpeg;base64,${image}`
-              : imageUrl
-          }
+          src={image ? image : imageUrl}
           alt="잘못된 경로입니다."
           className="w-full rounded-xl object-cover text-xs text-gray"
         />

@@ -5,7 +5,6 @@ import {
   getCast,
   postCast,
   putCast,
-  uploadCastImage,
 } from '@services/castService'
 import { CastPostRequest, CastPutRequest } from '@types'
 
@@ -51,21 +50,10 @@ export const useCast = () => {
     }
   }, [])
 
-  const handleImageUpload = useCallback(async (file: File) => {
-    try {
-      const imageUrl = await uploadCastImage(file)
-      return imageUrl
-    } catch (error) {
-      console.error('Failed to upload image:', error)
-      throw error
-    }
-  }, [])
-
   return {
     addCast: handleAddCast,
     updateCast: handleUpdateCast,
     deleteCast: handleDeleteCast,
     getCast: handleGetCast,
-    uploadImage: handleImageUpload,
   }
 }
