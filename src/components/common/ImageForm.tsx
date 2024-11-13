@@ -1,5 +1,6 @@
 import React from 'react'
 
+import AlertOwing from '@assets/common/AlertOwing.png'
 import { BsPlusCircle } from 'react-icons/bs'
 import { MdLightbulbOutline } from 'react-icons/md'
 
@@ -46,11 +47,22 @@ const ImageForm: React.FC<ImageFormProps> = ({
         />
       </div>
       <div className="my-1 flex h-80 w-80 justify-center rounded-xl border border-lightgray dark:border-lightdarkgray dark:bg-verydarkblack">
-        <img
-          src={image}
-          alt="Image"
-          className="w-full rounded-xl object-cover"
-        />
+        {image ? (
+          <img
+            src={image}
+            alt="image"
+            className="w-full rounded-xl object-cover"
+          />
+        ) : (
+          <div className="flex w-full flex-col items-center justify-center rounded-[6px] border border-[#CFCDCD]">
+            <img
+              src={AlertOwing}
+              alt="AlertOwing"
+              className="mx-auto h-auto w-12"
+            />
+            <div className="mt-4 text-redorange">이미지를 추가해 주세요!</div>
+          </div>
+        )}
       </div>
       {isEditable && (
         <div
