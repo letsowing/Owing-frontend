@@ -15,7 +15,7 @@ const CastImage: React.FC<CastImageProps> = ({ imageUrl }) => {
   return (
     <div className="flex w-full items-center justify-center">
       <img
-        src={imageUrl || isDarkMode ? DarkAlertOwing : AlertOwing}
+        src={imageUrl ? imageUrl : isDarkMode ? DarkAlertOwing : AlertOwing}
         alt="Cast"
         className="w-full rounded-xl object-cover"
       />

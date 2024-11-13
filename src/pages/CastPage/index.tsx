@@ -27,7 +27,7 @@ const initialCastData: Cast = {
 
 const CastPage: React.FC = () => {
   const navigate = useNavigate()
-  const { updateCast, deleteCast, getCast, uploadImage } = useCast()
+  const { updateCast, deleteCast, getCast } = useCast()
 
   const [originalCastData, setOriginalCastData] =
     useState<Cast>(initialCastData)
@@ -102,33 +102,18 @@ const CastPage: React.FC = () => {
     }
   }
 
-  const handleImageUpload = async (file: File) => {
-    try {
-      const imageUrl = await uploadImage(file)
-      setCastData((prev) => ({ ...prev, imageUrl }))
-    } catch (error) {
-      console.error('Failed to upload image:', error)
-    }
-  }
-
   return (
     <div className="mx-[3%] flex w-[94%] flex-col items-center justify-center gap-2 p-4">
       <PageTitle id={selectedFileId} isEditing={isEditing} />
 
       <div className="flex w-full flex-col">
-        <CastImageSection
-          castData={castData}
-          isEditing={isEditing}
-          onImageUpload={handleImageUpload}
-        />
-
+        <CastImageSection castData={castData} isEditing={isEditing} />
         <div className="w-full flex-1">
           <CastInputForm
             castData={castData}
             onInputChange={handleInputChange}
             isEditable={isEditing}
           />
-
           <CastActionButtons
             isEditing={isEditing}
             hasId={true}

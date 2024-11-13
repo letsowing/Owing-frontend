@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import AIImageGenerationPrompt from './AIImageGenerationPrompt'
 import CastImage from './CastImage'
@@ -9,14 +9,26 @@ import { BsPlusCircle } from 'react-icons/bs'
 interface CastImageSectionProps {
   castData: Cast
   isEditing: boolean
-  onImageUpload: (file: File) => Promise<void>
 }
 
 const CastImageSection: React.FC<CastImageSectionProps> = ({
   castData,
   isEditing,
-  onImageUpload,
 }) => {
+  const [editedImageUrl, setEditedImageUrl] = useState(castData.imageUrl || '')
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setEditedImageUrl(reader.result as string)
+        castData.imageUrl = reader.result as string
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
   return (
     <div className="flex justify-center">
       <div className="flex-col">
@@ -30,16 +42,13 @@ const CastImageSection: React.FC<CastImageSectionProps> = ({
               type="file"
               accept="image/*"
               className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0]
-                if (file) onImageUpload(file)
-              }}
+              onChange={handleFileChange}
             />
             <BsPlusCircle className="mt-1 text-redorange dark:text-blue" />
           </label>
         )}
         <div className="flex-center align-center flex h-80 w-80 rounded-xl bg-beige dark:bg-coldbeige">
-          <CastImage imageUrl={castData.imageUrl || ''} />
+          <CastImage imageUrl={editedImageUrl || ''} />
         </div>
         {isEditing && <AIImageGenerationPrompt />}
       </div>
