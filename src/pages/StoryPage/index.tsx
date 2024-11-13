@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { AIHelper } from '@components/aiHelper/AIHelper'
 import { AIWindow } from '@components/aiHelper/AIWindow'
@@ -21,9 +21,9 @@ const StoryWrapper = () => {
   const [selectedFeature, setSelectedFeature] = useState<Feature['id'] | null>(
     null,
   )
-  const [storyContent, setStoryContent] = useState('')
+  const storyContentRef = useRef('')
   const { selectedFileId } = useProjectStore()
-  const [currentStoryId, setCurrentStoryId] = useState(selectedFileId!)
+  const [currentStoryId] = useState(selectedFileId!)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
@@ -31,7 +31,7 @@ const StoryWrapper = () => {
       try {
         setIsLoading(true)
         const data = await getStory(currentStoryId)
-        setStoryContent(data.content || '')
+        storyContentRef.current = data.content || ''
       } catch (error) {
         console.error('스토리 원고 조회 실패', error)
       } finally {
@@ -63,6 +63,19 @@ const StoryWrapper = () => {
     setSelectedFeature(null)
   }
 
+  const handleEditorChange = (newContent: string) => {
+    storyContentRef.current = newContent
+  }
+
+  const handleSave = async () => {
+    try {
+      await postStory(currentStoryId, { content: storyContentRef.current })
+    } catch (error) {
+      console.error('원고 저장 실패:', error)
+    }
+    console.log('저장된 내용:', storyContentRef.current)
+  }
+
   if (isLoading) {
     return <Loader />
   }
@@ -88,7 +101,11 @@ const StoryWrapper = () => {
       )}
 
       <div className="relative z-0 mt-10">
-        <StoryEditor initialValue={storyContent} />
+        <StoryEditor
+          initialValue={storyContentRef.current}
+          onEditorChange={handleEditorChange}
+          onSave={handleSave}
+        />
       </div>
     </>
   )

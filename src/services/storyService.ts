@@ -20,10 +20,12 @@ export const getStory = async (
 
 export const postStory = async (
   storyId: number,
-  content: string,
+  data: {
+    content: string
+  },
 ): Promise<{ content: string }> => {
   try {
-    const response = await axiosInstance.post(`/stories/${storyId}`, content)
+    const response = await axiosInstance.post(`/stories/${storyId}`, data)
     return response.data
   } catch (error) {
     console.error('시나리오 저장 실패:', error)
