@@ -6,10 +6,10 @@ import {
   postCast,
   putCast,
 } from '@services/castService'
-import { CastPostRequest, CastPutRequest } from '@types'
+import { PostCastRequest, PutCastRequest } from '@types'
 
 export const useCast = () => {
-  const handleAddCast = useCallback(async (castData: CastPostRequest) => {
+  const handleAddCast = useCallback(async (castData: PostCastRequest) => {
     try {
       const newCast = await postCast(castData)
       return newCast
@@ -20,7 +20,7 @@ export const useCast = () => {
   }, [])
 
   const handleUpdateCast = useCallback(
-    async (castId: string, castData: CastPutRequest) => {
+    async (castId: string, castData: PutCastRequest) => {
       try {
         await putCast(castId, castData)
       } catch (error) {

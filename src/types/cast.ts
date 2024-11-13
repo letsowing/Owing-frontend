@@ -14,8 +14,19 @@ export interface Cast {
   }
 }
 
+export interface CastGraphResponse {
+  id: number
+  name: string
+  role: string
+  imageUrl: string
+  coordinate: {
+    x: number
+    y: number
+  }
+}
+
 export interface CastGraph {
-  cast: CastResponse[]
+  cast: CastGraphResponse[]
   relationship: CustomEdge[]
 }
 
@@ -26,7 +37,6 @@ export interface PutCastRelationshipRequest {
   sourceHandle: string
   targetHandle: string
 }
-
 export interface PostCastRelationshipRequest {
   source: number
   target: number
@@ -63,7 +73,7 @@ export interface getCastResponse {
   }
 }
 
-export interface CastPostRequest {
+export interface PostCastRequest {
   folderId: number | undefined
   name: string
   age: number
@@ -77,24 +87,13 @@ export interface CastPostRequest {
   }
 }
 
-export interface CastPutRequest {
+export interface PutCastRequest {
   name: string
   age: number
   gender: string
   role: string
   description: string
   imageUrl: string
-}
-
-export interface CastResponse {
-  id: number
-  name: string
-  role: string
-  imageUrl: string
-  coordinate: {
-    x: number
-    y: number
-  }
 }
 
 export interface CastAiImageRequest {

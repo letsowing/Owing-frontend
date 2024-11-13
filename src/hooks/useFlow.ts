@@ -11,8 +11,9 @@ import {
   postCast,
   postCastRelationship,
   putCast,
+  putCastRelationshipHandle,
 } from '@services/castService'
-import { Cast, CustomNode } from '@types'
+import { Cast, CustomEdge, CustomNode, EdgeTypes } from '@types'
 import { Connection, Edge, NodeChange } from '@xyflow/react'
 
 export const useFlow = () => {
@@ -21,9 +22,7 @@ export const useFlow = () => {
     edges,
     isBidirectionalEdge,
     onNodesChange: onNodesChangeFromStore,
-    onEdgesChange,
     onConnect: onConnectFromStore,
-    reconnect,
     setNodes,
     setEdges,
     addNode,
@@ -56,6 +55,43 @@ export const useFlow = () => {
   )
 
   const edgeReconnectSuccessful = useRef(true)
+
+  // Flow Management Functions
+  const setInitialFlow = useCallback(
+    async (projectId: number) => {
+      try {
+        const graphData = await getCastGraph(projectId)
+        const initialNodes: CustomNode[] = graphData.cast.map((cast) => ({
+          id: cast.id?.toString(),
+          position: cast.coordinate || { x: 0, y: 0 },
+          type: 'customNode',
+          data: {
+            name: cast.name || '',
+            role: cast.role || '',
+            image: cast.imageUrl || '',
+          },
+        }))
+
+        const initialEdges = graphData.relationship.map((rel) => ({
+          id: rel.id.toString(),
+          source: rel.source.toString(),
+          target: rel.target.toString(),
+          label: rel.label || '관계',
+          type: rel.type,
+          sourceHandle: rel.sourceHandle,
+          targetHandle: rel.targetHandle,
+        }))
+
+        setNodes(initialNodes)
+        setEdges(initialEdges)
+        return graphData
+      } catch (error) {
+        console.error('Failed to load graph data:', error)
+        throw error
+      }
+    },
+    [setNodes, setEdges],
+  )
 
   // Node Management Functions
   const onNodeAdd = useCallback(
@@ -102,7 +138,6 @@ export const useFlow = () => {
           description: cast.description || '',
           imageUrl: cast.imageUrl || '',
         }
-
         await putCast(nodeId, castData)
 
         updateNodeInStore(nodeId, {
@@ -135,51 +170,50 @@ export const useFlow = () => {
   }, [])
 
   const onReconnect = useCallback(
-    (oldEdge: Edge, newConnection: Connection) => {
+    async (oldEdge: Edge, newConnection: Connection) => {
       edgeReconnectSuccessful.current = true
-      reconnect(oldEdge, newConnection)
+      try {
+        const result = await putCastRelationshipHandle(oldEdge.id, {
+          source: Number(newConnection.source),
+          target: Number(newConnection.target),
+          type: oldEdge.type as keyof EdgeTypes,
+          sourceHandle: newConnection.sourceHandle!,
+          targetHandle: newConnection.targetHandle!,
+        })
+
+        const updatedEdges = edges.map((edge) =>
+          edge.id === oldEdge.id
+            ? {
+                ...edge,
+                id: result.id || edge.id, // 새 ID가 있으면 업데이트
+                source: newConnection.source || edge.source,
+                target: newConnection.target || edge.target,
+                sourceHandle: newConnection.sourceHandle || edge.sourceHandle,
+                targetHandle: newConnection.targetHandle || edge.targetHandle,
+              }
+            : edge,
+        )
+        setEdges(updatedEdges as CustomEdge[])
+      } catch (error) {
+        console.error('Failed to handle edge reconnection:', error)
+      }
     },
-    [reconnect],
+    [edges, setEdges],
   )
 
   const onReconnectEnd = useCallback(
     async (_event: MouseEvent | TouchEvent, edge: Edge) => {
       try {
         if (!edgeReconnectSuccessful.current) {
+          // 재연결이 실패한 경우 엣지 삭제
           await deleteCastRelationship(edge.id)
           removeEdge(edge.id)
         }
       } catch (error) {
-        console.error('Failed to delete cast relationship:', error)
+        console.error('Failed to handle edge reconnection:', error)
       }
     },
     [removeEdge],
-  )
-
-  // Flow Management Functions
-  const setInitialFlow = useCallback(
-    async (projectId: number) => {
-      try {
-        const graphData = await getCastGraph(projectId)
-        const initialNodes: CustomNode[] = graphData.cast.map((cast) => ({
-          id: cast.id?.toString(),
-          position: cast.coordinate || { x: 0, y: 0 },
-          type: 'customNode',
-          data: {
-            name: cast.name || '',
-            role: cast.role || '',
-            image: cast.imageUrl || '',
-          },
-        }))
-        setNodes(initialNodes)
-        setEdges(graphData.relationship)
-        return graphData
-      } catch (error) {
-        console.error('Failed to load graph data:', error)
-        throw error
-      }
-    },
-    [setNodes, setEdges],
   )
 
   const onConnect = useCallback(
@@ -231,7 +265,7 @@ export const useFlow = () => {
       const edge = edges.find((e) => e.id === edgeId)
       if (edge) {
         try {
-          await patchCastRelationshipLabel(edgeId, newLabel)
+          await patchCastRelationshipLabel(edgeId, { label: newLabel })
           updateEdgeLabelInStore(edgeId, newLabel)
         } catch (error) {
           console.error('Failed to update cast relationship:', error)
@@ -262,7 +296,6 @@ export const useFlow = () => {
     // Flow Management
     setInitialFlow,
     onNodesChange,
-    onEdgesChange,
     onConnect,
     setIsBidirectionalEdge,
   }
