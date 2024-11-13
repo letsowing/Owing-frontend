@@ -1,62 +1,71 @@
 import { useCallback } from 'react'
 
-import { useCastStore } from '@stores/castStore'
-
-import { Cast } from '@types'
+import {
+  deleteCast as deleteCastAPI,
+  getCast,
+  postCast,
+  putCast,
+  uploadCastImage,
+} from '@services/castService'
+import { CastPostRequest, CastPutRequest } from '@types'
 
 export const useCast = () => {
-  const { casts, setCasts, addCast, updateCast, deleteCast } = useCastStore(
-    useCallback(
-      (state) => ({
-        casts: state.casts,
-        setCasts: state.setCasts,
-        addCast: state.addCast,
-        updateCast: state.updateCast,
-        deleteCast: state.deleteCast,
-      }),
-      [],
-    ),
-  )
-
-  const handleSetCasts = useCallback(
-    (newCasts: Cast[]) => {
-      setCasts(newCasts)
-    },
-    [setCasts],
-  )
-
-  const handleAddCast = useCallback(
-    (cast: Cast) => {
-      addCast(cast)
-    },
-    [addCast],
-  )
+  const handleAddCast = useCallback(async (castData: CastPostRequest) => {
+    try {
+      const newCast = await postCast(castData)
+      return newCast
+    } catch (error) {
+      console.error('Failed to add cast:', error)
+      throw error
+    }
+  }, [])
 
   const handleUpdateCast = useCallback(
-    (cast: Cast) => {
-      updateCast(cast)
+    async (castId: string, castData: CastPutRequest) => {
+      try {
+        await putCast(castId, castData)
+      } catch (error) {
+        console.error('Failed to update cast:', error)
+        throw error
+      }
     },
-    [updateCast],
+    [],
   )
 
-  const handleDeleteCast = useCallback(
-    (id: string) => {
-      deleteCast(id)
-    },
-    [deleteCast],
-  )
+  const handleDeleteCast = useCallback(async (castId: string) => {
+    try {
+      await deleteCastAPI(castId)
+    } catch (error) {
+      console.error('Failed to delete cast:', error)
+      throw error
+    }
+  }, [])
 
-  const getCastById = useCallback(
-    (id: string) => casts.find((char) => char.id === id),
-    [casts],
-  )
+  const handleGetCast = useCallback(async (castId: string) => {
+    try {
+      const data = await getCast(castId)
+      return data.cast
+    } catch (error) {
+      console.error('Failed to fetch cast:', error)
+      throw error
+    }
+  }, [])
+
+  const handleImageUpload = useCallback(async (file: File) => {
+    try {
+      const imageUrl = await uploadCastImage(file)
+      return imageUrl
+    } catch (error) {
+      console.error('Failed to upload image:', error)
+      throw error
+    }
+  }, [])
 
   return {
-    casts,
-    setCasts: handleSetCasts,
     addCast: handleAddCast,
     updateCast: handleUpdateCast,
     deleteCast: handleDeleteCast,
-    getCastById,
+    getCast: handleGetCast,
+    uploadImage: handleImageUpload,
   }
 }

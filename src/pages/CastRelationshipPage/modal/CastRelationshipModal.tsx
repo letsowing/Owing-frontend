@@ -37,7 +37,9 @@ const CastRelationshipModal = ({
 }: CastRelationshipModalProps) => {
   const { modals } = useModalManagement()
   const [editableCast, setEditableCast] = useState<Cast>(initialCast)
-  const [selectedFolderId, setSelectedFolderId] = useState<number | undefined>()
+  const [selectedFolderId, setSelectedFolderId] = useState<number | undefined>(
+    folderId,
+  )
 
   useEffect(() => {
     if (modals.length > 0) {
@@ -88,7 +90,7 @@ const CastRelationshipModal = ({
         <div className="w-1/3">
           <ImageForm
             isEditable={isEditable}
-            image={editableCast.imageUrl}
+            image={editableCast.imageUrl || ''}
             onImageChange={(image) => handleInputChange('imageUrl', image)}
             onAIGenerateClick={handleAIImageGeneration}
           />

@@ -29,7 +29,7 @@ const InputForm: React.FC<InputFormProps> = ({
       <InputField
         type="text"
         labelValue="이름"
-        value={cast.name}
+        value={cast.name || ''}
         isRequired={true}
         maxLength={50}
         isEditable={isEditable}
@@ -40,7 +40,7 @@ const InputForm: React.FC<InputFormProps> = ({
           <InputField
             type="number"
             labelValue="나이"
-            value={cast.age.toString()}
+            value={cast.age?.toString() || '0'}
             isRequired={false}
             maxLength={50}
             isEditable={isEditable}
@@ -51,7 +51,7 @@ const InputForm: React.FC<InputFormProps> = ({
           <InputField
             type="text"
             labelValue="성별"
-            value={cast.gender}
+            value={cast.gender || ''}
             isRequired={false}
             maxLength={50}
             isEditable={isEditable}
@@ -64,7 +64,7 @@ const InputForm: React.FC<InputFormProps> = ({
           <InputField
             type="text"
             labelValue="역할/직업"
-            value={cast.role}
+            value={cast.role || ''}
             isRequired={true}
             maxLength={200}
             isEditable={isEditable}
@@ -82,7 +82,7 @@ const InputForm: React.FC<InputFormProps> = ({
       </div>
       <TextAreaField
         labelValue="세부사항"
-        value={cast.description}
+        value={cast.description || ''}
         isRequired={false}
         maxLength={1000}
         isEditable={isEditable}

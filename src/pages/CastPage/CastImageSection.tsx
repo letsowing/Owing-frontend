@@ -38,8 +38,8 @@ const CastImageSection: React.FC<CastImageSectionProps> = ({
             <BsPlusCircle className="mt-1 text-redorange dark:text-blue" />
           </label>
         )}
-        <div className="flex-center align-center flex h-80 w-80 rounded-xl bg-coldbeige">
-          <CastImage imageUrl={castData.imageUrl} />
+        <div className="flex-center align-center flex h-80 w-80 rounded-xl bg-beige dark:bg-coldbeige">
+          <CastImage imageUrl={castData.imageUrl || ''} />
         </div>
         {isEditing && <AIImageGenerationPrompt />}
       </div>

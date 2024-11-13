@@ -7,12 +7,14 @@ import {
   CastGraph,
   CastPostRequest,
   CastPutRequest,
-  CastRelationship,
   FolderSummary,
   PostCastRelationshipRequest,
+  PostCastRelationshipResponse,
+  PutCastRelationshipRequest,
   getCastResponse,
 } from '@types'
 
+// 캐릭터 단일 조회 => folderId와 Cast
 export const getCast = async (castId: string): Promise<getCastResponse> => {
   try {
     const response = await axiosInstance.get<getCastResponse>(`/cast/${castId}`)
@@ -23,12 +25,13 @@ export const getCast = async (castId: string): Promise<getCastResponse> => {
   }
 }
 
+// 캐릭터 추가 시 폴더 선택 => {id, name}[]
 export const getFolderList = async (
   projectId: number,
 ): Promise<FolderSummary[]> => {
   try {
     const response = await axiosInstance.get<FolderSummary[]>(
-      `/cast/${projectId}/folderList`,
+      `/cast/folders/${projectId}/dropdown`,
     )
     return response.data
   } catch (error) {
@@ -37,26 +40,48 @@ export const getFolderList = async (
   }
 }
 
-export const postCast = async (cast: CastPostRequest): Promise<Cast> => {
-  const response = await axiosInstance.post('/cast', cast)
-  return {
-    ...response.data,
-    position: response.data.coordinate,
+// 인물관계도 전체 조회 => CastResponse[], CustomEdge[]
+export const getCastGraph = async (projectId: number): Promise<CastGraph> => {
+  try {
+    const response = await axiosInstance.get<CastGraph>(
+      `/cast/graph?projectId=${projectId}`,
+    )
+    console.log(response.data)
+    return response.data
+  } catch (error) {
+    console.error('Failed to get cast graph:', error)
+    throw error
   }
 }
 
-export const putCast = async (
-  castId: string,
-  cast: CastPutRequest,
-): Promise<void> => {
+// 캐릭터 생성 => folderId, coordinate 추가
+export const postCast = async (cast: CastPostRequest): Promise<Cast> => {
   try {
-    await axiosInstance.put<Cast>(`/cast/${castId}`, cast)
+    const response = await axiosInstance.post('/cast', cast)
+    return {
+      ...response.data,
+      position: response.data.coordinate,
+    }
   } catch (error) {
     console.error('Failed to update cast:', error)
     throw error
   }
 }
 
+// 캐릭터 수정 => folderId, coordinate 제거
+export const putCast = async (
+  castId: string,
+  cast: CastPutRequest,
+): Promise<void> => {
+  try {
+    await axiosInstance.put<void>(`/cast/${castId}`, cast)
+  } catch (error) {
+    console.error('Failed to update cast:', error)
+    throw error
+  }
+}
+
+// 캐릭터 삭제
 export const deleteCast = async (castId: string): Promise<void> => {
   try {
     await axiosInstance.delete(`/cast/${castId}`)
@@ -66,6 +91,7 @@ export const deleteCast = async (castId: string): Promise<void> => {
   }
 }
 
+// 캐릭터 이동 => {x,y}
 export const patchCastCoord = async (
   castId: string,
   data: CastCoord,
@@ -79,58 +105,59 @@ export const patchCastCoord = async (
   }
 }
 
-// PUT /api/cast/relationship/{uuid}
-export const patchCastRelationship = async (
-  id: string,
+// 관계 생성
+export const postCastRelationship = async (
   data: PostCastRelationshipRequest,
-): Promise<CastRelationship> => {
+): Promise<PostCastRelationshipResponse> => {
   try {
-    const response = await axiosInstance.put<CastRelationship>(
-      `/cast/relationship/${id}`,
+    const response = await axiosInstance.post<PostCastRelationshipResponse>(
+      '/cast/relationships',
       data,
     )
     return response.data
+  } catch (error) {
+    console.error('Failed to create cast relationship:', error)
+    throw error
+  }
+}
+
+// 관계 라벨 수정 => label: string
+export const patchCastRelationshipLabel = async (
+  relationshipId: string,
+  label: string,
+): Promise<void> => {
+  try {
+    await axiosInstance.patch<void>(
+      `/cast/relationships/${relationshipId}/label`,
+      label,
+    )
   } catch (error) {
     console.error('Failed to update cast relationship:', error)
     throw error
   }
 }
 
-// DELETE /api/cast/relationship/{uuid}
-export const deleteCastRelationship = async (id: string): Promise<void> => {
+// 관계 handle 이동 => id를 제외한 CustomEdge 값
+export const putCastRelationshipHandle = async (
+  relationshipId: string,
+  data: PutCastRelationshipRequest,
+): Promise<void> => {
   try {
-    await axiosInstance.delete(`/cast/relationship/${id}`)
+    await axiosInstance.put<void>(`/cast/relationships/${relationshipId}`, data)
+  } catch (error) {
+    console.error('Failed to update cast relationship:', error)
+    throw error
+  }
+}
+
+// 관계 삭제
+export const deleteCastRelationship = async (
+  relationshipId: string,
+): Promise<void> => {
+  try {
+    await axiosInstance.delete(`/cast/relationships/${relationshipId}`)
   } catch (error) {
     console.error('Failed to delete cast relationship:', error)
-    throw error
-  }
-}
-
-// GET /api/cast
-export const getCasts = async (folderId: string): Promise<Cast[]> => {
-  try {
-    const response = await axiosInstance.get<Cast[]>(
-      `/cast?folderId=${folderId}`,
-    )
-    return response.data
-  } catch (error) {
-    console.error('Failed to get casts:', error)
-    throw error
-  }
-}
-
-// POST /api/cast/relationship
-export const postCastRelationship = async (
-  data: PostCastRelationshipRequest,
-): Promise<CastRelationship> => {
-  try {
-    const response = await axiosInstance.post<CastRelationship>(
-      '/cast/relationship',
-      data,
-    )
-    return response.data
-  } catch (error) {
-    console.error('Failed to create cast relationship:', error)
     throw error
   }
 }
@@ -146,19 +173,7 @@ export const uploadCastImage = async (data: Partial<Cast>): Promise<string> => {
   }
 }
 
-// GET /api/cast/graph
-export const getCastGraph = async (projectId: number): Promise<CastGraph> => {
-  try {
-    const response = await axiosInstance.get<CastGraph>(
-      `/cast/graph?projectId=${projectId}`,
-    )
-    return response.data
-  } catch (error) {
-    console.error('Failed to get cast graph:', error)
-    throw error
-  }
-}
-
+// image
 export const postCastGenerateAiImage = async (
   data: CastAiImageRequest,
 ): Promise<{ imageUrl: string }> => {

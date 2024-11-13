@@ -1,4 +1,4 @@
-import { CustomNode, EdgeTypes } from '@types'
+import { CustomEdge, EdgeTypes } from '@types'
 
 export interface Cast {
   id: string
@@ -15,28 +15,32 @@ export interface Cast {
 }
 
 export interface CastGraph {
-  nodes: CustomNode[]
-  edges: CastRelationship[]
+  cast: CastResponse[]
+  relationship: CustomEdge[]
 }
 
-export interface CastRelationship {
-  id: string
-  sourceId: number
-  targetId: number
-  label: string
+export interface PutCastRelationshipRequest {
+  source: number
+  target: number
   type: keyof EdgeTypes
   sourceHandle: string
   targetHandle: string
 }
 
 export interface PostCastRelationshipRequest {
-  sourceId: number
-  targetId: number
+  source: number
+  target: number
   label: string
   type: keyof EdgeTypes
   sourceHandle: string
   targetHandle: string
 }
+
+export interface PostCastRelationshipResponse
+  extends PostCastRelationshipRequest {
+  id: string
+}
+
 export interface CastCoord {
   x: number
   y: number
@@ -52,7 +56,7 @@ export interface getCastResponse {
     role: string
     description: string
     imageUrl: string
-    position: {
+    coordinate: {
       x: number
       y: number
     }
@@ -85,10 +89,7 @@ export interface CastPutRequest {
 export interface CastResponse {
   id: number
   name: string
-  age: number
-  gender: string
   role: string
-  description: string
   imageUrl: string
   coordinate: {
     x: number
