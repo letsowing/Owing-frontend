@@ -1,6 +1,14 @@
 import axiosInstance from '@utils/httpCommons'
 
-export const getStory = async (storyId: number): Promise<void> => {
+export const getStory = async (
+  storyId: number,
+): Promise<{
+  storyId: number
+  name: string
+  description: string
+  textCount: number
+  content: string
+}> => {
   try {
     const response = await axiosInstance.get(`/stories/${storyId}`)
     return response.data.blocks
@@ -13,7 +21,7 @@ export const getStory = async (storyId: number): Promise<void> => {
 export const postStory = async (
   storyId: number,
   content: string,
-): Promise<void> => {
+): Promise<{ content: string }> => {
   try {
     const response = await axiosInstance.post(`/stories/${storyId}`, content)
     return response.data
