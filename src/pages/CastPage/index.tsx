@@ -20,20 +20,24 @@ import {
 import { Cast } from '@types'
 import { useNavigate } from 'react-router-dom'
 
+const initialCastData: Cast = {
+  id: '',
+  name: '',
+  age: 0,
+  gender: '',
+  role: '',
+  description: '',
+  position: { x: 0, y: 0 },
+  imageUrl: '',
+}
+
 const CastPage: React.FC = () => {
   const navigate = useNavigate()
   const { updateCast, deleteCast } = useCharFlow()
 
-  const [castData, setCastData] = useState<Cast>({
-    id: '',
-    name: '',
-    age: 0,
-    gender: '',
-    role: '',
-    description: '',
-    position: { x: 0, y: 0 },
-    imageUrl: '',
-  })
+  const [originalCastData, setOriginalCastData] =
+    useState<Cast>(initialCastData)
+  const [castData, setCastData] = useState<Cast>(initialCastData)
   const [isEditing, setIsEditing] = useState(false)
   const { selectedFileId, selectedFolderId } = useProjectStore()
 
@@ -42,7 +46,8 @@ const CastPage: React.FC = () => {
     const fetchCast = async () => {
       try {
         const data = await getCast(selectedFileId.toString())
-        setCastData(data)
+        setCastData(data.cast)
+        setOriginalCastData(data.cast)
       } catch (error) {
         console.error('Failed to fetch cast:', error)
       }
@@ -87,10 +92,10 @@ const CastPage: React.FC = () => {
     setIsEditing(true)
   }
 
-  const handleCancel = async () => {
+  const handleCancel = () => {
     setIsEditing(false)
     // 수정 취소시 원래 데이터로 복구
-    await getCast(selectedFileId.toString()).then(setCastData)
+    setCastData(originalCastData)
   }
 
   const handleDelete = async () => {

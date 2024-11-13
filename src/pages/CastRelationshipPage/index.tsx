@@ -6,8 +6,6 @@ import { useThemeStore } from '@stores/themeStore'
 import { useCharFlow } from '@hooks/useCharFlow'
 import { useModalManagement } from '@hooks/useModal'
 
-import { generateUUID } from '@utils/uuid'
-
 import AddButton from './AddButton'
 import BidirectionalEdge from './BidirectionalEdge'
 import CustomNode from './CustomNode'
@@ -20,18 +18,19 @@ import {
   deleteCastRelationship,
   getCast,
   getCastGraph,
+  getFolderList,
+  patchCastCoord,
+  patchCastRelationship,
   postCast,
   postCastRelationship,
   putCast,
-  putCastCoord,
-  putCastRelationship,
 } from '@services/castService'
 import {
   Cast,
-  CastCoord,
   CustomNodeProps,
   CustomNode as CustomNodeType,
   EdgeTypes,
+  FolderSummary,
   ModalType,
   NodeTypes,
 } from '@types'
@@ -74,6 +73,7 @@ const FlowWithProvider: React.FC = () => {
 
   const [isEditable, setIsEditable] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [folderList, setFolderList] = useState<FolderSummary[]>([])
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -81,6 +81,9 @@ const FlowWithProvider: React.FC = () => {
         setIsLoading(true)
         const graphData = await getCastGraph(currentProject.id)
         setInitialFlow(graphData.nodes, graphData.edges)
+
+        const list = await getFolderList(currentProject.id)
+        setFolderList(list)
       } catch (error) {
         console.error('초기 그래프 데이터를 가져오는 데 실패했습니다:', error)
       } finally {
@@ -105,7 +108,7 @@ const FlowWithProvider: React.FC = () => {
       const edge = edges.find((e) => e.id === edgeId)
       if (edge) {
         try {
-          await putCastRelationship(edgeId, {
+          await patchCastRelationship(edgeId, {
             sourceId: Number(edge.source),
             targetId: Number(edge.target),
             label: newLabel,
@@ -122,32 +125,29 @@ const FlowWithProvider: React.FC = () => {
   )
 
   const handleCastAction = useCallback(
-    async (cast: Cast) => {
-      let castData
+    async (cast: Cast, selectedFolderId: number | undefined) => {
       try {
+        const castData = {
+          name: cast.name,
+          age: cast.age,
+          gender: cast.gender,
+          role: cast.role,
+          description: cast.description,
+          imageUrl: cast.imageUrl,
+        }
+
         if (cast.id) {
-          castData = {
-            name: cast.name,
-            age: cast.age,
-            gender: cast.gender,
-            role: cast.role,
-            description: cast.description,
-            imageUrl: cast.imageUrl,
-          }
+          // 수정의 경우
           await putCast(cast.id, castData)
           updateCast(cast)
         } else {
-          castData = {
-            folderId: 29,
-            name: cast.name,
-            age: cast.age,
-            gender: cast.gender,
-            role: cast.role,
-            description: cast.description,
-            imageUrl: cast.imageUrl,
+          // 생성의 경우
+          const newCastData = {
+            ...castData,
+            folderId: selectedFolderId,
             coordinate: cast.position,
           }
-          const newCast = await postCast(castData)
+          const newCast = await postCast(newCastData)
           addCast(newCast)
         }
         closeModal()
@@ -168,12 +168,14 @@ const FlowWithProvider: React.FC = () => {
     async (_event: React.MouseEvent, node: CustomNodeType) => {
       try {
         setIsLoading(true)
-        const cast = await getCast(node.id)
-        if (cast) {
+        const data = await getCast(node.id)
+        if (data) {
           openModal({
             type: ModalType.CHARACTER_RELATIONSHIP,
-            cast,
+            cast: data.cast,
             isEditable: false,
+            folderId: data.folderId,
+            folderList: folderList,
             onSave: handleCastAction,
             onEdit: toggleEditMode,
             onClose: handleCloseModal,
@@ -186,20 +188,28 @@ const FlowWithProvider: React.FC = () => {
         setIsLoading(false)
       }
     },
-    [handleCastAction, handleCloseModal, openModal, toggleEditMode],
+    [folderList, handleCastAction, handleCloseModal, openModal, toggleEditMode],
   )
 
-  const handleAddCast = useCallback(() => {
+  const handleAddCast = useCallback(async () => {
     openModal({
       type: ModalType.CHARACTER_RELATIONSHIP,
       cast: null,
       isEditable: true,
+      folderId: undefined,
+      folderList: folderList,
       onSave: handleCastAction,
       onEdit: toggleEditMode,
       onClose: handleCloseModal,
     })
     setIsEditable(true)
-  }, [handleCloseModal, handleCastAction, openModal, toggleEditMode])
+  }, [
+    openModal,
+    folderList,
+    handleCastAction,
+    toggleEditMode,
+    handleCloseModal,
+  ])
 
   const handleNodeRemove = useCallback(
     async (nodeId: string) => {
@@ -218,12 +228,8 @@ const FlowWithProvider: React.FC = () => {
 
   const onConnect = useCallback(
     async (connection: Connection) => {
-      const newEdgeId = generateUUID()
-      onConnectFromStore(connection, newEdgeId)
-
       try {
-        await postCastRelationship({
-          uuid: newEdgeId,
+        const newCast = await postCastRelationship({
           sourceId: Number(connection.source),
           targetId: Number(connection.target),
           label: '관계',
@@ -231,6 +237,7 @@ const FlowWithProvider: React.FC = () => {
           sourceHandle: connection.sourceHandle || 'left',
           targetHandle: connection.targetHandle || 'right',
         })
+        onConnectFromStore(connection, newCast.id)
       } catch (error) {
         console.error('Failed to create cast relationship:', error)
       }
@@ -248,12 +255,10 @@ const FlowWithProvider: React.FC = () => {
         if (change.type === 'position' && 'position' in change) {
           const { id, position } = change
           try {
-            await putCastCoord(id, {
-              position: {
-                x: position?.x ?? 0,
-                y: position?.y ?? 0,
-              },
-            } as unknown as CastCoord)
+            await patchCastCoord(id, {
+              x: position?.x ?? 0,
+              y: position?.y ?? 0,
+            })
           } catch (error) {
             console.error('Failed to update cast position:', error)
           }
@@ -360,6 +365,8 @@ const FlowWithProvider: React.FC = () => {
             <CastRelationshipModal
               key={index}
               isEditable={isEditable}
+              folderId={modal.folderId}
+              folderList={modal.folderList}
               onEdit={() => setIsEditable(true)}
               onSave={handleCastAction}
               onClose={handleCloseModal}

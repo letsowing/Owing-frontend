@@ -1,4 +1,4 @@
-import { Cast, Project } from '@types'
+import { Cast, FolderSummary, Project } from '@types'
 
 export enum ModalType {
   CHARACTER_RELATIONSHIP = 'CHARACTER_RELATIONSHIP',
@@ -18,7 +18,9 @@ export interface CastRelationshipModalProps extends ModalProps<Cast> {
   type: ModalType.CHARACTER_RELATIONSHIP
   isEditable: boolean
   cast: Cast | null
-  onSave: ActionFunction<Cast>
+  folderId: number | undefined
+  folderList: FolderSummary[]
+  onSave: (data: Cast, folderId: number | undefined) => Promise<void>
   onEdit: () => void
   onClose: () => void
 }

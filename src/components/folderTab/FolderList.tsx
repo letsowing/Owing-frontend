@@ -4,7 +4,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useProjectStore } from '@stores/projectStore'
 
 import { useDnd } from '@hooks/useDnd'
-import useNavigation from '@hooks/useNavigation'
 
 import FolderListItem from './FolderListItem'
 
@@ -38,7 +37,6 @@ const FolderList: React.FC<FolderListProps> = ({
   const [newFolderName, setNewFolderName] = useState(folder.name)
   const [isFileEditing, setIsFileEditing] = useState(false)
   const [newFileName, setNewFileName] = useState('')
-  const { activePath } = useNavigation()
   const currentProject = useProjectStore((state) => state.currentProject)
 
   const ref = useRef<HTMLDivElement>(null)
@@ -96,31 +94,15 @@ const FolderList: React.FC<FolderListProps> = ({
   const handleSaveFile = async () => {
     const trimmedFileName = newFileName.trim()
     if (!trimmedFileName) {
+      setIsFileEditing(false)
       return
     }
 
     try {
-      let data
-      let newFile
-
-      if (activePath === 'cast') {
-        data = {
-          folderId: folder.id,
-          name: trimmedFileName,
-          age: 0,
-          gender: '',
-          role: '',
-          description: '',
-          coordinate: { x: Math.random() * 500, y: Math.random() * 500 },
-        }
-        newFile = await currentService.postCast(data)
-      } else {
-        data = {
-          folderId: folder.id,
-          name: trimmedFileName,
-        }
-        newFile = await currentService.postFile(data)
-      }
+      const newFile = await currentService.postFile({
+        folderId: folder.id,
+        name: trimmedFileName,
+      })
 
       addFile(folder.id, newFile.id, trimmedFileName)
     } catch (error) {

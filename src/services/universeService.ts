@@ -3,7 +3,7 @@ import axiosInstance from '@utils/httpCommons'
 
 import { putUploadImageToS3 } from './s3Service'
 
-export const putUniverseDescription = async (
+export const putUniverse = async (
   fileId: number,
   data: { name: string; description: string; imageUrl: string },
 ): Promise<void> => {
@@ -43,9 +43,7 @@ export const getUniversePresignedUrl = async (
   fileUrl: string
 }> => {
   try {
-    const response = await axiosInstance.get(
-      `/universes/files/${fileExtension}`,
-    )
+    const response = await axiosInstance.get(`/universes/files/${fileExtension}`)
     return response.data
   } catch (error) {
     console.error('세계관 Presigned Url 생성 실패:', error)

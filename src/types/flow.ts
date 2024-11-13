@@ -23,7 +23,7 @@ export type EdgeTypes = {
 }
 
 export interface CustomEdge extends Edge {
-  uuid?: string
+  [key: string]: unknown
   type: keyof EdgeTypes
 }
 

@@ -9,10 +9,12 @@ import ProjectInfoForm from './ProjectInfoFormProps '
 
 import {
   deleteProject,
+  getProject,
   postProjectGenerateAiImage,
   putProject,
 } from '@services/projectService'
 import { Project } from '@types'
+import { Loader } from 'lucide-react'
 
 const ProjectInfoPage = () => {
   const { currentProject, setCurrentProject } = useProjectStore()
@@ -21,6 +23,7 @@ const ProjectInfoPage = () => {
   const [isGenerating, setIsGenerating] = useState(false)
   const [isEditable, setIsEditable] = useState(false)
   const [isDisabled, setIsDisabled] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const { goToMain } = useNavigation()
 
   const handleInputChange = (field: keyof Project, value: string) => {
@@ -28,23 +31,21 @@ const ProjectInfoPage = () => {
   }
 
   useEffect(() => {
-    // 편집 모드일 때만 필수값 체크
-    if (isEditable) {
-      const hasEmptyRequired =
-        !project.title.trim() ||
-        !project.description.trim() ||
-        !project.category ||
-        !project.genres.length
-
-      setIsDisabled(hasEmptyRequired)
+    const fetchProject = async () => {
+      try {
+        setIsLoading(true)
+        const data = await getProject(currentProject.id)
+        setProject(data)
+      } catch (error) {
+        console.error('프로젝트 조회 실패:', error)
+        alert('프로젝트 정보를 불러오는데 실패했습니다.')
+      } finally {
+        setIsLoading(false)
+      }
     }
-  }, [
-    isEditable,
-    project.title,
-    project.description,
-    project.category,
-    project.genres,
-  ])
+
+    fetchProject()
+  }, [currentProject.id, setCurrentProject])
 
   const handleSave = async () => {
     if (
@@ -150,6 +151,10 @@ const ProjectInfoPage = () => {
         genres: updatedGenres,
       }
     })
+  }
+
+  if (isLoading) {
+    return <Loader />
   }
 
   return (

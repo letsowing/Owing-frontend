@@ -8,12 +8,14 @@ import {
   CastPostRequest,
   CastPutRequest,
   CastRelationship,
+  FolderSummary,
+  PostCastRelationshipRequest,
+  getCastResponse,
 } from '@types'
 
-// GET /api/cast/{castId}
-export const getCast = async (castId: string): Promise<Cast> => {
+export const getCast = async (castId: string): Promise<getCastResponse> => {
   try {
-    const response = await axiosInstance.get<Cast>(`/cast/${castId}`)
+    const response = await axiosInstance.get<getCastResponse>(`/cast/${castId}`)
     return response.data
   } catch (error) {
     console.error('Failed to get cast:', error)
@@ -21,7 +23,28 @@ export const getCast = async (castId: string): Promise<Cast> => {
   }
 }
 
-// PUT /api/cast/{castingId}
+export const getFolderList = async (
+  projectId: number,
+): Promise<FolderSummary[]> => {
+  try {
+    const response = await axiosInstance.get<FolderSummary[]>(
+      `/cast/${projectId}/folderList`,
+    )
+    return response.data
+  } catch (error) {
+    console.error('Failed to get cast:', error)
+    throw error
+  }
+}
+
+export const postCast = async (cast: CastPostRequest): Promise<Cast> => {
+  const response = await axiosInstance.post('/cast', cast)
+  return {
+    ...response.data,
+    position: response.data.coordinate,
+  }
+}
+
 export const putCast = async (
   castId: string,
   cast: CastPutRequest,
@@ -34,26 +57,21 @@ export const putCast = async (
   }
 }
 
-// DELETE /api/cast/{castingId}
-export const deleteCast = async (castingId: string): Promise<void> => {
+export const deleteCast = async (castId: string): Promise<void> => {
   try {
-    await axiosInstance.delete(`/cast/${castingId}`)
+    await axiosInstance.delete(`/cast/${castId}`)
   } catch (error) {
     console.error('Failed to delete cast:', error)
     throw error
   }
 }
 
-// PUT /api/cast/{castingId}/coord
-export const putCastCoord = async (
-  castingId: string,
+export const patchCastCoord = async (
+  castId: string,
   data: CastCoord,
 ): Promise<Cast> => {
   try {
-    const response = await axiosInstance.put<Cast>(
-      `/cast/${castingId}/coord`,
-      data,
-    )
+    const response = await axiosInstance.patch<Cast>(`/cast/${castId}`, data)
     return response.data
   } catch (error) {
     console.error('Failed to update cast coord:', error)
@@ -62,13 +80,13 @@ export const putCastCoord = async (
 }
 
 // PUT /api/cast/relationship/{uuid}
-export const putCastRelationship = async (
-  uuid: string,
-  data: CastRelationship,
+export const patchCastRelationship = async (
+  id: string,
+  data: PostCastRelationshipRequest,
 ): Promise<CastRelationship> => {
   try {
     const response = await axiosInstance.put<CastRelationship>(
-      `/cast/relationship/${uuid}`,
+      `/cast/relationship/${id}`,
       data,
     )
     return response.data
@@ -79,9 +97,9 @@ export const putCastRelationship = async (
 }
 
 // DELETE /api/cast/relationship/{uuid}
-export const deleteCastRelationship = async (uuid: string): Promise<void> => {
+export const deleteCastRelationship = async (id: string): Promise<void> => {
   try {
-    await axiosInstance.delete(`/cast/relationship/${uuid}`)
+    await axiosInstance.delete(`/cast/relationship/${id}`)
   } catch (error) {
     console.error('Failed to delete cast relationship:', error)
     throw error
@@ -101,19 +119,9 @@ export const getCasts = async (folderId: string): Promise<Cast[]> => {
   }
 }
 
-export const postCast = async (
-  cast: Partial<CastPostRequest>,
-): Promise<Cast> => {
-  const response = await axiosInstance.post('/cast', cast)
-  return {
-    ...response.data,
-    position: response.data.coordinate,
-  }
-}
-
 // POST /api/cast/relationship
 export const postCastRelationship = async (
-  data: CastRelationship,
+  data: PostCastRelationshipRequest,
 ): Promise<CastRelationship> => {
   try {
     const response = await axiosInstance.post<CastRelationship>(

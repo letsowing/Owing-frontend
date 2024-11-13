@@ -44,6 +44,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
   const handleSaveFolder = async () => {
     const trimmedFolderName = newFolderName.trim()
     if (!trimmedFolderName) {
+      setIsEditing(false)
       return
     }
     try {

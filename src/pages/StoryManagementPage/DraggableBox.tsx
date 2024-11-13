@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import { useDnd } from '@hooks/useDnd'
 import useNavigation from '@hooks/useNavigation'
 
-import { putStoryDescription } from '@services/storyService'
+import { putStory } from '@services/storyService'
 import { DraggableBoxProps } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 
@@ -74,14 +74,19 @@ export default function DraggableBox({
 
   const handleSave = async (e: React.MouseEvent) => {
     e.stopPropagation()
+    const trimmedEditedName = editedName.trim()
+    if (!trimmedEditedName) {
+      setIsEditing(false)
+      return
+    }
     try {
-      await putStoryDescription(file.id, {
-        name: editedName,
+      await putStory(file.id, {
+        name: trimmedEditedName,
         description: editedDescription,
       })
 
       updateFile(folderId, file.id, {
-        name: editedName,
+        name: trimmedEditedName,
         description: editedDescription,
       })
       setIsEditing(false)
@@ -90,8 +95,7 @@ export default function DraggableBox({
     }
   }
 
-  const handleCancel = (e: React.MouseEvent) => {
-    e.stopPropagation()
+  const handleCancel = () => {
     setEditedName(file.name)
     setEditedDescription(file.description)
     setIsEditing(false)
@@ -119,7 +123,7 @@ export default function DraggableBox({
             className="mb-2 rounded border p-1 dark:text-darkgray"
           />
           <textarea
-            value={editedDescription}
+            value={editedDescription || ''}
             onChange={(e) => setEditedDescription(e.target.value)}
             className="flex-grow resize-none rounded border p-1 dark:text-darkgray"
           />

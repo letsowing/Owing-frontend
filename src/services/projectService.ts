@@ -2,8 +2,7 @@ import { getImageExtensionFromBase64 } from '@utils/base64'
 import axiosInstance from '@utils/httpCommons'
 
 import { putUploadImageToS3 } from './s3Service'
-
-import { ProjectPutRequest, ProjectSummary } from '@types'
+import { Project, ProjectPutRequest, ProjectSummary } from '@types'
 
 export const postCreateProject = async (
   title: string,
@@ -20,7 +19,6 @@ export const postCreateProject = async (
       await putUploadImageToS3(presignedUrlData.presignedUrl, coverUrl)
       coverUrl = presignedUrlData.fileUrl
     }
-
     const payload = {
       title,
       description,
@@ -32,6 +30,7 @@ export const postCreateProject = async (
       '/projects',
       payload,
     )
+    //await putUploadImageToS3(response.data.presignedUrl, coverUrl)
     return response.data
   } catch (error) {
     console.error('프로젝트 생성 실패:', error)
@@ -72,6 +71,16 @@ export const getAllProjects = async (
   }
 }
 
+export const getProject = async (projectId: number): Promise<Project> => {
+  try {
+    const response = await axiosInstance.get(`/projects/${projectId}`)
+    return response.data
+  } catch (error) {
+    console.error('프로젝트 리스트 조회 실패:', error)
+    throw error
+  }
+}
+
 export const putProject = async (
   projectId: number,
   data: ProjectPutRequest,
@@ -86,7 +95,7 @@ export const putProject = async (
     }
     await axiosInstance.put(`/projects/${projectId}`, data)
   } catch (error) {
-    console.error('프로젝트 수정 실패:', error)
+    console.error('프로젝트 생성 실패:', error)
     throw error
   }
 }
