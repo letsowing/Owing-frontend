@@ -1,4 +1,7 @@
+import { getImageExtensionFromBase64 } from '@utils/base64'
 import axiosInstance from '@utils/httpCommons'
+
+import { putUploadImageToS3 } from './s3Service'
 
 import {
   Cast,
@@ -73,6 +76,13 @@ export const putCast = async (
   cast: CastPutRequest,
 ): Promise<void> => {
   try {
+    if (cast.imageUrl.startsWith('data:')) {
+      const presignedUrlData = await getCastPresignedUrl(
+        getImageExtensionFromBase64(cast.imageUrl),
+      )
+      await putUploadImageToS3(presignedUrlData.presignedUrl, cast.imageUrl)
+      cast.imageUrl = presignedUrlData.fileUrl
+    }
     await axiosInstance.put<void>(`/cast/${castId}`, cast)
   } catch (error) {
     console.error('Failed to update cast:', error)
@@ -161,23 +171,13 @@ export const deleteCastRelationship = async (
   }
 }
 
-// POST /api/cast/image
-export const uploadCastImage = async (data: Partial<Cast>): Promise<string> => {
-  try {
-    const response = await axiosInstance.post<string>('/cast/image', data)
-    return response.data
-  } catch (error) {
-    console.error('Failed to upload cast image:', error)
-    throw error
-  }
-}
-
 // image
 export const postCastGenerateAiImage = async (
-  data: CastAiImageRequest,
+  data: Partial<Cast>,
 ): Promise<{ imageUrl: string }> => {
   try {
     const response = await axiosInstance.post('cast/images', data)
+    console.log('요청요청')
     return response.data
   } catch (error) {
     console.error('Failed to generate cast AI iamge:', error)
