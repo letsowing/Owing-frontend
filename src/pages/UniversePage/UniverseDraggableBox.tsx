@@ -4,7 +4,12 @@ import { useRef, useState } from 'react'
 import { useDnd } from '@hooks/useDnd'
 
 import AlertOwing from '@assets/common/AlertOwing.png'
-import { putUniverse } from '@services/universeService'
+
+import {
+  postUniverseGenerateAiImage,
+  putUniverse,
+} from '@services/universeService'
+
 import { DraggableBoxProps } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 
@@ -17,10 +22,11 @@ export default function UniverseDraggableBox({
   const file = files[index]
   const { moveFileItem, updateFile } = useDnd()
   const ref = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [editedName, setEditedName] = useState(file.name)
   const [editedDescription, setEditedDescription] = useState(file.description)
-  // const [editedImageUrl, setEditedImageUrl] = useState(file.imageUrl)
+  const [editedImageUrl, setEditedImageUrl] = useState(file.imageUrl)
 
   const [, drop] = useDrop({
     accept: 'GRID_ITEM',
@@ -83,13 +89,13 @@ export default function UniverseDraggableBox({
       await putUniverse(file.id, {
         name: trimmedEditedName,
         description: editedDescription,
-        imageUrl: file.imageUrl!,
+        imageUrl: editedImageUrl || '',
       })
 
       updateFile(folderId, file.id, {
         name: trimmedEditedName,
         description: editedDescription,
-        imageUrl: file.imageUrl,
+        imageUrl: editedImageUrl,
       })
       setIsEditing(false)
     } catch (error) {
@@ -103,6 +109,34 @@ export default function UniverseDraggableBox({
     setIsEditing(false)
   }
 
+  const handleAiImage = async () => {
+    try {
+      const data = await postUniverseGenerateAiImage({
+        name: editedName,
+        description: editedDescription,
+      })
+
+      setEditedImageUrl(data.imageUrl)
+    } catch (error) {
+      console.error('세계관 AI 이미지 생성 실패:', error)
+    }
+  }
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click()
+  }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        setEditedImageUrl(reader.result as string)
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
   return (
     <div
       ref={ref}
@@ -111,11 +145,11 @@ export default function UniverseDraggableBox({
       }`}
     >
       <div className="flex w-full items-center">
-        {file.imageUrl ? (
+        {editedImageUrl ? (
           <div
             className="h-[240px] w-[240px] min-w-[240px] bg-cover bg-center bg-no-repeat"
             style={{
-              backgroundImage: `url(${file.imageUrl})`,
+              backgroundImage: `url(${editedImageUrl})`,
             }}
           ></div>
         ) : (
@@ -159,12 +193,25 @@ export default function UniverseDraggableBox({
         {isEditing ? (
           <>
             <div className="mb-auto flex flex-col items-end">
-              <button className="h-10 from-redorange to-orange px-4 text-sm text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white">
+              <button
+                className="h-10 from-redorange to-orange px-4 text-sm text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white"
+                onClick={handleAiImage}
+              >
                 + Create Image with AI
               </button>
-              <button className="mt-2 h-10 px-4 text-sm text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white">
+              <button
+                className="mt-2 h-10 px-4 text-sm text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
+                onClick={handleUploadClick}
+              >
                 + Upload Image locally
               </button>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                className="hidden"
+              />
             </div>
             <div className="mt-auto flex flex-row items-center space-x-2">
               <button

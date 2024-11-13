@@ -172,14 +172,13 @@ export const postCastGenerateAiImage = async (
 }
 
 export const getCastPresignedUrl = async (
-  fileName: string,
+  fileExtension: string,
 ): Promise<{
   presignedUrl: string
-  fileURl: string
-  fileName: string
+  fileUrl: string
 }> => {
   try {
-    const response = await axiosInstance.get(`/cast/files/${fileName}`)
+    const response = await axiosInstance.get(`/cast/files/${fileExtension}`)
     return response.data
   } catch (error) {
     console.error('인물 Presigned Url 생성 실패:', error)
