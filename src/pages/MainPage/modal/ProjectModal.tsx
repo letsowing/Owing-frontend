@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 
 import ImageForm from '@components/common/ImageForm'
 import InputField from '@components/common/InputField'
-import Loader from '@components/common/Loader'
 import Modal from '@components/common/Modal'
 import ProjectTagField from '@components/common/ProjectTagField'
 import TextAreaField from '@components/common/TextAreaField'
