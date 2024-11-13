@@ -2,6 +2,7 @@ import { getImageExtensionFromBase64 } from '@utils/base64'
 import axiosInstance from '@utils/httpCommons'
 
 import { putUploadImageToS3 } from './s3Service'
+
 import { Project, ProjectPutRequest, ProjectSummary } from '@types'
 
 export const postCreateProject = async (
@@ -30,7 +31,6 @@ export const postCreateProject = async (
       '/projects',
       payload,
     )
-    //await putUploadImageToS3(response.data.presignedUrl, coverUrl)
     return response.data
   } catch (error) {
     console.error('프로젝트 생성 실패:', error)
