@@ -11,7 +11,7 @@ export const getStory = async (
 }> => {
   try {
     const response = await axiosInstance.get(`/stories/${storyId}`)
-    return response.data.blocks
+    return response.data
   } catch (error) {
     console.error('시나리오 조회 실패:', error)
     throw error
