@@ -32,18 +32,13 @@ const ProjectInfoForm = ({
   return (
     <>
       <div className="flex justify-center">
-        {isGenerating ? (
-          <div className="flex h-[22rem] w-[22rem] items-center justify-center">
-            <Loader />
-          </div>
-        ) : (
-          <ImageForm
-            isEditable={isEditable}
-            image={project.coverUrl}
-            onImageChange={onImageChange}
-            onAIGenerateClick={onAIGenerateClick}
-          />
-        )}
+        <ImageForm
+          isEditable={isEditable}
+          image={project.coverUrl}
+          onImageChange={onImageChange}
+          onAIGenerateClick={onAIGenerateClick}
+          isGenerating={isGenerating}
+        />
       </div>
       <InputField
         type="text"
