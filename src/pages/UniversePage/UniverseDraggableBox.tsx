@@ -1,15 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useRef, useState } from 'react'
 
+import Loader from '@components/common/Loader'
+
 import { useDnd } from '@hooks/useDnd'
 
 import AlertOwing from '@assets/common/AlertOwing.png'
-
 import {
   postUniverseGenerateAiImage,
   putUniverse,
 } from '@services/universeService'
-
 import { DraggableBoxProps } from '@types'
 import { useDrag, useDrop } from 'react-dnd'
 
@@ -23,6 +23,7 @@ export default function UniverseDraggableBox({
   const { moveFileItem, updateFile } = useDnd()
   const ref = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isGenerating, setIsGenerating] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [editedName, setEditedName] = useState(file.name)
   const [editedDescription, setEditedDescription] = useState(file.description)
@@ -110,15 +111,17 @@ export default function UniverseDraggableBox({
   }
 
   const handleAiImage = async () => {
+    setIsGenerating(true)
     try {
       const data = await postUniverseGenerateAiImage({
         name: editedName,
         description: editedDescription,
       })
-
       setEditedImageUrl(data.imageUrl)
     } catch (error) {
       console.error('세계관 AI 이미지 생성 실패:', error)
+    } finally {
+      setIsGenerating(false)
     }
   }
 
@@ -145,7 +148,16 @@ export default function UniverseDraggableBox({
       }`}
     >
       <div className="flex w-full items-center">
-        {editedImageUrl ? (
+        {isGenerating ? (
+          <div className="h-[240px] w-[240px] flex-col items-center border border-lightgray">
+            <div className="mb-10 mt-20">
+              <Loader />
+            </div>
+            <label className="px-4 py-10 text-sm font-black text-orange text-opacity-60 dark:text-cornflowerblue dark:text-opacity-70">
+              이미지 생성에 1분 정도 소요됩니다.
+            </label>
+          </div>
+        ) : editedImageUrl ? (
           <div
             className="h-[240px] w-[240px] min-w-[240px] bg-cover bg-center bg-no-repeat"
             style={{
@@ -194,7 +206,9 @@ export default function UniverseDraggableBox({
           <>
             <div className="mb-auto flex flex-col items-end">
               <button
-                className="h-10 from-redorange to-orange px-4 text-sm text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white"
+                className={`h-10 from-redorange to-orange px-4 text-sm text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white ${
+                  !isGenerating ? 'cursor-pointer' : 'cursor-not-allowed'
+                }`}
                 onClick={handleAiImage}
               >
                 + Create Image with AI
