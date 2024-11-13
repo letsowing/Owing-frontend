@@ -7,12 +7,13 @@ import {
   Cast,
   CastCoord,
   CastGraph,
-  CastPostRequest,
-  CastPutRequest,
+  CustomEdge,
   FolderSummary,
   PostCastRelationshipRequest,
   PostCastRelationshipResponse,
+  PostCastRequest,
   PutCastRelationshipRequest,
+  PutCastRequest,
   getCastResponse,
 } from '@types'
 
@@ -20,7 +21,13 @@ import {
 export const getCast = async (castId: string): Promise<getCastResponse> => {
   try {
     const response = await axiosInstance.get<getCastResponse>(`/cast/${castId}`)
-    return response.data
+    return {
+      folderId: response.data.folderId,
+      cast: {
+        ...response.data.cast,
+        id: response.data.cast.id.toString(),
+      },
+    }
   } catch (error) {
     console.error('Failed to get cast:', error)
     throw error
@@ -56,7 +63,7 @@ export const getCastGraph = async (projectId: number): Promise<CastGraph> => {
 }
 
 // 캐릭터 생성 => folderId, coordinate 추가
-export const postCast = async (cast: CastPostRequest): Promise<Cast> => {
+export const postCast = async (cast: PostCastRequest): Promise<Cast> => {
   try {
     const response = await axiosInstance.post('/cast', cast)
     return {
@@ -72,7 +79,7 @@ export const postCast = async (cast: CastPostRequest): Promise<Cast> => {
 // 캐릭터 수정 => folderId, coordinate 제거
 export const putCast = async (
   castId: string,
-  cast: CastPutRequest,
+  cast: PutCastRequest,
 ): Promise<void> => {
   try {
     cast.imageUrl = cast.imageUrl || ''
@@ -133,12 +140,12 @@ export const postCastRelationship = async (
 // 관계 라벨 수정 => label: string
 export const patchCastRelationshipLabel = async (
   relationshipId: string,
-  label: string,
+  data: { label: string },
 ): Promise<void> => {
   try {
     await axiosInstance.patch<void>(
       `/cast/relationships/${relationshipId}/label`,
-      label,
+      data,
     )
   } catch (error) {
     console.error('Failed to update cast relationship:', error)
@@ -150,9 +157,13 @@ export const patchCastRelationshipLabel = async (
 export const putCastRelationshipHandle = async (
   relationshipId: string,
   data: PutCastRelationshipRequest,
-): Promise<void> => {
+): Promise<CustomEdge> => {
   try {
-    await axiosInstance.put<void>(`/cast/relationships/${relationshipId}`, data)
+    const response = await axiosInstance.put<CustomEdge>(
+      `/cast/relationships/${relationshipId}`,
+      data,
+    )
+    return response.data
   } catch (error) {
     console.error('Failed to update cast relationship:', error)
     throw error

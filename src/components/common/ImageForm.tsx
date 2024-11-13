@@ -56,7 +56,7 @@ const ImageForm: React.FC<ImageFormProps> = ({
         <img
           src={image ? image : imageUrl}
           alt="잘못된 경로입니다."
-          className="w-full rounded-xl object-cover text-xs text-gray"
+          className="h-full w-full rounded-xl object-cover text-xs text-gray"
         />
       </div>
       {isEditable && (

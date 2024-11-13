@@ -62,12 +62,17 @@ const CastRelationshipModal = ({
     setSelectedFolderId(folderId)
   }
 
-  const handleSave = async () => {
-    onSave(editableCast, selectedFolderId)
-  }
-
   const handleAIImageGeneration = () => {
     console.log('Create AI Image!')
+  }
+
+  const handleSave = async () => {
+    try {
+      await onSave(editableCast, selectedFolderId)
+      onClose()
+    } catch (error) {
+      console.error('Failed to save cast:', error)
+    }
   }
 
   const handlePrimaryAction = () => {
