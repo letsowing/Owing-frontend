@@ -67,7 +67,7 @@ function debounce<T extends (...args: Parameters<T>) => ReturnType<T>>(
 export const debouncedSave = debounce(
   async (storyId: number, content: string): Promise<void> => {
     try {
-      await postStory(storyId, content)
+      await postStory(storyId, { content: content })
       console.log('시나리오가 성공적으로 저장되었습니다.')
     } catch (error) {
       console.error(
