@@ -1,9 +1,17 @@
 import axiosInstance from '@utils/httpCommons'
 
-export const getStory = async (storyId: number): Promise<void> => {
+export const getStory = async (
+  storyId: number,
+): Promise<{
+  storyId: number
+  name: string
+  description?: string
+  textCount: number
+  content?: string
+}> => {
   try {
     const response = await axiosInstance.get(`/stories/${storyId}`)
-    return response.data.blocks
+    return response.data
   } catch (error) {
     console.error('시나리오 조회 실패:', error)
     throw error
@@ -12,10 +20,12 @@ export const getStory = async (storyId: number): Promise<void> => {
 
 export const postStory = async (
   storyId: number,
-  content: string,
-): Promise<void> => {
+  data: {
+    content: string
+  },
+): Promise<{ content: string }> => {
   try {
-    const response = await axiosInstance.post(`/stories/${storyId}`, content)
+    const response = await axiosInstance.post(`/stories/${storyId}`, data)
     return response.data
   } catch (error) {
     console.error('시나리오 저장 실패:', error)
