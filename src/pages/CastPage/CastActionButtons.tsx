@@ -39,7 +39,7 @@ const CastActionButtons: React.FC<CastActionButtonsProps> = ({
             </div>
           )}
           <div className="w-[12rem]">
-            <MainButton value="수정" onClick={onEdit} disabled={!isValid} />
+            <MainButton value="수정" onClick={onEdit} />
           </div>
         </>
       )}

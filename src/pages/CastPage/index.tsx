@@ -119,7 +119,6 @@ const CastPage: React.FC = () => {
       }
     }
   }
-
   return (
     <div className="mx-[3%] flex w-[94%] flex-col items-center justify-center gap-2 p-4">
       <PageTitle id={selectedFileId} isEditing={isEditing} />
