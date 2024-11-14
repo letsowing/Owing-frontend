@@ -56,7 +56,7 @@ const Chart = ({ dailyStats }: ChartProps) => {
           type: 'datetime',
         },
         title: {
-          text: 'Activity',
+          text: '날짜별 글자수',
           align: 'left',
         },
         fill: {

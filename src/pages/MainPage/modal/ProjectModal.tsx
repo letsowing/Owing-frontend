@@ -100,8 +100,8 @@ const ProjectModal = ({
   return (
     <Modal
       modalType={ModalType.PROJECT}
-      primaryButtonText="Save"
-      secondaryButtonText="Cancel"
+      primaryButtonText="저장"
+      secondaryButtonText="취소"
       onPrimaryAction={handleSave}
       onSecondaryAction={onClose}
     >

@@ -19,7 +19,7 @@ const ProjectList = ({ projects = [], onProjectClick }: ProjectListProps) => {
     onProjectClick(projectData)
   }
   return (
-    <div className="scrollbar-thin scrollbar-thumb-lightredorange scrollbar-track-white dark:scrollbar-thumb-skyblue dark:scrollbar-track-darkblack mt-2 max-h-72 overflow-x-auto overflow-y-auto">
+    <div className="mt-2 max-h-72 overflow-x-auto overflow-y-auto scrollbar-thin scrollbar-track-white scrollbar-thumb-lightredorange dark:scrollbar-track-darkblack dark:scrollbar-thumb-skyblue">
       <table className="divide-y-lightgray w-full">
         <thead className="text-lightgray dark:text-skyblue">
           <tr>
@@ -27,19 +27,19 @@ const ProjectList = ({ projects = [], onProjectClick }: ProjectListProps) => {
               scope="col"
               className="w-1/2 py-1 pl-4 pr-3 text-left text-sm font-semibold"
             >
-              Name
+              이름
             </th>
             <th
               scope="col"
               className="px-3 text-center text-sm font-semibold text-lightgray dark:text-skyblue"
             >
-              Last Modified
+              최종 수정일
             </th>
             <th
               scope="col"
               className="text-center text-sm font-semibold text-lightgray dark:text-skyblue"
             >
-              Created
+              생성일
             </th>
           </tr>
         </thead>
