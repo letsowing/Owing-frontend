@@ -23,7 +23,7 @@ export default function FolderTabLayout() {
   const [isFolderTabOpen, setIsFolderTabOpen] = useState(true)
   const { currentProject, setSelectedFolderId, setSelectedFileId } =
     useProjectStore()
-  const { setItems } = useDnd()
+  const { items, setItems } = useDnd()
 
   const location = useLocation()
   const currentService = useMemo(() => {
@@ -43,31 +43,25 @@ export default function FolderTabLayout() {
           currentProject.id,
         )
         setItems(fetchedFolders)
-
-        setSelectedFolderId(
-          fetchedFolders?.length > 0 ? fetchedFolders[0].id : null,
-        )
-        setSelectedFileId(
-          fetchedFolders?.length > 0
-            ? fetchedFolders[0].files?.length > 0
-              ? fetchedFolders[0].files[0].id
-              : null
-            : null,
-        )
       } catch (err) {
         console.error('폴더 목록 조회 실패:', err)
       }
     }
 
     fetchFolders()
-  }, [
-    currentService,
-    currentProject.id,
-    setItems,
-    setSelectedFolderId,
-    location.pathname,
-    setSelectedFileId,
-  ])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentProject.id, location.pathname])
+
+  useEffect(() => {
+    setSelectedFolderId(items?.length > 0 ? items[0].id : null)
+    setSelectedFileId(
+      items?.length > 0
+        ? items[0].files?.length > 0
+          ? items[0].files[0].id
+          : null
+        : null,
+    )
+  }, [items, setSelectedFileId, setSelectedFolderId])
 
   return (
     <DndProvider backend={HTML5Backend}>
@@ -84,12 +78,12 @@ export default function FolderTabLayout() {
             projectId={currentProject.id}
             isOpen={isFolderTabOpen}
             onClose={() => setIsFolderTabOpen(false)}
-            setSelectedFolderId={setSelectedFolderId}
-            setSelectedFileId={setSelectedFileId}
             currentService={currentService}
           />
           <main className="h-full w-full overflow-y-auto dark:bg-darkblack">
-            <Header isTabOpen={isTabOpen} />
+            <div className="sticky top-0 z-10">
+              <Header isTabOpen={isTabOpen} />
+            </div>
             <Outlet context={{ currentService }} />
           </main>
         </div>

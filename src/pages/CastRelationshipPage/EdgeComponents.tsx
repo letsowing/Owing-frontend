@@ -51,13 +51,15 @@ export const EdgeLabel = ({
             onChange={handleLabelInputChange}
             onBlur={handleFinishEditing}
             onKeyDown={(e) => e.key === 'Enter' && handleFinishEditing()}
-            className={`rounded border-2 border-${borderColor} bg-white px-1 py-0.5 text-xs text-darkgray outline-none`}
+            className={`rounded border-2 bg-white px-1 py-1 text-xs text-darkgray outline-none`}
             autoFocus
+            style={{ borderColor: borderColor }}
           />
         ) : (
           <div
-            className={`cursor-pointer rounded border-2 border-${borderColor} bg-white px-1 py-0.5 text-xs text-darkgray`}
+            className={`cursor-pointer rounded border-2 bg-white px-1 py-1 text-xs text-darkgray`}
             onClick={handleLabelClick}
+            style={{ borderColor: borderColor }}
           >
             {label}
           </div>
@@ -70,13 +72,13 @@ export const EdgeLabel = ({
 export const EdgeMarker = ({ id, color, isStart = false }: EdgeMarkerProps) => {
   return (
     <marker
-      id={`${id}${isStart ? '-start' : ''}-marker`}
+      id={id}
       viewBox="0 0 10 10"
-      refX="5"
+      refX="10"
       refY="5"
       markerUnits="strokeWidth"
-      markerWidth="10"
-      markerHeight="10"
+      markerWidth="20"
+      markerHeight="20"
       orient={isStart ? 'auto-start-reverse' : 'auto'}
     >
       <path d="M 0 0 L 10 5 L 0 10 z" fill={color} />

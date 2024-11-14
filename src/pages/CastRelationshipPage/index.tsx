@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useProjectStore } from '@stores/projectStore'
 import { useThemeStore } from '@stores/themeStore'
 
+import { useConfirm } from '@hooks/useConfirm'
 import { useFlow } from '@hooks/useFlow'
 import { useModalManagement } from '@hooks/useModal'
 
@@ -55,11 +56,11 @@ const FlowWithProvider: React.FC = () => {
   const { isDarkMode } = useThemeStore()
   const { modals, openModal, closeModal } = useModalManagement()
   const { currentProject } = useProjectStore()
+  const { confirmDelete } = useConfirm()
 
   const [isEditable, setIsEditable] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [folderList, setFolderList] = useState<FolderSummary[]>([])
-  const [selectedFolderId, setSelectedFolderId] = useState<number | undefined>()
 
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -93,11 +94,12 @@ const FlowWithProvider: React.FC = () => {
   }, [closeModal])
 
   const handleCastAction = useCallback(
-    async (cast: Cast, selectedFolderId: number | undefined) => {
+    async (cast: Cast, selectedFolderId: number) => {
       try {
         if (cast.id) {
-          onNodeUpdate(cast.id, cast)
+          onNodeUpdate(cast.id, cast, selectedFolderId)
         } else {
+          console.log('index: ', cast)
           onNodeAdd(cast, selectedFolderId)
         }
         handleCloseModal()
@@ -113,7 +115,6 @@ const FlowWithProvider: React.FC = () => {
       try {
         setIsLoading(true)
         const data = await getCast(node.id)
-        setSelectedFolderId(data.folderId)
         if (data) {
           openModal({
             type: ModalType.CHARACTER_RELATIONSHIP,
@@ -122,11 +123,10 @@ const FlowWithProvider: React.FC = () => {
               position: data.cast.coordinate,
             },
             isEditable: false,
-            folderId: selectedFolderId,
+            folderId: data.folderId,
             folderList: folderList,
             onSave: handleCastAction,
             onEdit: toggleEditMode,
-            onSelect: setSelectedFolderId,
             onClose: handleCloseModal,
           })
           setIsEditable(false)
@@ -137,14 +137,7 @@ const FlowWithProvider: React.FC = () => {
         setIsLoading(false)
       }
     },
-    [
-      folderList,
-      handleCastAction,
-      handleCloseModal,
-      openModal,
-      selectedFolderId,
-      toggleEditMode,
-    ],
+    [folderList, handleCastAction, handleCloseModal, openModal, toggleEditMode],
   )
 
   const handleAddCast = useCallback(async () => {
@@ -152,11 +145,10 @@ const FlowWithProvider: React.FC = () => {
       type: ModalType.CHARACTER_RELATIONSHIP,
       cast: null,
       isEditable: true,
-      folderId: undefined,
+      folderId: 0,
       folderList: folderList,
       onSave: handleCastAction,
       onEdit: toggleEditMode,
-      onSelect: setSelectedFolderId,
       onClose: handleCloseModal,
     })
     setIsEditable(true)
@@ -169,10 +161,20 @@ const FlowWithProvider: React.FC = () => {
   ])
 
   const handleNodeRemove = useCallback(
-    (nodeId: string) => {
-      onNodeRemove(nodeId)
+    async (nodeId: string) => {
+      const isConfirmed = await confirmDelete({
+        title: '파일을 삭제하시겠습니까?',
+        text: '휴지통으로 옯겨집니다.',
+      })
+      if (isConfirmed) {
+        try {
+          onNodeRemove(nodeId)
+        } catch (error) {
+          console.error('Failed to delete cast:', error)
+        }
+      }
     },
-    [onNodeRemove],
+    [confirmDelete, onNodeRemove],
   )
 
   const nodeTypes = useMemo<NodeTypes>(
@@ -260,7 +262,6 @@ const FlowWithProvider: React.FC = () => {
               folderList={modal.folderList}
               onSave={handleCastAction}
               onEdit={() => setIsEditable(true)}
-              onSelect={setSelectedFolderId}
               onClose={handleCloseModal}
               type={ModalType.CHARACTER_RELATIONSHIP}
               cast={modal.cast}

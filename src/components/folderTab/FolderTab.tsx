@@ -16,24 +16,24 @@ interface FolderTabProps {
   projectId: number
   isOpen: boolean
   onClose: () => void
-  setSelectedFolderId: (folderId: number | null) => void
-  setSelectedFileId: (fileId: number | null) => void
   currentService: any
 }
 
 const FolderTab: React.FC<FolderTabProps> = ({
   projectId,
-  setSelectedFolderId,
-  setSelectedFileId,
   isOpen,
   onClose,
   currentService,
 }) => {
   const { items, setItems } = useDnd()
-  const [activeFolderId, setActiveFolderId] = useState<number | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [newFolderName, setNewFolderName] = useState('')
-  const currentProject = useProjectStore((state) => state.currentProject)
+  const {
+    currentProject,
+    selectedFolderId,
+    setSelectedFolderId,
+    setSelectedFileId,
+  } = useProjectStore()
 
   const editableRef = useRef<HTMLDivElement>(null)
 
@@ -77,7 +77,6 @@ const FolderTab: React.FC<FolderTabProps> = ({
 
   const handleSelectFolder = (folder: FolderItem) => {
     setSelectedFolderId(folder.id)
-    setActiveFolderId(folder.id)
     if (folder.files.length > 0) {
       setSelectedFileId(folder.files[0].id)
     }
@@ -85,29 +84,30 @@ const FolderTab: React.FC<FolderTabProps> = ({
 
   return (
     <div
-      className={`h-full bg-beige transition-all duration-300 ease-in-out dark:bg-coldbeige ${
+      className={`relative h-full bg-beige transition-all duration-300 ease-in-out dark:bg-coldbeige ${
         isOpen ? 'w-72' : 'w-0'
       } overflow-hidden`}
     >
-      <div className="flex justify-between p-4">
-        <p className="truncate font-bold">{currentProject.title}</p>
+      <div className="sticky top-0 z-10 bg-beige dark:bg-coldbeige">
+        <div className="flex justify-between p-4">
+          <p className="truncate font-bold">{currentProject.title}</p>
+          <button
+            onClick={onClose}
+            className="mt-1 flex w-8 justify-end text-darkgray"
+          >
+            <RiCloseLargeLine />
+          </button>
+        </div>
+
         <button
-          onClick={onClose}
-          className="mt-1 flex w-8 justify-end text-darkgray"
+          onClick={handleCreateFolder}
+          className="mx-4 mb-4 flex h-10 w-52 items-center justify-center rounded-md border border-solid border-whitegray bg-white text-sm dark:bg-darkgray"
         >
-          <RiCloseLargeLine />
+          <FaPlus className="dark:text-white" size={12} />
+          <p className="px-1 dark:text-white">Create Folder</p>
         </button>
       </div>
-
-      <button
-        onClick={handleCreateFolder}
-        className="mx-4 mb-4 flex h-10 w-52 items-center justify-center rounded-md border border-solid border-whitegray bg-white text-sm dark:bg-darkgray"
-      >
-        <FaPlus className="dark:text-white" size={12} />
-        <p className="px-1 dark:text-white">Create Folder</p>
-      </button>
-
-      <ul className="max-h-[780px] overflow-auto">
+      <ul className="max-h-[780px] overflow-y-auto scrollbar-thin scrollbar-track-beige scrollbar-thumb-lightredorange dark:scrollbar-track-coldbeige dark:scrollbar-thumb-skyblue">
         {items.map((folder: FolderItem, index: number) => (
           <FolderList
             key={folder.id}
@@ -115,7 +115,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
             index={index}
             onSelectFolder={handleSelectFolder}
             onSelectFile={setSelectedFileId}
-            isActive={activeFolderId === folder.id}
+            isActive={selectedFolderId === folder.id}
             currentService={currentService}
           />
         ))}

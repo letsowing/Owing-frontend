@@ -1,6 +1,7 @@
 import React, { memo, useCallback } from 'react'
 
-import { useThemeStore } from '@/stores/themeStore'
+import { useThemeStore } from '@stores/themeStore'
+
 import AlertOwing from '@assets/common/AlertOwing.png'
 import DarkAlertOwing from '@assets/common/DarkAlertOwing.png'
 import { CustomNodeProps, CustomNode as CustomNodeType } from '@types'
@@ -38,7 +39,7 @@ const CustomNode: React.FC<CustomNodeRemoveProps> = ({
 
   return (
     <div
-      className="z-10 w-32 cursor-pointer overflow-hidden rounded-lg bg-white shadow-md dark:shadow-gray"
+      className="z-10 h-36 w-32 cursor-pointer overflow-hidden rounded-lg bg-white shadow-md dark:shadow-gray"
       onClick={handleClick}
     >
       <div className="flex justify-between border-b border-lightgray px-2 py-2">
@@ -57,11 +58,11 @@ const CustomNode: React.FC<CustomNodeRemoveProps> = ({
           <MdDelete />
         </button>
       </div>
-      <div className="h-full w-full p-2">
+      <div className="h-full w-full">
         <img
           src={data.image || imageUrl}
           alt={'잘못된 경로입니다'}
-          className="m-auto w-5/6 object-cover text-xs text-gray"
+          className="object-cover text-xs text-gray"
         />
       </div>
       <Handle type="source" position={Position.Top} id="top" />

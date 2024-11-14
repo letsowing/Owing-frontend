@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 
 import Loader from '@components/common/Loader'
 
+import { useConfirm } from '@hooks/useConfirm'
+
 import AIImageGenerationPrompt from './AIImageGenerationPrompt'
 import CastImage from './CastImage'
 
@@ -18,6 +20,7 @@ const CastImageSection: React.FC<CastImageSectionProps> = ({
   castData,
   isEditing,
 }) => {
+  const { confirmAIImageGeneration } = useConfirm()
   const [editedImageUrl, setEditedImageUrl] = useState(castData.imageUrl || '')
   const [isGenerating, setIsGenerating] = useState(false)
 
@@ -34,6 +37,10 @@ const CastImageSection: React.FC<CastImageSectionProps> = ({
   }
 
   const handleGenerateAiImage = async () => {
+    const isConfirmed = await confirmAIImageGeneration()
+    if (!isConfirmed) {
+      return
+    }
     setIsGenerating(true)
     try {
       const data = await postCastGenerateAiImage({

@@ -67,6 +67,10 @@ export default function DraggableBox({
 
   drag(drop(ref))
 
+  const isFormValid = () => {
+    return !!editedName.trim()
+  }
+
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation()
     setIsEditing(true)
@@ -117,6 +121,7 @@ export default function DraggableBox({
       {isEditing ? (
         <>
           <input
+            placeholder="필수 입력입니다."
             type="text"
             value={editedName}
             onChange={(e) => setEditedName(e.target.value)}
@@ -137,6 +142,7 @@ export default function DraggableBox({
             <button
               onClick={handleSave}
               className="text-md h-7 px-4 text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white dark:text-coldbeige dark:hover:bg-coldbeige dark:hover:text-darkgray"
+              disabled={!isFormValid()}
             >
               Save
             </button>

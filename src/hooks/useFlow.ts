@@ -95,14 +95,14 @@ export const useFlow = () => {
 
   // Node Management Functions
   const onNodeAdd = useCallback(
-    async (cast: Cast, folderId: number | undefined) => {
+    async (cast: Cast, folderId: number) => {
       try {
         const castData = {
           name: cast.name,
-          age: 0,
-          gender: '',
+          age: cast.age || 0,
+          gender: cast.gender || '',
           role: cast.role,
-          description: '',
+          description: cast.description || '',
           imageUrl: cast.imageUrl || '',
           folderId: folderId,
           coordinate: cast.position,
@@ -128,9 +128,10 @@ export const useFlow = () => {
   )
 
   const onNodeUpdate = useCallback(
-    async (nodeId: string, cast: Cast) => {
+    async (nodeId: string, cast: Cast, folderId: number) => {
       try {
         const castData = {
+          folderId,
           name: cast.name,
           age: cast.age || 0,
           gender: cast.gender || '',

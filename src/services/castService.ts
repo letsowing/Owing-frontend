@@ -84,7 +84,7 @@ export const postCast = async (cast: PostCastRequest): Promise<Cast> => {
   }
 }
 
-// 캐릭터 수정 => folderId, coordinate 제거
+// 캐릭터 수정 => coordinate 제거
 export const putCast = async (
   castId: string,
   cast: PutCastRequest,

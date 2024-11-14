@@ -6,6 +6,8 @@ import Modal from '@components/common/Modal'
 import ProjectTagField from '@components/common/ProjectTagField'
 import TextAreaField from '@components/common/TextAreaField'
 
+import { useConfirm } from '@hooks/useConfirm'
+
 import { CATEGORY_LIST } from '@constants/categoryList'
 import { GENRE_LIST } from '@constants/genreList'
 import { postProjectGenerateAiImage } from '@services/projectService'
@@ -26,6 +28,7 @@ const ProjectModal = ({
   onSave,
   onClose,
 }: ProjectModalProps) => {
+  const { confirmAIImageGeneration } = useConfirm()
   const [projectInput, setProjectInput] = useState<Project>(initialProject)
   const [isGenerating, setIsGenerating] = useState(false)
 
@@ -36,6 +39,15 @@ const ProjectModal = ({
       setProjectInput(initialProject)
     }
   }, [project])
+
+  const isFormValid = () => {
+    return !!(
+      projectInput.title.trim() &&
+      projectInput.genres.length &&
+      projectInput?.category &&
+      projectInput.description.trim()
+    )
+  }
 
   const handleInputChange = (field: keyof Project, value: string) => {
     setProjectInput((prev) => ({ ...prev, [field]: value }))
@@ -53,24 +65,25 @@ const ProjectModal = ({
     }))
   }
 
-  const onAiGenerateClick = () => {
-    const generateAiImage = async () => {
-      setIsGenerating(true)
-      try {
-        const data = await postProjectGenerateAiImage(
-          projectInput.title,
-          projectInput.description || '',
-          projectInput.category || '',
-          projectInput.genres || [],
-        )
-        onImageChange(data.imageUrl)
-      } catch (error) {
-        console.error('AI 이미지 생성 실패', error)
-      } finally {
-        setIsGenerating(false)
-      }
+  const onAiGenerateClick = async () => {
+    const isConfirmed = await confirmAIImageGeneration()
+    if (!isConfirmed) {
+      return
     }
-    generateAiImage()
+    setIsGenerating(true)
+    try {
+      const data = await postProjectGenerateAiImage(
+        projectInput.title,
+        projectInput.description || '',
+        projectInput.category || '',
+        projectInput.genres || [],
+      )
+      onImageChange(data.imageUrl)
+    } catch (error) {
+      console.error('AI 이미지 생성 실패', error)
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   const onCategoryTagClick = (value: string) => {
@@ -100,6 +113,7 @@ const ProjectModal = ({
   return (
     <Modal
       modalType={ModalType.PROJECT}
+      isValid={isFormValid()}
       primaryButtonText="저장"
       secondaryButtonText="취소"
       onPrimaryAction={handleSave}

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 
 import { useProjectStore } from '@stores/projectStore'
 
+import { useConfirm } from '@hooks/useConfirm'
 import useNavigation from '@hooks/useNavigation'
 
 import ProjectInfoBtns from './ProjectInfoBtns'
@@ -18,17 +19,14 @@ import { Loader } from 'lucide-react'
 
 const ProjectInfoPage = () => {
   const { currentProject, setCurrentProject } = useProjectStore()
+  const { confirmDelete, showSuccessDialog, confirmAIImageGeneration } =
+    useConfirm()
 
   const [project, setProject] = useState<Project>(currentProject)
   const [isGenerating, setIsGenerating] = useState(false)
   const [isEditable, setIsEditable] = useState(false)
-  const [isDisabled, setIsDisabled] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const { goToMain } = useNavigation()
-
-  const handleInputChange = (field: keyof Project, value: string) => {
-    setProject((prev) => ({ ...prev, [field]: value }))
-  }
 
   useEffect(() => {
     const fetchProject = async () => {
@@ -38,7 +36,6 @@ const ProjectInfoPage = () => {
         setProject(data)
       } catch (error) {
         console.error('프로젝트 조회 실패:', error)
-        alert('프로젝트 정보를 불러오는데 실패했습니다.')
       } finally {
         setIsLoading(false)
       }
@@ -47,18 +44,20 @@ const ProjectInfoPage = () => {
     fetchProject()
   }, [currentProject.id, setCurrentProject])
 
-  const handleSave = async () => {
-    if (
-      !project.title.trim() ||
-      !project.description.trim() ||
-      !project.category ||
-      !project.genres.length
-    ) {
-      alert('필수 항목을 모두 입력해주세요.')
-      return
-    }
+  const isFormValid = () => {
+    return !!(
+      project.title.trim() &&
+      project.genres.length &&
+      project.category &&
+      project.description.trim()
+    )
+  }
 
-    setIsDisabled(true)
+  const handleInputChange = (field: keyof Project, value: string) => {
+    setProject((prev) => ({ ...prev, [field]: value }))
+  }
+
+  const handleSave = async () => {
     try {
       const payload = {
         title: project.title,
@@ -69,15 +68,13 @@ const ProjectInfoPage = () => {
       }
 
       await putProject(project.id, payload)
-      alert('프로젝트가 수정되었습니다.')
 
       setCurrentProject(project)
     } catch (error) {
       console.error('프로젝트 수정 실패:', error)
-      alert('프로젝트 수정에 실패했습니다. 다시 시도해주세요.')
     } finally {
-      setIsDisabled(false)
       setIsEditable(false)
+      showSuccessDialog('저장되었습니다.')
     }
   }
 
@@ -91,12 +88,13 @@ const ProjectInfoPage = () => {
   }
 
   const handleDelete = async () => {
-    const isConfirmed = window.confirm('정말 삭제하시겠습니까?')
-
+    const isConfirmed = await confirmDelete({
+      title: '작품을 영구 삭제하시겠습니까?',
+      text: '이 작업은 되돌릴 수 없습니다.',
+    })
     if (isConfirmed) {
       try {
         await deleteProject(project.id)
-        alert('프로젝트가 삭제되었습니다.')
         goToMain()
       } catch (error) {
         console.error('프로젝트 삭제 실패:', error)
@@ -113,6 +111,10 @@ const ProjectInfoPage = () => {
   }
 
   const onAiGenerateClick = async () => {
+    const isConfirmed = await confirmAIImageGeneration()
+    if (!isConfirmed) {
+      return
+    }
     setIsGenerating(true)
     try {
       const data = await postProjectGenerateAiImage(
@@ -171,7 +173,7 @@ const ProjectInfoPage = () => {
       />
       <ProjectInfoBtns
         isEditable={isEditable}
-        isDisabled={isDisabled}
+        isValid={isFormValid()}
         onCancel={handleCancel}
         onSave={handleSave}
         onEdit={handleEdit}

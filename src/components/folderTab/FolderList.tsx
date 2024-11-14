@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from 'react'
 
 import { useProjectStore } from '@stores/projectStore'
 
+import { useConfirm } from '@hooks/useConfirm'
 import { useDnd } from '@hooks/useDnd'
 
 import FolderListItem from './FolderListItem'
@@ -32,12 +33,14 @@ const FolderList: React.FC<FolderListProps> = ({
 }) => {
   const folder = folders[index]
   const { moveFolder, addFile, updateFolderName, deleteFolder } = useDnd()
+  const currentProject = useProjectStore((state) => state.currentProject)
+  const { confirmDelete } = useConfirm()
+
   const [isOpen, setIsOpen] = useState(true)
   const [isFolderEditing, setIsEditingFolder] = useState(false)
   const [newFolderName, setNewFolderName] = useState(folder.name)
   const [isFileEditing, setIsFileEditing] = useState(false)
   const [newFileName, setNewFileName] = useState('')
-  const currentProject = useProjectStore((state) => state.currentProject)
 
   const ref = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLDivElement>(null)
@@ -131,8 +134,14 @@ const FolderList: React.FC<FolderListProps> = ({
 
   const handleDeleteFolder = async () => {
     try {
-      await currentService.deleteFolder(folder.id)
-      deleteFolder(folder.id)
+      const isConfirmed = await confirmDelete({
+        title: '폴더를 삭제하시겠습니까?',
+        text: '휴지통으로 옮겨집니다.',
+      })
+      if (isConfirmed) {
+        await currentService.deleteFolder(folder.id)
+        deleteFolder(folder.id)
+      }
     } catch (error) {
       console.error('폴더 삭제 실패:', error)
     }

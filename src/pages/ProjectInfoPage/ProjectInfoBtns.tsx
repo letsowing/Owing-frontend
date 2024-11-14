@@ -3,7 +3,7 @@ import SubButton from '@components/common/SubButton'
 
 interface ProjectInfoBtnsProps {
   isEditable: boolean
-  isDisabled: boolean
+  isValid: boolean
   onCancel: () => void
   onSave: () => void
   onEdit: () => void
@@ -12,7 +12,7 @@ interface ProjectInfoBtnsProps {
 
 const ProjectInfoBtns = ({
   isEditable,
-  isDisabled,
+  isValid,
   onCancel,
   onSave,
   onEdit,
@@ -28,7 +28,7 @@ const ProjectInfoBtns = ({
         <MainButton
           value={isEditable ? '저장' : '편집'}
           onClick={isEditable ? onSave : onEdit}
-          disabled={isEditable ? isDisabled : false}
+          disabled={!isValid}
         />
       </div>
     </div>
