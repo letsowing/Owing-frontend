@@ -27,7 +27,7 @@ const ProjectCarouselItem = ({
     >
       <div className="flex flex-1 bg-white">
         <img
-          className="h-full w-full bg-contain"
+          className="h-36 w-full bg-cover"
           src={imageUrl ? imageUrl : defaultImage}
         />
       </div>
