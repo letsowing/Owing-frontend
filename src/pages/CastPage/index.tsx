@@ -64,7 +64,7 @@ const CastPage: React.FC = () => {
   }
 
   const isFormValid = () => {
-    return !!(castData.name.trim() && castData.role.trim())
+    return !!(castData.name?.trim() && castData.role?.trim())
   }
 
   const handleInputChange = (field: keyof Cast, value: string) => {
