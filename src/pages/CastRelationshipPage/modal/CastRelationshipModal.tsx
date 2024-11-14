@@ -58,8 +58,8 @@ const CastRelationshipModal = ({
 
   const isFormValid = () => {
     return !!(
-      editableCast.name.trim() &&
-      editableCast.role.trim() &&
+      editableCast.name?.trim() &&
+      editableCast.role?.trim() &&
       selectedFolderId
     )
   }
