@@ -13,8 +13,8 @@ import Profile from './Profile'
 import QuickAccess from './QuickAccess'
 import ProjectModal from './modal/ProjectModal'
 
-import { WORD_COUNT_STATS } from '@datas/wordCountStats'
 import { getAllProjects, postCreateProject } from '@services/projectService'
+import { getDailyStats } from '@services/statsService'
 import { ModalType, Project, ProjectSummary } from '@types'
 
 const initialMember = {
@@ -25,6 +25,18 @@ const initialMember = {
   profileUrl: '',
 }
 
+const initialDailyStats = {
+  todayCount: 0,
+  monthlyCount: 0,
+  monthlyAvgCount: 0,
+  graph: [
+    {
+      date: new Date(),
+      dailyCount: 0,
+    },
+  ],
+}
+
 const Main = () => {
   const { modals, openModal, closeModal } = useModalManagement()
   const { goToProject } = useNavigation()
@@ -32,6 +44,7 @@ const Main = () => {
   const { member } = useMemberStore()
   const [projects, setProjects] = useState<ProjectSummary[]>([])
   const [sortedProjects, setSortedProjects] = useState<ProjectSummary[]>([])
+  const [dailyStats, setDailyStats] = useState(initialDailyStats)
   const setActivePath = useMenuStore((state) => state.setActivePath)
 
   useEffect(() => {
@@ -45,7 +58,18 @@ const Main = () => {
         console.error('프로젝트 리스트 조회 실패:', error)
       }
     }
+
+    const fetchDailyStats = async () => {
+      try {
+        const fetchedDailyStats = await getDailyStats()
+        setDailyStats(fetchedDailyStats)
+      } catch (error) {
+        console.error('글자수 통계 데이터 조회 실패:', error)
+      }
+    }
+
     fetchProjects()
+    fetchDailyStats()
   }, [])
 
   const handleMoveProject = useCallback(
@@ -102,10 +126,10 @@ const Main = () => {
           <div className="mt-6 lg:w-1/4">
             <Profile member={member || initialMember} />
             <Dashboard
-              todayWordCount={WORD_COUNT_STATS.todayWordCount}
-              monthTotalWordCount={WORD_COUNT_STATS.monthTotalWordCount}
-              monthAvgWordCount={WORD_COUNT_STATS.monthAvgWordCount}
-              dailyStats={WORD_COUNT_STATS.dailyStats}
+              todayWordCount={dailyStats.todayCount}
+              monthTotalWordCount={dailyStats.monthlyCount}
+              monthAvgWordCount={dailyStats.monthlyAvgCount}
+              dailyStats={dailyStats.graph}
             />
           </div>
           <div className="lg:w-3/4">

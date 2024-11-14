@@ -4,8 +4,8 @@ import ApexCharts from 'react-apexcharts'
 
 interface ChartProps {
   dailyStats: {
-    day: Date
-    wordCount: number
+    date: Date
+    dailyCount: number
   }[]
 }
 
@@ -20,7 +20,7 @@ const Chart = ({ dailyStats }: ChartProps) => {
     <ApexCharts
       type="line"
       series={[
-        { name: '글자수', data: dailyStats.map((stat) => stat.wordCount) },
+        { name: '글자수', data: dailyStats.map((stat) => stat.dailyCount) },
       ]}
       options={{
         chart: {
@@ -52,11 +52,11 @@ const Chart = ({ dailyStats }: ChartProps) => {
           },
           axisTicks: { show: true },
           axisBorder: { show: true },
-          categories: dailyStats.map((stat) => stat.day.getTime()),
+          categories: dailyStats.map((stat) => stat.date.getTime()),
           type: 'datetime',
         },
         title: {
-          text: 'Activity',
+          text: '날짜별 글자수',
           align: 'left',
         },
         fill: {

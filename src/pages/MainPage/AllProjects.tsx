@@ -12,7 +12,7 @@ const AllProjects = ({ projects, onProjectClick }: AllProjectsProps) => {
     <div className="mt-9 flex flex-col">
       <div className="flex justify-between">
         <label className="text-sm font-semibold text-redorange dark:text-blue">
-          All Projects
+          전체 작품
         </label>
         {/* <select className="text-redorange"></select> */}
       </div>

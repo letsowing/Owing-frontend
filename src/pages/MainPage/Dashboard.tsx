@@ -5,8 +5,8 @@ interface DashboardProps {
   monthTotalWordCount: number
   monthAvgWordCount: number
   dailyStats: {
-    day: Date
-    wordCount: number
+    date: Date
+    dailyCount: number
   }[]
 }
 
@@ -18,7 +18,7 @@ const Dashboard = ({
 }: DashboardProps) => {
   return (
     <div className="mt-5 flex w-64 flex-col gap-2 rounded-3xl bg-beige py-5 text-sm dark:bg-coldbeige dark:text-darkblack">
-      <label className="mb-2 px-5 text-xl font-semibold">Dashboard</label>
+      <label className="mb-2 px-5 text-xl font-semibold">글자수 통계</label>
       <div className="flex justify-between px-5">
         <label className="text-gray">오늘의 활동 글자수</label>
         <label className="font-semibold text-redorange dark:text-blue">

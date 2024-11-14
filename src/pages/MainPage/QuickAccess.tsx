@@ -16,7 +16,7 @@ const QuickAccess = ({
   return (
     <div className="w-full">
       <label className="text-sm font-semibold text-redorange dark:text-blue">
-        Quick Access
+        바로가기
       </label>
       <div className="mt-6">
         <ProjectCarousel
