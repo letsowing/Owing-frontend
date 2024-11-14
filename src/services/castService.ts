@@ -65,6 +65,14 @@ export const getCastGraph = async (projectId: number): Promise<CastGraph> => {
 // 캐릭터 생성 => folderId, coordinate 추가
 export const postCast = async (cast: PostCastRequest): Promise<Cast> => {
   try {
+    cast.imageUrl = cast.imageUrl || ''
+    if (cast.imageUrl.startsWith('data:')) {
+      const presignedUrlData = await getCastPresignedUrl(
+        getImageExtensionFromBase64(cast.imageUrl),
+      )
+      await putUploadImageToS3(presignedUrlData.presignedUrl, cast.imageUrl)
+      cast.imageUrl = presignedUrlData.fileUrl
+    }
     const response = await axiosInstance.post('/cast', cast)
     return {
       ...response.data,
