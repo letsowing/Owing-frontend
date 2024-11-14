@@ -120,6 +120,7 @@ const FlowWithProvider: React.FC = () => {
             type: ModalType.CHARACTER_RELATIONSHIP,
             cast: {
               ...data.cast,
+              role: data.cast.role?.trim() || '역할',
               position: data.cast.coordinate,
             },
             isEditable: false,
