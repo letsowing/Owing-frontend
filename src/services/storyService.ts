@@ -1,5 +1,7 @@
 import axiosInstance from '@utils/httpCommons'
 
+import { Message } from '@types'
+
 export const getStory = async (
   storyId: number,
 ): Promise<{
@@ -79,22 +81,20 @@ export const debouncedSave = debounce(
   7000,
 )
 
-export const postStoryConflict = async (
-  id: number,
-  targetStory: string,
-): Promise<string> => {
+export const postStoryConflictCheck = async (
+  storyId: number,
+  data: { projectId: number },
+): Promise<{
+  items: Message[]
+}> => {
   try {
-    const payload = {
-      targetStory,
-    }
     const response = await axiosInstance.post(
-      `/stories/${id}/findStoryConflict`,
-      payload,
+      `/stories/${storyId}/crash-check`,
+      data,
     )
-    console.log(response.data)
     return response.data
   } catch (error) {
-    console.error('일관성 체크 실패:', error)
+    console.error('설정 충돌 검사 실패:', error)
     throw error
   }
 }
