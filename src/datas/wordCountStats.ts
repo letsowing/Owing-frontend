@@ -1,31 +1,31 @@
 export const WORD_COUNT_STATS = {
-  todayWordCount: 742,
-  monthTotalWordCount: 11843,
-  monthAvgWordCount: 789,
-  dailyStats: [
+  todayCount: 742,
+  monthlyCount: 11843,
+  monthlyAvgCount: 789,
+  graph: [
     {
-      day: new Date(2024, 9, 1),
-      wordCount: 673,
+      date: new Date(2024, 9, 1),
+      dailyCount: 673,
     },
     {
-      day: new Date(2024, 9, 2),
-      wordCount: 892,
+      date: new Date(2024, 9, 2),
+      dailyCount: 892,
     },
     {
-      day: new Date(2024, 9, 3),
-      wordCount: 321,
+      date: new Date(2024, 9, 3),
+      dailyCount: 321,
     },
     {
-      day: new Date(2024, 9, 4),
-      wordCount: 955,
+      date: new Date(2024, 9, 4),
+      dailyCount: 955,
     },
     {
-      day: new Date(2024, 9, 5),
-      wordCount: 782,
+      date: new Date(2024, 9, 5),
+      dailyCount: 782,
     },
     {
-      day: new Date(2024, 10, 1),
-      wordCount: 1145,
+      date: new Date(2024, 10, 1),
+      dailyCount: 1145,
     },
   ],
 }

@@ -102,10 +102,10 @@ const Main = () => {
           <div className="mt-6 lg:w-1/4">
             <Profile member={member || initialMember} />
             <Dashboard
-              todayWordCount={WORD_COUNT_STATS.todayWordCount}
-              monthTotalWordCount={WORD_COUNT_STATS.monthTotalWordCount}
-              monthAvgWordCount={WORD_COUNT_STATS.monthAvgWordCount}
-              dailyStats={WORD_COUNT_STATS.dailyStats}
+              todayWordCount={WORD_COUNT_STATS.todayCount}
+              monthTotalWordCount={WORD_COUNT_STATS.monthlyCount}
+              monthAvgWordCount={WORD_COUNT_STATS.monthlyAvgCount}
+              dailyStats={WORD_COUNT_STATS.graph}
             />
           </div>
           <div className="lg:w-3/4">

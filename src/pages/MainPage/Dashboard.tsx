@@ -5,8 +5,8 @@ interface DashboardProps {
   monthTotalWordCount: number
   monthAvgWordCount: number
   dailyStats: {
-    day: Date
-    wordCount: number
+    date: Date
+    dailyCount: number
   }[]
 }
 
