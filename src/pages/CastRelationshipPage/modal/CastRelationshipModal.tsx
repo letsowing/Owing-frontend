@@ -8,6 +8,7 @@ import { useModalManagement } from '@hooks/useModal'
 
 import InputForm from './InputForm'
 
+import { postCastGenerateAiImage } from '@/services/castService'
 import { Cast, CastRelationshipModalProps, ModalType } from '@types'
 
 const mockData = [
@@ -40,6 +41,7 @@ const CastRelationshipModal = ({
   const [selectedFolderId, setSelectedFolderId] = useState<number | undefined>(
     folderId,
   )
+  const [isGenerating, setIsGenerating] = useState(false)
 
   useEffect(() => {
     if (modals.length > 0) {
@@ -62,8 +64,22 @@ const CastRelationshipModal = ({
     setSelectedFolderId(folderId)
   }
 
-  const handleAIImageGeneration = () => {
-    console.log('Create AI Image!')
+  const handleAIImageGeneration = async () => {
+    setIsGenerating(true)
+    try {
+      const data = await postCastGenerateAiImage({
+        name: editableCast.name,
+        age: editableCast.age,
+        gender: editableCast.gender,
+        role: editableCast.role,
+        description: editableCast.description,
+      })
+      handleInputChange('imageUrl', data.imageUrl)
+    } catch (error) {
+      console.error('인물 AI 이미지 생성 실패', error)
+    } finally {
+      setIsGenerating(false)
+    }
   }
 
   const handleSave = async () => {
@@ -98,6 +114,7 @@ const CastRelationshipModal = ({
             image={editableCast.imageUrl || ''}
             onImageChange={(image) => handleInputChange('imageUrl', image)}
             onAIGenerateClick={handleAIImageGeneration}
+            isGenerating={isGenerating}
           />
         </div>
         <div className="flex w-3/5 flex-col justify-between">
