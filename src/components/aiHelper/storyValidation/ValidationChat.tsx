@@ -1,43 +1,39 @@
-import React from 'react'
+import { useState } from 'react'
+
+import { useProjectStore } from '@stores/projectStore'
 
 import { MessageList } from './MessageList'
 import { ValidationButton } from './validationButton'
 
+import { postStoryConflictCheck } from '@services/storyService'
 import { Message } from '@types'
 
-export const ValidationChat: React.FC = () => {
-  const [messages] = React.useState<Array<Message>>([
-    { id: 1, content: '안녕하세요', date: '24/10/30 14:19:52' },
+export const ValidationChat = () => {
+  const [messages, setMessages] = useState<Array<Message>>([
     {
-      id: 2,
-      content:
-        '이전 3회차에서는 주인공이 사건을 해결하는 과정에서 긴장감이 고조되었는데, 이번 회차에서는 느슨한 전개로 이어지고 있어 흐름이 충돌하는 느낌이 듭니다. 3회차에서는 주인공이 의심스러워하던 인물이 반전을 일으키며 긴박한 상황을 만들었지만, 이번 회차에서는 같은 인물이 다시 평온한 모습으로 등장해 전개가 모순됩니다.',
-      date: '24/10/30 14:19:52',
-    },
-    {
-      id: 3,
-      content: '안녕하세요! 무엇을 도와드릴까요?',
-      date: '24/10/30 14:19:52',
-    },
-    {
-      id: 4,
-      content: '안녕하세요! 무엇을 도와드릴까요?',
-      date: '24/10/30 14:19:52',
-    },
-    {
-      id: 5,
-      content: '안녕하세요! 무엇을 도와드릴까요?',
-      date: '24/10/30 14:19:52',
-    },
-    {
-      id: 6,
-      content: '안녕하세요! 무엇을 도와드릴까요?',
-      date: '24/10/30 14:19:52',
+      base: '',
+      add: '',
+      reason: '',
+      createdAt: new Date(),
     },
   ])
+  // const [isGenerating, setIsGenerating] = useState(false)
+  const { selectedFileId, currentProject } = useProjectStore()
+  const [currentStoryId] = useState(selectedFileId!)
+  const [currentProjectId] = useState(currentProject.id!)
 
-  const handleClickValidation = () => {
-    console.log('ai 설정 체크')
+  const handleClickValidation = async () => {
+    // setIsGenerating(true)
+    try {
+      const data = await postStoryConflictCheck(currentStoryId, {
+        projectId: currentProjectId,
+      })
+      setMessages(data.items)
+    } catch (error) {
+      console.error('원고 설정 충돌 체크 실패:', error)
+    } finally {
+      // setIsGenerating(false)
+    }
   }
 
   return (

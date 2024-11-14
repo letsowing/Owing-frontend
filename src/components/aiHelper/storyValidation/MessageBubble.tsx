@@ -14,10 +14,24 @@ export const MessageBubble = ({ message }: { message: Message }) => {
         <div className="absolute -left-2 top-5 h-4 w-4 rotate-45 transform border-b border-l border-lightgray bg-white" />
 
         {/* 내용 */}
-        <p className="text-xs">{message.content}</p>
+        <strong>기존 설정</strong>
+        <p className="text-xs">{message.base}</p>
+        <br />
+        <strong>현재 원고에서 문제가 되는 설정</strong>
+        <p className="text-xs">{message.add}</p>
+        <br />
+        <strong>설정 충돌 이유</strong>
+        <p className="text-xs">{message.reason}</p>
+        <br />
 
         {/* 시간 */}
-        <div className="-mb-2 mt-2 text-right text-xs">{message.date}</div>
+        <div className="-mb-2 mt-2 text-right text-xs">
+          {new Date(message.createdAt).toLocaleTimeString([], {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+          })}
+        </div>
       </div>
     </div>
   )
