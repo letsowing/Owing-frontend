@@ -85,10 +85,7 @@ const FolderList: React.FC<FolderListProps> = ({
 
   const handleFolderNameKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      if (
-        newFolderName.trim().length > 0 &&
-        e.nativeEvent.isComposing === false
-      ) {
+      if (e.nativeEvent.isComposing === false) {
         handleSaveFolderName()
       }
     }
@@ -129,10 +126,7 @@ const FolderList: React.FC<FolderListProps> = ({
 
   const handleFileNameKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      if (
-        newFileName.trim().length > 0 &&
-        e.nativeEvent.isComposing === false
-      ) {
+      if (e.nativeEvent.isComposing === false) {
         handleSaveFile()
       }
     }

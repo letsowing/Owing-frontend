@@ -65,10 +65,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      if (
-        newFolderName.trim().length > 0 &&
-        e.nativeEvent.isComposing === false
-      ) {
+      if (e.nativeEvent.isComposing === false) {
         handleSaveFolder()
       }
     }

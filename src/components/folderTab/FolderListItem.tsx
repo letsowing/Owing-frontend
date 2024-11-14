@@ -73,10 +73,7 @@ export default function FolderListItem({
 
   const handleFileNameKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
-      if (
-        newFileName.trim().length > 0 &&
-        e.nativeEvent.isComposing === false
-      ) {
+      if (e.nativeEvent.isComposing === false) {
         handleSaveFileName()
       }
     }
