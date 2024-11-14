@@ -13,11 +13,11 @@ const CastImage: React.FC<CastImageProps> = ({ imageUrl }) => {
   const isDarkMode = useThemeStore((state) => state.isDarkMode)
 
   return (
-    <div className="flex w-full items-center justify-center">
+    <div className="flex h-full w-full items-center justify-center">
       <img
         src={imageUrl ? imageUrl : isDarkMode ? DarkAlertOwing : AlertOwing}
         alt="Cast"
-        className="w-full rounded-xl object-cover"
+        className="h-full w-full rounded-xl object-cover"
       />
     </div>
   )
