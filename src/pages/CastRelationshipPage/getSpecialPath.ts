@@ -15,7 +15,6 @@ export const getSpecialPath = (
     centerY + offset
   } ${targetX} ${targetY}`
 
-  // Calculate label position
   const labelX = centerX
   const labelY = centerY + offset / 2
 

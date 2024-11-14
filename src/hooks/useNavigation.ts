@@ -36,6 +36,7 @@ const useNavigation = () => {
       goToProject: () => navigate(`/projectInfo`),
       goToStoryManagement: (projectId: number) =>
         navigate(`/storyManagement/${projectId}`),
+      goToCast: () => navigate(`/cast`),
     }),
     [navigate],
   )()

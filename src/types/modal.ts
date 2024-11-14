@@ -18,11 +18,10 @@ export interface CastRelationshipModalProps extends ModalProps<Cast> {
   type: ModalType.CHARACTER_RELATIONSHIP
   isEditable: boolean
   cast: Cast | null
-  folderId: number | undefined
+  folderId: number
   folderList: FolderSummary[]
-  onSave: (data: Cast, folderId: number | undefined) => Promise<void>
+  onSave: (data: Cast, folderId: number) => Promise<void>
   onEdit: () => void
-  onSelect: (folderId: number) => void
   onClose: () => void
 }
 

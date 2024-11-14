@@ -29,7 +29,7 @@ export default function DirectionalEdge({
   const edgeColor = useEdgeColor(type)
 
   const [edgePath, labelX, labelY] = React.useMemo(() => {
-    const offset = sourceX < targetX ? 50 : -50
+    const offset = sourceX < targetX ? 60 : -60
     return getSpecialPath(
       {
         sourceX,
@@ -43,11 +43,14 @@ export default function DirectionalEdge({
 
   return (
     <>
+      <defs>
+        <EdgeMarker id={`${id}-end`} color={edgeColor} />
+      </defs>
       <EdgePath
         id={id}
         edgeColor={edgeColor}
         pathData={edgePath}
-        markerEnd={`url(#${id}-marker)`}
+        markerEnd={`url(#${id}-end)`}
       />
       <EdgeLabel
         labelX={labelX}
@@ -58,9 +61,8 @@ export default function DirectionalEdge({
         handleLabelInputChange={handleLabelInputChange}
         handleLabelClick={handleLabelClick}
         handleFinishEditing={handleFinishEditing}
-        borderColor="redorange dark:violet"
+        borderColor={edgeColor}
       />
-      <EdgeMarker id={id} color={edgeColor} />
     </>
   )
 }

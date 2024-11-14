@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useRef, useState } from 'react'
 
+import { useConfirm } from '@hooks/useConfirm'
 import { useDnd } from '@hooks/useDnd'
 import useNavigation from '@hooks/useNavigation'
 
@@ -27,11 +28,12 @@ export default function FolderListItem({
   const file = files[index]
   const { moveFileItem, updateFileName, deleteFile } = useDnd()
   const { activePath, goToStory } = useNavigation()
-  const ref = useRef<HTMLLIElement>(null)
+  const { confirmDelete } = useConfirm()
 
   const [isFileEditing, setIsFileEditing] = useState(false)
   const [newFileName, setNewFileName] = useState(file.name)
 
+  const ref = useRef<HTMLLIElement>(null)
   const fileNameRef = useRef<HTMLDivElement>(null)
 
   const moveCursorToEnd = () => {
@@ -75,8 +77,14 @@ export default function FolderListItem({
 
   const handleDeleteFile = async () => {
     try {
-      await currentService.deleteFile(file.id)
-      deleteFile(folderId, file.id)
+      const isConfirmed = await confirmDelete({
+        title: '파일을 삭제하시겠습니까?',
+        text: '휴지통으로 옮겨집니다.',
+      })
+      if (isConfirmed) {
+        await currentService.deleteFile(file.id)
+        deleteFile(folderId, file.id)
+      }
     } catch (error) {
       console.error('파일 삭제 실패:', error)
     }

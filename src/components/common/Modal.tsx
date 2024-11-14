@@ -11,6 +11,7 @@ import ReactModal from 'react-modal'
 interface ModalProps {
   modalType: ModalType
   children?: ReactNode
+  isValid: boolean
   primaryButtonText?: string
   secondaryButtonText?: string
   onPrimaryAction?: () => void
@@ -20,6 +21,7 @@ interface ModalProps {
 const Modal: React.FC<ModalProps> = ({
   modalType,
   children,
+  isValid,
   primaryButtonText = 'Save',
   secondaryButtonText = 'Cancel',
   onPrimaryAction,
@@ -41,7 +43,11 @@ const Modal: React.FC<ModalProps> = ({
         {children}
         <div className="mb-6 me-20 ml-auto mt-16 flex w-1/3 gap-4">
           <SubButton value={secondaryButtonText} onClick={onSecondaryAction} />
-          <MainButton value={primaryButtonText} onClick={onPrimaryAction} />
+          <MainButton
+            value={primaryButtonText}
+            onClick={onPrimaryAction}
+            disabled={!isValid}
+          />
         </div>
       </div>
     </ReactModal>

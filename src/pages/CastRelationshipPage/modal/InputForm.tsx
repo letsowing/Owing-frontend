@@ -44,7 +44,7 @@ const InputForm: React.FC<InputFormProps> = ({
             isRequired={false}
             maxLength={50}
             isEditable={isEditable}
-            onChange={(value) => onInputChange('age', parseInt(value, 10) || 0)}
+            onChange={(value) => onInputChange('age', parseInt(value, 10))}
           />
         </div>
         <div className="w-full">

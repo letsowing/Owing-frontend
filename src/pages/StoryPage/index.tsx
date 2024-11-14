@@ -9,6 +9,8 @@ import { ValidationView } from '@components/aiHelper/storyValidation/ValidationV
 
 import { useProjectStore } from '@stores/projectStore'
 
+import { useConfirm } from '@hooks/useConfirm'
+
 import { StoryEditor } from './StoryEditor'
 
 import { getStory, postStory } from '@services/storyService'
@@ -17,14 +19,16 @@ import { Loader } from 'lucide-react'
 import { createPortal } from 'react-dom'
 
 const StoryWrapper = () => {
+  const { showSuccessDialog } = useConfirm()
+  const { selectedFileId } = useProjectStore()
+
+  const [currentStoryId] = useState(selectedFileId!)
+  const storyContentRef = useRef('')
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
   const [selectedFeature, setSelectedFeature] = useState<Feature['id'] | null>(
     null,
   )
-  const storyContentRef = useRef('')
-  const { selectedFileId } = useProjectStore()
-  const [currentStoryId] = useState(selectedFileId!)
-  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const fetchStoryContent = async () => {
@@ -72,6 +76,8 @@ const StoryWrapper = () => {
       await postStory(currentStoryId, { content: storyContentRef.current })
     } catch (error) {
       console.error('원고 저장 실패:', error)
+    } finally {
+      showSuccessDialog('저장되었습니다.')
     }
     console.log('저장된 내용:', storyContentRef.current)
   }

@@ -5,6 +5,8 @@ import EmptyFolder from '@components/common/EmptyFolder'
 import { useProjectStore } from '@stores/projectStore'
 
 import { useCast } from '@hooks/useCast'
+import { useConfirm } from '@hooks/useConfirm'
+import { useDnd } from '@hooks/useDnd'
 
 import CastActionButtons from './CastActionButtons'
 import CastImageSection from './CastImageSection'
@@ -12,7 +14,6 @@ import CastInputForm from './CastInputForm'
 import PageTitle from './PageTitle'
 
 import { Cast } from '@types'
-import { useNavigate } from 'react-router-dom'
 
 const initialCastData: Cast = {
   id: '',
@@ -26,17 +27,23 @@ const initialCastData: Cast = {
 }
 
 const CastPage: React.FC = () => {
-  const navigate = useNavigate()
   const { updateCast, deleteCast, getCast } = useCast()
+  const { confirmDelete, showSuccessDialog } = useConfirm()
+  const { deleteFile } = useDnd()
+  const { selectedFileId, selectedFolderId } = useProjectStore()
 
   const [originalCastData, setOriginalCastData] =
     useState<Cast>(initialCastData)
   const [castData, setCastData] = useState<Cast>(initialCastData)
   const [isEditing, setIsEditing] = useState(false)
-  const { selectedFileId, selectedFolderId } = useProjectStore()
 
   useEffect(() => {
-    if (!selectedFileId) return
+    setIsEditing(false)
+
+    if (!selectedFileId) {
+      return
+    }
+
     const fetchCast = async () => {
       try {
         const data = await getCast(selectedFileId.toString())
@@ -56,6 +63,10 @@ const CastPage: React.FC = () => {
     return <EmptyFolder isFolderEmpty={!selectedFolderId} />
   }
 
+  const isFormValid = () => {
+    return !!(castData.name.trim() && castData.role.trim())
+  }
+
   const handleInputChange = (field: keyof Cast, value: string) => {
     setCastData((prev) => ({
       ...prev,
@@ -66,6 +77,7 @@ const CastPage: React.FC = () => {
   const handleSave = async () => {
     try {
       const cast = {
+        folderId: selectedFolderId,
         name: castData.name,
         age: castData.age,
         gender: castData.gender,
@@ -75,9 +87,11 @@ const CastPage: React.FC = () => {
       }
       await updateCast(castData.id, cast)
       setCastData(castData)
-      setIsEditing(false)
     } catch (error) {
       console.error('Failed to update cast:', error)
+    } finally {
+      setIsEditing(false)
+      showSuccessDialog('저장되었습니다.')
     }
   }
 
@@ -92,13 +106,17 @@ const CastPage: React.FC = () => {
   }
 
   const handleDelete = async () => {
-    if (!window.confirm('캐릭터를 삭제하시겠습니까?')) return
-
-    try {
-      await deleteCast(selectedFileId.toString())
-      navigate('/casts')
-    } catch (error) {
-      console.error('Failed to delete cast:', error)
+    const isConfirmed = await confirmDelete({
+      title: '파일을 삭제하시겠습니까?',
+      text: '휴지통으로 옯겨집니다.',
+    })
+    if (isConfirmed) {
+      try {
+        await deleteCast(selectedFileId.toString())
+        deleteFile(selectedFolderId, selectedFileId)
+      } catch (error) {
+        console.error('Failed to delete cast:', error)
+      }
     }
   }
 
@@ -116,7 +134,8 @@ const CastPage: React.FC = () => {
           />
           <CastActionButtons
             isEditing={isEditing}
-            hasId={true}
+            isValid={isFormValid()}
+            hasId={true} // 저장/수정을 가르는 요소
             onSave={handleSave}
             onEdit={handleEdit}
             onCancel={handleCancel}

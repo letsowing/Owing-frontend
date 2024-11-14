@@ -27,7 +27,9 @@ const HeaderTabLayout: React.FC = () => {
         />
       )}
       <div className="flex w-full flex-1 flex-col dark:bg-darkblack dark:text-coldbeige">
-        <Header isTabOpen={isTabOpen} />
+        <div className="sticky top-0 z-10">
+          <Header isTabOpen={isTabOpen} />
+        </div>
         <Outlet />
       </div>
     </div>

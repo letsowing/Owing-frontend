@@ -74,7 +74,7 @@ export interface getCastResponse {
 }
 
 export interface PostCastRequest {
-  folderId: number | undefined
+  folderId: number
   name: string
   age: number
   gender: string
@@ -88,6 +88,7 @@ export interface PostCastRequest {
 }
 
 export interface PutCastRequest {
+  folderId: number
   name: string
   age: number
   gender: string

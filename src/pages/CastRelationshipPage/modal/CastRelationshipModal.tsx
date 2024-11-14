@@ -2,20 +2,21 @@ import { useEffect, useState } from 'react'
 
 import ImageForm from '@components/common/ImageForm'
 import Modal from '@components/common/Modal'
-import TagField from '@components/common/TagField'
 
+import { useConfirm } from '@hooks/useConfirm'
+// import TagField from '@components/common/TagField'
 import { useModalManagement } from '@hooks/useModal'
 
 import InputForm from './InputForm'
 
-import { postCastGenerateAiImage } from '@/services/castService'
 import { Cast, CastRelationshipModalProps, ModalType } from '@types'
+import { postCastGenerateAiImage } from 'services/castService'
 
-const mockData = [
-  { name: '1화', value: '1' },
-  { name: '2화', value: '2' },
-  { name: '3화', value: '3' },
-]
+// const mockData = [
+//   { name: '1화', value: '1' },
+//   { name: '2화', value: '2' },
+//   { name: '3화', value: '3' },
+// ]
 
 const initialCast: Cast = {
   id: '',
@@ -36,11 +37,10 @@ const CastRelationshipModal = ({
   onSave,
   onClose,
 }: CastRelationshipModalProps) => {
+  const { confirmAIImageGeneration } = useConfirm()
   const { modals } = useModalManagement()
   const [editableCast, setEditableCast] = useState<Cast>(initialCast)
-  const [selectedFolderId, setSelectedFolderId] = useState<number | undefined>(
-    folderId,
-  )
+  const [selectedFolderId, setSelectedFolderId] = useState<number>(folderId)
   const [isGenerating, setIsGenerating] = useState(false)
 
   useEffect(() => {
@@ -56,6 +56,14 @@ const CastRelationshipModal = ({
     }
   }, [folderId, modals])
 
+  const isFormValid = () => {
+    return !!(
+      editableCast.name.trim() &&
+      editableCast.role.trim() &&
+      selectedFolderId
+    )
+  }
+
   const handleInputChange = (field: keyof Cast, value: string | number) => {
     setEditableCast((prev) => ({ ...prev, [field]: value }))
   }
@@ -65,6 +73,10 @@ const CastRelationshipModal = ({
   }
 
   const handleAIImageGeneration = async () => {
+    const isConfirmed = await confirmAIImageGeneration()
+    if (!isConfirmed) {
+      return
+    }
     setIsGenerating(true)
     try {
       const data = await postCastGenerateAiImage({
@@ -102,6 +114,7 @@ const CastRelationshipModal = ({
   return (
     <Modal
       modalType={ModalType.CHARACTER_RELATIONSHIP}
+      isValid={isFormValid()}
       primaryButtonText={isEditable ? 'Save' : 'Edit'}
       secondaryButtonText="Cancel"
       onPrimaryAction={handlePrimaryAction}
@@ -126,7 +139,7 @@ const CastRelationshipModal = ({
             onInputChange={handleInputChange}
             onFolderSelect={handleFolderSelect}
           />
-          {!isEditable && (
+          {/* {!isEditable && (
             <div className="mt-8">
               <TagField
                 labelValue="등장원고"
@@ -134,7 +147,7 @@ const CastRelationshipModal = ({
                 isEditable={isEditable}
               />
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </Modal>

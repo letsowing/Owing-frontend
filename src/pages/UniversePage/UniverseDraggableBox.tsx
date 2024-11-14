@@ -3,6 +3,7 @@ import { useRef, useState } from 'react'
 
 import Loader from '@components/common/Loader'
 
+import { useConfirm } from '@hooks/useConfirm'
 import { useDnd } from '@hooks/useDnd'
 
 import AlertOwing from '@assets/common/AlertOwing.png'
@@ -20,7 +21,9 @@ export default function UniverseDraggableBox({
   currentService,
 }: DraggableBoxProps) {
   const file = files[index]
+  const { confirmAIImageGeneration } = useConfirm()
   const { moveFileItem, updateFile } = useDnd()
+
   const ref = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [isGenerating, setIsGenerating] = useState(false)
@@ -73,6 +76,10 @@ export default function UniverseDraggableBox({
 
   drag(drop(ref))
 
+  const isFormValid = () => {
+    return !!editedName.trim()
+  }
+
   const handleEdit = (e: React.MouseEvent) => {
     e.stopPropagation()
     setIsEditing(true)
@@ -111,6 +118,10 @@ export default function UniverseDraggableBox({
   }
 
   const handleAiImage = async () => {
+    const isConfirmed = await confirmAIImageGeneration()
+    if (!isConfirmed) {
+      return
+    }
     setIsGenerating(true)
     try {
       const data = await postUniverseGenerateAiImage({
@@ -153,7 +164,7 @@ export default function UniverseDraggableBox({
             <div className="mb-10 mt-20">
               <Loader />
             </div>
-            <label className="px-4 py-10 text-sm font-black text-orange text-opacity-60 dark:text-cornflowerblue dark:text-opacity-70">
+            <label className="px-4 py-10 text-xs font-black text-orange text-opacity-60 dark:text-cornflowerblue dark:text-opacity-70">
               이미지 생성에 1분 정도 소요됩니다.
             </label>
           </div>
@@ -181,6 +192,7 @@ export default function UniverseDraggableBox({
               <input
                 className="mb-2 w-full border-b border-lightgray text-2xl font-semibold"
                 value={editedName}
+                placeholder="필수 입력입니다."
                 onChange={(e) => setEditedName(e.target.value)}
               />
               <textarea
@@ -237,6 +249,7 @@ export default function UniverseDraggableBox({
               <button
                 onClick={handleSave}
                 className="h-12 px-4 text-lg text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
+                disabled={!isFormValid()}
               >
                 Save
               </button>

@@ -42,12 +42,16 @@ export default function BidirectionalEdge({
   }, [sourceX, sourceY, targetX, targetY, sourcePosition, targetPosition])
   return (
     <>
+      <defs>
+        <EdgeMarker id={`${id}-start`} color={edgeColor} isStart={true} />
+        <EdgeMarker id={`${id}-end`} color={edgeColor} />
+      </defs>
       <EdgePath
         id={id}
         edgeColor={edgeColor}
         pathData={edgePath}
-        markerEnd={`url(#${id}-end-marker)`}
-        markerStart={`url(#${id}-start-marker)`}
+        markerEnd={`url(#${id}-end)`}
+        markerStart={`url(#${id}-start)`}
       />
       <EdgeLabel
         labelX={labelX}
@@ -58,10 +62,8 @@ export default function BidirectionalEdge({
         handleLabelInputChange={handleLabelInputChange}
         handleLabelClick={handleLabelClick}
         handleFinishEditing={handleFinishEditing}
-        borderColor="olive"
+        borderColor={edgeColor}
       />
-      <EdgeMarker id={id} color={edgeColor} isStart={true} />
-      <EdgeMarker id={id} color={edgeColor} />
     </>
   )
 }

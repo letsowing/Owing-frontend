@@ -19,14 +19,14 @@ export const MENU_LIST = [
     path: 'storyManagement',
   },
   {
-    icon: TbCirclesRelation,
-    text: '인물관계도',
-    path: 'castRelationship',
-  },
-  {
     icon: GoPerson,
     text: '캐릭터',
     path: 'cast',
+  },
+  {
+    icon: TbCirclesRelation,
+    text: '인물관계도',
+    path: 'castRelationship',
   },
   {
     icon: RiEarthFill,
