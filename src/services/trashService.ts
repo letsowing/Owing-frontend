@@ -5,10 +5,12 @@ import { trashFolder } from '@datas/trash'
 // 휴지통 리스트 조회
 export const getTrashcanList = async (projectId: number) => {
   try {
-    //const response = await axiosInstance.get(`/trashcans?project=${projectId}`)
-    //return response.data
-    console.log(projectId)
-    return trashFolder
+    const response = await axiosInstance.get(
+      `/trashcans/folders?projectId=${projectId}`,
+    )
+    return response.data
+    // console.log(projectId)
+    // return trashFolder
   } catch (error) {
     console.error('휴지통 리스트 조회 실패:', error)
     throw error
@@ -19,7 +21,7 @@ export const getTrashcanList = async (projectId: number) => {
 export const deleteAllTrashes = async (projectId: number) => {
   try {
     const response = await axiosInstance.delete(
-      `/trashcans?project=${projectId}`,
+      `/trashcans/folders?projectId=${projectId}`,
     )
     return response.data
   } catch (error) {
@@ -28,7 +30,7 @@ export const deleteAllTrashes = async (projectId: number) => {
   }
 }
 
-// 휴지통 요소 영구 삭제
+//휴지통 요소 영구 삭제
 export const deleteTrashcanFile = async (trashId: number) => {
   try {
     const response = await axiosInstance.delete(`/trashcans/${trashId}`)
@@ -39,7 +41,7 @@ export const deleteTrashcanFile = async (trashId: number) => {
   }
 }
 
-// 휴지통 요소 복원하기
+//휴지통 요소 복원하기
 export const postRestoreTrashcanFile = async (trashId: number) => {
   try {
     const response = await axiosInstance.post(`/trashcans/${trashId}`)
@@ -50,10 +52,10 @@ export const postRestoreTrashcanFile = async (trashId: number) => {
   }
 }
 
-// 휴지통 폴더 영구 삭제
+//휴지통 폴더 영구 삭제
 export const deleteTrashcanFolder = async (trashId: number) => {
   try {
-    const response = await axiosInstance.delete(`/trashcans/${trashId}/folder`)
+    const response = await axiosInstance.delete(`/trashcans/folders/${trashId}`)
     return response.data
   } catch (error) {
     console.error('휴지통 요소 영구 삭제 실패:', error)
@@ -61,10 +63,10 @@ export const deleteTrashcanFolder = async (trashId: number) => {
   }
 }
 
-// 휴지통 폴더 복원하기
+//휴지통 폴더 복원하기
 export const postRestoreTrashcanFolder = async (trashId: number) => {
   try {
-    const response = await axiosInstance.post(`/trashcans/${trashId}/folder`)
+    const response = await axiosInstance.post(`/trashcans/folders/${trashId}`)
     return response.data
   } catch (error) {
     console.error('휴지통 요소 복원 실패:', error)
@@ -72,7 +74,7 @@ export const postRestoreTrashcanFolder = async (trashId: number) => {
   }
 }
 
-// 휴지통 개별 요소 가져오기
+//휴지통 개별 요소 가져오기
 export const getTrashcanContent = async (
   trashId: number,
   contentType: string, // story/cast/universe
@@ -88,15 +90,13 @@ export const getTrashcanContent = async (
   }
 }
 
-// 휴지통 개별 폴더 가져오기
+//휴지통 개별 폴더 가져오기
 export const getTrashcanFolderContent = async (
   trashId: number,
   contentType: string, // story/cast/universe
 ) => {
   try {
-    const response = await axiosInstance.get(
-      `/trashcans/${trashId}/${contentType}/folder`,
-    )
+    const response = await axiosInstance.get(`/trashcans/folders/${trashId}`)
     return response.data
   } catch (error) {
     console.error(`휴지통 폴더 ${contentType} 조회 실패:`, error)
