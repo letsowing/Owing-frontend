@@ -12,3 +12,14 @@ export type Message = {
   reason: string
   createdAt: Date
 }
+
+export type SpellingError = {
+  help: string
+  errorIdx: number
+  correctMethod: number
+  start: number
+  errMsg: string
+  end: number
+  orgStr: string
+  candWord: string
+}

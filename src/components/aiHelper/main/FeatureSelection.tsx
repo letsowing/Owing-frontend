@@ -36,7 +36,7 @@ export const FeatureSelection = ({
           key={feature.id}
           {...feature}
           onClick={() => {
-            if (feature.id !== 'spelling' && feature.id !== 'search') {
+            if (feature.id !== 'search') {
               onSelectFeature(feature.id)
             }
           }}

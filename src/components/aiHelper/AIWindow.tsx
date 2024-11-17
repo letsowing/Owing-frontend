@@ -47,8 +47,7 @@ export const AIWindow = ({
                 label="맞춤법 검사"
                 icon={MdOutlineThumbUp}
                 isActive={selectedFeature === 'spelling'}
-                // onClick={() => onSelectFeature('spelling')}
-                onClick={() => {}}
+                onClick={() => onSelectFeature('spelling')}
               />
               <TabItem
                 label="검색어 추천"

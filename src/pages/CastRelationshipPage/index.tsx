@@ -14,6 +14,7 @@ import DirectionalEdge from './DirectionalEdge'
 import SelectEdgeButton from './SelectEdgeButton'
 import CastRelationshipModal from './modal/CastRelationshipModal'
 
+import '@assets/style/handle.css'
 import { getCast, getFolderList } from '@services/castService'
 import {
   Cast,
@@ -164,7 +165,7 @@ const FlowWithProvider: React.FC = () => {
   const handleNodeRemove = useCallback(
     async (nodeId: string) => {
       const isConfirmed = await confirmDelete({
-        title: '파일을 삭제하시겠습니까?',
+        title: '캐릭터를 삭제하시겠습니까?',
         text: '휴지통으로 옯겨집니다.',
       })
       if (isConfirmed) {
@@ -236,6 +237,7 @@ const FlowWithProvider: React.FC = () => {
         edgeTypes={edgeTypes}
         defaultEdgeOptions={defaultEdgeOptions}
         fitView
+        className="touch-flow"
         isValidConnection={isValidConnection}
         connectionMode={ConnectionMode.Loose}
         colorMode={isDarkMode ? 'dark' : 'light'}
@@ -245,7 +247,7 @@ const FlowWithProvider: React.FC = () => {
         <MiniMap />
       </ReactFlow>
       <div className="absolute left-0 right-9 top-2 z-10 flex justify-center">
-        <div className="inline-flex space-x-2 rounded-lg bg-beige p-2 dark:bg-coldbeige">
+        <div className="inline-flex space-x-5 rounded-lg bg-beige p-2 dark:bg-coldbeige">
           <AddButton onClick={handleAddCast} />
           <SelectEdgeButton
             isBidirectional={isBidirectionalEdge}

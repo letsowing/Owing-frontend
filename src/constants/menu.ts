@@ -14,9 +14,9 @@ export const MENU_LIST = [
     path: 'projectInfo',
   },
   {
-    icon: BsFeather,
-    text: '스토리 원고',
-    path: 'storyManagement',
+    icon: RiEarthFill,
+    text: '세계관',
+    path: 'universe',
   },
   {
     icon: GoPerson,
@@ -29,9 +29,9 @@ export const MENU_LIST = [
     path: 'castRelationship',
   },
   {
-    icon: RiEarthFill,
-    text: '세계관',
-    path: 'universe',
+    icon: BsFeather,
+    text: '스토리 원고',
+    path: 'storyManagement',
   },
   {
     icon: HiOutlineTrash,

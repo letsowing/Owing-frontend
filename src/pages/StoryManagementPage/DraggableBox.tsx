@@ -128,6 +128,7 @@ export default function DraggableBox({
             className="mb-2 rounded border p-1 dark:text-darkgray"
           />
           <textarea
+            placeholder="줄거리를 입력할 수 있습니다."
             value={editedDescription || ''}
             onChange={(e) => setEditedDescription(e.target.value)}
             className="flex-grow resize-none rounded border p-1 dark:text-darkgray"
@@ -150,13 +151,13 @@ export default function DraggableBox({
         </>
       ) : (
         <>
-          <h3 className="mb-1 font-semibold">{file.name}</h3>
-          <p>{file.description}</p>
+          <h3 className="mb-2 font-semibold">{file.name}</h3>
+          <p>{file.description || '줄거리를 입력할 수 있습니다.'}</p>
           <button
             onClick={handleEdit}
             className="text-md ml-auto mt-auto h-7 from-redorange to-orange px-4 text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white dark:from-blue dark:to-skyblue dark:text-blue dark:hover:text-coldbeige"
           >
-            Edit
+            줄거리 수정
           </button>
         </>
       )}

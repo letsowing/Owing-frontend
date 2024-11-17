@@ -1,6 +1,6 @@
 import axiosInstance from '@utils/httpCommons'
 
-import { Message } from '@types'
+import { Message, SpellingError } from '@types'
 
 export const getStory = async (
   storyId: number,
@@ -95,6 +95,20 @@ export const postStoryConflictCheck = async (
     return response.data
   } catch (error) {
     console.error('설정 충돌 검사 실패:', error)
+    throw error
+  }
+}
+
+export const postSpellingCheck = async (
+  storyId: number,
+): Promise<SpellingError[]> => {
+  try {
+    const response = await axiosInstance.post<SpellingError[]>(
+      `/stories/${storyId}/spell-check`,
+    )
+    return response.data
+  } catch (error) {
+    console.error('맞춤법 검사 실패:', error)
     throw error
   }
 }

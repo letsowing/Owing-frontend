@@ -36,14 +36,14 @@ export const useConfirm = () => {
     const result = await Swal.fire({
       title: 'AI 이미지 생성',
       html:
-        '캐릭터의 특징을 자세히 설명할수록<br>더 멋진 이미지가 생성됩니다!<br><br>' +
-        '지금 설명을 더 추가하시겠습니까?',
+        '이미지의 특징을 자세히 설명할수록<br>더 멋진 이미지가 생성됩니다!<br><br>' +
+        '세부 설명을 더 추가하시겠습니까?',
       icon: 'info',
       showCancelButton: true,
       confirmButtonColor: '#FB5D2B',
       cancelButtonColor: '#3082F6',
       confirmButtonText: '이미지 생성하기',
-      cancelButtonText: '설명 추가하기',
+      cancelButtonText: '돌아가기',
     })
 
     return result.isConfirmed
