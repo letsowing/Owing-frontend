@@ -2,7 +2,7 @@ import { postRefreshToken } from '@services/authService'
 import axios, { AxiosError } from 'axios'
 
 const axiosInstance = axios.create({
-  baseURL: 'https://api.letsowing.com/v1',
+  baseURL: import.meta.env.VITE_APP_BASE_URL,
   timeout: 300000,
   headers: {
     'Content-Type': 'application/json',
