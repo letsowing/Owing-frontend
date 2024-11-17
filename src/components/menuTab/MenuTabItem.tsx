@@ -16,7 +16,7 @@ const MenuTabItem: React.FC<MenuTabItemProps> = ({
   onClickMenu,
 }) => {
   let disabled = false
-  if (text === '휴지통' || text === '도움말' || text === '설정') {
+  if (text === '도움말' || text === '설정') {
     disabled = !disabled
   }
 
