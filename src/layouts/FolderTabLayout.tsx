@@ -49,8 +49,7 @@ export default function FolderTabLayout() {
     }
 
     fetchFolders()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentProject.id, location.pathname])
+  }, [currentProject.id, currentService, location.pathname, setItems])
 
   useEffect(() => {
     setSelectedFolderId(items?.length > 0 ? items[0].id : null)

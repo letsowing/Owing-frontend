@@ -22,7 +22,6 @@ const StoryWrapper = () => {
   const { showSuccessDialog } = useConfirm()
   const { selectedFileId } = useProjectStore()
 
-  const [currentStoryId] = useState(selectedFileId!)
   const storyContentRef = useRef('')
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
@@ -34,7 +33,7 @@ const StoryWrapper = () => {
     const fetchStoryContent = async () => {
       try {
         setIsLoading(true)
-        const data = await getStory(currentStoryId)
+        const data = await getStory(selectedFileId!)
         storyContentRef.current = data.content || ''
       } catch (error) {
         console.error('스토리 원고 조회 실패', error)
@@ -43,7 +42,7 @@ const StoryWrapper = () => {
       }
     }
     fetchStoryContent()
-  }, [currentStoryId])
+  }, [selectedFileId])
 
   const renderContent = () => {
     switch (selectedFeature) {
@@ -73,13 +72,12 @@ const StoryWrapper = () => {
 
   const handleSave = async () => {
     try {
-      await postStory(currentStoryId, { content: storyContentRef.current })
+      await postStory(selectedFileId!, { content: storyContentRef.current })
     } catch (error) {
       console.error('원고 저장 실패:', error)
     } finally {
       showSuccessDialog('저장되었습니다.')
     }
-    console.log('저장된 내용:', storyContentRef.current)
   }
 
   if (isLoading) {

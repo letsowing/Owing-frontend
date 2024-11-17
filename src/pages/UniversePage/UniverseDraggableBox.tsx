@@ -196,6 +196,7 @@ export default function UniverseDraggableBox({
                 onChange={(e) => setEditedName(e.target.value)}
               />
               <textarea
+                placeholder="줄거리를 입력할 수 있습니다."
                 className="mt-1 h-[11rem] w-full min-w-full overflow-y-auto rounded border border-lightgray p-2 text-darkgray"
                 rows={5}
                 value={editedDescription || ''}
@@ -206,7 +207,7 @@ export default function UniverseDraggableBox({
             <>
               <strong className="text-2xl font-semibold">{file.name}</strong>
               <p className="mt-4 h-[11rem] overflow-y-auto text-darkgray">
-                {file.description}
+                {file.description || '줄거리를 입력할 수 있습니다.'}
               </p>
             </>
           )}

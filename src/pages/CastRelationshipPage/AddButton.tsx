@@ -12,7 +12,7 @@ const AddButton: React.FC<AddButtonProps> = ({ onClick }) => {
       onClick={onClick}
       className="rounded bg-beige px-3 py-1 text-gray hover:bg-lightredorange hover:font-semibold hover:text-white dark:bg-coldbeige hover:dark:bg-skyblue hover:dark:text-darkgray"
     >
-      <MdOutlinePersonAddAlt1 />
+      <MdOutlinePersonAddAlt1 className="h-9 w-9" />
     </button>
   )
 }

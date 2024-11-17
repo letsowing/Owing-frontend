@@ -22,7 +22,7 @@ const SelectEdgeButton: React.FC<SelectEdgeProps> = ({
         }`}
         onClick={() => onChange(true)}
       >
-        <TbArrowsUpRight />
+        <TbArrowsUpRight className="h-9 w-9" />
       </button>
       <button
         className={`rounded px-3 py-1 ${
@@ -32,7 +32,7 @@ const SelectEdgeButton: React.FC<SelectEdgeProps> = ({
         }`}
         onClick={() => onChange(false)}
       >
-        <PiFlowArrowBold />
+        <PiFlowArrowBold className="h-9 w-9" />
       </button>
     </>
   )

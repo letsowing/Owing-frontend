@@ -70,7 +70,7 @@ const ImageForm: React.FC<ImageFormProps> = ({
           <img
             src={image ? image : imageUrl}
             alt="잘못된 경로입니다."
-            className="h-80 w-80 rounded-xl bg-contain text-xs text-gray"
+            className="h-full w-full rounded-xl object-cover text-xs text-gray"
           />
         )}
       </div>
@@ -85,7 +85,7 @@ const ImageForm: React.FC<ImageFormProps> = ({
             <div className="text-xl font-medium text-redorange dark:text-blue">
               <MdLightbulbOutline />
             </div>
-            <span className="text-[10px] text-darkgray dark:text-coldbeige">
+            <span className="text-[10px] font-medium text-darkgray dark:text-coldbeige">
               AI를 활용하여 이미지를 생성할 수 있어요!
             </span>
           </div>
