@@ -24,7 +24,7 @@ const ImageModal: React.FC<ImageModalProps> = ({ onAction }) => {
   }
 
   return (
-    <Modal modalType={ModalType.IMAGE}>
+    <Modal modalType={ModalType.IMAGE} isValid={true}>
       <div className="mx-20 my-20 flex flex-col gap-10">
         <div className="flex justify-between gap-10">
           <div className="flex w-1/2 flex-col gap-7">

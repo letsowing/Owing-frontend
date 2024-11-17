@@ -1,4 +1,5 @@
 import { BsFeather } from 'react-icons/bs'
+import { FaBook } from 'react-icons/fa'
 import { GoPerson } from 'react-icons/go'
 import { HiOutlineTrash } from 'react-icons/hi'
 import { LuSettings } from 'react-icons/lu'
@@ -8,29 +9,34 @@ import { TbCirclesRelation } from 'react-icons/tb'
 
 export const MENU_LIST = [
   {
-    icon: BsFeather,
-    text: '스토리 원고',
-    path: 'scenarioManagement',
-  },
-  {
-    icon: TbCirclesRelation,
-    text: '인물관계도',
-    path: 'characterRelationship',
-  },
-  {
-    icon: GoPerson,
-    text: '캐릭터',
-    path: 'character',
+    icon: FaBook,
+    text: '작품',
+    path: 'projectInfo',
   },
   {
     icon: RiEarthFill,
     text: '세계관',
-    path: 'worldView',
+    path: 'universe',
+  },
+  {
+    icon: GoPerson,
+    text: '캐릭터',
+    path: 'cast',
+  },
+  {
+    icon: TbCirclesRelation,
+    text: '인물관계도',
+    path: 'castRelationship',
+  },
+  {
+    icon: BsFeather,
+    text: '스토리 원고',
+    path: 'storyManagement',
   },
   {
     icon: HiOutlineTrash,
     text: '휴지통',
-    path: 'trash',
+    path: 'trashCan',
   },
   {
     icon: LuHelpCircle,

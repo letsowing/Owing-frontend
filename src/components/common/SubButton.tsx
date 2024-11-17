@@ -1,13 +1,15 @@
 interface SubButtonProps {
   value: string
+  disabled?: boolean
   onClick?: () => void
 }
 
-const SubButton = ({ value, onClick }: SubButtonProps) => {
+const SubButton = ({ value, disabled, onClick }: SubButtonProps) => {
   return (
     <button
-      className="bg-verylightgray dark:bg-verydarkblack h-[50px] w-full rounded-xl px-6 py-2 font-medium text-redorange dark:text-blue"
+      className="h-[50px] w-full rounded-xl bg-verylightgray px-6 py-2 font-medium text-redorange dark:bg-verydarkblack dark:text-blue"
       onClick={onClick}
+      disabled={disabled}
     >
       {value}
     </button>

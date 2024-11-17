@@ -12,3 +12,26 @@ export interface FolderItem {
   description: string
   files: FileItem[]
 }
+
+export interface FolderSummary {
+  id: number
+  name: string
+}
+
+export interface PatchFolderPositionRequest {
+  beforeId: number | null
+  afterId: number | null
+  projectId: number
+}
+
+export interface PostFileRequest {
+  folderId: number
+  name: string
+  imageUrl?: string
+}
+
+export interface PatchFilePositionRequest {
+  beforeId: number | null
+  afterId: number | null
+  folderId: number
+}

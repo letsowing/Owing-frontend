@@ -14,9 +14,9 @@ const QuickAccess = ({
   onProjectClick,
 }: QuickAccessProps) => {
   return (
-    <div className="flex flex-col">
-      <label className="gap-1 text-sm font-semibold text-redorange dark:text-blue">
-        Quick Access
+    <div className="w-full">
+      <label className="text-sm font-semibold text-redorange dark:text-blue">
+        바로가기
       </label>
       <div className="mt-6">
         <ProjectCarousel

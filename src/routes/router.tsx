@@ -1,16 +1,18 @@
 import FolderTabLayout from '@layouts/FolderTabLayout'
 import HeaderTabLayout from '@layouts/HeaderTabLayout'
 
-import CharacterPage from '@pages/CharacterPage'
-import CharacterRelationshipPage from '@pages/CharacterRelationshipPage'
+import CastPage from '@pages/CastPage'
+import CastRelationshipPage from '@pages/CastRelationshipPage'
 import ContactUsPage from '@pages/ContactUsPage'
 import Landing from '@pages/LandingPage'
 import Login from '@pages/LoginPage'
 import Main from '@pages/MainPage'
+import ProjectInfoPage from '@pages/ProjectInfoPage'
 import Register from '@pages/RegisterPage'
-import ScenarioManagementPage from '@pages/ScenarioManagementPage'
-import ScenarioPage from '@pages/ScenarioPage'
-import WorldViewPage from '@pages/WorldViewPage'
+import StoryManagementPage from '@pages/StoryManagementPage'
+import StoryPage from '@pages/StoryPage'
+import TrashCanPage from '@pages/TrashCanPage'
+import UniversePage from '@pages/UniversePage'
 
 import App from '@/App'
 import { createBrowserRouter } from 'react-router-dom'
@@ -33,12 +35,20 @@ const router = createBrowserRouter([
             element: <ContactUsPage />,
           },
           {
-            path: 'characterRelationship',
-            element: <CharacterRelationshipPage />,
+            path: 'castRelationship',
+            element: <CastRelationshipPage />,
           },
           {
             path: 'main',
             element: <Main />,
+          },
+          {
+            path: 'projectInfo',
+            element: <ProjectInfoPage />,
+          },
+          {
+            path: 'login',
+            element: <Login />,
           },
         ],
       },
@@ -46,30 +56,30 @@ const router = createBrowserRouter([
         element: <FolderTabLayout />,
         children: [
           {
-            path: 'scenarioManagement/:projectId',
-            element: <ScenarioManagementPage />,
+            path: 'storyManagement/:projectId',
+            element: <StoryManagementPage />,
           },
           {
-            path: 'character/:projectId',
-            element: <CharacterPage />,
+            path: 'cast',
+            element: <CastPage />,
           },
           {
-            path: 'scenario/:projectId',
-            element: <ScenarioPage />,
+            path: 'story/:storyId',
+            element: <StoryPage />,
           },
           {
-            path: 'worldView/:projectId',
-            element: <WorldViewPage />,
+            path: 'universe',
+            element: <UniversePage />,
           },
         ],
       },
       {
-        path: 'login',
-        element: <Login />,
-      },
-      {
         path: 'register',
         element: <Register />,
+      },
+      {
+        path: 'trashCan',
+        element: <TrashCanPage />,
       },
     ],
   },

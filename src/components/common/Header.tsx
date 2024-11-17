@@ -1,11 +1,13 @@
 import React from 'react'
 
+import useMemberStore from '@stores/memberStore'
 import { useThemeStore } from '@stores/themeStore'
 
 import useNavigation from '@hooks/useNavigation'
 
 import DarkHeaderOwing from '@assets/common/DarkHeaderOwing.png'
 import HeaderOwing from '@assets/common/HeaderOwing.png'
+import { postLogout } from '@services/authService'
 
 const LeftHeader: React.FC = () => {
   const { isDarkMode } = useThemeStore()
@@ -26,27 +28,38 @@ const LeftHeader: React.FC = () => {
 
 const RightHeader: React.FC = () => {
   const { goToLanding, goToContactUs, goToLogin } = useNavigation()
+  const { isLoggedIn, logout } = useMemberStore()
+
+  const handleAuthClick = () => {
+    if (isLoggedIn) {
+      logout()
+      postLogout()
+      goToLanding()
+    } else {
+      goToLogin()
+    }
+  }
+
   return (
     <nav className="flex items-center space-x-12">
       <button
         onClick={goToLanding}
         className="bg-gradient-to-b from-redorange to-orange bg-clip-text font-bold text-transparent dark:from-blue dark:to-skyblue"
       >
-        How to use
+        서비스 소개
       </button>
-
       <button
-        onClick={goToLogin}
+        onClick={handleAuthClick}
         className="bg-gradient-to-b from-redorange to-orange bg-clip-text font-bold text-transparent dark:from-blue dark:to-skyblue"
       >
-        Logout
+        {isLoggedIn ? '로그아웃' : '로그인'}
       </button>
 
       <button
         onClick={goToContactUs}
         className="rounded-full bg-gradient-to-r from-redorange to-orange px-6 py-2 font-bold text-white dark:from-blue dark:to-skyblue"
       >
-        Contact us
+        문의하기
       </button>
     </nav>
   )

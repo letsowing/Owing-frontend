@@ -8,10 +8,13 @@ export default {
     extend: {
       colors: {
         beige: '#FDF8F3',
+        darkbeige: '#FFECD8',
         orange: '#EF931A',
         redorange: '#FB5D2B',
         lightredorange: '#FF9060',
+        blush: '#ff8080',
 
+        whitegray: '#E8E8E8',
         verylightgray: '#F8F8F8',
         lightgray: '#CFCDCD',
         gray: '#676767',
@@ -21,7 +24,9 @@ export default {
 
         // dark mode
         coldbeige: '#F5F7FF',
+        darkcoldbeige: '#DDEBFF',
         skyblue: '#C3DCFE',
+        cornflowerblue: '#809CFF',
         blue: '#3082F6',
         lightdarkgray: '#464646',
         darkblack: '#262627',
@@ -55,6 +60,7 @@ export default {
   },
   plugins: [
     require('tailwind-scrollbar-hide'),
+    require('tailwind-scrollbar')({ nocompatible: true }),
     plugin(function ({ matchUtilities, theme }) {
       matchUtilities(
         {

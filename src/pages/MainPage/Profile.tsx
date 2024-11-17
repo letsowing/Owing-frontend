@@ -1,22 +1,20 @@
-import DemoProfile from '@assets/profile/DemoProfile.png'
-
 interface ProfileProps {
   member: {
-    imageUrl: string
-    name: string
+    profileUrl: string
+    nickname: string
   }
 }
 
 const Profile = ({ member }: ProfileProps) => {
   return (
-    <div className="flex h-[14rem] flex-col items-center rounded-3xl bg-beige dark:bg-coldbeige xl:w-[15rem] 2xl:w-[20rem]">
-      <div className="m-auto h-[8rem] w-[8rem] overflow-hidden rounded-2xl bg-gray">
-        {/* 시연용 데이터 추가 */}
-        <img src={DemoProfile} alt="DemoProfile" />
-        {/* <img src={member.imageUrl} /> */}
-      </div>
-      <label className="mb-5 text-2xl font-semibold dark:text-darkblack">
-        {member.name}
+    <div className="flex h-60 w-64 flex-col items-center justify-center rounded-3xl bg-beige dark:bg-coldbeige">
+      <img
+        src={member.profileUrl}
+        alt="DemoProfile"
+        className="w-36 rounded-2xl"
+      />
+      <label className="mt-5 text-2xl font-semibold dark:text-darkblack">
+        {member.nickname}
       </label>
     </div>
   )

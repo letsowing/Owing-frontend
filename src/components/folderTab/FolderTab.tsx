@@ -16,24 +16,24 @@ interface FolderTabProps {
   projectId: number
   isOpen: boolean
   onClose: () => void
-  setSelectedFolderId: (folderId: number) => void
-  setSelectedFileId: (fileId: number) => void
   currentService: any
 }
 
 const FolderTab: React.FC<FolderTabProps> = ({
   projectId,
-  setSelectedFolderId,
-  setSelectedFileId,
   isOpen,
   onClose,
   currentService,
 }) => {
   const { items, setItems } = useDnd()
-  const [activeFolderId, setActiveFolderId] = useState<number | null>(null)
   const [isEditing, setIsEditing] = useState(false)
   const [newFolderName, setNewFolderName] = useState('')
-  const currentProject = useProjectStore((state) => state.currentProject)
+  const {
+    currentProject,
+    selectedFolderId,
+    setSelectedFolderId,
+    setSelectedFileId,
+  } = useProjectStore()
 
   const editableRef = useRef<HTMLDivElement>(null)
 
@@ -42,6 +42,11 @@ const FolderTab: React.FC<FolderTabProps> = ({
   }
 
   const handleSaveFolder = async () => {
+    const trimmedFolderName = newFolderName.trim()
+    if (!trimmedFolderName) {
+      setIsEditing(false)
+      return
+    }
     try {
       const folderData = {
         projectId,
@@ -49,6 +54,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
         description: 'This is a folder description',
       }
       const newFolder = await currentService.postFolder(folderData)
+      newFolder.files = []
       setItems([...items, newFolder])
     } catch (error) {
       console.error('새 폴더 생성 실패:', error)
@@ -59,7 +65,9 @@ const FolderTab: React.FC<FolderTabProps> = ({
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      handleSaveFolder()
+      if (e.nativeEvent.isComposing === false) {
+        handleSaveFolder()
+      }
     }
   }
 
@@ -71,46 +79,45 @@ const FolderTab: React.FC<FolderTabProps> = ({
 
   const handleSelectFolder = (folder: FolderItem) => {
     setSelectedFolderId(folder.id)
-    setActiveFolderId(folder.id)
+    if (folder.files.length > 0) {
+      setSelectedFileId(folder.files[0].id)
+    }
   }
 
   return (
     <div
-      className={`h-full bg-beige transition-all duration-300 ease-in-out dark:bg-coldbeige ${
+      className={`relative h-full bg-beige transition-all duration-300 ease-in-out dark:bg-coldbeige ${
         isOpen ? 'w-72' : 'w-0'
       } overflow-hidden`}
     >
-      <div className="flex justify-between p-4">
-        <p className="truncate font-bold">{currentProject.title}</p>
+      <div className="sticky top-0 z-10 bg-beige dark:bg-coldbeige">
+        <div className="flex justify-between p-4">
+          <p className="truncate font-bold">{currentProject.title}</p>
+          <button
+            onClick={onClose}
+            className="mt-1 flex w-8 justify-end text-darkgray"
+          >
+            <RiCloseLargeLine />
+          </button>
+        </div>
+
         <button
-          onClick={onClose}
-          className="mt-1 flex w-8 justify-end text-darkgray"
+          onClick={handleCreateFolder}
+          className="mx-4 mb-4 flex h-10 w-52 items-center justify-center rounded-md border border-solid border-whitegray bg-white text-sm dark:bg-darkgray"
         >
-          <RiCloseLargeLine />
+          <FaPlus className="dark:text-white" size={12} />
+          <p className="px-1 dark:text-white">Create Folder</p>
         </button>
       </div>
-
-      <button
-        onClick={handleCreateFolder}
-        className="mx-4 mb-4 flex h-10 w-52 items-center justify-center rounded-md border border-solid bg-white text-sm dark:bg-darkgray"
-        style={{ borderColor: '#e8e8e8' }}
-      >
-        <FaPlus className="dark:text-white" size={12} />
-        <p className="px-1 dark:text-white">Create Folder</p>
-      </button>
-
-      <ul
-        className="m-0 p-0"
-        style={{ maxHeight: '780px', overflow: 'overlay' }}
-      >
+      <ul className="max-h-[780px] overflow-y-auto scrollbar-thin scrollbar-track-beige scrollbar-thumb-lightredorange dark:scrollbar-track-coldbeige dark:scrollbar-thumb-skyblue">
         {items.map((folder: FolderItem, index: number) => (
           <FolderList
             key={folder.id}
-            folder={folder}
+            folders={items}
             index={index}
             onSelectFolder={handleSelectFolder}
             onSelectFile={setSelectedFileId}
-            isActive={activeFolderId === folder.id}
+            isActive={selectedFolderId === folder.id}
             currentService={currentService}
           />
         ))}

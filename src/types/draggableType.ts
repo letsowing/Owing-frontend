@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { FileItem } from '@types'
+
 export interface DraggableBoxProps {
-  id: number
   index: number
-  name: string
-  description: string
+  files: FileItem[]
   folderId: number
-  imageUrl?: string
   currentService: any
+  onSelectFile?: (id: number) => void
 }

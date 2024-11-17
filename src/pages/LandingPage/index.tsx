@@ -1,8 +1,12 @@
 import Card from '@pages/LandingPage/Card'
-import CharacterRelationshipGrid from '@pages/LandingPage/CharacterRelationshipGrid'
+import CastRelationshipGrid from '@pages/LandingPage/CastRelationshipGrid'
 import Footer from '@pages/LandingPage/Footer'
 import Ribbon from '@pages/LandingPage/Ribbon'
 import Title from '@pages/LandingPage/Title'
+
+import useMemberStore from '@stores/memberStore'
+
+import useNavigation from '@hooks/useNavigation'
 
 import AiHelperIcon from '@assets/landing/aiHelper.png'
 import DashboardIcon from '@assets/landing/dashboard.png'
@@ -13,12 +17,22 @@ import MemoIcon from '@assets/landing/memo.png'
 import TemplateIcon from '@assets/landing/template.png'
 import UniverseIcon from '@assets/landing/universe.png'
 import { CARD_LIST } from '@constants/cardList'
-import { INFO_LIST } from '@constants/characterRelationshipInfoList'
+import { INFO_LIST } from '@constants/castRelationshipInfoList'
 import { motion } from 'framer-motion'
 import { SlArrowDown } from 'react-icons/sl'
-import { Link } from 'react-router-dom'
 
 const Landing = () => {
+  const { goToMain, goToLogin } = useNavigation()
+  const isLoggedIn = useMemberStore((state) => state.isLoggedIn)
+
+  const handleStartClick = () => {
+    if (isLoggedIn) {
+      goToMain()
+    } else {
+      goToLogin()
+    }
+  }
+
   return (
     <div className="w-full" style={{ minHeight: '1080px' }}>
       <div className="mx-auto mt-48 py-8">
@@ -29,14 +43,12 @@ const Landing = () => {
         />
 
         <div className="flex flex-col items-center justify-center">
-          <Link to="/main">
-            <img
-              src={GetStartedIcon}
-              alt="getStarted"
-              className="mb-16 mt-52 h-auto w-96"
-            />
-          </Link>
-
+          <img
+            src={GetStartedIcon}
+            alt="getStarted"
+            className="mb-16 mt-52 h-auto w-96"
+            onClick={handleStartClick}
+          />
           <div className="mb-12 animate-bounce text-4xl text-lightgray">
             <SlArrowDown />
           </div>
@@ -232,7 +244,7 @@ const Landing = () => {
             transition={{ ease: 'easeInOut', duration: 0.6 }}
             className="mx-80 mt-32"
           >
-            <CharacterRelationshipGrid infoList={INFO_LIST} />
+            <CastRelationshipGrid infoList={INFO_LIST} />
           </motion.div>
         </div>
 

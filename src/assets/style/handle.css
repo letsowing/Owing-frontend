@@ -1,0 +1,12 @@
+
+.react-flow.touch-flow .react-flow__handle {
+  width: 16px;
+  height: 16px;
+  background-color: #FF9060;
+  border-color: white;
+}
+
+
+.dark .react-flow.touch-flow .react-flow__handle {
+  background-color: #C3DCFE; 
+}

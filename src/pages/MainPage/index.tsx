@@ -1,73 +1,82 @@
 import { useCallback, useEffect, useState } from 'react'
 
-import ThemeToggleSwitch from '@components/common/DarkModeToggle'
-
+import useMemberStore from '@stores/memberStore'
 import { useMenuStore } from '@stores/menuStore'
 import { useProjectStore } from '@stores/projectStore'
 
 import { useModalManagement } from '@hooks/useModal'
 import useNavigation from '@hooks/useNavigation'
 
-import AllProjects from './AllScenario'
+import AllProjects from './AllProjects'
 import Dashboard from './Dashboard'
 import Profile from './Profile'
 import QuickAccess from './QuickAccess'
 import ProjectModal from './modal/ProjectModal'
 
-import { WORD_COUNT_STATS } from '@datas/wordCountStats'
-import { getMember } from '@services/memberService'
-import { postCreateProject } from '@services/projectService'
-import { getAllProjects } from '@services/projectService'
-import { Member, ModalType, Project, ProjectSummary } from '@types'
+import { getAllProjects, postCreateProject } from '@services/projectService'
+import { getDailyStats } from '@services/statsService'
+import { ModalType, Project, ProjectSummary } from '@types'
 
-const initialMember: Member = {
+const initialMember = {
   id: 0,
   email: '',
   name: '',
   nickname: '',
-  imageUrl: '',
+  profileUrl: '',
+}
+
+const initialDailyStats = {
+  todayCount: 0,
+  monthlyCount: 0,
+  monthlyAvgCount: 0,
+  graph: [
+    {
+      date: new Date(),
+      dailyCount: 0,
+    },
+  ],
 }
 
 const Main = () => {
   const { modals, openModal, closeModal } = useModalManagement()
   const { goToProject } = useNavigation()
   const { setCurrentProject } = useProjectStore()
-  const [member, setMember] = useState<Member>(initialMember)
+  const { member } = useMemberStore()
   const [projects, setProjects] = useState<ProjectSummary[]>([])
   const [sortedProjects, setSortedProjects] = useState<ProjectSummary[]>([])
+  const [dailyStats, setDailyStats] = useState(initialDailyStats)
   const setActivePath = useMenuStore((state) => state.setActivePath)
 
   useEffect(() => {
-    const fetchMember = async () => {
-      try {
-        const fetchedMember = await getMember(1)
-        setMember(fetchedMember)
-      } catch (error) {
-        console.error('회원 조회 실패', error)
-      }
-    }
     const fetchProjects = async () => {
       try {
-        const fetchedProjects = await getAllProjects()
-        setProjects(fetchedProjects.projects)
-        const sortedProjectsList = fetchedProjects.projects.sort(
-          (a: ProjectSummary, b: ProjectSummary) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-        )
+        const fetchedProjects = await getAllProjects('CREATED_AT')
+        setProjects(fetchedProjects)
+        const sortedProjectsList = await getAllProjects('ACCESSED_AT')
         setSortedProjects(sortedProjectsList)
       } catch (error) {
         console.error('프로젝트 리스트 조회 실패:', error)
       }
     }
-    fetchMember()
+
+    const fetchDailyStats = async () => {
+      try {
+        const fetchedDailyStats = await getDailyStats()
+        setDailyStats(fetchedDailyStats)
+      } catch (error) {
+        console.error('글자수 통계 데이터 조회 실패:', error)
+      }
+    }
+
     fetchProjects()
+    fetchDailyStats()
   }, [])
 
   const handleMoveProject = useCallback(
     (project: Project) => {
       setCurrentProject(project)
-      goToProject(project.id)
-      setActivePath('scenarioManagement')
+      goToProject()
+      setActivePath('projectInfo')
     },
     [goToProject, setActivePath, setCurrentProject],
   )
@@ -82,12 +91,15 @@ const Main = () => {
         try {
           const savedProject = await postCreateProject(
             project.title,
-            project.description || '',
-            project.category || '',
-            project.genres || [],
-            project.imageUrl,
+            project.description,
+            project.category,
+            project.genres,
+            project.coverUrl,
           )
           project.id = savedProject.id
+          project.accessedAt = savedProject.accessedAt
+          project.createdAt = savedProject.createdAt
+          project.updatedAt = savedProject.updatedAt
           handleMoveProject(project)
         } catch (error) {
           console.error('프로젝트 생성 실패:', error)
@@ -109,28 +121,23 @@ const Main = () => {
 
   return (
     <>
-      <div className="mx-[5%] flex w-[90%]">
-        <div className="mt-5 flex-col xl:w-[20%] 2xl:w-[25%]">
-          <Profile member={member} />
-          <div className="my-9">
+      <div className="container mx-auto px-4 md:px-8 lg:px-12">
+        <div className="flex flex-col gap-8 lg:flex-row">
+          <div className="mt-6 lg:w-1/4">
+            <Profile member={member || initialMember} />
             <Dashboard
-              todayWordCount={WORD_COUNT_STATS.todayWordCount}
-              monthTotalWordCount={WORD_COUNT_STATS.monthTotalWordCount}
-              monthAvgWordCount={WORD_COUNT_STATS.monthAvgWordCount}
-              dailyStats={WORD_COUNT_STATS.dailyStats}
+              todayWordCount={dailyStats.todayCount}
+              monthTotalWordCount={dailyStats.monthlyCount}
+              monthAvgWordCount={dailyStats.monthlyAvgCount}
+              dailyStats={dailyStats.graph}
             />
           </div>
-          <div className="flex w-[85%] justify-center">
-            <ThemeToggleSwitch />
-          </div>
-        </div>
-        <div className="mt-6 flex-col xl:w-[80%] 2xl:w-[75%]">
-          <QuickAccess
-            handleAddProject={handleAddProject}
-            projects={projects}
-            onProjectClick={handleMoveProject}
-          />
-          <div className="mb-20 mt-16 w-full dark:bg-darkblack">
+          <div className="lg:w-3/4">
+            <QuickAccess
+              handleAddProject={handleAddProject}
+              projects={projects}
+              onProjectClick={handleMoveProject}
+            />
             <AllProjects
               projects={sortedProjects}
               onProjectClick={handleMoveProject}

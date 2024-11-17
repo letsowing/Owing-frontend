@@ -10,7 +10,7 @@ interface MenuState {
 export const useMenuStore = create<MenuState>()(
   persist(
     (set) => ({
-      activePath: 'scenarioManagement',
+      activePath: 'storyManagement',
       setActivePath: (path: MenuPath) => set({ activePath: path }),
     }),
     {

@@ -18,19 +18,9 @@ const useNavigation = () => {
   )
 
   const goTo = useCallback(
-    (path: MenuPath, projectId?: number) => {
+    (path: MenuPath) => {
       setActivePath(path)
-      // 리터럴 타입으로 직접 체크
-      if (
-        projectId !== undefined &&
-        (path === 'character' ||
-          path === 'scenarioManagement' ||
-          path === 'worldView')
-      ) {
-        navigate(`/${path}/${projectId}`)
-      } else {
-        navigate(`/${path}`)
-      }
+      navigate(`/${path}`)
     },
     [navigate, setActivePath],
   )
@@ -42,13 +32,12 @@ const useNavigation = () => {
       goToLogin: () => navigate('/login'),
       goToRegister: () => navigate('/register'),
       goToContactUs: () => navigate('/contactUs'),
-      goToCharacterRelationship: () => navigate('/characterRelationship'),
-      goToScenarioManagement: () => navigate('/scenarioManagement'),
-      goToScenario: (id: number) => navigate(`/scenario/${id}`),
-      goToProject: (projectId: number) =>
-        navigate(`/scenarioManagement/${projectId}`),
-      goToWorldView: (projectId: number) => navigate(`/worldView/${projectId}`),
-      goToCharacter: (projectId: number) => navigate(`/character/${projectId}`),
+      goToStory: (storyId: number) => navigate(`/story/${storyId}`),
+      goToProject: () => navigate(`/projectInfo`),
+      goToStoryManagement: (projectId: number) =>
+        navigate(`/storyManagement/${projectId}`),
+      goToCast: () => navigate(`/cast`),
+      goToTrash: () => navigate(`/trashCan`),
     }),
     [navigate],
   )()

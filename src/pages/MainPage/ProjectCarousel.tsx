@@ -39,7 +39,7 @@ const ProjectCarousel = ({
   }
 
   return (
-    <div className="slider-container">
+    <>
       {totalSlides > 1 ? (
         <Slider {...settings}>
           <NewProject handleAddProject={handleAddProject} />
@@ -49,7 +49,7 @@ const ProjectCarousel = ({
               id={project.id}
               title={project.title}
               createdAt={project.createdAt}
-              imageUrl={project.imageUrl}
+              imageUrl={project.coverUrl}
               onProjectClick={() => handleProjectClick(project)}
             />
           ))}
@@ -57,7 +57,7 @@ const ProjectCarousel = ({
       ) : (
         <NewProject handleAddProject={handleAddProject} />
       )}
-    </div>
+    </>
   )
 }
 

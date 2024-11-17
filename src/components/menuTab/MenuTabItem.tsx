@@ -15,6 +15,11 @@ const MenuTabItem: React.FC<MenuTabItemProps> = ({
   isActive,
   onClickMenu,
 }) => {
+  let disabled = false
+  if (text === '도움말' || text === '설정') {
+    disabled = !disabled
+  }
+
   return (
     <div
       className={`flex cursor-pointer items-center justify-between p-3 ${
@@ -23,7 +28,9 @@ const MenuTabItem: React.FC<MenuTabItemProps> = ({
           : 'text-gray hover:bg-beige dark:text-coldbeige dark:hover:bg-coldbeige dark:hover:text-gray'
       }`}
       onClick={() => {
-        onClickMenu()
+        if (!disabled) {
+          onClickMenu()
+        }
       }}
     >
       <div className="flex items-center">
