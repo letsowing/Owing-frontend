@@ -1,7 +1,5 @@
 import axiosInstance from '@utils/httpCommons'
 
-import { trashFolder } from '@datas/trash'
-
 // 휴지통 리스트 조회
 export const getTrashcanList = async (projectId: number) => {
   try {
@@ -9,8 +7,6 @@ export const getTrashcanList = async (projectId: number) => {
       `/trashcans/folders?projectId=${projectId}`,
     )
     return response.data
-    // console.log(projectId)
-    // return trashFolder
   } catch (error) {
     console.error('휴지통 리스트 조회 실패:', error)
     throw error
