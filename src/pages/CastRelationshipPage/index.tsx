@@ -89,10 +89,23 @@ const FlowWithProvider: React.FC = () => {
     setIsEditable((prev) => !prev)
   }, [])
 
+  const refreshFolderList = useCallback(async () => {
+    try {
+      const list = await getFolderList(currentProject.id)
+      setFolderList(list)
+    } catch (error) {
+      console.error('폴더 목록을 가져오는데 실패했습니다:', error)
+    }
+  }, [currentProject.id])
+
   const handleCloseModal = useCallback(() => {
     closeModal()
     setIsEditable(false)
   }, [closeModal])
+
+  const handleFolderListUpdate = useCallback(async () => {
+    await refreshFolderList()
+  }, [refreshFolderList])
 
   const handleCastAction = useCallback(
     async (cast: Cast, selectedFolderId: number) => {
@@ -130,6 +143,7 @@ const FlowWithProvider: React.FC = () => {
             onSave: handleCastAction,
             onEdit: toggleEditMode,
             onClose: handleCloseModal,
+            onFolderListUpdate: handleFolderListUpdate,
           })
           setIsEditable(false)
         }
@@ -139,7 +153,14 @@ const FlowWithProvider: React.FC = () => {
         setIsLoading(false)
       }
     },
-    [folderList, handleCastAction, handleCloseModal, openModal, toggleEditMode],
+    [
+      folderList,
+      handleCastAction,
+      handleCloseModal,
+      handleFolderListUpdate,
+      openModal,
+      toggleEditMode,
+    ],
   )
 
   const handleAddCast = useCallback(async () => {
@@ -152,6 +173,7 @@ const FlowWithProvider: React.FC = () => {
       onSave: handleCastAction,
       onEdit: toggleEditMode,
       onClose: handleCloseModal,
+      onFolderListUpdate: handleFolderListUpdate,
     })
     setIsEditable(true)
   }, [
@@ -160,6 +182,7 @@ const FlowWithProvider: React.FC = () => {
     handleCastAction,
     toggleEditMode,
     handleCloseModal,
+    handleFolderListUpdate,
   ])
 
   const handleNodeRemove = useCallback(
@@ -266,6 +289,7 @@ const FlowWithProvider: React.FC = () => {
               onSave={handleCastAction}
               onEdit={() => setIsEditable(true)}
               onClose={handleCloseModal}
+              onFolderListUpdate={handleFolderListUpdate}
               type={ModalType.CHARACTER_RELATIONSHIP}
               cast={modal.cast}
             />

@@ -5,25 +5,27 @@ import editorConfig from './editorConfig'
 import { Editor } from '@tinymce/tinymce-react'
 
 interface StoryEditorProps {
-  initialValue: string
+  value: string
+  isDarkMode: boolean
   onEditorChange: (newContent: string) => void
   onSave: () => void
 }
 
 export const StoryEditor = ({
+  value,
+  isDarkMode,
   onEditorChange,
-  initialValue,
   onSave,
 }: StoryEditorProps) => {
   return (
     <div>
       <Editor
-        apiKey="xp2713ap1r9doy0rwb0yl6j9f2t804a7xo6dsd3qwlntso02"
-        initialValue={initialValue}
-        init={editorConfig}
+        apiKey={import.meta.env.VITE_TINY_MCE_ID}
+        value={value}
+        init={editorConfig(isDarkMode)}
         onEditorChange={onEditorChange}
       />
-      <div className="ms-3 mt-3 w-20 flex-row justify-end">
+      <div className="ms-3 mt-4 w-20 flex-row justify-end">
         <MainButton value="저장" onClick={onSave} />
       </div>
     </div>

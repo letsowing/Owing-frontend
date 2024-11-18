@@ -35,7 +35,6 @@ const createDirectoryService = (path: string) => ({
   postFolder: async (data: {
     projectId: number
     name: string
-    description: string
   }): Promise<FolderItem> => {
     try {
       const response = await axiosInstance.post(`${path}/folders/dnd`, data)

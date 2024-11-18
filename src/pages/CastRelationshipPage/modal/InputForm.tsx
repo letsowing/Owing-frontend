@@ -14,6 +14,7 @@ interface InputFormProps {
   folderList: FolderSummary[]
   onInputChange: (field: keyof Cast, value: string | number) => void
   onFolderSelect: (folderId: number) => void
+  onCreateFolder: () => void
 }
 
 const InputForm: React.FC<InputFormProps> = ({
@@ -23,6 +24,7 @@ const InputForm: React.FC<InputFormProps> = ({
   folderList,
   onInputChange,
   onFolderSelect,
+  onCreateFolder,
 }) => {
   return (
     <div className="flex flex-col space-y-9 pe-1">
@@ -75,8 +77,9 @@ const InputForm: React.FC<InputFormProps> = ({
           <FolderSelectList
             folders={folderList}
             selectedFolderId={selectedFolderId}
-            onFolderSelect={onFolderSelect}
             isEditable={isEditable}
+            onFolderSelect={onFolderSelect}
+            handleCreateFolder={onCreateFolder}
           />
         </div>
       </div>
@@ -84,7 +87,7 @@ const InputForm: React.FC<InputFormProps> = ({
         labelValue="세부사항"
         value={cast.description || ''}
         isRequired={false}
-        maxLength={1000}
+        maxLength={5000}
         isEditable={isEditable}
         onChange={(value) => onInputChange('description', value)}
       />

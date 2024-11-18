@@ -1,8 +1,8 @@
 import { useThemeStore } from '@stores/themeStore'
 
-import Logo from '../../../public/logo.svg'
-import NightLogo from '../../../public/logo_night.svg'
 import GoogleOAuth from './GoogleOAuth'
+import Logo from '/logo.svg'
+import NightLogo from '/logo_night.svg'
 
 const Login = () => {
   const { isDarkMode } = useThemeStore()

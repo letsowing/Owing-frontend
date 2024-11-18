@@ -69,7 +69,7 @@ const ProjectInfoForm = ({
       <TextAreaField
         labelValue="작품 설명"
         isRequired={true}
-        maxLength={1000}
+        maxLength={5000}
         isEditable={isEditable}
         value={project.description || ''}
         onChange={(value) => onInputChange('description', value)}

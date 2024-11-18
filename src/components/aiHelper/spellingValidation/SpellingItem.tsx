@@ -1,7 +1,7 @@
-import { SpellingError } from '@types'
+import { SpellingMessage } from '@types'
 
 interface SpellingErrorItemProps {
-  error: SpellingError
+  error: SpellingMessage
 }
 
 export const SpellingItem = ({ error }: SpellingErrorItemProps) => {

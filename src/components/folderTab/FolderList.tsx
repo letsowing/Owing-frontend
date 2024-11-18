@@ -17,6 +17,7 @@ import { PiFilePlusLight, PiTrashSimpleLight } from 'react-icons/pi'
 interface FolderListProps {
   folders: FolderItem[]
   index: number
+  selectedFileId: number | null
   onSelectFolder: (folder: FolderItem) => void
   onSelectFile: (fileId: number | null) => void
   isActive: boolean
@@ -26,6 +27,7 @@ interface FolderListProps {
 const FolderList: React.FC<FolderListProps> = ({
   folders,
   index,
+  selectedFileId,
   onSelectFolder,
   onSelectFile,
   isActive,
@@ -63,7 +65,8 @@ const FolderList: React.FC<FolderListProps> = ({
     }
   }
 
-  const handleSaveFolderName = async () => {
+  const handleSaveFolderName = async (e: React.FormEvent) => {
+    e.preventDefault()
     const trimmedFolderName = newFolderName.trim()
     if (trimmedFolderName === '' || trimmedFolderName === folder.name) {
       setNewFolderName(folder.name)
@@ -86,7 +89,8 @@ const FolderList: React.FC<FolderListProps> = ({
   const handleFolderNameKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       if (e.nativeEvent.isComposing === false) {
-        handleSaveFolderName()
+        e.preventDefault()
+        handleSaveFolderName(e)
       }
     }
   }
@@ -98,7 +102,8 @@ const FolderList: React.FC<FolderListProps> = ({
     setTimeout(() => inputRef.current?.focus(), 0)
   }
 
-  const handleSaveFile = async () => {
+  const handleSaveFile = async (e: React.FormEvent) => {
+    e.preventDefault()
     const trimmedFileName = newFileName.trim()
     if (!trimmedFileName) {
       setIsFileEditing(false)
@@ -127,7 +132,8 @@ const FolderList: React.FC<FolderListProps> = ({
   const handleFileNameKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       if (e.nativeEvent.isComposing === false) {
-        handleSaveFile()
+        e.preventDefault()
+        handleSaveFile(e)
       }
     }
   }
@@ -275,10 +281,11 @@ const FolderList: React.FC<FolderListProps> = ({
         <ul className="pe-2 ps-4">
           {folder.files?.map((file: FileItem, fileIndex: number) => (
             <FolderListItem
-              key={file.id}
+              key={`${folder.id}-${file.id}`}
               index={fileIndex}
               folderId={folder.id}
               files={folder.files}
+              isActive={selectedFileId === file.id}
               currentService={currentService}
               onSelectFile={(id) => {
                 onSelectFolder(folders[index])

@@ -1,7 +1,7 @@
 import CastTrashContent from './CastTrashContent'
 import RestoreHeader from './RestoreHeader'
-import StoryTrashContent from './StoryTrashContent'
 import UniverseTrashContent from './UniverseTrashContent'
+import StoryTrashContent from './story/StoryTrashContent'
 
 import { TrashContentProps } from '@types'
 

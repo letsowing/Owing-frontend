@@ -18,7 +18,7 @@ export const FeatureButton: React.FC<FeatureButtonProps> = ({
       onClick={onClick}
       className="flex w-full items-center rounded-lg border border-lightgray p-4 text-left hover:bg-beige dark:hover:bg-coldbeige"
     >
-      <span className="mr-4 flex-shrink-0 text-2xl">{icon}</span>
+      <span className="mr-4 w-8 flex-shrink-0 text-2xl">{icon}</span>
       <div>
         <p className="text-xs text-gray">{description}</p>
         <h3 className="font-medium">{title}</h3>

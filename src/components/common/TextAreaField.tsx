@@ -13,7 +13,7 @@ const TextAreaField: React.FC<TextAreaFieldProps> = ({
   value,
   labelValue,
   isRequired = false,
-  maxLength = 1000,
+  maxLength = 5000,
   isEditable = true,
   onChange,
 }) => {

@@ -11,8 +11,8 @@ const ThemeToggleSwitch = () => {
       >
         <div className="absolute top-1 h-10 w-24 translate-x-1 rounded-lg bg-white transition-transform duration-300 ease-in-out dark:translate-x-24"></div>
         <div className="flex items-center justify-between px-8">
-          <span className="z-10 text-orange dark:text-gray">Light</span>
-          <span className="z-10 text-gray dark:text-blue">Dark</span>
+          <span className="z-10 text-orange dark:text-gray">밝게</span>
+          <span className="z-10 text-gray dark:text-blue">어둡게</span>
         </div>
       </button>
     </div>
