@@ -31,7 +31,7 @@ export default function DnDWrapper({
         {selectedFolder &&
           selectedFolder.files.map((file, index) => (
             <DraggableBox
-              key={file.id}
+              key={`${selectedFolder.id}-${file.id}`}
               index={index}
               files={selectedFolder.files}
               folderId={selectedFolder.id}

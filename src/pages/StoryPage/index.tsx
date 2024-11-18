@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { AIHelper } from '@components/aiHelper/AIHelper'
 import { AIWindow } from '@components/aiHelper/AIWindow'
@@ -8,12 +8,13 @@ import { SpellingView } from '@components/aiHelper/spellingValidation/SpellingVi
 import { ValidationView } from '@components/aiHelper/storyValidation/ValidationView'
 
 import { useProjectStore } from '@stores/projectStore'
+import { useThemeStore } from '@stores/themeStore'
 
 import { useConfirm } from '@hooks/useConfirm'
 
 import { StoryEditor } from './StoryEditor'
 
-import { getStory, postStory } from '@services/storyService'
+import { debouncedSave, getStory, postStory } from '@services/storyService'
 import { Feature } from '@types'
 import { Loader } from 'lucide-react'
 import { createPortal } from 'react-dom'
@@ -21,8 +22,9 @@ import { createPortal } from 'react-dom'
 const StoryWrapper = () => {
   const { showSuccessDialog } = useConfirm()
   const { selectedFileId } = useProjectStore()
+  const isDarkMode = useThemeStore((state) => state.isDarkMode)
 
-  const storyContentRef = useRef('')
+  const [content, setContent] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   const [selectedFeature, setSelectedFeature] = useState<Feature['id'] | null>(
@@ -31,18 +33,33 @@ const StoryWrapper = () => {
 
   useEffect(() => {
     const fetchStoryContent = async () => {
+      if (!selectedFileId) return
+
+      setIsLoading(true)
       try {
-        setIsLoading(true)
-        const data = await getStory(selectedFileId!)
-        storyContentRef.current = data.content || ''
+        const data = await getStory(selectedFileId)
+        setContent(data.content || '')
       } catch (error) {
         console.error('스토리 원고 조회 실패', error)
       } finally {
         setIsLoading(false)
       }
     }
+
     fetchStoryContent()
   }, [selectedFileId])
+
+  useEffect(() => {
+    setIsLoading(true)
+
+    setTimeout(() => setIsLoading(false), 100)
+  }, [isDarkMode])
+
+  useEffect(() => {
+    if (selectedFileId && content) {
+      debouncedSave(selectedFileId, content)
+    }
+  }, [content, selectedFileId])
 
   const renderContent = () => {
     switch (selectedFeature) {
@@ -66,17 +83,17 @@ const StoryWrapper = () => {
     setSelectedFeature(null)
   }
 
-  const handleEditorChange = (newContent: string) => {
-    storyContentRef.current = newContent
-  }
+  const handleEditorChange = useCallback((newContent: string) => {
+    setContent(newContent)
+  }, [])
 
+  // 수동 저장 버튼을 위한 핸들러
   const handleSave = async () => {
     try {
-      await postStory(selectedFileId!, { content: storyContentRef.current })
+      await postStory(selectedFileId!, { content })
+      showSuccessDialog('저장되었습니다.')
     } catch (error) {
       console.error('원고 저장 실패:', error)
-    } finally {
-      showSuccessDialog('저장되었습니다.')
     }
   }
 
@@ -104,9 +121,10 @@ const StoryWrapper = () => {
         document.body,
       )}
 
-      <div className="relative z-0 mt-10">
+      <div className="relative z-0 mx-2">
         <StoryEditor
-          initialValue={storyContentRef.current}
+          value={content}
+          isDarkMode={isDarkMode}
           onEditorChange={handleEditorChange}
           onSave={handleSave}
         />

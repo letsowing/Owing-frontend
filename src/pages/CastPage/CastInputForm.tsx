@@ -69,7 +69,7 @@ const CastInputForm: React.FC<CastInputFormProps> = ({
           value={castData.description || ''}
           labelValue="상세 정보"
           isRequired={false}
-          maxLength={1000}
+          maxLength={5000}
           isEditable={isEditable}
           onChange={(value) => onInputChange('description', value)}
         />

@@ -22,7 +22,7 @@ const UniverseTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
         {selection.selectedFolder &&
           selection.selectedFolder.files.map((file) => (
             <UniverseContentItem
-              key={file.id}
+              key={`${selection.selectedFolder!.id}-${file.id}`}
               name={file.name}
               description={file.description}
               imageUrl=""

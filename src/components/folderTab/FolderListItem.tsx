@@ -14,6 +14,7 @@ interface FolderListItemProps {
   index: number
   folderId: number
   files: FileItem[]
+  isActive: boolean
   currentService: any
   onSelectFile: (fileId: number) => void
 }
@@ -22,6 +23,7 @@ export default function FolderListItem({
   index,
   folderId,
   files,
+  isActive,
   currentService,
   onSelectFile,
 }: FolderListItemProps) {
@@ -53,7 +55,8 @@ export default function FolderListItem({
     setTimeout(() => moveCursorToEnd(), 0)
   }
 
-  const handleSaveFileName = async () => {
+  const handleSaveFileName = async (e: React.FormEvent) => {
+    e.preventDefault()
     const trimmedFileName = newFileName.trim()
     if (!trimmedFileName || trimmedFileName === file.name) {
       setNewFileName(file.name)
@@ -74,7 +77,8 @@ export default function FolderListItem({
   const handleFileNameKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       if (e.nativeEvent.isComposing === false) {
-        handleSaveFileName()
+        e.preventDefault()
+        handleSaveFileName(e)
       }
     }
   }
@@ -185,7 +189,9 @@ export default function FolderListItem({
             className="h-auto w-40 max-w-[130px] resize-none overflow-hidden whitespace-pre-wrap bg-transparent px-2 text-base outline-none"
           ></div>
         ) : (
-          <p className="mx-2 max-w-32 truncate text-[15px] text-darkgray">
+          <p
+            className={`mx-2 max-w-32 truncate text-[15px] ${isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'}`}
+          >
             {file.name}
           </p>
         )}

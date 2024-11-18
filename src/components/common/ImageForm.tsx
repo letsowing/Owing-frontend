@@ -89,7 +89,7 @@ const ImageForm: React.FC<ImageFormProps> = ({
               AI를 활용하여 이미지를 생성할 수 있어요!
             </span>
           </div>
-          <span className="mx-2 rounded-full bg-orange bg-opacity-20 px-2 text-sm text-redorange dark:bg-coldbeige dark:text-blue">
+          <span className="mx-2 rounded-full bg-orange bg-opacity-20 px-2 text-xs text-redorange dark:bg-coldbeige dark:text-blue">
             Click
           </span>
         </div>

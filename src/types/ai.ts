@@ -5,15 +5,19 @@ export type Feature = {
   description: string
 }
 
-export type Message = {
-  id?: number
+export type CrashMessage = {
   base: string
   add: string
   reason: string
-  createdAt: Date
 }
 
-export type SpellingError = {
+export type CrashCheck = {
+  id: number
+  crashCheckItemResponseList: CrashMessage[]
+  createdAt: string
+}
+
+export type SpellingMessage = {
   help: string
   errorIdx: number
   correctMethod: number
@@ -22,4 +26,10 @@ export type SpellingError = {
   end: number
   orgStr: string
   candWord: string
+}
+
+export type SpellingCheck = {
+  id: number
+  storySpellCheckResponseList: SpellingMessage[]
+  createdAt: string
 }
