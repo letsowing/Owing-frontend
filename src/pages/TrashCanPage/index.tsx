@@ -20,7 +20,7 @@ const TrashCanPage = () => {
       />
       <div className="flex h-full w-full flex-row">
         <FolderTab items={items} selection={selection} actions={actions} />
-        <main className="h-full w-full overflow-y-auto dark:bg-darkblack">
+        <main className="w-full overflow-y-auto scrollbar-hide dark:bg-darkblack">
           <Header isTabOpen={isTabOpen} />
           <TrashContent selection={selection} actions={actions} />
         </main>

@@ -31,17 +31,25 @@ const FolderTab: React.FC<FolderTabProps> = ({
   const {
     currentProject,
     selectedFolderId,
+    selectedFileId,
     setSelectedFolderId,
     setSelectedFileId,
   } = useProjectStore()
 
   const editableRef = useRef<HTMLDivElement>(null)
 
+  useEffect(() => {
+    if (isEditing && editableRef.current) {
+      editableRef.current.focus()
+    }
+  }, [isEditing])
+
   const handleCreateFolder = () => {
     setIsEditing(true)
   }
 
-  const handleSaveFolder = async () => {
+  const handleSaveFolder = async (e: React.FormEvent) => {
+    e.preventDefault()
     const trimmedFolderName = newFolderName.trim()
     if (!trimmedFolderName) {
       setIsEditing(false)
@@ -51,7 +59,6 @@ const FolderTab: React.FC<FolderTabProps> = ({
       const folderData = {
         projectId,
         name: newFolderName,
-        description: 'This is a folder description',
       }
       const newFolder = await currentService.postFolder(folderData)
       newFolder.files = []
@@ -66,16 +73,11 @@ const FolderTab: React.FC<FolderTabProps> = ({
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       if (e.nativeEvent.isComposing === false) {
-        handleSaveFolder()
+        e.preventDefault()
+        handleSaveFolder(e)
       }
     }
   }
-
-  useEffect(() => {
-    if (isEditing && editableRef.current) {
-      editableRef.current.focus()
-    }
-  }, [isEditing])
 
   const handleSelectFolder = (folder: FolderItem) => {
     setSelectedFolderId(folder.id)
@@ -106,7 +108,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
           className="mx-4 mb-4 flex h-10 w-52 items-center justify-center rounded-md border border-solid border-whitegray bg-white text-sm dark:bg-darkgray"
         >
           <FaPlus className="dark:text-white" size={12} />
-          <p className="px-1 dark:text-white">Create Folder</p>
+          <p className="px-1 dark:text-white">폴더 생성</p>
         </button>
       </div>
       <ul className="max-h-[780px] overflow-y-auto scrollbar-thin scrollbar-track-beige scrollbar-thumb-lightredorange dark:scrollbar-track-coldbeige dark:scrollbar-thumb-skyblue">
@@ -115,9 +117,10 @@ const FolderTab: React.FC<FolderTabProps> = ({
             key={folder.id}
             folders={items}
             index={index}
+            isActive={selectedFolderId === folder.id}
+            selectedFileId={selectedFileId}
             onSelectFolder={handleSelectFolder}
             onSelectFile={setSelectedFileId}
-            isActive={selectedFolderId === folder.id}
             currentService={currentService}
           />
         ))}

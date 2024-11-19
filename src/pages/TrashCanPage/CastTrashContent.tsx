@@ -1,15 +1,21 @@
 import React, { useEffect, useState } from 'react'
 
 import { useProjectStore } from '@stores/projectStore'
+import { useThemeStore } from '@stores/themeStore'
 
 import EmptyTrash from './EmptyTrash'
 import InputField from './InputField'
 
+import AlertOwing from '@assets/common/AlertOwing.png'
+import DarkAlertOwing from '@assets/common/DarkAlertOwing.png'
 import { getTrashcanContent } from '@services/trashService'
 import { Cast, TrashContentProps } from '@types'
 
 const CastTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
   const currentProject = useProjectStore((state) => state.currentProject)
+  const isDarkMode = useThemeStore((state) => state.isDarkMode)
+  const imageUrl =
+    selection.selectedFile?.imageUrl || isDarkMode ? DarkAlertOwing : AlertOwing
 
   const [cast, setCast] = useState<Cast>({
     id: '',
@@ -55,22 +61,18 @@ const CastTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
 
       <div className="flex w-full flex-col items-center">
         <div className="flex h-80 w-80 rounded-xl bg-coldbeige text-center">
-          {selection.selectedFile?.imageUrl ? (
-            <img
-              src={selection.selectedFile?.imageUrl}
-              alt="Cast"
-              className="h-full w-full object-cover"
-            />
-          ) : (
-            <div className="flex h-full items-center text-gray">No Image</div>
-          )}
+          <img
+            src={imageUrl}
+            alt="Cast"
+            className="h-full w-full object-cover"
+          />
         </div>
 
         <div className="w-full flex-1">
           <div className="w-full flex-col">
             <div className="mt-3">
               <InputField
-                value={cast.name}
+                value={cast.name || ''}
                 labelValue="이름"
                 isTextArea={false}
               />
@@ -78,14 +80,14 @@ const CastTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
             <div className="mt-3 flex justify-evenly gap-4">
               <div className="w-full">
                 <InputField
-                  value={cast.age.toString()}
+                  value={cast.age?.toString() || '0'}
                   labelValue="나이"
                   isTextArea={false}
                 />
               </div>
               <div className="w-full">
                 <InputField
-                  value={cast.gender}
+                  value={cast.gender || ''}
                   labelValue="성별"
                   isTextArea={false}
                 />
@@ -93,14 +95,14 @@ const CastTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
             </div>
             <div className="mt-3">
               <InputField
-                value={cast.role}
+                value={cast.role || ''}
                 labelValue="역할"
                 isTextArea={false}
               />
             </div>
             <div className="mt-3">
               <InputField
-                value={cast.description}
+                value={cast.description || ''}
                 labelValue="상세 정보"
                 isTextArea={true}
               />

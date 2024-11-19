@@ -1,8 +1,21 @@
-// src/configs/editorConfig.ts
-export const editorConfig = {
+export const editorConfig = (isDarkMode: boolean) => ({
   // 기본 설정
-  height: 500,
-  skin: 'snow',
+  height: '82vh',
+  resize: false,
+  // 다크모드 조건부 적용
+  skin: isDarkMode ? 'oxide-dark' : 'snow',
+  content_css: isDarkMode ? 'dark' : 'default',
+
+  content_style: `
+     body { 
+       font-family: Helvetica, Arial, sans-serif; 
+       font-size: 14px;
+       background-color: ${isDarkMode ? '#262627' : '#ffffff'};
+       color: ${isDarkMode ? '#fff' : '#161616'};
+     }
+
+   `,
+
   menubar: true,
   placeholder: 'Ask a question or post an update...',
   z_index: 100,
@@ -45,9 +58,6 @@ export const editorConfig = {
     'bullist numlist outdent indent | link image media table | ' +
     'removeformat | help | code fullscreen | pagebreak | searchreplace',
 
-  content_style:
-    'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-
   image_advtab: true,
   image_caption: true,
 
@@ -70,6 +80,6 @@ export const editorConfig = {
   autosave_interval: '30s',
   autosave_prefix: '{path}{query}-{id}-',
   autosave_restore_when_empty: false,
-}
+})
 
 export default editorConfig

@@ -33,7 +33,7 @@ export default function UniverseWrapper({
         {selectedFolder &&
           selectedFolder.files.map((file, index) => (
             <UniverseDraggableBox
-              key={file.id}
+              key={`${selectedFolder.id}-${file.id}`}
               index={index}
               files={selectedFolder.files}
               folderId={selectedFolder.id}

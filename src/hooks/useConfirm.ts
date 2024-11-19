@@ -66,10 +66,39 @@ export const useConfirm = () => {
     })
   }
 
+  const promptFolderName = async (): Promise<string | null> => {
+    const result = await Swal.fire({
+      title: '새 폴더 생성',
+      input: 'text',
+      inputLabel: '폴더 이름을 입력하세요',
+      inputPlaceholder: '새 폴더',
+      showCancelButton: true,
+      confirmButtonColor: '#FB5D2B',
+      cancelButtonColor: '#3082F6',
+      confirmButtonText: '생성',
+      cancelButtonText: '취소',
+      inputValidator: (value) => {
+        if (!value) {
+          return '폴더 이름을 입력해주세요'
+        }
+        if (value.length > 50) {
+          return '폴더 이름은 50자를 넘을 수 없습니다'
+        }
+        return null
+      },
+    })
+
+    if (result.isConfirmed) {
+      return result.value
+    }
+    return null
+  }
+
   return {
     confirmDelete,
     confirmAIImageGeneration,
     showSuccessDialog,
     showErrorDialog,
+    promptFolderName,
   }
 }

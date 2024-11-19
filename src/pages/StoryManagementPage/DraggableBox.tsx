@@ -138,14 +138,14 @@ export default function DraggableBox({
               onClick={handleCancel}
               className="text-md h-7 px-4 text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white dark:text-coldbeige dark:hover:bg-coldbeige dark:hover:text-darkgray"
             >
-              Cancel
+              취소
             </button>
             <button
               onClick={handleSave}
               className="text-md h-7 px-4 text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white dark:text-coldbeige dark:hover:bg-coldbeige dark:hover:text-darkgray"
               disabled={!isFormValid()}
             >
-              Save
+              저장
             </button>
           </div>
         </>

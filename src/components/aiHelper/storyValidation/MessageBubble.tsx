@@ -1,7 +1,12 @@
-import { Message } from '@types'
+import { CrashMessage } from '@types'
 import { Bot } from 'lucide-react'
 
-export const MessageBubble = ({ message }: { message: Message }) => {
+interface MessageBubbleProps {
+  message: CrashMessage
+  createdAt: string
+}
+
+export const MessageBubble = ({ message, createdAt }: MessageBubbleProps) => {
   return (
     <div className="relative pl-8">
       <div className="relative rounded-lg border border-lightgray bg-white p-4">
@@ -25,8 +30,8 @@ export const MessageBubble = ({ message }: { message: Message }) => {
         <br />
 
         {/* 시간 */}
-        <div className="-mb-2 mt-2 text-right text-xs">
-          {new Date(message.createdAt).toLocaleTimeString([], {
+        <div className="-mb-2 text-right text-xs">
+          {new Date(createdAt).toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
