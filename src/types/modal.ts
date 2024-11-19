@@ -23,6 +23,7 @@ export interface CastRelationshipModalProps extends ModalProps<Cast> {
   onSave: (data: Cast, folderId: number) => Promise<void>
   onEdit: () => void
   onClose: () => void
+  onFolderListUpdate: () => void
 }
 
 export interface ProjectModalProps extends ModalProps<Project> {

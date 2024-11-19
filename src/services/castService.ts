@@ -8,6 +8,7 @@ import {
   CastCoord,
   CastGraph,
   CustomEdge,
+  FolderItem,
   FolderSummary,
   PostCastRelationshipRequest,
   PostCastRelationshipResponse,
@@ -80,6 +81,19 @@ export const postCast = async (cast: PostCastRequest): Promise<Cast> => {
     }
   } catch (error) {
     console.error('Failed to update cast:', error)
+    throw error
+  }
+}
+
+export const postCastFolder = async (data: {
+  projectId: number
+  name: string
+}): Promise<FolderItem> => {
+  try {
+    const response = await axiosInstance.post('cast/folders/dnd', data)
+    return response.data
+  } catch (error) {
+    console.error('새 폴더 생성 실패:', error)
     throw error
   }
 }

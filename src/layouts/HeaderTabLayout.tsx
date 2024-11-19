@@ -8,14 +8,16 @@ import { useMenuTab } from '@hooks/useMenuTab'
 import { Outlet, useLocation } from 'react-router-dom'
 
 const HeaderTabLayout: React.FC = () => {
-  const { isTabOpen, tabWidth, toggleTab } = useMenuTab()
-
   const location = useLocation()
   const isNotTabPage =
     location.pathname === '/' ||
     location.pathname === '/main' ||
     location.pathname === '/contactUs' ||
     location.pathname === '/login'
+
+  const { isTabOpen, tabWidth, toggleTab } = useMenuTab({
+    isNotTabPage,
+  })
 
   return (
     <div className="flex h-screen">

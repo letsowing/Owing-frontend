@@ -1,4 +1,4 @@
-import EmptyTrash from './EmptyTrash'
+import EmptyTrash from '../EmptyTrash'
 import StoryContentItem from './StoryContentItem'
 import StoryTrashDetail from './StoryTrashDetail'
 
@@ -17,8 +17,6 @@ const StoryTrashContent: React.FC<TrashContentProps> = ({
     actions.setIsStoryDetail(true)
   }
 
-  console.log(selection.isStoryDetail)
-
   return (
     <>
       {selection.isStoryDetail ? (
@@ -28,7 +26,7 @@ const StoryTrashContent: React.FC<TrashContentProps> = ({
           {selection.selectedFolder &&
             selection.selectedFolder.files.map((file) => (
               <StoryContentItem
-                key={file.id}
+                key={`${selection.selectedFolder!.id}-${file.id}`}
                 name={file.name}
                 description={file.description}
                 onClickStoryTrash={() => handleSelectItem(file)}

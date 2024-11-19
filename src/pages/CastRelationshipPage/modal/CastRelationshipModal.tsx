@@ -3,14 +3,15 @@ import { useEffect, useState } from 'react'
 import ImageForm from '@components/common/ImageForm'
 import Modal from '@components/common/Modal'
 
+import { useProjectStore } from '@stores/projectStore'
+
 import { useConfirm } from '@hooks/useConfirm'
-// import TagField from '@components/common/TagField'
 import { useModalManagement } from '@hooks/useModal'
 
 import InputForm from './InputForm'
 
 import { Cast, CastRelationshipModalProps, ModalType } from '@types'
-import { postCastGenerateAiImage } from 'services/castService'
+import { postCastFolder, postCastGenerateAiImage } from 'services/castService'
 
 // const mockData = [
 //   { name: '1화', value: '1' },
@@ -36,12 +37,15 @@ const CastRelationshipModal = ({
   onEdit,
   onSave,
   onClose,
+  onFolderListUpdate,
 }: CastRelationshipModalProps) => {
-  const { confirmAIImageGeneration } = useConfirm()
+  const { confirmAIImageGeneration, promptFolderName } = useConfirm()
   const { modals } = useModalManagement()
   const [editableCast, setEditableCast] = useState<Cast>(initialCast)
   const [selectedFolderId, setSelectedFolderId] = useState<number>(folderId)
   const [isGenerating, setIsGenerating] = useState(false)
+  const [localFolderList, setLocalFolderList] = useState(folderList)
+  const currentProject = useProjectStore((state) => state.currentProject)
 
   useEffect(() => {
     if (modals.length > 0) {
@@ -111,12 +115,36 @@ const CastRelationshipModal = ({
     }
   }
 
+  const handleCreateFolder = async () => {
+    try {
+      const folderName = await promptFolderName()
+      if (folderName) {
+        const newFolder = await postCastFolder({
+          projectId: currentProject.id,
+          name: folderName,
+        })
+        const newFolderItem = {
+          id: newFolder.id,
+          name: folderName,
+        }
+        setLocalFolderList((prev) => [...prev, newFolderItem])
+
+        if (onFolderListUpdate) {
+          onFolderListUpdate()
+        }
+        setSelectedFolderId(newFolder.id)
+      }
+    } catch (error) {
+      console.error('폴더 생성 실패:', error)
+    }
+  }
+
   return (
     <Modal
       modalType={ModalType.CHARACTER_RELATIONSHIP}
       isValid={isFormValid()}
-      primaryButtonText={isEditable ? 'Save' : 'Edit'}
-      secondaryButtonText="Cancel"
+      primaryButtonText={isEditable ? '저장' : '편집'}
+      secondaryButtonText="취소"
       onPrimaryAction={handlePrimaryAction}
       onSecondaryAction={onClose}
     >
@@ -135,9 +163,10 @@ const CastRelationshipModal = ({
             isEditable={isEditable}
             cast={editableCast}
             selectedFolderId={selectedFolderId}
-            folderList={folderList}
+            folderList={localFolderList}
             onInputChange={handleInputChange}
             onFolderSelect={handleFolderSelect}
+            onCreateFolder={handleCreateFolder}
           />
           {/* {!isEditable && (
             <div className="mt-8">

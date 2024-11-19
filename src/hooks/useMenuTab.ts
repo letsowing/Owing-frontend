@@ -6,14 +6,16 @@ interface UseMenuTabProps {
   defaultWidth?: number
   collapsedWidth?: number
   autoOpenPaths?: string[]
+  isNotTabPage?: boolean
 }
 
 export const useMenuTab = ({
   defaultWidth = 256,
   collapsedWidth = 41,
-  autoOpenPaths = ['storyManagement'],
+  autoOpenPaths = ['storyManagement', 'projectInfo', 'story', 'universe'],
+  isNotTabPage = false,
 }: UseMenuTabProps = {}) => {
-  const [isTabOpen, setIsTabOpen] = useState(true)
+  const [isTabOpen, setIsTabOpen] = useState(!isNotTabPage)
   const [tabWidth, setTabWidth] = useState(defaultWidth)
   const location = useLocation()
 
@@ -30,6 +32,12 @@ export const useMenuTab = ({
     autoOpenPaths,
   ])
 
+  useEffect(() => {
+    if (isNotTabPage) {
+      setIsTabOpen(false)
+    }
+  }, [isNotTabPage])
+
   const toggleTab = () => {
     setIsTabOpen(!isTabOpen)
   }
@@ -37,6 +45,7 @@ export const useMenuTab = ({
   return {
     isTabOpen,
     tabWidth,
+    setIsTabOpen,
     toggleTab,
   }
 }

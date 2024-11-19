@@ -157,7 +157,7 @@ const ProjectModal = ({
         <TextAreaField
           labelValue="작품 설명"
           isRequired={isEditable}
-          maxLength={1000}
+          maxLength={5000}
           isEditable={isEditable}
           value={projectInput.description || ''}
           onChange={(value) => handleInputChange('description', value)}

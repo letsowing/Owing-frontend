@@ -224,13 +224,13 @@ export default function UniverseDraggableBox({
                 }`}
                 onClick={handleAiImage}
               >
-                + Create Image with AI
+                + AI 이미지 생성하기
               </button>
               <button
                 className="mt-2 h-10 px-4 text-sm text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
                 onClick={handleUploadClick}
               >
-                + Upload Image locally
+                + 내 이미지 불러오기
               </button>
               <input
                 type="file"
@@ -245,14 +245,14 @@ export default function UniverseDraggableBox({
                 onClick={handleCancel}
                 className="h-12 px-4 text-lg text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
               >
-                Cancel
+                취소
               </button>
               <button
                 onClick={handleSave}
                 className="h-12 px-4 text-lg text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
                 disabled={!isFormValid()}
               >
-                Save
+                저장
               </button>
             </div>
           </>
@@ -261,7 +261,7 @@ export default function UniverseDraggableBox({
             onClick={handleEdit}
             className="mt-auto h-12 px-4 text-lg text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
           >
-            Edit
+            줄거리 수정
           </button>
         )}
       </div>

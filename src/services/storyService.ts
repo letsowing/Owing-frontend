@@ -1,6 +1,6 @@
 import axiosInstance from '@utils/httpCommons'
 
-import { Message, SpellingError } from '@types'
+import { CrashCheck, SpellingCheck } from '@types'
 
 export const getStory = async (
   storyId: number,
@@ -78,20 +78,16 @@ export const debouncedSave = debounce(
       )
     }
   },
-  7000,
+  2000,
 )
-
-export const postStoryConflictCheck = async (
+export const getStoryConflictCheck = async (
   storyId: number,
-  data: { projectId: number },
-): Promise<{
-  items: Message[]
-}> => {
+): Promise<CrashCheck[]> => {
   try {
-    const response = await axiosInstance.post(
+    const response = await axiosInstance.get<CrashCheck[]>(
       `/stories/${storyId}/crash-check`,
-      data,
     )
+
     return response.data
   } catch (error) {
     console.error('설정 충돌 검사 실패:', error)
@@ -99,11 +95,42 @@ export const postStoryConflictCheck = async (
   }
 }
 
+export const postStoryConflictCheck = async (
+  storyId: number,
+  data: { projectId: number },
+): Promise<CrashCheck> => {
+  try {
+    const response = await axiosInstance.post<CrashCheck>(
+      `/stories/${storyId}/crash-check`,
+      data,
+    )
+
+    return response.data
+  } catch (error) {
+    console.error('설정 충돌 검사 실패:', error)
+    throw error
+  }
+}
+
+export const getSpellingCheck = async (
+  storyId: number,
+): Promise<SpellingCheck[]> => {
+  try {
+    const response = await axiosInstance.get<SpellingCheck[]>(
+      `/stories/${storyId}/spell-check`,
+    )
+    return response.data
+  } catch (error) {
+    console.error('맞춤법 검사 내역 조회 실패:', error)
+    throw error
+  }
+}
+
 export const postSpellingCheck = async (
   storyId: number,
-): Promise<SpellingError[]> => {
+): Promise<SpellingCheck> => {
   try {
-    const response = await axiosInstance.post<SpellingError[]>(
+    const response = await axiosInstance.post<SpellingCheck>(
       `/stories/${storyId}/spell-check`,
     )
     return response.data

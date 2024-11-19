@@ -21,8 +21,13 @@ import { Outlet, useLocation } from 'react-router-dom'
 export default function FolderTabLayout() {
   const { isTabOpen, tabWidth, toggleTab } = useMenuTab()
   const [isFolderTabOpen, setIsFolderTabOpen] = useState(true)
-  const { currentProject, setSelectedFolderId, setSelectedFileId } =
-    useProjectStore()
+  const {
+    currentProject,
+    setSelectedFolderId,
+    setSelectedFileId,
+    selectedFolderId,
+    selectedFileId,
+  } = useProjectStore()
   const { items, setItems } = useDnd()
 
   const location = useLocation()
@@ -35,6 +40,10 @@ export default function FolderTabLayout() {
       return storyDirectoryService
     }
   }, [location.pathname])
+
+  const selectedFolder = useMemo(() => {
+    return items.find((folder) => folder.id === selectedFolderId)
+  }, [items, selectedFolderId])
 
   useEffect(() => {
     const fetchFolders = async () => {
@@ -49,18 +58,58 @@ export default function FolderTabLayout() {
     }
 
     fetchFolders()
-  }, [currentProject.id, currentService, location.pathname, setItems])
+  }, [
+    currentProject.id,
+    currentService,
+    location.pathname,
+    setItems,
+    setSelectedFileId,
+    setSelectedFolderId,
+  ])
 
   useEffect(() => {
-    setSelectedFolderId(items?.length > 0 ? items[0].id : null)
-    setSelectedFileId(
-      items?.length > 0
-        ? items[0].files?.length > 0
-          ? items[0].files[0].id
-          : null
-        : null,
-    )
-  }, [items, setSelectedFileId, setSelectedFolderId])
+    if (items.length > 0 && selectedFolderId) {
+      // 1. 선택된 폴더가 존재하는지 확인
+      const folderExists = items.some(
+        (folder) => folder.id === selectedFolderId,
+      )
+
+      if (!folderExists) {
+        // 폴더가 삭제된 경우 첫 번째 폴더로 이동
+        setSelectedFolderId(items[0].id)
+        if (items[0].files?.length > 0) {
+          setSelectedFileId(items[0].files[0].id)
+        } else {
+          setSelectedFileId(null)
+        }
+        return
+      }
+
+      // 2. 선택된 파일이 존재하는지 확인
+      if (selectedFileId && selectedFolder) {
+        const fileExists = selectedFolder.files.some(
+          (file) => file.id === selectedFileId,
+        )
+
+        if (!fileExists) {
+          // 파일이 삭제된 경우 동일 폴더의 첫 번째 파일로 이동
+          if (selectedFolder.files.length > 0) {
+            setSelectedFileId(selectedFolder.files[0].id)
+          } else {
+            // 폴더에 파일이 없는 경우
+            setSelectedFileId(null)
+          }
+        }
+      }
+    }
+  }, [
+    items,
+    selectedFolderId,
+    selectedFileId,
+    selectedFolder,
+    setSelectedFolderId,
+    setSelectedFileId,
+  ])
 
   return (
     <DndProvider backend={HTML5Backend}>
