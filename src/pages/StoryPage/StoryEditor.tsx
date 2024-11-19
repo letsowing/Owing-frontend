@@ -25,7 +25,7 @@ export const StoryEditor = ({
         init={editorConfig(isDarkMode)}
         onEditorChange={onEditorChange}
       />
-      <div className="ms-3 mt-3 w-20 flex-row justify-end">
+      <div className="ms-3 mt-4 w-20 flex-row justify-end">
         <MainButton value="저장" onClick={onSave} />
       </div>
     </div>
