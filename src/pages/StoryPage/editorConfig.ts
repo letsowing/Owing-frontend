@@ -1,6 +1,6 @@
 export const editorConfig = (isDarkMode: boolean) => ({
   // 기본 설정
-  height: '84vh',
+  height: '82vh',
   resize: false,
   // 다크모드 조건부 적용
   skin: isDarkMode ? 'oxide-dark' : 'snow',
