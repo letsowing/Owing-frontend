@@ -111,7 +111,6 @@ const FolderTab: React.FC<FolderTabProps> = ({
         </button>
       </div>
 
-      {/* Scrollable Content Section - Flexible Height */}
       <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-track-beige scrollbar-thumb-lightredorange dark:scrollbar-track-coldbeige dark:scrollbar-thumb-skyblue">
         <ul>
           {items.map((folder: FolderItem, index: number) => (
@@ -128,7 +127,7 @@ const FolderTab: React.FC<FolderTabProps> = ({
           ))}
           {isEditing && (
             <li className="mx-2 mb-4 flex items-center border-gray px-2 py-1 text-base text-gray">
-              <CiFolderOn className="mr-2 h-auto w-[17px]" />
+              <CiFolderOn className="mr-2 h-auto w-16" />
               <div
                 ref={editableRef}
                 contentEditable
