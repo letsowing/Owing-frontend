@@ -69,7 +69,7 @@ export const ValidationChat = () => {
           onClickValidation={handleClickValidation}
         />
       </div>
-      <div className="mx-5 h-3/4 overflow-y-auto rounded-lg border border-lightgray px-1 scrollbar-thin scrollbar-track-white scrollbar-thumb-lightredorange dark:scrollbar-thumb-skyblue">
+      <div className="mx-5 h-[72%] overflow-y-auto rounded-lg border border-lightgray px-1 scrollbar-thin scrollbar-track-white scrollbar-thumb-lightredorange dark:scrollbar-thumb-skyblue">
         {crashChecks.map((check) => (
           <div key={check.id} className="my-4">
             <MessageList

@@ -26,7 +26,7 @@ export const AIWindow = ({
 }: AIWindowProps) => {
   return (
     <div
-      className={`z-999 absolute right-10 top-20 flex h-4/5 w-1/3 rounded-lg border border-lightgray bg-white pl-1 text-darkgray transition-all duration-300 ease-in-out ${isOpen ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0'} `}
+      className={`z-999 absolute right-10 top-16 flex h-4/5 w-1/3 rounded-lg border border-lightgray bg-white pl-1 text-darkgray transition-all duration-300 ease-in-out ${isOpen ? 'translate-y-0 opacity-100' : 'pointer-events-none translate-y-4 opacity-0'} `}
     >
       <div className="h-full flex-1">{children}</div>
       {selectedFeature ? (
