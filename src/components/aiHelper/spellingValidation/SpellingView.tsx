@@ -56,7 +56,7 @@ export const SpellingView = () => {
           onClickValidation={handleSpellingCheck}
         />
       </div>
-      <div className="mx-5 h-3/4 overflow-y-auto rounded-lg border border-lightgray px-1 scrollbar-thin scrollbar-track-white scrollbar-thumb-lightredorange dark:scrollbar-thumb-skyblue">
+      <div className="mx-5 h-[72%] overflow-y-auto rounded-lg border border-lightgray px-1 scrollbar-thin scrollbar-track-white scrollbar-thumb-lightredorange dark:scrollbar-thumb-skyblue">
         <SpellingResults
           key={errors.id}
           errors={errors.storySpellCheckResponseList}
