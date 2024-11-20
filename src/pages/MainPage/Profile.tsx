@@ -13,7 +13,7 @@ const Profile = ({ member }: ProfileProps) => {
         alt="DemoProfile"
         className="w-36 rounded-2xl"
       />
-      <label className="mt-5 text-2xl font-semibold dark:text-darkblack">
+      <label className="mt-5 text-2xl font-semibold dark:text-verydarkblack">
         {member.nickname}
       </label>
     </div>

@@ -52,7 +52,7 @@ const Chart = ({ dailyStats }: ChartProps) => {
           },
           axisTicks: { show: true },
           axisBorder: { show: true },
-          categories: dailyStats.map((stat) => stat.date.getTime()),
+          categories: dailyStats.map((stat) => new Date(stat.date).getTime()),
           type: 'datetime',
         },
         title: {

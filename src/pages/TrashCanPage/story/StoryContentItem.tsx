@@ -12,7 +12,7 @@ const StoryContentItem = ({
   return (
     <div
       onClick={onClickStoryTrash}
-      className="shadow-gray-300/50 hover:bg-gray-50 dark:hover:bg-gray-900 m-2 flex h-56 cursor-pointer flex-col rounded-md bg-white p-2 shadow-lg transition-colors dark:bg-verydarkblack dark:text-coldbeige"
+      className="m-2 flex h-56 flex-col rounded-md bg-white p-2 shadow-lg dark:bg-darkblack dark:text-white dark:shadow-black"
     >
       <h3 className="mb-1 font-semibold">{name}</h3>
       <p>{description}</p>

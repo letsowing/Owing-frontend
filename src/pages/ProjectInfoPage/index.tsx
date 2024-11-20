@@ -83,7 +83,7 @@ const ProjectInfoPage = () => {
   }
 
   const handleCancel = () => {
-    setProject(currentProject)
+    setProject(project)
     setIsEditable(false)
   }
 

@@ -22,7 +22,7 @@ export const TabItem = ({
     >
       <div
         className={`mb-1 p-3 ${
-          isActive ? 'bg-darkbeige dark:bg-darkcoldbeige rounded-full' : ''
+          isActive ? 'rounded-full bg-darkbeige dark:bg-coldbeige' : ''
         }`}
       >
         <Icon className="h-6 w-6" />

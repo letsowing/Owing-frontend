@@ -24,9 +24,9 @@ export default function UniverseWrapper({
 
   return (
     <>
-      <div className="w-full px-4 pb-2 text-gray dark:text-white">
-        <h3 className="text-[24px] font-semibold">{selectedFolder.name}</h3>
-        <p className="my-5 text-[18px]">{selectedFolder.description}</p>
+      <div className="w-full px-4 pb-2 text-darkgray dark:text-white">
+        <h3 className="ms-5 text-2xl font-semibold">{selectedFolder.name}</h3>
+        <p className="text-md my-5">{selectedFolder.description}</p>
       </div>
 
       <div className="flex flex-col py-2">

@@ -1,3 +1,5 @@
+import { useThemeStore } from '@stores/themeStore'
+
 import Swal from 'sweetalert2'
 
 interface ConfirmOptions {
@@ -9,6 +11,8 @@ interface ConfirmOptions {
 }
 
 export const useConfirm = () => {
+  const isDarkMode = useThemeStore((state) => state.isDarkMode)
+
   const confirmDelete = async (options: ConfirmOptions = {}) => {
     const {
       title = '정말 삭제하시겠습니까?',
@@ -43,7 +47,7 @@ export const useConfirm = () => {
       confirmButtonColor: '#FB5D2B',
       cancelButtonColor: '#3082F6',
       confirmButtonText: '이미지 생성하기',
-      cancelButtonText: '돌아가기',
+      cancelButtonText: '취소',
     })
 
     return result.isConfirmed
@@ -55,6 +59,8 @@ export const useConfirm = () => {
       title: '성공',
       text: message,
       timer: 1500,
+      confirmButtonColor: isDarkMode ? '#3082F6' : '#FB5D2B',
+      iconColor: isDarkMode ? '#3082F6' : '#FB5D2B',
     })
   }
 
@@ -63,6 +69,8 @@ export const useConfirm = () => {
       icon: 'error',
       title: '오류',
       text: message,
+      confirmButtonColor: '#FB5D2B', // 확인 버튼 색상
+      iconColor: '#FB5D2B', // 아이콘 색상
     })
   }
 

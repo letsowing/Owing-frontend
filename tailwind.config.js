@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
+import { Background } from 'reactflow'
 import plugin from 'tailwindcss/plugin'
 
+;``
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
@@ -23,14 +25,13 @@ export default {
         violet: '#A49AFF',
 
         // dark mode
-        coldbeige: '#F5F7FF',
-        darkcoldbeige: '#DDEBFF',
+        coldbeige: '#DDEBFF',
         skyblue: '#C3DCFE',
         cornflowerblue: '#809CFF',
         blue: '#3082F6',
         lightdarkgray: '#464646',
-        darkblack: '#262627',
-        verydarkblack: '#161616',
+        darkblack: '#313236',
+        verydarkblack: '#2B2D31',
       },
       textShadow: {
         sm: '0 1px 2px var(--tw-shadow-color)',

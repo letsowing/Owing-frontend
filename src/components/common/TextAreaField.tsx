@@ -34,7 +34,7 @@ const TextAreaField: React.FC<TextAreaFieldProps> = ({
   return (
     <div className="flex flex-col">
       <div className="flex justify-between">
-        <label className="flex font-semibold text-darkgray dark:text-white">
+        <label className="mb-1 flex font-semibold text-darkgray dark:text-white">
           {labelValue}
           {isRequired && isEditable && (
             <div className="flex items-center gap-3">
@@ -56,7 +56,7 @@ const TextAreaField: React.FC<TextAreaFieldProps> = ({
         onChange={onChangeTextArea}
         maxLength={maxLength}
         readOnly={!isEditable}
-        className="mt-1 h-[100px] w-full rounded-lg border border-lightgray px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-redorange dark:border-lightdarkgray dark:bg-verydarkblack dark:text-coldbeige dark:ring-blue"
+        className="mt-1 h-44 w-full rounded-lg border border-lightgray px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-redorange dark:border-lightdarkgray dark:bg-darkblack dark:text-coldbeige dark:ring-blue"
       />
     </div>
   )

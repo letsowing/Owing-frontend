@@ -29,7 +29,7 @@ const MenuTabList: React.FC<MenuTabListProps> = ({ onItemClick }) => {
   }
 
   return (
-    <div className="w-64">
+    <div className="w-48">
       {MENU_LIST.map((item) => (
         <MenuTabItem
           icon={item.icon}

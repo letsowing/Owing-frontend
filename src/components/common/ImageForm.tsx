@@ -56,7 +56,7 @@ const ImageForm: React.FC<ImageFormProps> = ({
           disabled={!isEditable}
         />
       </div>
-      <div className="my-1 flex h-80 w-80 items-center justify-center rounded-xl border border-lightgray dark:border-lightdarkgray dark:bg-verydarkblack">
+      <div className="my-1 flex h-80 w-80 items-center justify-center rounded-xl border border-lightgray dark:border-lightdarkgray dark:bg-darkblack">
         {isGenerating ? (
           <div className="flex-col">
             <div className="my-10">

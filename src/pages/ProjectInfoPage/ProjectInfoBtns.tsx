@@ -28,7 +28,7 @@ const ProjectInfoBtns = ({
         <MainButton
           value={isEditable ? '저장' : '편집'}
           onClick={isEditable ? onSave : onEdit}
-          disabled={!isValid}
+          disabled={!isValid && isEditable}
         />
       </div>
     </div>

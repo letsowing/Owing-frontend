@@ -35,7 +35,7 @@ const MenuTabItem: React.FC<MenuTabItemProps> = ({
     >
       <div className="flex items-center">
         <Icon size={22} />
-        <span className="ml-2">{text}</span>
+        <span className="ml-3">{text}</span>
       </div>
       {isActive ? <ChevronRight size={20} /> : <ChevronDown size={20} />}
     </div>

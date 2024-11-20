@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
+import Loader from '@components/common/Loader'
+
 import { useProjectStore } from '@stores/projectStore'
 import { useThemeStore } from '@stores/themeStore'
 
@@ -14,8 +16,7 @@ import { Cast, TrashContentProps } from '@types'
 const CastTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
   const currentProject = useProjectStore((state) => state.currentProject)
   const isDarkMode = useThemeStore((state) => state.isDarkMode)
-  const imageUrl =
-    selection.selectedFile?.imageUrl || isDarkMode ? DarkAlertOwing : AlertOwing
+  const [isLoading, setIsLoading] = useState<boolean>(false)
 
   const [cast, setCast] = useState<Cast>({
     id: '',
@@ -34,6 +35,7 @@ const CastTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
         return
       }
       try {
+        setIsLoading(true)
         const data = await getTrashcanContent(
           selection.selectedFile!.id,
           'cast', // contentType
@@ -41,6 +43,8 @@ const CastTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
         setCast(data)
       } catch (err) {
         console.error(err)
+      } finally {
+        setIsLoading(false)
       }
     }
 
@@ -51,10 +55,14 @@ const CastTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
     return <EmptyTrash />
   }
 
+  if (isLoading) {
+    return <Loader />
+  }
+
   return (
-    <div className="mx-[3%] flex w-[94%] flex-col items-center justify-center gap-2 p-4">
+    <div className="mx-9 flex w-[94%] flex-col items-center justify-center gap-2 p-4">
       <div className="flex-start w-full">
-        <h1 className="mb-4 text-2xl font-bold dark:text-coldbeige">
+        <h1 className="e mb-4 text-2xl font-bold text-darkgray dark:text-white">
           {selection.selectedFolder?.name}
         </h1>
       </div>
@@ -62,7 +70,7 @@ const CastTrashContent: React.FC<TrashContentProps> = ({ selection }) => {
       <div className="flex w-full flex-col items-center">
         <div className="flex h-80 w-80 rounded-xl bg-coldbeige text-center">
           <img
-            src={imageUrl}
+            src={cast.imageUrl || (isDarkMode ? DarkAlertOwing : AlertOwing)}
             alt="Cast"
             className="h-full w-full object-cover"
           />

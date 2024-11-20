@@ -3,10 +3,13 @@ import { useRef, useState } from 'react'
 
 import Loader from '@components/common/Loader'
 
+import { useThemeStore } from '@stores/themeStore'
+
 import { useConfirm } from '@hooks/useConfirm'
 import { useDnd } from '@hooks/useDnd'
 
 import AlertOwing from '@assets/common/AlertOwing.png'
+import DarkAlertOwing from '@assets/common/DarkAlertOwing.png'
 import {
   postUniverseGenerateAiImage,
   putUniverse,
@@ -21,6 +24,7 @@ export default function UniverseDraggableBox({
   currentService,
 }: DraggableBoxProps) {
   const file = files[index]
+  const isDarkMode = useThemeStore((state) => state.isDarkMode)
   const { confirmAIImageGeneration } = useConfirm()
   const { moveFileItem, updateFile } = useDnd()
 
@@ -154,13 +158,13 @@ export default function UniverseDraggableBox({
   return (
     <div
       ref={ref}
-      className={`shadow-gray-300/50 m-4 flex items-center rounded-md bg-white p-6 shadow-lg ${
+      className={`mx-8 mb-6 flex items-center rounded-md bg-white p-6 text-darkgray shadow-lg dark:bg-darkblack dark:text-white dark:shadow-black ${
         isDragging ? 'opacity-20' : ''
       }`}
     >
       <div className="flex w-full items-center">
         {isGenerating ? (
-          <div className="h-[240px] w-[240px] flex-col items-center border border-lightgray">
+          <div className="h-60 w-60 flex-col items-center rounded-md border text-center">
             <div className="mb-10 mt-20">
               <Loader />
             </div>
@@ -170,44 +174,45 @@ export default function UniverseDraggableBox({
           </div>
         ) : editedImageUrl ? (
           <div
-            className="h-[240px] w-[240px] min-w-[240px] bg-cover bg-center bg-no-repeat"
+            className="h-60 w-60 min-w-60 bg-cover bg-center bg-no-repeat"
             style={{
               backgroundImage: `url(${editedImageUrl})`,
             }}
           ></div>
         ) : (
-          <div className="flex h-[240px] w-[240px] min-w-[240px] flex-col items-center justify-center rounded-[6px] border border-[#CFCDCD]">
+          <div className="flex h-60 w-60 min-w-60 flex-col items-center justify-center rounded-md border border-lightgray dark:border-lightdarkgray">
             <img
-              src={AlertOwing}
+              src={isDarkMode ? DarkAlertOwing : AlertOwing}
               alt="AlertOwing"
               className="mx-auto h-auto w-12"
             />
-            <div className="mt-4 text-redorange">이미지를 추가해 주세요!</div>
+            <div className="mt-4 text-redorange dark:text-skyblue">
+              이미지를 추가해 주세요!
+            </div>
           </div>
         )}
 
-        <div className="m-4 mb-auto flex w-3/4 flex-grow flex-col">
+        <div className="m-2 ms-5 flex flex-grow flex-col">
           {isEditing ? (
             <>
               <input
-                className="mb-2 w-full border-b border-lightgray text-2xl font-semibold"
+                className="mb-2 w-full rounded-md border p-2 text-2xl font-semibold dark:bg-verydarkblack"
                 value={editedName}
                 placeholder="필수 입력입니다."
                 onChange={(e) => setEditedName(e.target.value)}
               />
               <textarea
-                placeholder="줄거리를 입력할 수 있습니다."
-                className="mt-1 h-[11rem] w-full min-w-full overflow-y-auto rounded border border-lightgray p-2 text-darkgray"
-                rows={5}
+                placeholder="설명을 입력할 수 있습니다."
+                className="scroll-hide mt-1 h-[11rem] w-full min-w-full resize-none overflow-y-auto rounded-md border p-2 dark:bg-verydarkblack"
                 value={editedDescription || ''}
                 onChange={(e) => setEditedDescription(e.target.value)}
               />
             </>
           ) : (
             <>
-              <strong className="text-2xl font-semibold">{file.name}</strong>
-              <p className="mt-4 h-[11rem] overflow-y-auto text-darkgray">
-                {file.description || '줄거리를 입력할 수 있습니다.'}
+              <div className="mb-2 p-2 text-2xl font-semibold">{file.name}</div>
+              <p className="scroll-hide h-[11rem] overflow-y-auto rounded-md p-2">
+                {file.description || '설명을 입력할 수 있습니다.'}
               </p>
             </>
           )}
@@ -219,7 +224,7 @@ export default function UniverseDraggableBox({
           <>
             <div className="mb-auto flex flex-col items-end">
               <button
-                className={`h-10 from-redorange to-orange px-4 text-sm text-redorange hover:rounded-[10px] hover:bg-gradient-to-r hover:text-white ${
+                className={`h-10 from-redorange to-orange px-4 text-sm text-redorange hover:rounded-md hover:bg-gradient-to-r hover:text-white dark:from-blue dark:to-skyblue dark:text-blue dark:hover:text-white ${
                   !isGenerating ? 'cursor-pointer' : 'cursor-not-allowed'
                 }`}
                 onClick={handleAiImage}
@@ -227,7 +232,7 @@ export default function UniverseDraggableBox({
                 + AI 이미지 생성하기
               </button>
               <button
-                className="mt-2 h-10 px-4 text-sm text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
+                className="mt-2 h-10 px-4 text-sm hover:rounded-md hover:bg-darkgray hover:text-white"
                 onClick={handleUploadClick}
               >
                 + 내 이미지 불러오기
@@ -237,19 +242,19 @@ export default function UniverseDraggableBox({
                 ref={fileInputRef}
                 onChange={handleFileChange}
                 accept="image/*"
-                className="hidden"
+                className="hidden dark:bg-verydarkblack"
               />
             </div>
             <div className="mt-auto flex flex-row items-center space-x-2">
               <button
                 onClick={handleCancel}
-                className="h-12 px-4 text-lg text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
+                className="h-12 px-4 text-lg hover:rounded-md hover:bg-darkgray hover:text-white"
               >
                 취소
               </button>
               <button
                 onClick={handleSave}
-                className="h-12 px-4 text-lg text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
+                className="h-12 px-4 text-lg hover:rounded-md hover:bg-darkgray hover:text-white"
                 disabled={!isFormValid()}
               >
                 저장
@@ -259,7 +264,7 @@ export default function UniverseDraggableBox({
         ) : (
           <button
             onClick={handleEdit}
-            className="mt-auto h-12 px-4 text-lg text-darkgray hover:rounded-[10px] hover:bg-darkgray hover:text-white"
+            className="mt-auto h-12 px-4 text-lg hover:rounded-md hover:bg-darkgray hover:text-white dark:hover:bg-skyblue dark:hover:text-darkgray"
           >
             줄거리 수정
           </button>

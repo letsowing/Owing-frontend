@@ -20,12 +20,13 @@ export const StoryEditor = ({
   return (
     <div>
       <Editor
-        apiKey={import.meta.env.VITE_TINY_MCE_ID}
         value={value}
+        apiKey={import.meta.env.VITE_TINY_MCE_ID}
+        initialValue={value}
         init={editorConfig(isDarkMode)}
         onEditorChange={onEditorChange}
       />
-      <div className="ms-3 mt-4 w-20 flex-row justify-end">
+      <div className="fixed bottom-3 right-24">
         <MainButton value="저장" onClick={onSave} />
       </div>
     </div>

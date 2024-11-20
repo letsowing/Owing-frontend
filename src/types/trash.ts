@@ -50,3 +50,11 @@ export interface TrashActionsProps {
   state: TrashState
   setters: TrashSetters
 }
+
+export interface TrashDetail {
+  storyId: number
+  name: string
+  description: string
+  content: string
+  textCount: number
+}

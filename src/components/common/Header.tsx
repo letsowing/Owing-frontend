@@ -72,7 +72,7 @@ interface HeaderProps {
 const Header = ({ isTabOpen }: HeaderProps) => {
   return (
     <header
-      className={`dark:bg-darkblack ${isTabOpen ? 'justify-end' : 'justify-between'} inset-0 flex h-auto w-full items-center bg-white px-8 py-2`}
+      className={`dark:bg-verydarkblack ${isTabOpen ? 'justify-end' : 'justify-between'} inset-0 flex h-auto w-full items-center bg-white px-8 py-2`}
     >
       {!isTabOpen && <LeftHeader />}
       <RightHeader />

@@ -36,7 +36,7 @@ const Modal: React.FC<ModalProps> = ({
       isOpen={isOpen}
       ariaHideApp={false}
       onRequestClose={closeModal}
-      className="modal-content z-50 mx-auto mt-[4%] flex h-5/6 w-3/4 flex-col overflow-y-auto rounded-3xl bg-white drop-shadow-lg scrollbar-hide dark:bg-darkblack"
+      className="modal-content z-50 mx-auto mt-[4%] flex h-5/6 w-3/4 flex-col overflow-y-auto rounded-3xl bg-white drop-shadow-lg scrollbar-hide dark:bg-verydarkblack"
       overlayClassName="modal-overlay fixed inset-0 bg-gray bg-opacity-80 dark:bg-opacity-70 flex z-40"
     >
       <div className="flex flex-col">
