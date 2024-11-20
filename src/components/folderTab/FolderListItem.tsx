@@ -172,11 +172,11 @@ export default function FolderListItem({
       ref={ref}
       className={`${
         isDragging ? 'bg-white opacity-50' : ''
-      } group my-2 flex h-10 w-full items-center justify-between rounded-[7px] hover:bg-white`}
+      } group my-2 flex h-10 w-full items-center justify-between rounded-md hover:bg-white`}
       onClick={handleItemClick}
     >
       <div className="flex items-center">
-        <div className="ms-2 h-1 w-1 rounded-full bg-redorange dark:bg-blue"></div>
+        <div className="ms-2 h-1 w-1 rounded-full bg-redorange dark:bg-blue" />
 
         {isFileEditing ? (
           <div

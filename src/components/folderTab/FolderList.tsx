@@ -232,10 +232,10 @@ const FolderList: React.FC<FolderListProps> = ({
     <li className="mx-2 mb-4 list-none">
       <div
         ref={ref}
-        className="group flex w-full cursor-pointer items-center justify-between rounded-[7px] px-2 py-2 hover:bg-white"
+        className="group flex w-full cursor-pointer items-center justify-between rounded-md px-2 py-2 hover:bg-white"
         onClick={toggleFolder}
       >
-        <div className="flex items-center">
+        <div className="flex items-center justify-center text-sm">
           <CiFolderOn
             className={`${isActive ? 'text-redorange dark:text-blue' : 'text-darkgray'}`}
           />
@@ -259,6 +259,7 @@ const FolderList: React.FC<FolderListProps> = ({
               {newFolderName}
             </p>
           )}
+          <span className="text-sm text-gray">({folder.files.length})</span>
         </div>
 
         <div className="flex hidden w-16 items-center justify-between group-hover:flex">
@@ -296,7 +297,7 @@ const FolderList: React.FC<FolderListProps> = ({
 
           {isFileEditing && (
             <li className="mb-4 flex items-center">
-              <div className="mr-4 h-1 w-1 rounded-full bg-redorange dark:bg-blue"></div>
+              <div className="mr-4 h-1 w-1 rounded-full bg-redorange dark:bg-blue" />
               <div
                 ref={inputRef}
                 contentEditable
