@@ -19,7 +19,7 @@ const ProjectList = ({ projects = [], onProjectClick }: ProjectListProps) => {
     onProjectClick(projectData)
   }
   return (
-    <div className="mt-2 max-h-72 overflow-x-auto overflow-y-auto scrollbar-thin scrollbar-track-white scrollbar-thumb-lightredorange dark:scrollbar-track-darkblack dark:scrollbar-thumb-skyblue">
+    <div className="mt-2 max-h-72 overflow-x-auto overflow-y-auto scrollbar-thin scrollbar-track-white scrollbar-thumb-lightredorange dark:scrollbar-track-verydarkblack dark:scrollbar-thumb-skyblue">
       <table className="divide-y-lightgray w-full">
         <thead className="text-lightgray dark:text-skyblue">
           <tr>
@@ -43,7 +43,7 @@ const ProjectList = ({ projects = [], onProjectClick }: ProjectListProps) => {
             </th>
           </tr>
         </thead>
-        <tbody className="w-full divide-y divide-lightgray bg-white dark:bg-darkblack">
+        <tbody className="w-full divide-y divide-lightgray bg-white dark:bg-verydarkblack">
           {projects.length > 0 &&
             projects.map((project) => (
               <ProjectItem

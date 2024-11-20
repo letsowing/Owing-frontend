@@ -10,8 +10,8 @@ interface UseMenuTabProps {
 }
 
 export const useMenuTab = ({
-  defaultWidth = 256,
-  collapsedWidth = 41,
+  defaultWidth = 192,
+  collapsedWidth = 46,
   autoOpenPaths = ['storyManagement', 'projectInfo', 'story', 'universe'],
   isNotTabPage = false,
 }: UseMenuTabProps = {}) => {

@@ -8,7 +8,7 @@ const Login = () => {
   const { isDarkMode } = useThemeStore()
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-beige dark:bg-darkblack">
+    <div className="flex min-h-screen items-center justify-center bg-beige dark:bg-verydarkblack">
       <div className="w-full max-w-6xl rounded-2xl bg-white p-8 shadow-2xl dark:bg-coldbeige">
         <div className="flex flex-col items-center gap-8 lg:flex-row">
           <div className="flex w-full flex-col items-center justify-center space-y-6 lg:w-1/2">
@@ -20,7 +20,7 @@ const Login = () => {
               />
             </div>
             <div className="space-y-2 text-center">
-              <h1 className="text-3xl font-bold dark:text-darkblack">
+              <h1 className="text-3xl font-bold dark:text-verydarkblack">
                 환영합니다!
               </h1>
               <p className="text-sm text-gray">
@@ -31,7 +31,7 @@ const Login = () => {
           <div className="flex w-full flex-col items-center justify-center space-y-8 lg:w-1/2">
             <div className="w-full max-w-md space-y-6 rounded-xl p-8">
               <div className="text-center">
-                <h2 className="mb-2 text-2xl font-semibold text-darkblack">
+                <h2 className="mb-2 text-2xl font-semibold text-verydarkblack">
                   로그인
                 </h2>
                 <p className="text-sm text-gray">

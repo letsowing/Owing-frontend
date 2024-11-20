@@ -28,7 +28,11 @@ const CastActionButtons: React.FC<CastActionButtonsProps> = ({
             <SubButton value="취소" onClick={onCancel} />
           </div>
           <div className="w-[12rem]">
-            <MainButton value="저장" onClick={onSave} disabled={!isValid} />
+            <MainButton
+              value="저장"
+              onClick={onSave}
+              disabled={!isValid && isEditing}
+            />
           </div>
         </>
       ) : (

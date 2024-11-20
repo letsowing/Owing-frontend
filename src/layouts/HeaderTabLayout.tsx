@@ -28,7 +28,7 @@ const HeaderTabLayout: React.FC = () => {
           onToggle={toggleTab}
         />
       )}
-      <div className="flex w-full flex-1 flex-col dark:bg-darkblack dark:text-coldbeige">
+      <div className="flex w-full flex-1 flex-col dark:bg-verydarkblack dark:text-coldbeige">
         <div className="sticky top-0 z-10">
           <Header isTabOpen={isTabOpen} />
         </div>

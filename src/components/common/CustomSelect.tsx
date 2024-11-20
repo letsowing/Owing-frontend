@@ -46,7 +46,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         type="button"
         onClick={() => !disabled && setIsOpen(!isOpen)}
         tabIndex={disabled ? -1 : 0}
-        className={`mt-1 h-[50px] w-full cursor-pointer rounded-lg border border-lightgray px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-redorange dark:border-lightdarkgray dark:bg-verydarkblack dark:text-coldbeige dark:ring-blue ${className} ${
+        className={`mt-1 h-[50px] w-full cursor-pointer rounded-lg border border-lightgray px-3 py-2 focus:border-transparent focus:outline-none focus:ring-2 focus:ring-redorange dark:border-lightdarkgray dark:bg-darkblack dark:text-coldbeige dark:ring-blue ${className} ${
           disabled ? 'cursor-not-allowed opacity-60' : ''
         }`}
       >
@@ -59,7 +59,7 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
         </div>
       </button>
       {isOpen && (
-        <div className="absolute left-0 right-0 z-10 mt-1 max-h-60 overflow-auto rounded-lg border border-lightgray bg-white shadow-lg dark:border-lightdarkgray dark:bg-verydarkblack">
+        <div className="absolute left-0 right-0 z-10 mt-1 max-h-60 overflow-auto rounded-lg border border-lightgray bg-white shadow-lg dark:border-lightdarkgray dark:bg-darkblack">
           {options.map((option) => (
             <button
               type="button"

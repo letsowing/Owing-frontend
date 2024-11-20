@@ -128,7 +128,7 @@ export default function FolderTabLayout() {
             onClose={() => setIsFolderTabOpen(false)}
             currentService={currentService}
           />
-          <main className="h-full w-full overflow-y-auto dark:bg-darkblack">
+          <main className="h-full w-full overflow-y-auto dark:bg-verydarkblack">
             <div className="sticky top-0 z-10">
               <Header isTabOpen={isTabOpen} />
             </div>

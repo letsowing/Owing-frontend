@@ -32,7 +32,7 @@ export const AIWindow = ({
       {selectedFeature ? (
         <div className="flex flex-col rounded-r-lg bg-beige dark:bg-coldbeige">
           <button onClick={onClose} className="absolute end-0 top-0 p-2">
-            <RiCloseLine className="h-4 w-4 hover:rounded-full hover:bg-darkbeige hover:dark:bg-darkcoldbeige" />
+            <RiCloseLine className="h-4 w-4 hover:rounded-full hover:bg-darkbeige hover:dark:bg-coldbeige" />
           </button>
           <div className="mt-7">
             <TabItem label="홈" icon={ImMenu} onClick={onHomeClick} />
@@ -59,7 +59,7 @@ export const AIWindow = ({
         </div>
       ) : (
         <button onClick={onClose} className="absolute end-0 top-0 p-2">
-          <RiCloseLine className="h-4 w-4 self-start hover:rounded-full hover:bg-darkbeige hover:dark:bg-darkcoldbeige" />
+          <RiCloseLine className="h-4 w-4 self-start hover:rounded-full hover:bg-darkbeige hover:dark:bg-coldbeige" />
         </button>
       )}
     </div>

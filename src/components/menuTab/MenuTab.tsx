@@ -30,7 +30,7 @@ const MenuTab: React.FC<MenuTabProps> = ({
 
   return (
     <nav
-      className="flex h-full flex-col bg-white dark:bg-darkblack"
+      className="flex h-full flex-col border-e border-lightgray bg-white dark:border-coldbeige dark:bg-verydarkblack"
       style={style}
     >
       <div className="flex items-center justify-between p-3">
