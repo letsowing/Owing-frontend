@@ -22,7 +22,6 @@ export const StoryEditor = ({
       <Editor
         value={value}
         apiKey={import.meta.env.VITE_TINY_MCE_ID}
-        initialValue={value}
         init={editorConfig(isDarkMode)}
         onEditorChange={onEditorChange}
       />

@@ -211,7 +211,7 @@ export default function UniverseDraggableBox({
           ) : (
             <>
               <div className="mb-2 p-2 text-2xl font-semibold">{file.name}</div>
-              <p className="scroll-hide h-[11rem] overflow-y-auto rounded-md p-2">
+              <p className="scroll-hide h-44 overflow-y-auto rounded-md p-2">
                 {file.description || '설명을 입력할 수 있습니다.'}
               </p>
             </>
