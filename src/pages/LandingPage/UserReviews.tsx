@@ -5,7 +5,7 @@ import Card from '@pages/LandingPage/Card'
 const UserReview = () => {
   return (
     <div className="h-[45rem] bg-gradient-to-b from-white to-[#FDF8F4]">
-      <div className="relative w-full pb-40 overflow-x-hidden overflow-y-visible">
+      <div className="relative w-full pb-40 overflow-x-hidden overflow-y-visible dark:bg-verydarkblack">
         <div className="absolute inset-x-0 top-0 z-0 w-full">
           <Ribbon />
         </div>

@@ -7,7 +7,7 @@ import MemoIcon from '@assets/landing/memo.png'
 
 const StoryManuscript = () => {
   return (
-    <div className="bg-gradient-to-b from-[#F9FAFB] to-white py-40">
+    <div className="bg-gradient-to-b from-[#F9FAFB] to-white py-4 dark:bg-gradient-to-b dark:from-verydarkblack">
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}

@@ -26,7 +26,7 @@ const Landing = () => {
 
   return (
     <div className="w-full" style={{ minHeight: '1080px' }}>
-      <div className="mx-auto mt-48 py-8">
+      <div className="mx-auto mt-48 py-8 dark:bg-verydarkblack">
 
         {/* main image */}
         <img
@@ -36,7 +36,7 @@ const Landing = () => {
         />
 
         {/* get started */}
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center dark:bg-verydarkblack">
           <img
             src={GetStartedIcon}
             alt="getStarted"
