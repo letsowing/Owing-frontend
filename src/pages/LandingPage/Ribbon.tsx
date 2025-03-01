@@ -2,7 +2,7 @@ import React from 'react'
 
 const Ribbon: React.FC = () => {
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full dark:bg-verydarkblack">
       <svg
         className="h-full w-full"
         viewBox="0 0 100 40"

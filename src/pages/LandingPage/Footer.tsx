@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
     <div>
-      <div className="relative h-[700px] w-full overflow-hidden">
+      <div className="relative h-[700px] w-full overflow-hidden dark:bg-verydarkblack dark:text-blue">
         <svg
           className="absolute bottom-0 h-full w-full"
           viewBox="0 0 1440 700"
@@ -20,7 +20,7 @@ const Footer = () => {
           ></path>
         </svg>
         <div className="absolute bottom-0 left-0 right-0 p-4 text-center">
-          <div className="mb-2 text-sm font-bold text-darkgray">
+          <div className="mb-2 text-sm font-bold text-darkgray dark:text-white">
             © 2024. (주)_상류사회 Co, Ltd. All rights reserved.
           </div>
         </div>

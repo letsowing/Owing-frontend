@@ -5,7 +5,7 @@ import Title from "@pages/LandingPage/Title"
 
 const WorldBuilding = () => {
   return (
-    <div className="bg-[#FDF8F3] py-40">
+    <div className="bg-[#FDF8F3] py-40 dark:bg-verydarkblack">
       <div className="py-40">
         <Title
           title={'세계관'}

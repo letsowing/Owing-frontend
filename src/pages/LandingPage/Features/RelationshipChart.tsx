@@ -6,7 +6,7 @@ import Title from "@pages/LandingPage/Title";
 
 const RelationshipChart = () => {
   return (
-    <div className="bg-[#F9FAFB] py-40">
+    <div className="bg-[#F9FAFB] py-40 dark:bg-verydarkblack">
       <Title
         title={'인물관계도'}
         desc={`복잡한 관계 설정도\nOwing과 함께라면 쉽게`}
