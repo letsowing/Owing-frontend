@@ -1,7 +1,5 @@
 import React from 'react'
 
-import DarkModeToggle from '@components/common/DarkModeToggle'
-
 import { useThemeStore } from '@stores/themeStore'
 
 import useNavigation from '@hooks/useNavigation'
@@ -52,7 +50,6 @@ const MenuTab: React.FC<MenuTabProps> = ({
       <div className="flex-grow overflow-x-hidden">
         <MenuTabList onItemClick={onItemClick} />
       </div>
-      <div className="p-4">{isTabOpen && <DarkModeToggle />}</div>
     </nav>
   )
 }

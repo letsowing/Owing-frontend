@@ -11,6 +11,7 @@ import HeaderOwing from '@assets/common/HeaderOwing.png'
 import { postLogout } from '@services/authService'
 
 import LoginPopup from '@components/common/LoginPopup'
+import ThemeToggleSwitch from '@/components/common/DarkModeToggle'
 
 const LeftHeader: React.FC = () => {
   const { isDarkMode } = useThemeStore()
@@ -54,7 +55,8 @@ const RightHeader: React.FC = () => {
 
   return (
     <nav className="flex items-center space-x-12">
-      {/* TODO: Here we need a dark/light mode switch component */}
+      <ThemeToggleSwitch />
+
       <button
         onClick={goToContactUs}
         className="bg-gradient-to-b from-redorange to-orange bg-clip-text font-bold text-transparent dark:from-blue dark:to-skyblue"
