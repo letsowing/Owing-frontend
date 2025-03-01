@@ -1,21 +1,16 @@
 import { useThemeStore } from '@stores/themeStore'
+import { Sun, Moon } from 'lucide-react'
 
 const ThemeToggleSwitch = () => {
-  const { toggleDarkMode } = useThemeStore()
+  const { toggleDarkMode, isDarkMode } = useThemeStore()
 
   return (
-    <div className="rounded-lg bg-beige p-2 font-semibold dark:bg-coldbeige">
-      <button
+    <button
         onClick={toggleDarkMode}
-        className="relative h-12 w-36 rounded-full"
+        className="relative h-8 w-8 rounded-full"
       >
-        <div className="absolute top-1 h-10 w-16 translate-x-2 rounded-lg bg-white transition-transform duration-300 ease-in-out dark:translate-x-16"></div>
-        <div className="flex items-center justify-between px-6">
-          <span className="z-10 text-orange dark:text-gray">밝게</span>
-          <span className="z-10 text-gray dark:text-blue">어둡게</span>
-        </div>
+        { isDarkMode ? <Sun /> : <Moon /> }
       </button>
-    </div>
   )
 }
 
