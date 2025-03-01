@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import TemplateIcon from '@assets/landing/template.png'
 import AiHelperIcon from '@assets/landing/aiHelper.png'
 import KanbanIcon from '@assets/landing/kanban.png'
-import MemoIcon from '@assets/landing/memo.png'
+// import MemoIcon from '@assets/landing/memo.png'
 
 const StoryManuscript = () => {
   return (
@@ -119,6 +119,7 @@ const StoryManuscript = () => {
       </div>
     </motion.div>
 
+    {/*
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -146,6 +147,7 @@ const StoryManuscript = () => {
         </h2>
       </div>
     </motion.div>
+    */}
   </div>
   )
 }
