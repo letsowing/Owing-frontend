@@ -24,7 +24,7 @@ const MenuTab: React.FC<MenuTabProps> = ({
   onItemClick,
 }) => {
   const { isDarkMode } = useThemeStore()
-  const { goToMain } = useNavigation()
+  const { goToLanding } = useNavigation()
 
   return (
     <nav
@@ -37,7 +37,7 @@ const MenuTab: React.FC<MenuTabProps> = ({
             src={isDarkMode ? DarkHeaderOwing : HeaderOwing}
             alt={isDarkMode ? 'DarkHeaderOwing' : 'HeaderOwing'}
             className="ml-2 h-auto w-16 cursor-pointer"
-            onClick={goToMain}
+            onClick={goToLanding}
           />
         )}
         <button
