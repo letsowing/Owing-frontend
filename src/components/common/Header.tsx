@@ -1,17 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import useMemberStore from '@stores/memberStore'
 import { useThemeStore } from '@stores/themeStore'
-
 import useNavigation from '@hooks/useNavigation'
+import { useConfirm } from '@/hooks/useConfirm'
 
 import DarkHeaderOwing from '@assets/common/DarkHeaderOwing.png'
 import HeaderOwing from '@assets/common/HeaderOwing.png'
-
 import { postLogout } from '@services/authService'
-
-import LoginPopup from '@components/common/LoginPopup'
 import ThemeToggleSwitch from '@/components/common/DarkModeToggle'
+
 
 const LeftHeader: React.FC = () => {
   const { isDarkMode } = useThemeStore()
@@ -33,7 +31,7 @@ const LeftHeader: React.FC = () => {
 const RightHeader: React.FC = () => {
   const { goToLanding, goToContactUs, goToLogin, goToMain } = useNavigation()
   const { isLoggedIn, logout } = useMemberStore()
-  const [ showPopup, setShowPopup ] = useState(false);
+  const { loginNotification } = useConfirm()
 
   const handleAuthClick = () => {
     if (isLoggedIn) {
@@ -49,7 +47,7 @@ const RightHeader: React.FC = () => {
     if (isLoggedIn) {
       goToMain()
     } else {
-      setShowPopup(true)
+      loginNotification()
     }
   }
 
@@ -76,7 +74,6 @@ const RightHeader: React.FC = () => {
       >
         메인으로
       </button>
-      {showPopup && <LoginPopup onClose={() => setShowPopup(false)} />}
     </nav>
   )
 }

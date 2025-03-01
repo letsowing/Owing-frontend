@@ -1,6 +1,7 @@
-import { useThemeStore } from '@stores/themeStore'
-
 import Swal from 'sweetalert2'
+
+import { useThemeStore } from '@stores/themeStore'
+import useNavigation from '@/hooks/useNavigation'
 
 interface ConfirmOptions {
   title?: string
@@ -12,6 +13,22 @@ interface ConfirmOptions {
 
 export const useConfirm = () => {
   const isDarkMode = useThemeStore((state) => state.isDarkMode)
+  const { goToLogin } = useNavigation()
+
+  const loginNotification =() => {
+    return Swal.fire({
+      title: '알림',
+      text: '로그인이 필요한 서비스입니다.',
+      icon: 'info',
+      iconColor: isDarkMode ? '#3082F6' : '#FB5D2B',
+      confirmButtonText: '로그인 페이지로',
+      confirmButtonColor: isDarkMode ? '#3082F6' : '#FB5D2B',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        goToLogin()
+      }
+    })
+  }
 
   const confirmDelete = async (options: ConfirmOptions = {}) => {
     const {
@@ -108,5 +125,6 @@ export const useConfirm = () => {
     showSuccessDialog,
     showErrorDialog,
     promptFolderName,
+    loginNotification,
   }
 }
